@@ -19,3 +19,25 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+/*dark & light mood*/
+/* الوضع الليلي */
+html.dark {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+html.dark .element {
+  background-color: #161515;
+  color: #f0f0f0;
+}
+
+/* الوضع النهاري */
+html:not(.dark) {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+html:not(.dark) .element {
+  background-color: #f9f9f9;
+  color: #000;
+}
