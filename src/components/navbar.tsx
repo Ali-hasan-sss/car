@@ -1,8 +1,17 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { FaMoon, FaSun, FaUser } from "react-icons/fa";
-import ReactSwitch from "react-switch";
+import {
+  FaMoon,
+  FaSignInAlt,
+  FaSignOutAlt,
+  FaSun,
+  FaUser,
+  FaUserPlus,
+} from "react-icons/fa";
+import { Switch, FormControlLabel } from "@mui/material";
+import "react-toggle/style.css";
+import Link from "next/link";
 
 const CustomNavbar: React.FC = () => {
   const [expanded, setExpanded] = useState(false);
@@ -41,11 +50,16 @@ const CustomNavbar: React.FC = () => {
   };
 
   //change language
-  const toggleLanguage = (checked: boolean) => {
+  const toggleLanguage = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => {
     setIsArabic(checked);
     const languageCode = checked ? "ar" : "en";
+    const direction = languageCode === "ar" ? "rtl" : "ltr";
     localStorage.setItem("language", languageCode);
     document.documentElement.setAttribute("lang", languageCode);
+    document.documentElement.setAttribute("dir", direction);
   };
   // إغلاق القوائم عند النقر خارجها
   useEffect(() => {
@@ -71,169 +85,48 @@ const CustomNavbar: React.FC = () => {
   }, []);
 
   return (
-    <nav
-      className={`navbar ${
-        isDarkMode ? "bg-black text-white" : "bg-yellow-400 text-black"
-      }`}
-    >
-      {/* القائمة المنسدلة */}
-      <div className="navbar-start">
-        <div className="dropdown" ref={dropdownRef}>
-          <div
-            tabIndex={0}
-            role="button"
-            className="btn btn-ghost btn-circle"
-            onClick={() => setExpanded(!expanded)}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-light"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h7"
-              />
-            </svg>
-          </div>
-          {expanded && (
-            <ul
-              tabIndex={0}
-              className={`menu menu-sm absolute rounded-box z-[1] mt-3 rounded p-2 shadow w-52 left-0 top-full ${
-                isDarkMode ? "bg-black text-white" : "bg-yellow-400 text-black"
-              }`}
-            >
-              {/* Dark Mode Switch */}
-              <li className="flex items-center justify-between">
-                <span>{isArabic ? "الوضع" : "Dark"}</span>
-                <ReactSwitch
-                  onChange={toggleDarkMode}
-                  checked={isDarkMode}
-                  offColor="#888"
-                  onColor="#4CAF50"
-                  uncheckedIcon={
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        height: "100%",
-                        fontSize: 10,
-                        color: "#FFD700",
-                      }}
-                    >
-                      <FaSun />
-                    </div>
-                  }
-                  checkedIcon={
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        height: "100%",
-                        fontSize: 10,
-                        color: "#FFD700",
-                      }}
-                    >
-                      <FaMoon />
-                    </div>
-                  }
-                  height={16}
-                  width={34}
-                />
-              </li>
-
-              {/* Language Switch */}
-              <li className="flex items-center justify-between mt-2">
-                <span>{isArabic ? "العربية" : "English"}</span>
-                <ReactSwitch
-                  onChange={toggleLanguage}
+    <>
+      <nav
+        style={{ height: "50px" }}
+        className={`flex items-center justify-between ${
+          isDarkMode ? "bg-black text-white" : "bg-yellow-400 text-black"
+        }`}
+      >
+        {/* السويتش والقائمة المنسدلة */}
+        <div className="navbar-start mt-3">
+          <div className="hidden md:flex items-center">
+            <FormControlLabel
+              control={
+                <Switch
                   checked={isArabic}
-                  offColor="#888"
-                  onColor="#4CAF50"
-                  uncheckedIcon={
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        height: "100%",
-                        fontSize: 10,
-                        color: "#fff",
-                        paddingRight: 2,
-                      }}
-                    >
-                      EN
-                    </div>
-                  }
-                  checkedIcon={
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        height: "100%",
-                        fontSize: 10,
-                        color: "#fff",
-                        paddingLeft: 2,
-                      }}
-                    >
-                      AR
-                    </div>
-                  }
-                  height={16}
-                  width={34}
+                  onChange={toggleLanguage}
+                  name="language-switch"
+                  color="primary"
+                  inputProps={{ "aria-label": "language toggle" }}
                 />
-              </li>
-              <li className="mt-2">
-                <hr className="border-gray-700" />
-              </li>
-              <li className="block px-4 py-2 hover:bg-gray-200 hover:text-black">
-                <a>{isArabic ? "الصفحة الرئيسية" : "Home"}</a>
-              </li>
-              <li className="block px-4 py-2 hover:bg-gray-200 hover:text-black">
-                <a>{isArabic ? "الخدمات" : "Services"}</a>
-              </li>
-              <li className="block px-4 py-2 hover:bg-gray-200 hover:text-black">
-                <a>{isArabic ? "اتصل بنا" : "Contact Us"}</a>
-              </li>
-              <li className="block px-4 py-2 hover:bg-gray-200 hover:text-black">
-                <a>{isArabic ? "معرض السيارات" : "Car Store"}</a>
-              </li>
-            </ul>
-          )}
-        </div>
-      </div>
-      {/* عنوان النافبار */}
-      <div className="navbar-center">
-        <a className="btn btn-ghost text-xl text-light">brand logo</a>
-      </div>
-      {/* أيقونات */}
-      <div className="navbar-end flex item-center justify-center">
-        <div>
-          <button
-            className="btn mt-1 btn-ghost btn-circle"
-            onClick={toggleDarkMode}
-            aria-label="Toggle Dark Mode"
+              }
+              label={isArabic ? "AR" : "EN"}
+            />
+          </div>
+
+          {/* القائمة المنسدلة - تظهر فقط في الشاشات الصغيرة */}
+          <div
+            className={`dropdown md:hidden ${
+              isDarkMode ? "text-light" : "text-black"
+            }`}
+            ref={dropdownRef}
           >
-            {isDarkMode ? (
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle"
+              onClick={() => setExpanded(!expanded)}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-light"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-light"
+                className={`h-5 w-5 ${
+                  isDarkMode ? "text-light" : "text-black"
+                }`}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -242,63 +135,188 @@ const CustomNavbar: React.FC = () => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
-                  d="M12 3v2m0 14v2m8-10h2M4 12H2m15.364-7.364l-1.414 1.414M6.05 17.95l-1.414-1.414M18.364 18.364l-1.414-1.414M6.05 6.05L4.636 7.464"
+                  d="M4 6h16M4 12h16M4 18h7"
                 />
               </svg>
-            )}
-          </button>
-        </div>
-        <div ref={userDropdownRef}>
-          <button className="mt-1 mr-4 relative">
-            <div
-              tabIndex={0}
-              role="button"
-              onClick={() => setUserExpanded(!userexpanded)}
-              className="btn btn-ghost btn-circle"
-            >
-              <FaUser className="text-light" />
             </div>
-            {userexpanded && (
+            {expanded && (
               <ul
-                className={`absolute text-light right-0 mt-3 w-48 shadow rounded z-10 text-right ${
+                tabIndex={0}
+                className={`menu border menu-sm absolute rounded-box z-[1] mt-4 rounded p-4 shadow w-52 top-full ${
                   isDarkMode
                     ? "bg-black text-white"
                     : "bg-yellow-400 text-black"
-                }`}
+                } ${isArabic ? "right-0" : "left-0"}`}
               >
-                <li>
-                  <a
-                    className="block px-4 py-2 hover:bg-gray-200 hover:text-black"
-                    href="/login"
-                  >
-                    {!isArabic ? "Login" : "تسجيل الدخول"}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className="block px-4 py-2 hover:bg-gray-200 hover:text-black"
-                    href="/register"
-                  >
-                    {!isArabic ? "Create Account" : "إنشاء حساب"}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className="block px-4 py-2 hover:bg-gray-200 text-red-500 hover:text-red-600"
-                    href="/logout"
-                    onClick={() =>
-                      console.log(!isArabic ? "Logout" : "تسجيل الخروج")
+                {/* Dark Mode Switch */}
+                <li className="flex items-center justify-between">
+                  <span>{isArabic ? "الوضع" : "Dark"}</span>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        className="mx-2"
+                        checked={isDarkMode}
+                        onChange={toggleDarkMode}
+                        name="language-switch"
+                        color="primary"
+                        inputProps={{ "aria-label": "language toggle" }}
+                      />
                     }
-                  >
-                    {!isArabic ? "Logout" : "تسجيل الخروج"}
-                  </a>
+                    label={isDarkMode ? <FaMoon /> : <FaSun />}
+                  />
+                </li>
+
+                {/* Language Switch */}
+                <li className="flex items-center justify-between mt-2">
+                  <span>{isArabic ? "اللغة" : "Language"}</span>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        className="mx-2"
+                        checked={isArabic}
+                        onChange={toggleLanguage}
+                        name="language-switch"
+                        color="primary"
+                        inputProps={{ "aria-label": "language toggle" }}
+                      />
+                    }
+                    label={isArabic ? "AR" : "EN"}
+                  />
+                </li>
+                <li className="mt-2">
+                  <hr className="border-gray-700" />
+                </li>
+                <li className="px-4 py-2 hover:bg-gray-200 hover:text-black">
+                  <Link href="/">{isArabic ? "الصفحة الرئيسية" : "Home"}</Link>
+                </li>
+                <li className="px-4 py-2 hover:bg-gray-200 hover:text-black">
+                  <Link href="/services">
+                    {isArabic ? "الخدمات" : "Services"}
+                  </Link>
+                </li>
+                <li className="px-4 py-2 hover:bg-gray-200 hover:text-black">
+                  <Link href="/contact">
+                    {isArabic ? "اتصل بنا" : "Contact Us"}
+                  </Link>
+                </li>
+                <li className="px-4 py-2 hover:bg-gray-200 hover:text-black">
+                  <Link href="/car-store">
+                    {isArabic ? "معرض السيارات" : "Car Store"}
+                  </Link>
                 </li>
               </ul>
             )}
-          </button>
+          </div>
         </div>
-      </div>
-    </nav>
+        {/* عنوان النافبار */}
+        <div className="navbar-center mt-3">
+          <a
+            className={`btn btn-ghost text-xl ${
+              isDarkMode ? " text-white" : " text-black"
+            }`}
+          >
+            brand logo
+          </a>
+        </div>
+        {/* الدارك مود */}
+        <div className="navbar-end flex mt-3 item-center justify-center">
+          <div className="hidden md:block">
+            <button
+              className="btn mt-1 btn-ghost btn-circle"
+              onClick={toggleDarkMode}
+              aria-label="Toggle Dark Mode"
+            >
+              {isDarkMode ? <FaMoon className="text-light" /> : <FaSun />}
+            </button>
+          </div>
+
+          <div ref={userDropdownRef}>
+            <button className="mt-1  relative">
+              <div
+                tabIndex={0}
+                role="button"
+                onClick={() => setUserExpanded(!userexpanded)}
+                className="btn btn-ghost btn-circle flex  border"
+              >
+                <span
+                  className={` mx-2 ${
+                    isDarkMode ? "text-white" : " text-black"
+                  }`}
+                >
+                  {!isArabic ? "Login" : "التسجيل"}
+                </span>
+                <FaUser
+                  className={`  text-xl ${
+                    isDarkMode ? "text-light" : "text-black"
+                  }`}
+                />
+              </div>
+              {userexpanded && (
+                <ul
+                  className={`absolute border text-light mt-3 w-48 shadow rounded z-10 text-right ${
+                    isDarkMode
+                      ? "bg-black text-white"
+                      : "bg-yellow-400 text-black"
+                  } ${isArabic ? "left-0" : "right-0"}`}
+                >
+                  <li>
+                    <Link href="/login">
+                      <div className="block px-4 py-2 hover:bg-gray-200 hover:text-black flex items-center">
+                        <FaSignInAlt className="m-2" />
+                        {!isArabic ? "Login" : "تسجيل الدخول"}
+                      </div>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/register">
+                      <div className="block px-4 py-2 hover:bg-gray-200 hover:text-black flex items-center">
+                        <FaUserPlus className="m-2" />
+                        {!isArabic ? "Create Account" : "إنشاء حساب"}
+                      </div>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/logout">
+                      <div
+                        className="block px-4 py-2 hover:bg-gray-200 text-red-500 hover:text-red-600 flex items-center"
+                        onClick={() =>
+                          console.log(!isArabic ? "Logout" : "تسجيل الخروج")
+                        }
+                      >
+                        <FaSignOutAlt className="m-2" />
+                        {!isArabic ? "Logout" : "تسجيل الخروج"}
+                      </div>
+                    </Link>
+                  </li>
+                </ul>
+              )}
+            </button>
+          </div>
+        </div>
+      </nav>
+      <nav
+        className={`navbar hidden md:flex  ${
+          isDarkMode ? "bg-black text-white" : "bg-yellow-400 text-black"
+        }`}
+      >
+        <ul className="flex items-center justify-center">
+          <li className="px-4 py-2 hover:bg-gray-200 hover:text-black">
+            <Link href="/">{isArabic ? "الصفحة الرئيسية" : "Home"}</Link>
+          </li>
+          <li className="px-4 py-2 hover:bg-gray-200 hover:text-black">
+            <Link href="/services">{isArabic ? "الخدمات" : "Services"}</Link>
+          </li>
+          <li className="px-4 py-2 hover:bg-gray-200 hover:text-black">
+            <Link href="/contact">{isArabic ? "اتصل بنا" : "Contact Us"}</Link>
+          </li>
+          <li className="px-4 py-2 hover:bg-gray-200 hover:text-black">
+            <Link href="/car-store">
+              {isArabic ? "معرض السيارات" : "Car Store"}
+            </Link>
+          </li>
+        </ul>
+      </nav>
+    </>
   );
 };
 
