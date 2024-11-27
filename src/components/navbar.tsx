@@ -87,13 +87,13 @@ const CustomNavbar: React.FC = () => {
   return (
     <>
       <nav
-        style={{ height: "50px" }}
+        style={{ height: "60px" }}
         className={`flex items-center justify-between ${
           isDarkMode ? "bg-black text-white" : "bg-yellow-400 text-black"
         }`}
       >
         {/* السويتش والقائمة المنسدلة */}
-        <div className="navbar-start mt-3">
+        <div className="navbar-start my-1">
           <div className="hidden md:flex items-center">
             <FormControlLabel
               control={
@@ -209,7 +209,7 @@ const CustomNavbar: React.FC = () => {
           </div>
         </div>
         {/* عنوان النافبار */}
-        <div className="navbar-center mt-3">
+        <div className="navbar-center my-1">
           <a
             className={`btn btn-ghost text-xl ${
               isDarkMode ? " text-white" : " text-black"
@@ -219,7 +219,7 @@ const CustomNavbar: React.FC = () => {
           </a>
         </div>
         {/* الدارك مود */}
-        <div className="navbar-end flex mt-3 item-center justify-center">
+        <div className="navbar-end flex my-1 item-center justify-center">
           <div className="hidden md:block">
             <button
               className="btn mt-1 btn-ghost btn-circle"
