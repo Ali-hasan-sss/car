@@ -7,37 +7,31 @@
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   color: var(--foreground);
-  background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
-/*dark & light mood*/
-/* الوضع الليلي */
-html.dark {
-  background-color: #121212;
-  color: #ffffff;
-}
 
-html.dark .element {
-  background-color: #161515;
+.dark-bg {
+  background-color: #0b0a0a;
   color: #f0f0f0;
 }
-
-/* الوضع النهاري */
-html:not(.dark) {
-  background-color: #ffffff;
-  color: #000000;
+.dark-bg-2 {
+  background-color: #262525;
+  color: #f0f0f0;
 }
-
-html:not(.dark) .element {
-  background-color: #f9f9f9;
+.light-bg {
+  background-color: #bafcf4;
   color: #000;
+}
+.light-bg-2 {
+  background-color: #74dfd3;
+  color: #2a2727;
+}
+.nav-item {
+  border-bottom: 3px solid transparent;
+  transition: 0.4s;
+}
+.nav-item:hover {
+  border-bottom: 3px solid #df160c;
 }

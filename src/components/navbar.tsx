@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   FaMoon,
   FaSignInAlt,
@@ -12,55 +12,16 @@ import {
 import { Switch, FormControlLabel } from "@mui/material";
 import "react-toggle/style.css";
 import Link from "next/link";
+import { AppContext } from "../app/context/AppContext";
 
 const CustomNavbar: React.FC = () => {
+  const { isDarkMode, isArabic, toggleDarkMode, toggleLanguage } =
+    useContext(AppContext);
   const [expanded, setExpanded] = useState(false);
   const [userexpanded, setUserExpanded] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [isArabic, setIsArabic] = useState(false);
-
   const dropdownRef = useRef<HTMLDivElement>(null);
   const userDropdownRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    const savedLanguage = localStorage.getItem("language");
-    setIsDarkMode(savedTheme === "dark");
-    setIsArabic(savedLanguage === "ar");
-    document.documentElement.classList.toggle("dark", savedTheme === "dark");
-    document.documentElement.setAttribute(
-      "lang",
-      savedLanguage === "ar" ? "ar" : "en"
-    );
-  }, []);
-
-  // تغيير الوضع الليلي وحفظه في localStorage
-  const toggleDarkMode = () => {
-    const newMode = !isDarkMode;
-    setIsDarkMode(newMode);
-    localStorage.setItem("theme", newMode ? "dark" : "light");
-    const allElements = document.querySelectorAll("*");
-    allElements.forEach((element) => {
-      if (newMode) {
-        element.classList.add("dark");
-      } else {
-        element.classList.remove("dark");
-      }
-    });
-  };
-
-  //change language
-  const toggleLanguage = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    checked: boolean
-  ) => {
-    setIsArabic(checked);
-    const languageCode = checked ? "ar" : "en";
-    const direction = languageCode === "ar" ? "rtl" : "ltr";
-    localStorage.setItem("language", languageCode);
-    document.documentElement.setAttribute("lang", languageCode);
-    document.documentElement.setAttribute("dir", direction);
-  };
   // إغلاق القوائم عند النقر خارجها
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -89,7 +50,7 @@ const CustomNavbar: React.FC = () => {
       <nav
         style={{ height: "60px" }}
         className={`flex items-center justify-between ${
-          isDarkMode ? "bg-black text-white" : "bg-yellow-400 text-black"
+          isDarkMode ? "dark-bg text-white" : "light-bg text-black"
         }`}
       >
         {/* السويتش والقائمة المنسدلة */}
@@ -98,11 +59,26 @@ const CustomNavbar: React.FC = () => {
             <FormControlLabel
               control={
                 <Switch
+                  className={`${isArabic ? "ml-0" : "ml-2"}`}
                   checked={isArabic}
                   onChange={toggleLanguage}
                   name="language-switch"
                   color="primary"
                   inputProps={{ "aria-label": "language toggle" }}
+                  sx={{
+                    "& .MuiSwitch-switchBase": {
+                      color: "gray", // اللون عند الإيقاف
+                    },
+                    "& .MuiSwitch-switchBase.Mui-checked": {
+                      color: "blue", // اللون عند التشغيل
+                    },
+                    "& .MuiSwitch-track": {
+                      backgroundColor: "gray", // لون المسار عند الإيقاف
+                    },
+                    "& .MuiSwitch-track.Mui-checked": {
+                      backgroundColor: "blue", // لون المسار عند التشغيل
+                    },
+                  }}
                 />
               }
               label={isArabic ? "AR" : "EN"}
@@ -143,41 +119,65 @@ const CustomNavbar: React.FC = () => {
               <ul
                 tabIndex={0}
                 className={`menu border menu-sm absolute rounded-box z-[1] mt-4 rounded p-4 shadow w-52 top-full ${
-                  isDarkMode
-                    ? "bg-black text-white"
-                    : "bg-yellow-400 text-black"
+                  isDarkMode ? "dark-bg text-white" : "light-bg text-black"
                 } ${isArabic ? "right-0" : "left-0"}`}
               >
                 {/* Dark Mode Switch */}
                 <li className="flex items-center justify-between">
                   <span>{isArabic ? "الوضع" : "Dark"}</span>
                   <FormControlLabel
+                    label={isDarkMode ? <FaMoon /> : <FaSun />}
                     control={
                       <Switch
-                        className="mx-2"
                         checked={isDarkMode}
                         onChange={toggleDarkMode}
                         name="language-switch"
                         color="primary"
                         inputProps={{ "aria-label": "language toggle" }}
+                        sx={{
+                          "& .MuiSwitch-switchBase": {
+                            color: "gray", // اللون عند الإيقاف
+                          },
+                          "& .MuiSwitch-switchBase.Mui-checked": {
+                            color: "blue", // اللون عند التشغيل
+                          },
+                          "& .MuiSwitch-track": {
+                            backgroundColor: "gray", // لون المسار عند الإيقاف
+                          },
+                          "& .MuiSwitch-track.Mui-checked": {
+                            backgroundColor: "blue", // لون المسار عند التشغيل
+                          },
+                        }}
                       />
                     }
-                    label={isDarkMode ? <FaMoon /> : <FaSun />}
                   />
                 </li>
 
                 {/* Language Switch */}
                 <li className="flex items-center justify-between mt-2">
-                  <span>{isArabic ? "اللغة" : "Language"}</span>
+                  <span>{isArabic ? "اللغة" : "Lang"}</span>
                   <FormControlLabel
                     control={
                       <Switch
-                        className="mx-2"
                         checked={isArabic}
                         onChange={toggleLanguage}
                         name="language-switch"
-                        color="primary"
+                        color="warning"
                         inputProps={{ "aria-label": "language toggle" }}
+                        sx={{
+                          "& .MuiSwitch-switchBase": {
+                            color: "gray", // اللون عند الإيقاف
+                          },
+                          "& .MuiSwitch-switchBase.Mui-checked": {
+                            color: "blue", // اللون عند التشغيل
+                          },
+                          "& .MuiSwitch-track": {
+                            backgroundColor: "gray", // لون المسار عند الإيقاف
+                          },
+                          "& .MuiSwitch-track.Mui-checked": {
+                            backgroundColor: "blue", // لون المسار عند التشغيل
+                          },
+                        }}
                       />
                     }
                     label={isArabic ? "AR" : "EN"}
@@ -215,7 +215,7 @@ const CustomNavbar: React.FC = () => {
               isDarkMode ? " text-white" : " text-black"
             }`}
           >
-            brand logo
+            logo
           </a>
         </div>
         {/* الدارك مود */}
@@ -236,7 +236,7 @@ const CustomNavbar: React.FC = () => {
                 tabIndex={0}
                 role="button"
                 onClick={() => setUserExpanded(!userexpanded)}
-                className="btn btn-ghost btn-circle flex  border"
+                className="btn btn-ghost btn-circle flex  "
               >
                 <span
                   className={` mx-2 ${
@@ -253,10 +253,8 @@ const CustomNavbar: React.FC = () => {
               </div>
               {userexpanded && (
                 <ul
-                  className={`absolute border text-light mt-3 w-48 shadow rounded z-10 text-right ${
-                    isDarkMode
-                      ? "bg-black text-white"
-                      : "bg-yellow-400 text-black"
+                  className={`absolute border  mt-4 w-48 shadow rounded z-10 text-right ${
+                    isDarkMode ? "dark-bg text-white" : "light-bg text-black"
                   } ${isArabic ? "left-0" : "right-0"}`}
                 >
                   <li>
@@ -295,21 +293,21 @@ const CustomNavbar: React.FC = () => {
         </div>
       </nav>
       <nav
-        className={`navbar hidden md:flex  ${
-          isDarkMode ? "bg-black text-white" : "bg-yellow-400 text-black"
+        className={` hidden md:flex  ${
+          isDarkMode ? "dark-bg text-white" : "light-bg text-black"
         }`}
       >
         <ul className="flex items-center justify-center">
-          <li className="px-4 py-2 hover:bg-gray-200 hover:text-black">
+          <li className="mx-4 px-2 nav-item ">
             <Link href="/">{isArabic ? "الصفحة الرئيسية" : "Home"}</Link>
           </li>
-          <li className="px-4 py-2 hover:bg-gray-200 hover:text-black">
+          <li className="mx-4 px-2 nav-item ">
             <Link href="/services">{isArabic ? "الخدمات" : "Services"}</Link>
           </li>
-          <li className="px-4 py-2 hover:bg-gray-200 hover:text-black">
+          <li className="mx-4 px-2 nav-item ">
             <Link href="/contact">{isArabic ? "اتصل بنا" : "Contact Us"}</Link>
           </li>
-          <li className="px-4 py-2 hover:bg-gray-200 hover:text-black">
+          <li className="mx-4 px-2 nav-item ">
             <Link href="/car-store">
               {isArabic ? "معرض السيارات" : "Car Store"}
             </Link>

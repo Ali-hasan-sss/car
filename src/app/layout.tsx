@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
+import { AppProvider } from "./context/AppContext";
 import CustomNavbar from "@/components/navbar";
 
 const geistSans = localFont({
@@ -26,13 +27,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <CustomNavbar />
-        {children}
-      </body>
-    </html>
+    <AppProvider>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <CustomNavbar />
+          {children}
+        </body>
+      </html>
+    </AppProvider>
   );
 }

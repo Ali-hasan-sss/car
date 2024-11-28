@@ -1,56 +1,31 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
+import { useContext } from "react";
+import { AppContext } from "./context/AppContext";
+import Hero from "@/components/Hero";
 export default function Home() {
-  const [isArabic, setIsArabic] = useState(false);
-
-  // تحديث اللغة بناءً على localStorage مباشرةً
-  useEffect(() => {
-    const updateLanguage = () => {
-      const savedLanguage = localStorage.getItem("language");
-      setIsArabic(savedLanguage === "ar");
-    };
-
-    // تعيين اللغة عند أول تحميل
-    updateLanguage();
-
-    // التفاعل مع تغييرات اللغة من أي مصدر خارجي
-    window.addEventListener("storage", updateLanguage);
-
-    return () => {
-      window.removeEventListener("storage", updateLanguage);
-    };
-  }, []);
+  const { isArabic, isDarkMode } = useContext(AppContext);
 
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gray-800 text-white py-16 px-8">
-        <div className="container mx-auto text-center">
-          <h1 className="text-4xl font-bold mb-4">
-            {isArabic ? "استيراد السيارات من كندا" : "Import cars from Canada"}
-          </h1>
-          <p className="text-lg mb-8">
-            {isArabic
-              ? "نوفر لك خدمة استيراد السيارات بأفضل الأسعار والجودة العالية."
-              : "We provide the best car importing services at competitive prices and high quality."}
-          </p>
-          <button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-            {isArabic ? "اطلب الآن" : "Order Now"}
-          </button>
-        </div>
-      </section>
+      <Hero />
 
       {/* Services Section */}
-      <section className="py-16 px-8 bg-gray-100">
-        <div className="container mx-auto text-center">
+      <section
+        className={`  py-16 px-8 ${isDarkMode ? "dark-bg" : "light-bg "}`}
+      >
+        <div
+          className={`container mx-auto text-center ${
+            isDarkMode ? "dark-bg" : "light-bg "
+          }`}
+        >
           <h2 className="text-3xl font-bold mb-8">
             {isArabic ? "خدماتنا" : "Our Services"}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Service 1 */}
-            <div className="p-6 bg-white shadow-lg rounded-lg">
+            <div className="p-6 border shadow-lg rounded-lg">
               <h3 className="text-xl font-semibold mb-4">
                 {isArabic ? "تقرير حالة السيارة" : "Car Condition Report"}
               </h3>
@@ -61,7 +36,7 @@ export default function Home() {
               </p>
             </div>
             {/* Service 2 */}
-            <div className="p-6 bg-white shadow-lg rounded-lg">
+            <div className="p-6 border shadow-lg rounded-lg">
               <h3 className="text-xl font-semibold mb-4">
                 {isArabic ? "أسعار منافسة" : "Competitive Prices"}
               </h3>
@@ -72,7 +47,7 @@ export default function Home() {
               </p>
             </div>
             {/* Service 3 */}
-            <div className="p-6 bg-white shadow-lg rounded-lg">
+            <div className="p-6 border shadow-lg rounded-lg">
               <h3 className="text-xl font-semibold mb-4">
                 {isArabic ? "الشحن والتوصيل" : "Shipping and Delivery"}
               </h3>
