@@ -13,7 +13,14 @@ import { Switch, FormControlLabel } from "@mui/material";
 import "react-toggle/style.css";
 import Link from "next/link";
 import { AppContext } from "../app/context/AppContext";
+import { usePathname } from "next/navigation";
 
+const navItems = [
+  { label: "الرئيسية", href: "/" },
+  { label: "الخدمات", href: "/services" },
+  { label: "اتصل بنا", href: "/contact" },
+  { label: "معرض السيارات", href: "/car-store" },
+];
 const CustomNavbar: React.FC = () => {
   const { isDarkMode, isArabic, toggleDarkMode, toggleLanguage } =
     useContext(AppContext);
@@ -21,8 +28,8 @@ const CustomNavbar: React.FC = () => {
   const [userexpanded, setUserExpanded] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const userDropdownRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
-  // إغلاق القوائم عند النقر خارجها
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -154,7 +161,7 @@ const CustomNavbar: React.FC = () => {
                 </li>
 
                 {/* Language Switch */}
-                <li className="flex items-center justify-between mt-2">
+                <li className="flex items-center justify-between ">
                   <span>{isArabic ? "اللغة" : "Lang"}</span>
                   <FormControlLabel
                     control={
@@ -183,27 +190,26 @@ const CustomNavbar: React.FC = () => {
                     label={isArabic ? "AR" : "EN"}
                   />
                 </li>
-                <li className="mt-2">
-                  <hr className="border-gray-700" />
-                </li>
-                <li className="px-4 py-2 hover:bg-gray-200 hover:text-black">
-                  <Link href="/">{isArabic ? "الصفحة الرئيسية" : "Home"}</Link>
-                </li>
-                <li className="px-4 py-2 hover:bg-gray-200 hover:text-black">
-                  <Link href="/services">
-                    {isArabic ? "الخدمات" : "Services"}
-                  </Link>
-                </li>
-                <li className="px-4 py-2 hover:bg-gray-200 hover:text-black">
-                  <Link href="/contact">
-                    {isArabic ? "اتصل بنا" : "Contact Us"}
-                  </Link>
-                </li>
-                <li className="px-4 py-2 hover:bg-gray-200 hover:text-black">
-                  <Link href="/car-store">
-                    {isArabic ? "معرض السيارات" : "Car Store"}
-                  </Link>
-                </li>
+                {navItems.map((item) => (
+                  <li
+                    key={item.href}
+                    className={`mt-2 px-2 nav-item ${
+                      pathname === item.href ? "active" : ""
+                    }`}
+                  >
+                    <Link href={item.href}>
+                      {isArabic
+                        ? item.label
+                        : item.label === "الرئيسية"
+                        ? "Home"
+                        : item.label === "الخدمات"
+                        ? "Services"
+                        : item.label === "اتصل بنا"
+                        ? "Contact Us"
+                        : "Car Store"}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             )}
           </div>
@@ -298,20 +304,26 @@ const CustomNavbar: React.FC = () => {
         }`}
       >
         <ul className="flex items-center justify-center">
-          <li className="mx-4 px-2 nav-item ">
-            <Link href="/">{isArabic ? "الصفحة الرئيسية" : "Home"}</Link>
-          </li>
-          <li className="mx-4 px-2 nav-item ">
-            <Link href="/services">{isArabic ? "الخدمات" : "Services"}</Link>
-          </li>
-          <li className="mx-4 px-2 nav-item ">
-            <Link href="/contact">{isArabic ? "اتصل بنا" : "Contact Us"}</Link>
-          </li>
-          <li className="mx-4 px-2 nav-item ">
-            <Link href="/car-store">
-              {isArabic ? "معرض السيارات" : "Car Store"}
-            </Link>
-          </li>
+          {navItems.map((item) => (
+            <li
+              key={item.href}
+              className={`mx-4 px-2 nav-item ${
+                pathname === item.href ? "active" : ""
+              }`}
+            >
+              <Link href={item.href}>
+                {isArabic
+                  ? item.label
+                  : item.label === "الرئيسية"
+                  ? "Home"
+                  : item.label === "الخدمات"
+                  ? "Services"
+                  : item.label === "اتصل بنا"
+                  ? "Contact Us"
+                  : "Car Store"}
+              </Link>
+            </li>
+          ))}
         </ul>
       </nav>
     </>
