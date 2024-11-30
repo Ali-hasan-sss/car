@@ -54,3 +54,7 @@ body {
   width: 100%;
   transform: translateX(0);
 }
+.rejisterPage,
+.login {
+  min-height: 88vh;
+}

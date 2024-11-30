@@ -4,7 +4,7 @@ import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import PasswordStrengthBar from "react-password-strength-bar";
 import Image from "next/image";
-import "./style.css";
+import "./form_style.css";
 import { AppContext } from "@/app/context/AppContext";
 
 interface FormData {
@@ -46,20 +46,20 @@ const SignUpForm = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className={`max-w-4xl mx-auto  p-8 rounded-lg shadow-lg grid grid-cols-1 gap-6 sm:grid-cols-2 ${
+      className={`max-w-4xl mx-auto  p-8 rounded-lg shadow-lg grid grid-cols-1 gap-1 sm:grid-cols-2 ${
         isDarkMode ? "dark-bg " : "light-bg "
       }`}
     >
       {/* الاسم الكامل */}
       <div className="form-group">
-        <label htmlFor="fullName" className="text-lg font-medium ">
+        <label htmlFor="fullName" className="text-lg font-medium label ">
           {!isArabic ? "full Name" : "الاسم الكامل"}
         </label>
         <input
           id="fullName"
           type="text"
           {...register("fullName", { required: "الاسم الكامل مطلوب" })}
-          className="input text-black mt-2 p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
+          className="input text-black mt-1 p-2  rounded-md w-full"
         />
         {errors.fullName && (
           <p className="text-red-500 text-sm mt-1">{errors.fullName.message}</p>
@@ -68,7 +68,7 @@ const SignUpForm = () => {
 
       {/* Email */}
       <div className="form-group">
-        <label htmlFor="email" className="text-lg font-medium ">
+        <label htmlFor="email" className="text-lg font-medium label ">
           {isArabic ? "البريد الإلكتروني" : "Email"}
         </label>
         <input
@@ -79,7 +79,7 @@ const SignUpForm = () => {
               ? "البريد الإلكتروني مطلوب"
               : "Email is required",
           })}
-          className="input text-black mt-2 p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
+          className="input text-black mt-1 p-2 rounded-md w-full"
         />
         {errors.email && (
           <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
@@ -88,7 +88,7 @@ const SignUpForm = () => {
 
       {/* Password */}
       <div className="form-group">
-        <label htmlFor="password" className="text-lg font-medium">
+        <label htmlFor="password" className="text-lg font-medium label">
           {isArabic ? "كلمة المرور" : "Password"}
         </label>
         <input
@@ -109,7 +109,7 @@ const SignUpForm = () => {
                 : "Password must contain uppercase letters, numbers, and symbols",
             },
           })}
-          className="input text-black mt-2 p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
+          className="input text-black mt-1 p-2 rounded-md w-full"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -121,7 +121,7 @@ const SignUpForm = () => {
 
       {/* Confirm Password */}
       <div className="form-group">
-        <label htmlFor="confirmPassword" className="text-lg font-medium">
+        <label htmlFor="confirmPassword" className="text-lg font-medium label">
           {isArabic ? "تأكيد كلمة المرور" : "Confirm Password"}
         </label>
         <input
@@ -135,7 +135,7 @@ const SignUpForm = () => {
               value === password ||
               (isArabic ? "كلمة المرور غير متطابقة" : "Passwords do not match"),
           })}
-          className="input text-black mt-2 p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
+          className="input text-black mt-1 p-2 rounded-md w-full"
         />
         {errors.confirmPassword && (
           <p className="text-red-500 text-sm mt-1">
@@ -146,7 +146,7 @@ const SignUpForm = () => {
 
       {/* Account Type */}
       <div className="form-group">
-        <label htmlFor="accountType" className="text-lg font-medium">
+        <label htmlFor="accountType" className="text-lg font-medium label">
           {isArabic ? "نوع الحساب" : "Account Type"}
         </label>
         <select
@@ -155,7 +155,7 @@ const SignUpForm = () => {
           onChange={(e) =>
             setAccountType(e.target.value as "personal" | "company")
           }
-          className="input mt-2 p-3 text-black border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
+          className="input mt-1 p-2 text-black rounded-md w-full"
         >
           <option value="personal">
             {isArabic ? "حساب شخصي" : "Personal Account"}
@@ -172,7 +172,7 @@ const SignUpForm = () => {
           <div className="form-group">
             <label
               htmlFor="commercialRegistration"
-              className="text-lg font-medium "
+              className="text-lg font-medium label"
             >
               {isArabic
                 ? "رقم السجل التجاري"
@@ -186,7 +186,7 @@ const SignUpForm = () => {
                   ? "رقم السجل التجاري مطلوب"
                   : "Commercial Registration is required",
               })}
-              className="input mt-2 p-3 border text-black border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
+              className="input mt-1 p-2 text-black rounded-md w-full "
             />
             {errors.commercialRegistration && (
               <p className="text-red-500 text-sm mt-1">
@@ -195,7 +195,7 @@ const SignUpForm = () => {
             )}
           </div>
           <div className="form-group">
-            <label htmlFor="taxNumber" className="text-lg font-medium ">
+            <label htmlFor="taxNumber" className="text-lg font-medium label">
               {isArabic ? "الرقم الضريبي" : "Tax Number"}
             </label>
             <input
@@ -206,7 +206,7 @@ const SignUpForm = () => {
                   ? "الرقم الضريبي مطلوب"
                   : "Tax Number is required",
               })}
-              className="input text-black mt-2 p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
+              className="input text-black mt-1 p-2 rounded-md w-full"
             />
             {errors.taxNumber && (
               <p className="text-red-500 text-sm mt-1">
@@ -219,7 +219,7 @@ const SignUpForm = () => {
 
       {/* رفع صورة الهوية */}
       <div className="form-group">
-        <label htmlFor="file" className="text-lg font-medium ">
+        <label htmlFor="file" className="text-lg font-medium label">
           {isArabic ? "رفع صورة الهوية" : "Upload ID Image"}
         </label>
         <input
@@ -228,7 +228,7 @@ const SignUpForm = () => {
           accept="image/*"
           {...register("file", { required: "يجب رفع صورة الهوية" })}
           onChange={handleFileChange}
-          className="input text-black mt-2 p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
+          className="input text-black mt-1 p-2 rounded-md w-full"
         />
         {file && (
           <div className="mt-2">
@@ -248,7 +248,7 @@ const SignUpForm = () => {
       </div>
       {/* Phone Number */}
       <div className="form-group">
-        <label htmlFor="phoneNumber" className="text-lg font-medium ">
+        <label htmlFor="phoneNumber" className="text-lg font-medium label">
           {isArabic ? "رقم الهاتف" : "Phone Number"}
         </label>
         <input
@@ -259,7 +259,7 @@ const SignUpForm = () => {
               ? "رقم الهاتف مطلوب"
               : "Phone Number is required",
           })}
-          className="input text-black mt-2 p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500"
+          className="input text-black mt-1 p-2 rounded-md w-full"
         />
         {errors.phoneNumber && (
           <p className="text-red-500 text-sm mt-1">
@@ -268,7 +268,7 @@ const SignUpForm = () => {
         )}
         <button
           type="submit"
-          className="btn-submit mt-4 bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 focus:outline-none w-full sm:w-auto"
+          className="btn-submit mt-4 bg-blue-500 hover:bg-gray-600 text-white p-2 px-5  w-full sm:w-auto"
         >
           إنشاء حساب
         </button>
