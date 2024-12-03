@@ -9,21 +9,21 @@ import {
   FaUser,
   FaUserPlus,
 } from "react-icons/fa";
-import { Switch, FormControlLabel } from "@mui/material";
+import LanguageSwitch from "@/components/btn-switch/LanguageSwitch";
+import ThemSwitch from "@/components/btn-switch/ThemSwich";
 import "react-toggle/style.css";
 import Link from "next/link";
 import { AppContext } from "../app/context/AppContext";
 import { usePathname } from "next/navigation";
 
 const navItems = [
-  { label: "الرئيسية", href: "/" },
-  { label: "الخدمات", href: "/services" },
-  { label: "اتصل بنا", href: "/contact" },
-  { label: "معرض السيارات", href: "/car-store" },
+  { label_ar: "الرئيسية", label_en: "Home", href: "/" },
+  { label_ar: "الخدمات", label_en: "Services", href: "/services" },
+  { label_ar: "اتصل بنا", label_en: "Contact us", href: "/contact" },
+  { label_ar: "معرض السيارات", label_en: "Car Store", href: "/car-store" },
 ];
 const CustomNavbar: React.FC = () => {
-  const { isDarkMode, isArabic, toggleDarkMode, toggleLanguage } =
-    useContext(AppContext);
+  const { isDarkMode, isArabic, toggleDarkMode } = useContext(AppContext);
   const [expanded, setExpanded] = useState(false);
   const [userexpanded, setUserExpanded] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -63,33 +63,7 @@ const CustomNavbar: React.FC = () => {
         {/* السويتش والقائمة المنسدلة */}
         <div className="navbar-start my-1">
           <div className="hidden md:flex items-center">
-            <FormControlLabel
-              control={
-                <Switch
-                  className={`${isArabic ? "ml-0" : "ml-2"}`}
-                  checked={isArabic}
-                  onChange={toggleLanguage}
-                  name="language-switch"
-                  color="primary"
-                  inputProps={{ "aria-label": "language toggle" }}
-                  sx={{
-                    "& .MuiSwitch-switchBase": {
-                      color: "gray", // اللون عند الإيقاف
-                    },
-                    "& .MuiSwitch-switchBase.Mui-checked": {
-                      color: "blue", // اللون عند التشغيل
-                    },
-                    "& .MuiSwitch-track": {
-                      backgroundColor: "gray", // لون المسار عند الإيقاف
-                    },
-                    "& .MuiSwitch-track.Mui-checked": {
-                      backgroundColor: "blue", // لون المسار عند التشغيل
-                    },
-                  }}
-                />
-              }
-              label={isArabic ? "AR" : "EN"}
-            />
+            <LanguageSwitch />
           </div>
 
           {/* القائمة المنسدلة - تظهر فقط في الشاشات الصغيرة */}
@@ -132,81 +106,23 @@ const CustomNavbar: React.FC = () => {
                 {/* Dark Mode Switch */}
                 <li className="flex items-center justify-between">
                   <span>{isArabic ? "الوضع" : "Dark"}</span>
-                  <FormControlLabel
-                    label={isDarkMode ? <FaMoon /> : <FaSun />}
-                    control={
-                      <Switch
-                        checked={isDarkMode}
-                        onChange={toggleDarkMode}
-                        name="language-switch"
-                        color="primary"
-                        inputProps={{ "aria-label": "language toggle" }}
-                        sx={{
-                          "& .MuiSwitch-switchBase": {
-                            color: "gray", // اللون عند الإيقاف
-                          },
-                          "& .MuiSwitch-switchBase.Mui-checked": {
-                            color: "blue", // اللون عند التشغيل
-                          },
-                          "& .MuiSwitch-track": {
-                            backgroundColor: "gray", // لون المسار عند الإيقاف
-                          },
-                          "& .MuiSwitch-track.Mui-checked": {
-                            backgroundColor: "blue", // لون المسار عند التشغيل
-                          },
-                        }}
-                      />
-                    }
-                  />
+                  <ThemSwitch />
                 </li>
 
                 {/* Language Switch */}
                 <li className="flex items-center justify-between ">
                   <span>{isArabic ? "اللغة" : "Lang"}</span>
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        checked={isArabic}
-                        onChange={toggleLanguage}
-                        name="language-switch"
-                        color="warning"
-                        inputProps={{ "aria-label": "language toggle" }}
-                        sx={{
-                          "& .MuiSwitch-switchBase": {
-                            color: "gray", // اللون عند الإيقاف
-                          },
-                          "& .MuiSwitch-switchBase.Mui-checked": {
-                            color: "blue", // اللون عند التشغيل
-                          },
-                          "& .MuiSwitch-track": {
-                            backgroundColor: "gray", // لون المسار عند الإيقاف
-                          },
-                          "& .MuiSwitch-track.Mui-checked": {
-                            backgroundColor: "blue", // لون المسار عند التشغيل
-                          },
-                        }}
-                      />
-                    }
-                    label={isArabic ? "AR" : "EN"}
-                  />
+                  <LanguageSwitch />
                 </li>
                 {navItems.map((item) => (
                   <li
                     key={item.href}
-                    className={`mt-2 px-2 nav-item ${
+                    className={`mt-2 pb-1 px-2 nav-item ${
                       pathname === item.href ? "active" : ""
                     }`}
                   >
                     <Link href={item.href}>
-                      {isArabic
-                        ? item.label
-                        : item.label === "الرئيسية"
-                        ? "Home"
-                        : item.label === "الخدمات"
-                        ? "Services"
-                        : item.label === "اتصل بنا"
-                        ? "Contact Us"
-                        : "Car Store"}
+                      {isArabic ? item.label_ar : item.label_en}
                     </Link>
                   </li>
                 ))}
@@ -214,7 +130,7 @@ const CustomNavbar: React.FC = () => {
             )}
           </div>
         </div>
-        {/* عنوان النافبار */}
+        {/* center navbar for logo */}
         <div className="navbar-center my-1">
           <a
             className={`btn btn-ghost text-xl ${
@@ -242,7 +158,9 @@ const CustomNavbar: React.FC = () => {
                 tabIndex={0}
                 role="button"
                 onClick={() => setUserExpanded(!userexpanded)}
-                className="btn btn-ghost btn-circle flex  "
+                className={`btn-nav flex ${
+                  isDarkMode ? " border-dark" : " border-light"
+                }`}
               >
                 <span
                   className={` mx-2 ${
@@ -300,27 +218,21 @@ const CustomNavbar: React.FC = () => {
       </nav>
       <nav
         className={` hidden md:flex  ${
-          isDarkMode ? "dark-bg text-white" : "light-bg text-black"
+          isDarkMode
+            ? "dark-bg  shadow-[0px_20px_7px_rgb(255, 255, 255)]"
+            : "light-bg  shadow-[0px_20px_7px_rgba(0,0,0,0.1)]"
         }`}
       >
         <ul className="flex items-center justify-center">
           {navItems.map((item) => (
             <li
               key={item.href}
-              className={`mx-4 px-2 nav-item ${
+              className={`mx-3 pb-2 px-2 nav-item ${
                 pathname === item.href ? "active" : ""
               }`}
             >
               <Link href={item.href}>
-                {isArabic
-                  ? item.label
-                  : item.label === "الرئيسية"
-                  ? "Home"
-                  : item.label === "الخدمات"
-                  ? "Services"
-                  : item.label === "اتصل بنا"
-                  ? "Contact Us"
-                  : "Car Store"}
+                {isArabic ? item.label_ar : item.label_en}
               </Link>
             </li>
           ))}

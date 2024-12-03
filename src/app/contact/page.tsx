@@ -54,7 +54,7 @@ const ContactPage: React.FC = () => {
       ) : (
         <form
           onSubmit={handleSubmit}
-          className={`max-w-lg mx-auto p-3 shadow rounded ${
+          className={`max-w-lg mx-auto p-5 shadow rounded ${
             isDarkMode ? "dark-bg" : "light-bg"
           }`}
         >
@@ -70,8 +70,8 @@ const ContactPage: React.FC = () => {
               value={formData.name}
               onChange={handleInputChange}
               required
-              className={`input mt-1 p-2 rounded-md w-full text-black ${
-                isDarkMode ? "dark-bg-1" : "light-bg-1"
+              className={`input mt-1 p-2 rounded-md w-full  ${
+                isDarkMode ? "dark-bg-2" : "light-bg-2"
               }`}
             />
           </div>
@@ -88,8 +88,8 @@ const ContactPage: React.FC = () => {
               value={formData.email}
               onChange={handleInputChange}
               required
-              className={`input mt-1 p-2 rounded-md w-full text-black ${
-                isDarkMode ? "dark-bg-1" : "light-bg-1"
+              className={`input mt-1 p-2 rounded-md w-full  ${
+                isDarkMode ? "dark-bg-2" : "light-bg-2"
               }`}
             />
           </div>
@@ -105,8 +105,8 @@ const ContactPage: React.FC = () => {
               value={formData.message}
               onChange={handleInputChange}
               required
-              className={`input mt-1 p-2 rounded-md w-full text-black ${
-                isDarkMode ? "dark-bg-1" : "light-bg-1"
+              className={`input mt-1 p-2 rounded-md w-full  ${
+                isDarkMode ? "dark-bg-2" : "light-bg-2"
               }`}
               rows={4}
             ></textarea>
@@ -116,7 +116,9 @@ const ContactPage: React.FC = () => {
           <div className="text-center">
             <button
               type="submit"
-              className="bg-blue-500 text-white py-2 px-4 rounded-md w-full hover:bg-blue-600"
+              className={` text-white py-2 px-4 rounded-md w-full ${
+                isDarkMode ? "send-btn-dark" : "send-btn-light"
+              }`}
             >
               {isArabic ? "إرسال" : "Submit"}
             </button>

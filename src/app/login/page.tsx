@@ -46,8 +46,8 @@ const Login: React.FC = () => {
                 ? "البريد الإلكتروني مطلوب"
                 : "Email is required",
             })}
-            className={`input mt-1 p-2 rounded-md w-full text-black  ${
-              isDarkMode ? "dark-bg2" : "light-bg-2"
+            className={`input mt-1 p-2 rounded-md w-full  ${
+              isDarkMode ? "dark-bg-2" : "light-bg-2"
             }`}
           />
           {errors.email && (
@@ -74,8 +74,8 @@ const Login: React.FC = () => {
                   : "Password must be at least 8 characters long",
               },
             })}
-            className={`input mt-1 p-2 text-black rounded-md w-full  ${
-              isDarkMode ? "dark-bg2 " : "light-bg-2"
+            className={`input mt-1 p-2 rounded-md w-full  ${
+              isDarkMode ? "dark-bg-2" : "light-bg-2"
             }`}
           />
           {errors.password && (
@@ -88,11 +88,9 @@ const Login: React.FC = () => {
         {/* زر تسجيل الدخول */}
         <button
           type="submit"
-          className={`mt-6 w-full p-2  ${
-            isDarkMode
-              ? "bg-blue-600 hover:bg-blue-700"
-              : "bg-blue-500 hover:bg-blue-600"
-          } text-white`}
+          className={`mt-6 text-white w-full rounded p-2  ${
+            isDarkMode ? "send-btn-dark" : "send-btn-light"
+          } `}
         >
           {isArabic ? "تسجيل الدخول" : "Login"}
         </button>

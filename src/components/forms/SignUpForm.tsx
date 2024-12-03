@@ -59,7 +59,9 @@ const SignUpForm = () => {
           id="fullName"
           type="text"
           {...register("fullName", { required: "الاسم الكامل مطلوب" })}
-          className="input text-black mt-1 p-2  rounded-md w-full"
+          className={`input mt-1 p-2 rounded-md w-full  ${
+            isDarkMode ? "dark-bg-2" : "light-bg-2"
+          }`}
         />
         {errors.fullName && (
           <p className="text-red-500 text-sm mt-1">{errors.fullName.message}</p>
@@ -79,7 +81,9 @@ const SignUpForm = () => {
               ? "البريد الإلكتروني مطلوب"
               : "Email is required",
           })}
-          className="input text-black mt-1 p-2 rounded-md w-full"
+          className={`input mt-1 p-2 rounded-md w-full  ${
+            isDarkMode ? "dark-bg-2" : "light-bg-2"
+          }`}
         />
         {errors.email && (
           <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
@@ -109,7 +113,9 @@ const SignUpForm = () => {
                 : "Password must contain uppercase letters, numbers, and symbols",
             },
           })}
-          className="input text-black mt-1 p-2 rounded-md w-full"
+          className={`input mt-1 p-2 rounded-md w-full  ${
+            isDarkMode ? "dark-bg-2" : "light-bg-2"
+          }`}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -135,7 +141,9 @@ const SignUpForm = () => {
               value === password ||
               (isArabic ? "كلمة المرور غير متطابقة" : "Passwords do not match"),
           })}
-          className="input text-black mt-1 p-2 rounded-md w-full"
+          className={`input mt-1 p-2 rounded-md w-full  ${
+            isDarkMode ? "dark-bg-2" : "light-bg-2"
+          }`}
         />
         {errors.confirmPassword && (
           <p className="text-red-500 text-sm mt-1">
@@ -155,7 +163,9 @@ const SignUpForm = () => {
           onChange={(e) =>
             setAccountType(e.target.value as "personal" | "company")
           }
-          className="input mt-1 p-2 text-black rounded-md w-full"
+          className={`input mt-1 p-2 rounded-md w-full  ${
+            isDarkMode ? "dark-bg-2" : "light-bg-2"
+          }`}
         >
           <option value="personal">
             {isArabic ? "حساب شخصي" : "Personal Account"}
@@ -186,7 +196,9 @@ const SignUpForm = () => {
                   ? "رقم السجل التجاري مطلوب"
                   : "Commercial Registration is required",
               })}
-              className="input mt-1 p-2 text-black rounded-md w-full "
+              className={`input mt-1 p-2 rounded-md w-full  ${
+                isDarkMode ? "dark-bg-2" : "light-bg-2"
+              }`}
             />
             {errors.commercialRegistration && (
               <p className="text-red-500 text-sm mt-1">
@@ -206,7 +218,9 @@ const SignUpForm = () => {
                   ? "الرقم الضريبي مطلوب"
                   : "Tax Number is required",
               })}
-              className="input text-black mt-1 p-2 rounded-md w-full"
+              className={`input mt-1 p-2 rounded-md w-full  ${
+                isDarkMode ? "dark-bg-2" : "light-bg-2"
+              }`}
             />
             {errors.taxNumber && (
               <p className="text-red-500 text-sm mt-1">
@@ -228,7 +242,9 @@ const SignUpForm = () => {
           accept="image/*"
           {...register("file", { required: "يجب رفع صورة الهوية" })}
           onChange={handleFileChange}
-          className="input text-black mt-1 p-2 rounded-md w-full"
+          className={`input mt-1 p-2 rounded-md w-full  ${
+            isDarkMode ? "dark-bg-2" : "light-bg-2"
+          }`}
         />
         {file && (
           <div className="mt-2">
@@ -259,7 +275,9 @@ const SignUpForm = () => {
               ? "رقم الهاتف مطلوب"
               : "Phone Number is required",
           })}
-          className="input text-black mt-1 p-2 rounded-md w-full"
+          className={`input mt-1 p-2 rounded-md w-full  ${
+            isDarkMode ? "dark-bg-2" : "light-bg-2"
+          }`}
         />
         {errors.phoneNumber && (
           <p className="text-red-500 text-sm mt-1">
@@ -268,7 +286,7 @@ const SignUpForm = () => {
         )}
         <button
           type="submit"
-          className="btn-submit mt-4 bg-blue-500 hover:bg-gray-600 text-white p-2 px-5  w-full sm:w-auto"
+          className="btn-submit mt-4 bg-green-500 hover:bg-green-600 rounded text-white p-2 px-5  w-full sm:w-auto"
         >
           إنشاء حساب
         </button>

@@ -11,22 +11,41 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
-
+/*************dark and light mood styles*****************/
 .dark-bg {
-  background-color: #0b0a0a;
+  background-color: #030303;
+  color: #f0f0f0;
+}
+.dark-bg-1 {
+  background-color: #3f2c27e4;
   color: #f0f0f0;
 }
 .dark-bg-2 {
-  background-color: #262525;
+  background-color: #411d1df3;
   color: #f0f0f0;
 }
 .light-bg {
-  background-color: #bafcf4;
+  background-color: #f8ef00;
+  color: #000;
+}
+.light-bg-1 {
+  background-color: #d6d147d7;
   color: #000;
 }
 .light-bg-2 {
-  background-color: #74dfd3;
-  color: #2a2727;
+  background-color: #facbcbe6;
+  color: #1b1919;
+}
+.border-dark {
+  border: 1px solid #e60808;
+}
+.border-light {
+  border: 1px solid #780725;
+}
+/**************navbar style********************/
+.nav2 {
+  box-shadow: 0px 20px 7px rgb(255, 255, 255);
+  z-index: 10;
 }
 .nav-item {
   border-bottom: 3px solid transparent;
@@ -44,6 +63,7 @@ body {
   left: 50%;
   width: 0;
   height: 3px;
+  border-radius: 100px;
   background-color: #df160c;
   transition: all 0.3s ease;
 }
@@ -57,4 +77,33 @@ body {
 .rejisterPage,
 .login {
   min-height: 88vh;
+}
+/******************sidebar components****************/
+.sidebar {
+}
+
+/******************global components****************/
+.send-btn-light {
+  background-color: #076e119e;
+  transition: 0.2s;
+}
+.send-btn-light:hover {
+  background-color: #04be64df;
+}
+.send-btn-dark {
+  background-color: #293028;
+  transition: 0.2s;
+}
+.send-btn-dark:hover {
+  background-color: #3d473b;
+}
+.input {
+  border: 1px solid #fff;
+}
+.btn-nav {
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+.icon {
+  color: #ed3006;
 }
