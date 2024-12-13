@@ -11,6 +11,9 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        primary1: "#008080",
+        secondary1: "#eaf6ff",
+        trackbtn: "#555555",
       },
     },
   },

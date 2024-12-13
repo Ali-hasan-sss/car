@@ -1,0 +1,44 @@
+.track {
+  border-radius: 7px;
+}
+.track input {
+  outline: none;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+}
+.nav-item {
+  border-bottom: 2px solid transparent;
+  transition: 0.4s;
+  position: relative;
+  overflow: hidden;
+  font-size: 18x;
+  line-height: 27px;
+  font-weight: 500;
+}
+.nav-item:hover,
+.active {
+  color: #008080;
+}
+.nav-item::before {
+  content: "";
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  border-radius: 100px;
+  background-color: #008080;
+  transition: all 0.3s ease;
+}
+
+.nav-item:hover::before,
+.nav-item.active::before {
+  left: 0;
+  width: 100%;
+  transform: translateX(0);
+}
+.rejisterPage,
+.login {
+  min-height: 88vh;
+}

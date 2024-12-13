@@ -42,45 +42,6 @@ body {
 .border-light {
   border: 1px solid #780725;
 }
-/**************navbar style********************/
-.nav2 {
-  box-shadow: 0px 20px 7px rgb(255, 255, 255);
-  z-index: 10;
-}
-.nav-item {
-  border-bottom: 3px solid transparent;
-  transition: 0.4s;
-}
-.nav-item {
-  position: relative;
-  overflow: hidden;
-}
-
-.nav-item::before {
-  content: "";
-  position: absolute;
-  bottom: 0px;
-  left: 50%;
-  width: 0;
-  height: 3px;
-  border-radius: 100px;
-  background-color: #df160c;
-  transition: all 0.3s ease;
-}
-
-.nav-item:hover::before,
-.nav-item.active::before {
-  left: 0;
-  width: 100%;
-  transform: translateX(0);
-}
-.rejisterPage,
-.login {
-  min-height: 88vh;
-}
-/******************sidebar components****************/
-.sidebar {
-}
 
 /******************global components****************/
 .send-btn-light {
