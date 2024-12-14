@@ -36,7 +36,7 @@ export default function Fillter() {
 
           <div className="flex w-full flex-wrap items-start justify-start gap-4">
             {/* Select your address */}
-            <div className="flex border rounded bg-white w-[150px] h-[35px] py-[8px] px-[12px] ">
+            <div className="flex border rounded bg-white h-[35px] py-[8px] px-[12px] ">
               <select id="address" className="  focus:outline-none">
                 <option value="">Select your address</option>
                 <option value="address1">Address 1</option>
@@ -46,7 +46,7 @@ export default function Fillter() {
             </div>
 
             {/* Shipping Port */}
-            <div className="flex border rounded bg-white w-[150px] h-[35px] py-[8px] px-[12px]">
+            <div className="flex border rounded bg-white  h-[35px] py-[8px] px-[12px]">
               <select id="port" className=" bg-white focus:outline-none">
                 <option value="">Select shipping port</option>
                 <option value="port1">Port 1</option>
@@ -56,7 +56,7 @@ export default function Fillter() {
             </div>
 
             {/* Car */}
-            <div className="flex border rounded bg-white w-[150px] h-[35px] py-[8px] px-[12px]">
+            <div className="flex border rounded bg-white  h-[35px] py-[8px] px-[12px]">
               <select id="car" className=" focus:outline-none ">
                 <option value="">Select your car</option>
                 <option value="car1">Car 1</option>
