@@ -30,8 +30,65 @@ export default function Fillter() {
             ))}
           </div>
         </div>
+        {/**port information  */}
         <div className="fillter p-[10px] sm:p-[0px] gap-[20px]">
-          <p className="text-primary1">Select your address </p>
+          <p className="text-primary1 mt-4">Select your address</p>
+
+          <div className="flex w-full flex-wrap items-start justify-start gap-4">
+            {/* Select your address */}
+            <div className="flex border rounded bg-white w-[150px] h-[35px] py-[8px] px-[12px] ">
+              <select id="address" className="  focus:outline-none">
+                <option value="">Select your address</option>
+                <option value="address1">Address 1</option>
+                <option value="address2">Address 2</option>
+                <option value="address3">Address 3</option>
+              </select>
+            </div>
+
+            {/* Shipping Port */}
+            <div className="flex border rounded bg-white w-[150px] h-[35px] py-[8px] px-[12px]">
+              <select id="port" className=" bg-white focus:outline-none">
+                <option value="">Select shipping port</option>
+                <option value="port1">Port 1</option>
+                <option value="port2">Port 2</option>
+                <option value="port3">Port 3</option>
+              </select>
+            </div>
+
+            {/* Car */}
+            <div className="flex border rounded bg-white w-[150px] h-[35px] py-[8px] px-[12px]">
+              <select id="car" className=" focus:outline-none ">
+                <option value="">Select your car</option>
+                <option value="car1">Car 1</option>
+                <option value="car2">Car 2</option>
+                <option value="car3">Car 3</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        {/**email address */}
+        <div className="fillter p-[10px] sm:p-[0px] gap-[20px]">
+          <p className="text-primary1 mt-4">Enter Your Email Address </p>
+          <div className="flex w-[400px] h-[56px] bg-white px-[12px] py-[8px] gap-[18px] border rounded items-start justify-start gap-4">
+            <div className="flex gap-[12px] w-full h-full item-center ">
+              <div className="w-[24px] h-[24px] relative item-center justify-center mt-[10px]">
+                <img src="/images/email-icon.png" alt="email" />
+              </div>
+              <div className="input flex item-center w-full justify-center">
+                <input
+                  type="email"
+                  placeholder="mail@example.com"
+                  className=" bg-white focus:outline-none text-xl mb-1 w-full"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        {/**action */}
+        <div className="action w-full h-80px flex item-center justify-center py-[16px]">
+          <button className="btn w-[195px] h-[48px] rounded py-[12px] px-[24px] text-white bg-primary1 hover:bg-trasparent ">
+            Get Instant Quote up
+          </button>
         </div>
       </div>
     </div>
