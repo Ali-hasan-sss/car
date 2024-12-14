@@ -1,3 +1,16 @@
+.fillter-title {
+  font-size: 40px;
+  line-height: 50px;
+  font-weight: 700;
+}
+.fillter-des {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 27px;
+  margin: 15px 0px;
+  color: #555555;
+}
+
 .swiper-slide {
   display: flex;
   align-items: center;
