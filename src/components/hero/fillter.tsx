@@ -69,7 +69,7 @@ export default function Fillter() {
         {/**email address */}
         <div className="fillter p-[10px] sm:p-[0px] gap-[20px]">
           <p className="text-primary1 mt-4">Enter Your Email Address </p>
-          <div className="flex w-[400px] h-[56px] bg-white px-[12px] py-[8px] gap-[18px] border rounded items-start justify-start gap-4">
+          <div className="flex  h-[56px] bg-white px-[12px] py-[8px] gap-[18px] border rounded items-start justify-start gap-4">
             <div className="flex gap-[12px] w-full h-full item-center ">
               <div className="w-[24px] h-[24px] relative item-center justify-center mt-[10px]">
                 <img src="/images/email-icon.png" alt="email" />
@@ -86,7 +86,7 @@ export default function Fillter() {
         </div>
         {/**action */}
         <div className="action w-full h-80px flex item-center justify-center py-[16px]">
-          <button className="btn w-[195px] h-[48px] rounded py-[12px] px-[24px] text-white bg-primary1 hover:bg-trasparent ">
+          <button className="btn w-[195px] h-[48px] rounded py-[12px] px-[24px] text-blue-200  bg-primary1 hover:bg-transparent hover:border-primary1 hover:text-black ">
             Get Instant Quote up
           </button>
         </div>
