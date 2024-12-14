@@ -22,16 +22,19 @@ const Slider: React.FC = () => {
   const nextRef = useRef<HTMLDivElement | null>(null);
 
   return (
-    <div className="relative w-1/2 h-[500px]">
+    <div className="relative w-full h-[500px]">
+      {/* زر السهم السابق */}
       <div
         ref={prevRef}
-        className="absolute left-1/3 ml-[45px] bottom-10 transform -translate-y-1/2 z-10 cursor-pointer bg-black bg-opacity-50 text-white p-2 rounded-full"
+        className="absolute bottom-10 left-10 transform -translate-y-1/2 z-10 cursor-pointer bg-black bg-opacity-50 text-white p-2 rounded-full"
       >
         <FaArrowLeft size={24} />
       </div>
+
+      {/* زر السهم التالي */}
       <div
         ref={nextRef}
-        className="absolute right-1/3 mr-[45px] bottom-10 transform -translate-y-1/2 z-10 cursor-pointer bg-black bg-opacity-50 text-white p-2 rounded-full"
+        className="absolute bottom-10 right-10 transform -translate-y-1/2 z-10 cursor-pointer bg-black bg-opacity-50 text-white p-2 rounded-full"
       >
         <FaArrowRight size={24} />
       </div>

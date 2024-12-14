@@ -47,12 +47,12 @@ export default function Dropdown() {
       <div
         tabIndex={0}
         role="button"
-        className="btn btn-ghost btn-circle"
+        className=" btn-ghost"
         onClick={() => setExpanded(!expanded)}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className={`h-10 w-10 mt-4 `}
+          className={`h-10 w-10  `}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -68,7 +68,7 @@ export default function Dropdown() {
       {expanded && (
         <ul
           tabIndex={0}
-          className={`menu border menu-sm absolute rounded-box z-[1] mt-4 rounded p-4 shadow w-52 top-full ${
+          className={`bg-secondary1 border absolute rounded-box z-[10]  rounded p-4 shadow w-52 top-full ${
             isArabic ? "left-0 " : "right-0"
           }`}
         >

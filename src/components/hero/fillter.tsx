@@ -7,13 +7,13 @@ export default function Fillter() {
     { src: "/images/bus.png", alt: "bus", label: "Min bus" },
   ];
   return (
-    <div className="fillter w-1/2 ">
+    <div className="fillter w-full ">
       <div className="text">
         <h1 className="fillter-title">Simplify Your Car Import Journey!</h1>
         <p className="fillter-des">
           Comprehensive services to import and ship cars from Canada to Oman
         </p>
-        <div className="fillter p-[10px] gap-[20px]">
+        <div className="fillter p-[10px] sm:p-[0px] gap-[20px]">
           <p className="text-primary1">What are you shipping?</p>
           {/* cars category */}
           <div className="flex flex-wrap items-start justify-start gap-4">
@@ -30,7 +30,7 @@ export default function Fillter() {
             ))}
           </div>
         </div>
-        <div className="fillter p-[10px] gap-[20px]">
+        <div className="fillter p-[10px] sm:p-[0px] gap-[20px]">
           <p className="text-primary1">Select your address </p>
         </div>
       </div>
