@@ -1,0 +1,38 @@
+.stor-title {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 50px;
+}
+.stor-des {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 27px;
+  color: #555555;
+  margin-top: 10px;
+}
+.button {
+  border-radius: 25px;
+  font-weight: 500;
+  padding: 6px;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  color: #797474;
+  cursor: pointer;
+  min-width: 80px;
+}
+.button:hover,
+.active-tab {
+  background-color: #008080;
+  color: #ffffff;
+}
+.view-details-btn {
+  background-color: #008080;
+  border-radius: 25px;
+  border: 1px solid transparent;
+  color: #ffffff;
+}
+.view-details-btn:hover {
+  background-color: transparent;
+  border: 1px solid #008080;
+  color: #000000;
+}
