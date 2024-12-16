@@ -1,9 +1,9 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
-import Card from "./card";
 import { carData } from "./data";
 import { useRef } from "react";
+import Card from "./card";
 // المكون الرئيسي
 export default function Slider_card() {
   const prevRef = useRef<HTMLDivElement | null>(null);
