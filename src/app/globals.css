@@ -11,60 +11,19 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
-/*************dark and light mood styles*****************/
-.dark-bg {
-  background-color: #030303;
-  color: #f0f0f0;
+.start-btn {
+  background-color: #008080;
+  border: 1px solid transparent;
+  color: #ffffff;
+  border-radius: 3px;
 }
-.dark-bg-1 {
-  background-color: #3f2c27e4;
-  color: #f0f0f0;
+.start-btn:hover {
+  background-color: transparent;
+  border: 1px solid #008080;
+  color: #000000;
 }
-.dark-bg-2 {
-  background-color: #411d1df3;
-  color: #f0f0f0;
-}
-.light-bg {
-  background-color: #f8ef00;
-  color: #000;
-}
-.light-bg-1 {
-  background-color: #d6d147d7;
-  color: #000;
-}
-.light-bg-2 {
-  background-color: #facbcbe6;
-  color: #1b1919;
-}
-.border-dark {
-  border: 1px solid #e60808;
-}
-.border-light {
-  border: 1px solid #780725;
-}
-
-/******************global components****************/
-.send-btn-light {
-  background-color: #076e119e;
-  transition: 0.2s;
-}
-.send-btn-light:hover {
-  background-color: #04be64df;
-}
-.send-btn-dark {
-  background-color: #293028;
-  transition: 0.2s;
-}
-.send-btn-dark:hover {
-  background-color: #3d473b;
-}
-.input {
-  border: 1px solid #fff;
-}
-.btn-nav {
-  padding: 5px 10px;
-  border-radius: 20px;
-}
-.icon {
-  color: #ed3006;
+.title {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 50px;
 }

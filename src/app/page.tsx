@@ -3,7 +3,9 @@
 import CarDeals from "@/components/CarDeals";
 import Hero from "@/components/hero/hero";
 import HowItWorks from "@/components/HowItWorks";
+import Reviwe from "@/components/reviwe/index";
 import Store from "@/components/store";
+import Success from "@/components/SuccessNO";
 
 export default function Home() {
   return (
@@ -12,6 +14,8 @@ export default function Home() {
       <Store />
       <CarDeals />
       <HowItWorks />
+      <Success />
+      <Reviwe />
     </div>
   );
 }

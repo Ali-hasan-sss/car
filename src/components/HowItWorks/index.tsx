@@ -49,7 +49,14 @@ export default function HowItWorks() {
               </div>
             ))}
           </div>
-          <img src="/images/Vector.png" alt="victor" className="h-[50px]" />
+          <div className="px-3 flex  items-center justify-center">
+            <img src="/images/Vector.png" alt="victor" className="h-[50px]" />
+          </div>
+          <div className="px-3 mt-5 flex  items-center justify-center">
+            <button className="start-btn py-[10px] px-[24px] ">
+              Start Now
+            </button>
+          </div>
         </div>
       </div>
     </div>
