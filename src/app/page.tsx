@@ -1,6 +1,8 @@
 "use client";
 
 import CarDeals from "@/components/CarDeals";
+import Contact from "@/components/contact";
+import Gallery from "@/components/gallery";
 import Hero from "@/components/hero/hero";
 import HowItWorks from "@/components/HowItWorks";
 import Reviwe from "@/components/reviwe/index";
@@ -16,6 +18,8 @@ export default function Home() {
       <HowItWorks />
       <Success />
       <Reviwe />
+      <Gallery />
+      <Contact />
     </div>
   );
 }

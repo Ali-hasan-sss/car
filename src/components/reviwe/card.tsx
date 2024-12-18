@@ -43,7 +43,7 @@ export default function Card({ rate, des, user }: Review) {
       <div
         className="description text-sm px-4 py-2 flex-1 overflow-y-auto"
         style={{
-          maxHeight: "100px", // يحدد ارتفاع الوصف مع التمرير الحر إذا زاد المحتوى
+          maxHeight: "150px",
         }}
       >
         <p className="text-gray-500">{des}</p>

@@ -1,28 +1,46 @@
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/pagination";
+import "swiper/css/navigation";
+
 import Card from "./card";
 import { carData } from "./data";
-import { useRef } from "react";
-// المكون الرئيسي
+import { useRef, useEffect } from "react";
+
 export default function Slider_card() {
   const prevRef = useRef<HTMLDivElement | null>(null);
   const nextRef = useRef<HTMLDivElement | null>(null);
 
+  useEffect(() => {
+    // تحديث swiper عند تهيئة المراجع
+    const updateSwiperNavigation = () => {
+      const prevButton = prevRef.current;
+      const nextButton = nextRef.current;
+
+      if (prevButton && nextButton) {
+        prevButton.style.cursor = "pointer";
+        nextButton.style.cursor = "pointer";
+      }
+    };
+
+    updateSwiperNavigation();
+  }, [prevRef, nextRef]);
+
   return (
     <div className="slider-container">
       <Swiper
-        spaceBetween={1} // المسافة بين البطاقات
-        slidesPerView={4} // عدد البطاقات الافتراضي
+        modules={[Navigation]}
+        spaceBetween={1}
+        slidesPerView={4}
         breakpoints={{
-          1200: { slidesPerView: 5, spaceBetween: 3 }, // شاشات كبيرة جدًا
-          1024: { slidesPerView: 4, spaceBetween: 3 }, // شاشات كبيرة
-          768: { slidesPerView: 3, spaceBetween: 2 }, // شاشات متوسطة
-          400: { slidesPerView: 2, spaceBetween: 2 }, // شاشات صغيرة
-          0: { slidesPerView: 1, spaceBetween: 1 }, // شاشات صغيرة جدًا
+          1200: { slidesPerView: 5, spaceBetween: 3 },
+          1024: { slidesPerView: 4, spaceBetween: 3 },
+          768: { slidesPerView: 3, spaceBetween: 2 },
+          400: { slidesPerView: 2, spaceBetween: 2 },
+          0: { slidesPerView: 1, spaceBetween: 1 },
         }}
         navigation={{
-          prevEl: prevRef.current,
+          prevEl: prevRef.current, // الربط باستخدام refs
           nextEl: nextRef.current,
         }}
         onBeforeInit={(swiper) => {
@@ -35,10 +53,10 @@ export default function Slider_card() {
           }
         }}
         loop
-        freeMode={true} // سكرول حر
+        freeMode={true}
         style={{
-          height: "350px", // ارتفاع السلايدر
-          padding: "10px", // البادينغ داخل السلايدر
+          height: "350px",
+          padding: "10px",
         }}
       >
         {carData.map((car, index) => (
@@ -48,9 +66,7 @@ export default function Slider_card() {
         ))}
       </Swiper>
 
-      {/* عناصر التحكم أسفل السلايدر */}
       <div className="slider-controls flex justify-between items-center mt-2">
-        {/* النقاط تشير إلى عدد العناصر */}
         <div className="flex item-center justify-center gap-1">
           {carData.map((_, index) => (
             <div
@@ -75,18 +91,17 @@ export default function Slider_card() {
           <div className="arrow-button flex item-center justify-center gap-1 ">
             <div
               ref={prevRef}
-              className="arrow-btn  flex item-center justify-center p-[12px] "
+              className="arrow-btn flex item-center justify-center p-[12px] cursor-pointer"
             >
-              <img src="/images/left.png" className="w-[10px] " alt="arrow" />
+              <img src="/images/left.png" className="w-[10px]" alt="arrow" />
             </div>
             <div
               ref={nextRef}
-              className="arrow-btn  flex item-center justify-center p-[12px]"
+              className="arrow-btn flex item-center justify-center p-[12px] cursor-pointer"
             >
-              <img src="/images/right.png" className="w-[10px] " alt="arrow" />
+              <img src="/images/right.png" className="w-[10px]" alt="arrow" />
             </div>
           </div>
-          <div className="slider-dots"></div>
         </div>
       </div>
     </div>
