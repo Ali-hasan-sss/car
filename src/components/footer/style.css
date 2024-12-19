@@ -1,0 +1,16 @@
+.footer {
+  background-color: #232323;
+}
+.social_icon {
+  cursor: pointer;
+}
+.footer_link {
+  text-decoration: underline;
+  line-height: 20px;
+  font-size: 12px;
+  font-weight: 400;
+}
+.footer_nav {
+  color: #ffffff;
+  margin: 20px 10px;
+}

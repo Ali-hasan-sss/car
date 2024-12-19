@@ -19,11 +19,11 @@ export default function Success() {
     },
   ];
   return (
-    <div className="py-[30px] px-[96px] bg-secondary1 ">
+    <div className="py-[30px] px-[10px] md:px-[96px] bg-secondary1 ">
       <div className="title flex item-center justify-center">
         <h1 className="title">Success Numbers</h1>
       </div>
-      <div className="flex flex-wrap item-center gap-[25px] justify-center py-[40px] px-[5px] ">
+      <div className="flex flex-wrap items-center   gap-[25px] justify-center py-[40px] px-[5px] ">
         {success.map((item, index) => (
           <Card {...item} key={index} />
         ))}

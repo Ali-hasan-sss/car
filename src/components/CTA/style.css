@@ -1,0 +1,9 @@
+.btn-cta {
+  background: #ffd700;
+  border-radius: 7px;
+  padding: 12px 24px;
+  color: #ffffff;
+}
+.btn-cta:hover {
+  background: #dfcd03ed;
+}

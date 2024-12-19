@@ -2,6 +2,7 @@
 
 import CarDeals from "@/components/CarDeals";
 import Contact from "@/components/contact";
+import CTA from "@/components/CTA";
 import Gallery from "@/components/gallery";
 import Hero from "@/components/hero/hero";
 import HowItWorks from "@/components/HowItWorks";
@@ -20,6 +21,7 @@ export default function Home() {
       <Reviwe />
       <Gallery />
       <Contact />
+      <CTA />
     </div>
   );
 }

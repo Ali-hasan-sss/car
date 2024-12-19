@@ -1,3 +1,4 @@
+import "./style.css";
 export default function Contact() {
   return (
     <div
@@ -5,13 +6,11 @@ export default function Contact() {
       style={{ overflow: "hidden" }}
     >
       <form className="w-full md:w-1/2 p-5 m-2">
-        <div className="header py-2 mb-1">
-          <h1 className="title text-xl font-bold">Suggestion</h1>
+        <div className="header py-2 mb-3">
+          <h1 className="title">Suggestion</h1>
         </div>
         <div className="heading mb-5">
-          <h3 className="text-lg font-medium">
-            Let’s start with your name & email
-          </h3>
+          <h3 className="des">Let’s start with your name & email</h3>
         </div>
         <div className="form-group mb-4">
           <label className="block mb-2 text-sm font-medium">
@@ -38,7 +37,7 @@ export default function Contact() {
           <div className="flex items-center border">
             <img
               src="/images/email-icon.png"
-              className="w-[20px] h-[16px] mt-3 ml-2"
+              className="w-[20px] h-[16px]  ml-2"
               alt="email icon"
             />
             <input
