@@ -28,11 +28,8 @@ export const metadata: Metadata = {
     "SOUFAN GLOBAL",
     "car trading",
   ],
-  viewport:
-    "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
   robots: "index, follow",
   authors: [{ name: "SOUFAN GLOBAL" }],
-  themeColor: "#ffffff",
   openGraph: {
     title: "SOUFAN GLOBAL",
     description: "Import cars from Canada to Oman",
@@ -46,6 +43,12 @@ export const metadata: Metadata = {
     images: ["/path-to-your-twitter-image.jpg"], // مصفوفة للصور
   },
 };
+export const generateViewport = () => ({
+  width: "device-width",
+  initialScale: 1.0,
+  maximumScale: 1.0,
+  userScalable: false,
+});
 
 export default function RootLayout({
   children,
