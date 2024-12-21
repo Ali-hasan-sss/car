@@ -7,6 +7,9 @@
   font-size: 18px;
   line-height: 27px;
 }
+.track-btn {
+  border-radius: 7px;
+}
 .nav-item {
   border-bottom: 2px solid transparent;
   transition: 0.4s;

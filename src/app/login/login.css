@@ -1,0 +1,57 @@
+.form_content {
+  border-radius: 15px;
+}
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #333333;
+  line-height: 40px;
+}
+.des {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #555555;
+}
+.form_group label {
+  font-weight: 300;
+  color: #333333;
+}
+.form_group .forget {
+  font-size: 12px;
+  font-weight: 300;
+  color: #333333;
+  text-decoration: underline;
+}
+.form_group .input {
+  padding: 12px;
+  border-radius: 7px;
+  border: 1px solid #cccccc;
+  width: 100%;
+  outline: none;
+}
+.form_group .input_err {
+  padding: 12px;
+  border-radius: 7px;
+  border: 1px solid #fd0000;
+  width: 100%;
+  outline: none;
+}
+.submit {
+  border-radius: 7px;
+  border: 1px solid transparent;
+  padding: 8px 24px;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 500;
+}
+.submit:hover {
+  background: transparent;
+  border: 1px solid #008080;
+  color: #333333;
+}
+.dont_have {
+  color: #333333;
+  text-align: center;
+  width: 100%;
+}

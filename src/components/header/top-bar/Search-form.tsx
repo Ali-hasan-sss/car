@@ -8,7 +8,7 @@ export default function search() {
         className="input rounded p-2 w-full h-full"
       />
       {/* Button */}
-      <button className="btn h-full px-[10px] bg-trackbtn text-light hover:bg-gray-500 rounded-r">
+      <button className=" track-btn h-full px-[10px] bg-trackbtn text-light hover:bg-gray-500 ">
         Track
       </button>
     </div>
