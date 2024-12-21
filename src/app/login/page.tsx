@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Register_nav from "@/components/header/register_navbar";
 import Register_footer from "@/components/footer/Register_footer";
 import "./login.css";
@@ -13,6 +13,9 @@ interface LoginFormInputs {
 }
 
 const Login: React.FC = () => {
+  useEffect(() => {
+    document.title = "SOUFAN GLOBAL | Login";
+  }, []);
   const [formData, setFormData] = useState<LoginFormInputs>({
     email: "",
     password: "",

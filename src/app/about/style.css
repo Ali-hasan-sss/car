@@ -13,6 +13,11 @@
   color: #333333;
   font-weight: 400;
 }
+.des2 {
+  font-size: 14px;
+  color: #555555;
+  font-weight: 400;
+}
 .title1 {
   font-size: 30px;
   font-weight: 700;
@@ -25,4 +30,15 @@
 .list_item {
   width: 200px;
   padding: 10px;
+}
+.heading {
+  color: #333333;
+  font-weight: 600;
+  font-size: 14px;
+}
+.card_title {
+  font-weight: 700;
+}
+.jop {
+  color: #555555;
 }

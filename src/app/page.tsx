@@ -11,8 +11,12 @@ import HowItWorks from "@/components/HowItWorks";
 import Reviwe from "@/components/reviwe/index";
 import Store from "@/components/store";
 import Success from "@/components/SuccessNO";
+import { useEffect } from "react";
 
 export default function Home() {
+  useEffect(() => {
+    document.title = "SOUFAN GLOBAL";
+  }, []);
   return (
     <div>
       <Navbar />
