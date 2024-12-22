@@ -7,6 +7,8 @@ import Navbar from "@/components/header/navbar";
 import Footer from "@/components/footer";
 import Brands from "./brands";
 import Team from "./team";
+import Section3 from "./section3";
+import Section4 from "./section4";
 export const metadata: Metadata = {
   title: "SOUFAN GLOBAL | About Us",
 };
@@ -19,6 +21,8 @@ export default function About() {
       <About_section2 />
       <Brands />
       <Team />
+      <Section3 />
+      <Section4 />
       <Footer />
     </div>
   );

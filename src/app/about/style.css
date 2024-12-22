@@ -42,3 +42,9 @@
 .jop {
   color: #555555;
 }
+.plog_image {
+  overflow: hidden;
+}
+.info {
+  border-radius: 17px;
+}
