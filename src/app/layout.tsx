@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
-import { AppProvider } from "./context/AppContext";
+import { LanguageProvider } from "./context/LanguageContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -54,7 +54,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AppProvider>
+    <LanguageProvider>
       <html lang="en">
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -62,6 +62,6 @@ export default function RootLayout({
           {children}
         </body>
       </html>
-    </AppProvider>
+    </LanguageProvider>
   );
 }

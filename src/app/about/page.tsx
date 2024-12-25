@@ -1,3 +1,5 @@
+"use client";
+
 import "./style.css";
 import About_header from "./header";
 import About_section1 from "./section1";

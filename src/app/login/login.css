@@ -55,3 +55,36 @@
   text-align: center;
   width: 100%;
 }
+/*for rigester*/
+.input-box {
+  border: 1px solid #cccccc;
+  border-radius: 15px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+.input-box:hover {
+  background-color: #808080;
+  scale: 1.1;
+}
+.input-box.active {
+  border: 1px solid #008080;
+}
+.buttom {
+  background-color: #008080;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: #ffffff;
+  font-weight: 400;
+}
+.buttom:hover {
+  background: transparent;
+  border: 1px solid #008080;
+  color: #008080;
+}
+.disabled {
+  background-color: #9ac1c1;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: #ffffff;
+  font-weight: 400;
+}

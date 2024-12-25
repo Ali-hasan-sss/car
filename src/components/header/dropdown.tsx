@@ -1,15 +1,16 @@
 "use client";
-import { AppContext } from "@/app/context/AppContext";
+import { useLanguage } from "@/app/context/LanguageContext";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import LanguageSwitcher from "../btn-switch/LanguageSwitcher";
 
 export default function Dropdown() {
   const [expanded, setExpanded] = useState(false);
   const pathname = usePathname();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { t, isArabic } = useLanguage();
 
-  const { isArabic } = useContext(AppContext);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -18,6 +19,7 @@ export default function Dropdown() {
       ) {
         setExpanded(false);
       }
+      console.log(`isarabice:${isArabic}`);
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -25,34 +27,26 @@ export default function Dropdown() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
   const navItems = [
-    { id: 1, title_en: "Home", title_ar: "الرئيسية", path: "/" },
-    { id: 2, title_en: "Services", title_ar: "الخدمات", path: "/services" },
-    { id: 3, title_en: "About us", title_ar: "من نحن", path: "/about" },
-    {
-      id: 4,
-      title_en: "Information",
-      title_ar: "معلومات",
-      path: "/Information",
-    },
-    {
-      id: 5,
-      title_en: " Contact Us",
-      title_ar: "تواصل معنا",
-      path: "/contact",
-    },
+    { id: 1, label: t("Home"), path: "/" },
+    { id: 2, label: t("Services"), path: "/services" },
+    { id: 3, label: t("About_us"), path: "/about" },
+    { id: 4, label: t("Information"), path: "/Information" },
+    { id: 5, label: t("Contact_Us"), path: "/contact" },
   ];
+
   return (
-    <div className={`dropdown md:hidden `} ref={dropdownRef}>
+    <div className="dropdown md:hidden" ref={dropdownRef}>
       <div
         tabIndex={0}
         role="button"
-        className=" btn-ghost"
+        className="btn-ghost"
         onClick={() => setExpanded(!expanded)}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className={`h-10 w-10  `}
+          className={`h-10 w-10`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -68,9 +62,13 @@ export default function Dropdown() {
       {expanded && (
         <ul
           tabIndex={0}
-          className={`bg-secondary1 border absolute rounded-box z-[10]  rounded p-4 shadow w-52 top-full ${
-            isArabic ? "left-0 " : "right-0"
+          className={`bg-secondary1 border absolute rounded-box z-[10] rounded p-4 shadow w-[300px] max-w-full top-full ${
+            isArabic ? "right-0" : "left-0"
           }`}
+          style={{
+            maxWidth: "90%",
+            transform: isArabic ? "translateX(0)" : "translateX(0)",
+          }}
         >
           {navItems.map((item) => (
             <li
@@ -79,11 +77,12 @@ export default function Dropdown() {
                 pathname === item.path ? "active" : ""
               }`}
             >
-              <Link href={item.path}>
-                {isArabic ? item.title_ar : item.title_en}
-              </Link>
+              <Link href={item.path}>{item.label}</Link>
             </li>
           ))}
+          <li>
+            <LanguageSwitcher />
+          </li>
         </ul>
       )}
     </div>

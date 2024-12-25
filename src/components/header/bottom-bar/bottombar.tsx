@@ -1,27 +1,25 @@
 "use client";
 
-import { AppContext } from "@/app/context/AppContext";
+import { useLanguage } from "@/app/context/LanguageContext";
+import LanguageSwitcher from "@/components/btn-switch/LanguageSwitcher";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useContext } from "react";
 
 export default function Bottombar() {
+  const { t } = useLanguage();
   const pathname = usePathname();
-  const isArabic = useContext(AppContext);
   const navItems = [
-    { id: 1, title_en: "Home", title_ar: "الرئيسية", path: "/" },
-    { id: 2, title_en: "Services", title_ar: "الخدمات", path: "/services" },
-    { id: 3, title_en: "About us", title_ar: "من نحن", path: "/about" },
+    { id: 1, label: t("Home"), path: "/" },
+    { id: 2, label: t("Services"), path: "/services" },
+    { id: 3, label: t("About_us"), path: "/about" },
     {
       id: 4,
-      title_en: "Information",
-      title_ar: "معلومات",
+      label: t("Information"),
       path: "/Information",
     },
     {
       id: 5,
-      title_en: " Contact Us",
-      title_ar: "تواصل معنا",
+      label: t("Contact_Us"),
       path: "/contact",
     },
   ];
@@ -36,10 +34,13 @@ export default function Bottombar() {
               }`}
               href={item.path}
             >
-              {isArabic ? item.title_en : item.title_ar}
+              {item.label}
             </Link>
           </li>
         ))}
+        <li>
+          <LanguageSwitcher />
+        </li>
       </ul>
     </div>
   );

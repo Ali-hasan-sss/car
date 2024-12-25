@@ -6,6 +6,7 @@ import Register_footer from "@/components/footer/Register_footer";
 import "./login.css";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import axios, { AxiosError } from "axios";
+import { useLanguage } from "../context/LanguageContext";
 
 interface LoginFormInputs {
   email: string;
@@ -26,7 +27,7 @@ const Login: React.FC = () => {
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
-
+  const { t } = useLanguage();
   const validateForm = (): boolean => {
     const newErrors: Partial<LoginFormInputs> = {};
 
@@ -89,10 +90,8 @@ const Login: React.FC = () => {
           <div className="form_content flex flex-col items-center justify-center gap-[24px] w-[350px] p-[20px] bg-white">
             {/* Form Header */}
             <div className="header flex flex-col gap-[20px] text-center">
-              <h1 className="title">Log In</h1>
-              <p className="des">
-                Log in to your account to continue your journey
-              </p>
+              <h1 className="title">{t("Login")}</h1>
+              <p className="des">{t("login_des")}</p>
             </div>
 
             {/* Form Inputs */}
@@ -103,7 +102,8 @@ const Login: React.FC = () => {
               {/* Email Input */}
               <div className="form_group flex flex-col gap-[8px] items-start justify-start">
                 <label htmlFor="email">
-                  Email<span className="text-red-500">*</span>
+                  {t("Email")}
+                  <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="email"
@@ -122,17 +122,18 @@ const Login: React.FC = () => {
               <div className="form_group flex flex-col gap-[8px] items-start justify-start">
                 <div className="flex items-center w-full justify-between">
                   <label htmlFor="password">
-                    Password<span className="text-red-500">*</span>
+                    {t("Password")}
+                    <span className="text-red-500">*</span>
                   </label>
                   <a className="forget" href="#">
-                    Forgot your password?
+                    {t("Forgot_password")}
                   </a>
                 </div>
                 <div className="relative w-full">
                   <input
                     type={showPassword ? "text" : "password"}
                     id="password"
-                    placeholder="password..."
+                    placeholder={t("Password") + "..."}
                     value={formData.password}
                     onChange={handleInputChange}
                     className={` ${errors.password ? "input_err" : "input"}`}
@@ -159,12 +160,12 @@ const Login: React.FC = () => {
               {/* Submit Button */}
               <div className="form_group flex flex-col gap-[8px] items-start justify-start">
                 <button type="submit" className="w-full bg-primary1 submit">
-                  Log in
+                  {t("Login")}
                 </button>
                 <p className="dont_have">
-                  Dont have an account?
-                  <a className="text-blue-500" href="/signup">
-                    Signup
+                  {t("Dont_have_an_account")}
+                  <a className="text-blue-500 mx-1" href="/signup">
+                    {t("Signup")}
                   </a>
                 </p>
               </div>
