@@ -13,7 +13,7 @@ const LanguageSwitcher: React.FC = () => {
     { code: "en", label: "English" },
     { code: "ar", label: "العربية" },
   ];
-
+  const { t } = useLanguage();
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -23,15 +23,15 @@ const LanguageSwitcher: React.FC = () => {
       {/* Globe Icon Button */}
       <button
         onClick={toggleDropdown}
-        className="flex items-center p-1 rounded-full focus:outline-none"
+        className="flex items-center jystify-center rounded-full focus:outline-none"
         aria-label="Change language"
       >
-        <FaGlobe className="text-xl" />
+        {t("language")} <FaGlobe className="text-xl mx-1" />
       </button>
 
       {/* Dropdown */}
       {isDropdownOpen && (
-        <div className="absolute right-0 mt-4 w-32 bg-secondary1 border rounded shadow-lg">
+        <div className="absolute right-0 z-50  mt-4 w-32 bg-secondary1 border rounded shadow-lg">
           {availableLanguages.map((lang) => (
             <button
               key={lang.code}
@@ -40,10 +40,10 @@ const LanguageSwitcher: React.FC = () => {
                 setIsDropdownOpen(false); // Close dropdown
               }}
               disabled={language === lang.code}
-              className={`w-full px-4 py-2 text-left ${
+              className={`w-full px-4 py-2 rounded text-left ${
                 language === lang.code
                   ? "text-gray-400 cursor-not-allowed"
-                  : "hover:bg-gray-100"
+                  : "hover:bg-primary1"
               }`}
             >
               {lang.label}

@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  useMemo,
-} from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { translations, Language } from "@/utils/languages";
 
 interface LanguageContextProps {
@@ -50,8 +44,10 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
     document.documentElement.setAttribute("lang", language);
   }, [dir, language]);
 
-  const isArabic = useMemo(() => language === "ar", [language]);
-
+  const isArabic = language === "ar";
+  useEffect(() => {
+    console.log(isArabic);
+  });
   return (
     <LanguageContext.Provider
       value={{ language, setLanguage, t, dir, isArabic }}

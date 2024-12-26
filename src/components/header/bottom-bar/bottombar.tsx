@@ -38,7 +38,7 @@ export default function Bottombar() {
             </Link>
           </li>
         ))}
-        <li>
+        <li className="mt-1 text-lg gap-[10px]">
           <LanguageSwitcher />
         </li>
       </ul>

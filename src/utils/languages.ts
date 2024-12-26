@@ -1,5 +1,6 @@
 export const translations: Record<Language, { [key: string]: string }> = {
   en: {
+    language: "Language",
     Home: "Home",
     Services: "Services",
     About_us: "About us",
@@ -28,6 +29,7 @@ export const translations: Record<Language, { [key: string]: string }> = {
     Enter_your_tracking_number: "Enter your tracking number",
   },
   ar: {
+    language: "اللغة",
     Home: "الرئيسية",
     Services: "الخدمات",
     About_us: "من نحن",

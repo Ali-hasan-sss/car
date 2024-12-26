@@ -37,7 +37,7 @@ export default function Dropdown() {
   ];
 
   return (
-    <div className="dropdown md:hidden" ref={dropdownRef}>
+    <div className="dropdown md:hidden " ref={dropdownRef}>
       <div
         tabIndex={0}
         role="button"
@@ -62,12 +62,11 @@ export default function Dropdown() {
       {expanded && (
         <ul
           tabIndex={0}
-          className={`bg-secondary1 border absolute rounded-box z-[10] rounded p-4 shadow w-[300px] max-w-full top-full ${
-            isArabic ? "right-0" : "left-0"
-          }`}
+          className={`bg-secondary1 border absolute rounded-box z-[10] rounded p-4 shadow w-[300px] max-w-full top-full`}
           style={{
             maxWidth: "90%",
-            transform: isArabic ? "translateX(0)" : "translateX(0)",
+            right: isArabic ? "0" : "",
+            left: isArabic ? "" : "0",
           }}
         >
           {navItems.map((item) => (

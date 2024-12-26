@@ -11,7 +11,7 @@ interface ContactFormData {
 }
 
 const ContactPage: React.FC = () => {
-  const { isDarkMode, isArabic } = useContext(AppContext); // استخدام القيم من السياق
+  const { isDarkMode, isArabic } = useContext(AppContext);
   const [formData, setFormData] = useState<ContactFormData>({
     name: "",
     email: "",
