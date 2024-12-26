@@ -1,3 +1,4 @@
+import LanguageSwitcher from "@/components/btn-switch/LanguageSwitcher";
 import Link from "next/link";
 
 export default function Register_nav() {
@@ -10,6 +11,7 @@ export default function Register_nav() {
           alt="logo"
         />
       </Link>
+      <LanguageSwitcher />
     </div>
   );
 }

@@ -8,7 +8,7 @@ interface LanguageContextProps {
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
   dir: "ltr" | "rtl";
-  isArabic: boolean; // إضافة متغير isArabic
+  isArabic: boolean;
 }
 
 const LanguageContext = createContext<LanguageContextProps | undefined>(
@@ -18,13 +18,12 @@ const LanguageContext = createContext<LanguageContextProps | undefined>(
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [language, setLanguageState] = useState<Language>("en");
+  const [language, setLanguageState] = useState<Language | null>(null); // اللغة تكون null أثناء التحميل
 
+  // استرجاع اللغة المخزنة
   useEffect(() => {
     const storedLanguage = localStorage.getItem("language") as Language;
-    if (storedLanguage) {
-      setLanguageState(storedLanguage);
-    }
+    setLanguageState(storedLanguage || "en"); // إذا لم يتم تخزين اللغة، يتم استخدام "en" كافتراضية
   }, []);
 
   const setLanguage = (lang: Language) => {
@@ -33,6 +32,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const t = (key: string): string => {
+    if (!language) return key; // تجنب الخطأ إذا لم يتم تحميل اللغة بعد
     const translation = translations[language];
     return translation[key as keyof typeof translation] || key;
   };
@@ -40,14 +40,19 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
   const dir = language === "ar" ? "rtl" : "ltr";
 
   useEffect(() => {
-    document.documentElement.setAttribute("dir", dir);
-    document.documentElement.setAttribute("lang", language);
+    if (language) {
+      document.documentElement.setAttribute("dir", dir);
+      document.documentElement.setAttribute("lang", language);
+    }
   }, [dir, language]);
 
   const isArabic = language === "ar";
-  useEffect(() => {
-    console.log(isArabic);
-  });
+
+  if (!language) {
+    // يمكن وضع شاشة تحميل هنا أو مجرد إخفاء المحتوى
+    return null;
+  }
+
   return (
     <LanguageContext.Provider
       value={{ language, setLanguage, t, dir, isArabic }}

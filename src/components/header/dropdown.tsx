@@ -9,7 +9,8 @@ export default function Dropdown() {
   const [expanded, setExpanded] = useState(false);
   const pathname = usePathname();
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { t, isArabic } = useLanguage();
+  const menuRef = useRef<HTMLUListElement>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -19,7 +20,6 @@ export default function Dropdown() {
       ) {
         setExpanded(false);
       }
-      console.log(`isarabice:${isArabic}`);
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -27,6 +27,22 @@ export default function Dropdown() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    if (expanded && menuRef.current) {
+      const menuRect = menuRef.current.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+
+      // Adjust position if menu goes outside the screen
+      if (menuRect.right > windowWidth) {
+        menuRef.current.style.right = "0";
+        menuRef.current.style.left = "auto";
+      } else if (menuRect.left < 0) {
+        menuRef.current.style.left = "0";
+        menuRef.current.style.right = "auto";
+      }
+    }
+  }, [expanded]);
 
   const navItems = [
     { id: 1, label: t("Home"), path: "/" },
@@ -37,7 +53,7 @@ export default function Dropdown() {
   ];
 
   return (
-    <div className="dropdown md:hidden " ref={dropdownRef}>
+    <div className="relative md:hidden" ref={dropdownRef}>
       <div
         tabIndex={0}
         role="button"
@@ -61,12 +77,11 @@ export default function Dropdown() {
       </div>
       {expanded && (
         <ul
+          ref={menuRef}
           tabIndex={0}
-          className={`bg-secondary1 border absolute rounded-box z-[10] rounded p-4 shadow w-[300px] max-w-full top-full`}
+          className={`bg-secondary1 absolute border p-4 z-[50] rounded shadow w-[200px] top-full`}
           style={{
-            maxWidth: "90%",
-            right: isArabic ? "0" : "",
-            left: isArabic ? "" : "0",
+            left: "0", // أو right: "0" حسب اللغة أو الاتجاه
           }}
         >
           {navItems.map((item) => (
@@ -79,7 +94,7 @@ export default function Dropdown() {
               <Link href={item.path}>{item.label}</Link>
             </li>
           ))}
-          <li>
+          <li className="mt-2">
             <LanguageSwitcher />
           </li>
         </ul>
