@@ -13,6 +13,7 @@ export default {
         foreground: "var(--foreground)",
         primary1: "#008080",
         secondary1: "#eaf6ff",
+        secondary2: "#F7F7F8",
         trackbtn: "#555555",
       },
     },

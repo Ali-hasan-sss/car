@@ -10,10 +10,14 @@ export default function Avatar() {
   return (
     <div className="dropdown dropdown-bottom dropdown-end">
       <div tabIndex={0} role="button" onClick={toggleDropdown} className="">
-        <div className="avatar">
-          <div className="ring-primary1 ring-offset-base-100 w-[40px] rounded-full ring ring-offset-2 overflow-hidden">
+        <div className="avatar flex items-center gap-1">
+          <div className=" w-[25px] rounded-full  overflow-hidden">
             <img src="/images/avatar.png" alt="avatar" />
           </div>
+          <div className="">
+            <h3>ali hasan</h3>
+          </div>
+          <img src="/images/down.png" alt="down" />
         </div>
       </div>
       {isOpen && (

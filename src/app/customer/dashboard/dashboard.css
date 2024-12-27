@@ -1,0 +1,32 @@
+.siedbar {
+  padding: 20px 15px;
+  border-right: 0.5px solid #e2e8f0;
+  transition: all 0.4s;
+}
+.search-input,
+.search-input input {
+  border-radius: 10px;
+  outline: none;
+}
+.sied_item {
+  padding: 8px 12px;
+  border-radius: 10px;
+}
+.sied_item:hover,
+.sied_item_active {
+  background-color: #ffffff;
+}
+.wellcome {
+  color: #2d3748;
+  font-size: 20px;
+}
+.wellcome span {
+  font-weight: bold;
+  color: #000;
+  font-size: 22px;
+}
+.main {
+  border-radius: 15px;
+  padding: 20px;
+  flex: 1;
+}

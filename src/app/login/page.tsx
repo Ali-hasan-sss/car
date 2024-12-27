@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Register_nav from "@/components/header/register_navbar";
 import Register_footer from "@/components/footer/Register_footer";
 import "./login.css";
 import { useLanguage } from "../context/LanguageContext";
+import { useRouter } from "next/navigation";
 import EmailInput from "@/components/inputs/EmailInput";
 import PasswordInput from "@/components/inputs/PasswordInput";
 import axios from "axios";
@@ -15,22 +16,18 @@ interface LoginFormInputs {
 }
 
 const Login: React.FC = () => {
-  useEffect(() => {
-    document.title = "SOUFAN GLOBAL | Login";
-  }, []);
+  const router = useRouter();
+  const handleBack = () => {
+    router.push("/");
+  };
 
   const [formData, setFormData] = useState<LoginFormInputs>({
     email: "",
     password: "",
   });
   const [errors, setErrors] = useState<Partial<LoginFormInputs>>({});
-  const [showPassword, setShowPassword] = useState(false);
 
   const { t } = useLanguage();
-
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
-  };
 
   const validateForm = (): boolean => {
     const newErrors: Partial<LoginFormInputs> = {};
@@ -78,7 +75,7 @@ const Login: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Register_nav />
+      <Register_nav handleBack={handleBack} />
       <div className="flex-grow flex items-center justify-center bg-secondary1 w-full">
         <div className="container w-full h-full flex items-center justify-center">
           <div className="form_content flex flex-col items-center justify-center gap-[24px] w-[350px] p-[20px] bg-white">
@@ -98,8 +95,6 @@ const Login: React.FC = () => {
               <PasswordInput
                 value={formData.password}
                 error={errors.password}
-                showPassword={showPassword}
-                toggleShowPassword={togglePasswordVisibility}
                 onChange={handleInputChange}
               />
               <div className="form_group flex flex-col gap-[8px] items-start justify-start">

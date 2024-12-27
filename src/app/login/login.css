@@ -67,7 +67,8 @@
   scale: 1.1;
 }
 .input-box.active {
-  border: 1px solid #008080;
+  border-color: #008080;
+  background-color: #f0f8ff;
 }
 .buttom {
   background-color: #008080;
