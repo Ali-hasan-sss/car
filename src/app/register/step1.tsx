@@ -3,22 +3,16 @@ import { useState } from "react";
 
 interface chooseTypeProps {
   cklick: (x: string) => void;
-  validate: () => boolean;
+  error?: string;
 }
 
-const Step1: React.FC<chooseTypeProps> = ({ cklick }) => {
+const Step1: React.FC<chooseTypeProps> = ({ cklick, error }) => {
   const { t } = useLanguage();
   const [selected, setSelected] = useState<string>("");
-
   const handleClick = (type: string) => {
     setSelected(type);
     cklick(type);
   };
-
-  // التحقق من الاختيار
-  /*  validate = () => {
-    return selected !== "";
-  };*/
 
   return (
     <div className="w-full">
@@ -49,6 +43,7 @@ const Step1: React.FC<chooseTypeProps> = ({ cklick }) => {
           {t("company_des")}
         </label>
       </div>
+      {error && <span className="text-red-500 text-sm">{error}</span>}
     </div>
   );
 };

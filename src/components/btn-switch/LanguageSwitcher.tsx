@@ -1,32 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { FaGlobe } from "react-icons/fa";
 
-// تأكد أن الـ Language يحتوي على الرموز المتاحة
 type Language = "en" | "ar";
 
-const LanguageSwitcher: React.FC = () => {
+export default function LanguageSwitcher() {
   const { setLanguage, language } = useLanguage();
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
+  };
+  //click outsied menu
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const availableLanguages = [
     { code: "en", label: "English" },
     { code: "ar", label: "العربية" },
   ];
   const { t } = useLanguage();
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
 
   return (
     <div className="relative">
       {/* Globe Icon Button */}
       <button
         onClick={toggleDropdown}
-        className="flex items-center jystify-center rounded-full focus:outline-none"
+        className="flex gap-1 items-center text-gray-500 jystify-center rounded-full focus:outline-none"
         aria-label="Change language"
       >
-        {t("language")} <FaGlobe className="text-xl mx-1" />
+        <FaGlobe className="text-xl mx-1" />
+        {t("language")} <img src="/images/down.png" alt="down" />
       </button>
 
       {/* Dropdown */}
@@ -36,8 +54,8 @@ const LanguageSwitcher: React.FC = () => {
             <button
               key={lang.code}
               onClick={() => {
-                setLanguage(lang.code as Language); // Language is updated and saved in the context
-                setIsDropdownOpen(false); // Close dropdown
+                setLanguage(lang.code as Language);
+                setIsDropdownOpen(false);
               }}
               disabled={language === lang.code}
               className={`w-full px-4 py-2 rounded text-left ${
@@ -53,6 +71,4 @@ const LanguageSwitcher: React.FC = () => {
       )}
     </div>
   );
-};
-
-export default LanguageSwitcher;
+}

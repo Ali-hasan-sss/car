@@ -29,4 +29,73 @@
   border-radius: 15px;
   padding: 20px;
   flex: 1;
+  max-height: "80vh";
+}
+.sidearab {
+  border-left: 0.5px solid #e2e8f0;
+}
+.title {
+  font-size: 18px;
+  font-weight: 600;
+}
+.heading_des {
+  font-size: 14px;
+  font-weight: 300;
+}
+.box {
+  border: 0.5px solid #e9e3e3;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.4s;
+}
+.box:hover {
+  scale: 1.1;
+  background: #f7f5f5;
+}
+.selector {
+  width: 250px;
+}
+.selector label {
+  font-size: 14px;
+}
+/* تخصيص شريط التمرير للحاوية فقط */
+.siedbar::-webkit-scrollbar {
+  width: 4px; /* عرض شريط التمرير */
+}
+
+.siedbar::-webkit-scrollbar-track {
+  background: #f0f2f5; /* خلفية المسار */
+  border-radius: 4px; /* زوايا مستديرة للمسار */
+}
+
+.siedbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #4a90e2, #b9c6d7); /* لون شريط التمرير */
+  border-radius: 4px; /* زوايا مستديرة لشريط التمرير */
+}
+
+.siedbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #d9e4f1, #609fe8); /* تفاعل عند التمرير */
+}
+/* تخصيص شريط التمرير للمودال فقط */
+::-webkit-scrollbar {
+  width: 4px; /* عرض أصغر لشريط التمرير */
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* لون الخلفية لمسار التمرير */
+  border-radius: 8px; /* مطابقة الزوايا */
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #999, #555);
+  border-radius: 8px; /* زوايا مستديرة */
+  border: 1px solid #ccc; /* إضافة حدود رفيعة */
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #555, #333); /* لون مختلف عند التمرير */
+}
+/* منع تأثير شريط التمرير على المساحة المحيطة */
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+.actions {
+  border-bottom: 1px solid #000;
 }

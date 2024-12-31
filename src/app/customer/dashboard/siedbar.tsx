@@ -1,3 +1,4 @@
+import { useLanguage } from "@/app/context/LanguageContext";
 import Logo from "@/components/header/top-bar/logo";
 import Search_input from "@/components/inputs/search_input";
 import Link from "next/link";
@@ -13,40 +14,46 @@ import {
 import { FiSettings } from "react-icons/fi";
 
 export default function Sidebar() {
+  const { t, isArabic } = useLanguage();
   const [isExpand, setIsExpand] = useState(false);
   const pathname = usePathname();
   const sideItems_top = [
     {
-      label: "Home",
+      label: t("Home"),
       icon: <FaHome className="text-primary1 text-2xl side_icon" />,
       path: "/customer/dashboard",
     },
     {
-      label: "My Actions",
+      label: t("My_Actions"),
       icon: (
         <FaRegQuestionCircle className="text-primary1 text-2xl side_icon" />
       ),
       path: "/customer/dashboard/actions",
     },
     {
-      label: "Containers",
+      label: t("Containers"),
+      icon: <FaBook className="text-primary1 text-2xl side_icon" />,
+      path: "/customer/dashboard/containers",
+    },
+    {
+      label: t("Containers"),
       icon: <FaBook className="text-primary1 text-2xl side_icon" />,
       path: "/customer/dashboard/containers",
     },
   ];
   const sideItems_buttom = [
     {
-      label: "Profile",
+      label: t("profile"),
       icon: <FaUser className="text-primary1 text-2xl side_icon" />,
       path: "/customer/dashboard/profile",
     },
     {
-      label: "Sign in",
+      label: t("Sign in"),
       icon: <FaSignInAlt className="text-primary1 text-2xl side_icon" />,
       path: "/",
     },
     {
-      label: "Setting",
+      label: t("Settings"),
       icon: <FiSettings className="text-primary1 text-2xl side_icon" />,
       path: "/customer/dashboard/settings",
     },
@@ -55,7 +62,7 @@ export default function Sidebar() {
     <div
       className={`siedbar h-screen bg-secondary2  flex flex-col gap-[25px] ${
         isExpand ? "w-[40x]" : "w-[200px]"
-      } `}
+      } ${isArabic ? "sidearab" : ""} `}
     >
       <div className="header  flex items-center justify-between">
         {!isExpand && <Logo />}
@@ -83,7 +90,7 @@ export default function Sidebar() {
         )}
       </div>
       <Search_input isExpand={isExpand} />
-      <hr className="bg-gray-300" />
+      <hr className="text-gray-400" />
       <div className="flex flex-col h-screen items-between justify-between">
         <ul className="">
           {sideItems_top.map((item, index) => (

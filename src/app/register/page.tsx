@@ -25,20 +25,17 @@ const Signup: React.FC = () => {
   const { t } = useLanguage();
   const [step, setStep] = useState(1);
   const [accountType, setAccountType] = useState<string | null>(null);
-  console.log(accountType);
   const [formData, setFormData] = useState<SignupFormInputs>({
     name: "",
     company: "",
     email: "",
     password: "",
-    type: "1",
+    type: "",
   });
   const [errors, setErrors] = useState<Partial<SignupFormInputs>>({});
 
-  const handleTypeSelect = (type: string) => {
-    setAccountType(type);
-  };
   const Router = useRouter();
+
   const handleBack = () => {
     if (step === 1) {
       Router.push("/");
@@ -47,46 +44,85 @@ const Signup: React.FC = () => {
     }
   };
 
-  const validateStep1 = () => {
-    if (accountType === "") {
-      alert("يرجى اختيار نوع الحساب للمتابعة");
-      return false;
+  const validateStep1 = (): boolean => {
+    const newErrors: Partial<SignupFormInputs> = {};
+    if (!formData.type) {
+      newErrors.type = "Account type is required.";
     }
-    return true;
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const validateStep2 = (): boolean => {
+    const newErrors: Partial<SignupFormInputs> = {};
+    if (accountType === "1") {
+      if (!formData.name) {
+        newErrors.name = "Name is required.";
+      }
+      if (!formData.email) {
+        newErrors.email = "Email is required.";
+      } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email)) {
+        newErrors.email = "Please enter a valid email address.";
+      }
+      setErrors(newErrors);
+      return Object.keys(newErrors).length === 0;
+    } else {
+      if (!formData.name) {
+        newErrors.name = "Name is required.";
+      }
+      if (!formData.company) {
+        newErrors.company = "Company name is required.";
+      }
+      setErrors(newErrors);
+      return Object.keys(newErrors).length === 0;
+    }
+  };
+  const validateStep3 = (): boolean => {
+    const newErrors: Partial<SignupFormInputs> = {};
+    if (accountType === "1") {
+      if (!formData.password) {
+        newErrors.password = "Password is required.";
+      } else if (formData.password.length < 8) {
+        newErrors.password = "Password must be at least 8 characters.";
+      }
+      setErrors(newErrors);
+      return Object.keys(newErrors).length === 0;
+    } else {
+      if (!formData.password) {
+        newErrors.password = "Password is required.";
+      } else if (formData.password.length < 8) {
+        newErrors.password = "Password must be at least 8 characters.";
+      }
+      if (!formData.email) {
+        newErrors.email = "Email is required.";
+      } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email)) {
+        newErrors.email = "Please enter a valid email address.";
+      }
+      setErrors(newErrors);
+      return Object.keys(newErrors).length === 0;
+    }
   };
 
   const handleNextStep = (e: React.FormEvent) => {
     e.preventDefault();
-    if (step === 1 && !validateStep1()) {
-      return;
-    }
-    setStep(step + 1);
-  };
-  const validateForm = (): boolean => {
-    const newErrors: Partial<SignupFormInputs> = {};
 
-    // التحقق من البريد الإلكتروني
-    if (!formData.email) {
-      newErrors.email = "Email is required.";
-    } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address.";
+    let isValid = false;
+    if (step === 1) {
+      isValid = validateStep1();
+    } else if (step === 2) {
+      isValid = validateStep2();
     }
 
-    // التحقق من كلمة المرور
-    if (!formData.password) {
-      newErrors.password = "Password is required.";
-    } else if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters.";
+    if (isValid) {
+      setStep(step + 1);
+      setErrors({});
     }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
   };
 
   const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (validateForm()) {
+    if (validateStep3()) {
       try {
         const response = await axios.post("/api/auth/signup", formData);
         console.log("Signup successful:", response.data);
@@ -113,6 +149,14 @@ const Signup: React.FC = () => {
     }));
   };
 
+  const handleTypeSelect = (type: string) => {
+    setAccountType(type);
+    setFormData((prev) => ({
+      ...prev,
+      type: type,
+    }));
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Navbar */}
@@ -121,7 +165,6 @@ const Signup: React.FC = () => {
       {/* Main Content */}
       <div className="flex-grow flex items-center justify-center bg-secondary1 w-full">
         <div className="container w-full h-full flex items-center justify-center">
-          {/**content */}
           <div className="form_content flex flex-col items-center justify-center gap-[18px] w-[350px] py-[10px] px-[30px] bg-white">
             {/* Form Header */}
             <div className="header w-full flex flex-col gap-[10px] text-center">
@@ -131,49 +174,40 @@ const Signup: React.FC = () => {
               ) : step === 2 ? (
                 <p className="des">{t("Signup_step2_private")} </p>
               ) : (
-                <p className="des">{t("Signup_step1")} </p>
+                <p className="des">{t("Signup_step3")} </p>
               )}
             </div>
-            {/* Form inputs */}
-
-            <form
-              onSubmit={handleFinalSubmit}
-              className="flex flex-col w-full  items-center justify-center gap-[10px]"
-            >
+            {/* Form Inputs */}
+            <form className="flex flex-col w-full items-center justify-center gap-[10px]">
               {step === 1 ? (
-                // الخطوة الأولى
-                <Step1 cklick={handleTypeSelect} validate={validateStep1} />
+                <Step1 cklick={handleTypeSelect} error={errors.type} />
               ) : step === 2 && accountType === "1" ? (
-                // الخطوة الثانية لحساب الشخصي
                 <Personal_step1
                   formData={formData}
                   errors={errors}
                   onInputChange={handleInputChange}
                 />
               ) : step === 2 && accountType === "2" ? (
-                // الخطوة الثانية لحساب الشركة
                 <Company_step1
                   formData={formData}
                   errors={errors}
                   onInputChange={handleInputChange}
                 />
               ) : step === 3 && accountType === "1" ? (
-                // الخطوة الثالثة لحساب الشخصي
                 <Personal_step2
                   formData={formData}
                   errors={errors}
                   onInputChange={handleInputChange}
                 />
               ) : step === 3 && accountType === "2" ? (
-                // الخطوة الثالثة لحساب الشركة
                 <Company_step2
                   formData={formData}
                   errors={errors}
                   onInputChange={handleInputChange}
                 />
-              ) : // الجزء الافتراضي في حال لم تتحقق أي شروط
-              null}
+              ) : null}
 
+              {/* Action Buttons */}
               <div className="action flex items-center justify-center w-full">
                 {step < 3 ? (
                   <button
@@ -192,6 +226,7 @@ const Signup: React.FC = () => {
                 )}
               </div>
 
+              {/* Terms */}
               <div className="terms-box w-full px-[20px] flex flex-col gap-[15px] items-center justify-center">
                 <div className="text w-full flex mt-3 items-center justify-start">
                   <p className="text-gray-500 px-[5px]">
@@ -201,7 +236,7 @@ const Signup: React.FC = () => {
                     Log in
                   </a>
                 </div>
-                <div className="text w-full  items-center justify-start">
+                <div className="text w-full items-center justify-start">
                   <a href="#" className="text-gray-900">
                     Terms & Conditions:
                   </a>

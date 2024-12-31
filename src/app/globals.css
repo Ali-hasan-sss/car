@@ -18,6 +18,8 @@ html[dir="ltr"] {
 body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  overflow: auto !important;
+  padding-right: 0 !important;
 }
 .start-btn {
   background-color: #008080;

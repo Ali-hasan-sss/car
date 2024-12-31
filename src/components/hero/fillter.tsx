@@ -1,4 +1,7 @@
+import { useLanguage } from "@/app/context/LanguageContext";
+
 export default function Fillter() {
+  const { t } = useLanguage();
   const items = [
     { src: "/images/sedan.png", alt: "sedan", label: "Car" },
     { src: "/images/pickup-truck.png", alt: "pickup-truck", label: "Pickup" },
@@ -9,10 +12,8 @@ export default function Fillter() {
   return (
     <div className="fillter w-full ">
       <div className="text">
-        <h1 className="fillter-title">Simplify Your Car Import Journey!</h1>
-        <p className="fillter-des">
-          Comprehensive services to import and ship cars from Canada to Oman
-        </p>
+        <h1 className="fillter-title">{t("hero_title")}</h1>
+        <p className="fillter-des">{t("hero_des")}</p>
         <div className="fillter p-[10px] sm:p-[0px] gap-[20px]">
           <p className="text-primary1">What are you shipping?</p>
           {/* cars category */}
