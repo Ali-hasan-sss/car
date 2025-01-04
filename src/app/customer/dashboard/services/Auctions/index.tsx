@@ -17,7 +17,7 @@ import {
   ShippingOption,
   TransmissionTypeOptions,
   yearOfMade,
-} from "./data";
+} from "../data";
 
 interface AuctionsFormInputs {
   link: string;

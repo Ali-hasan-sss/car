@@ -8,7 +8,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { useRouter } from "next/navigation";
 import EmailInput from "@/components/inputs/EmailInput";
 import PasswordInput from "@/components/inputs/PasswordInput";
-import axios from "axios";
+//import axios from "axios";
 
 interface LoginFormInputs {
   email: string;
@@ -52,7 +52,7 @@ const Login: React.FC = () => {
     e.preventDefault();
 
     if (validateForm()) {
-      try {
+      /* try {
         const response = await axios.post("/api/auth/login", formData);
         console.log("Login successful:", response.data);
       } catch (error) {
@@ -61,7 +61,8 @@ const Login: React.FC = () => {
           email: "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
           password: "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
         });
-      }
+      }*/
+      router.push("/customer/dashboard");
     }
   };
 

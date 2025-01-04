@@ -6,7 +6,7 @@ interface EmailInputProps {
   placeholder?: string;
   label?: string;
   error?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; // أضف onChange هنا
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Text_input: React.FC<EmailInputProps> = ({
@@ -15,6 +15,7 @@ const Text_input: React.FC<EmailInputProps> = ({
   placeholder,
   error,
   label,
+  onChange, // التأكد من وجود الخاصية
 }) => {
   return (
     <div className="form_group flex flex-col gap-[8px] items-start justify-start">
@@ -26,7 +27,7 @@ const Text_input: React.FC<EmailInputProps> = ({
         id={id}
         placeholder={placeholder}
         value={value}
-        onChange={(e) => e.target.value}
+        onChange={onChange} // تمرير الخاصية مباشرة هنا
         className={`w-full p-1 text-lg outline-none border rounded  ${
           error ? "input_err" : "input"
         }`}

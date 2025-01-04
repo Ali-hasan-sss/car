@@ -42,6 +42,7 @@
   font-size: 14px;
   font-weight: 300;
 }
+
 .box {
   border: 0.5px solid #e9e3e3;
   border-radius: 12px;
@@ -54,6 +55,11 @@
 }
 .selector {
   width: 250px;
+  padding: 10px 0;
+}
+h3 {
+  font-size: 16px;
+  font-weight: 700;
 }
 .selector label {
   font-size: 14px;

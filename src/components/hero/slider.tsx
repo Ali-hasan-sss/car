@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import { Navigation } from "swiper/modules";
-import Image from "next/image";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 // استيراد الأنماط الأساسية لـ Swiper
@@ -62,11 +61,15 @@ const Slider: React.FC = () => {
         {images.map((image, index) => (
           <SwiperSlide key={index}>
             <div className="relative w-full h-full">
-              <Image
+              <img
                 src={image.src}
                 alt={image.alt}
-                fill
-                style={{ objectFit: "cover" }}
+                style={{
+                  objectFit: "cover",
+                  width: "100%",
+                  height: "100%",
+                  position: "absolute",
+                }}
               />
             </div>
           </SwiperSlide>

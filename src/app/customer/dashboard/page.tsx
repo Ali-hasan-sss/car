@@ -2,7 +2,8 @@
 import "./dashboard.css";
 import { useState } from "react";
 import { Modal, Box } from "@mui/material";
-import Auctions from "./Auctions";
+import Auctions from "./services/Auctions";
+import Shipping from "./services/shipping";
 
 const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -83,7 +84,9 @@ const Dashboard = () => {
           {serviceKey === "Auctions" && (
             <Auctions close={() => setIsModalOpen(false)} />
           )}
-          {serviceKey === "Shipping" && <p>Shipping Component Coming Soon</p>}
+          {serviceKey === "Shipping" && (
+            <Shipping close={() => setIsModalOpen(false)} />
+          )}
           {serviceKey === "Sell" && (
             <p>Sell & Buy Cars Component Coming Soon</p>
           )}
