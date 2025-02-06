@@ -13,7 +13,7 @@ export default function Servic_box({
 }: servic_boxProps) {
   return (
     <>
-      <div className="flex flex-col items-center w-[250px] h-[250px] bg-white shadow-md rounded-lg border p-[20px] justify-between">
+      <div className="flex flex-col items-center w-[300px] h-[300px] bg-white shadow-md rounded-lg border p-[20px] justify-between">
         <img src={image} alt="service" />
         <h2>{title}</h2>
         <button
