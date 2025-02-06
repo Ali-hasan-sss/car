@@ -1,3 +1,5 @@
+import Info_card from "./info_card";
+
 export default function HowItWorks() {
   const steps = [
     {
@@ -39,14 +41,12 @@ export default function HowItWorks() {
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             {steps.map((step, index) => (
-              <div
+              <Info_card
                 key={index}
-                className="w-[250px] h-[200px] py-[12px] flex flex-col items-center justify-center text-center gap-[10px]"
-              >
-                <img src={step.imgSrc} alt={step.alt} className="w-[50px]" />
-                <h3 className="text-lg font-semibold">{step.title}</h3>
-                <p className="text-sm text-gray-600">{step.description}</p>
-              </div>
+                image={step.imgSrc}
+                title={step.title}
+                des={step.description}
+              />
             ))}
           </div>
           <div className="px-3 flex  items-center justify-center">

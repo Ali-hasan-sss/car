@@ -19,6 +19,7 @@ import {
   NumberOfCylinders,
   yearOfMade,
 } from "../data";
+import { FaMinus } from "react-icons/fa";
 
 interface AuctionsFormInputs {
   link: string;
@@ -42,14 +43,14 @@ interface AuctionsFormInputs {
   shippingOption: string;
   shippedlocations: string;
   not_shippedlocations: string;
+  images: File[];
 }
+
 interface ShippingProps {
   close: () => void;
 }
+
 export default function Shipping({ close }: ShippingProps) {
-  const handleOptionChange = (value: string) => {
-    handleInputChange("not_shippedlocations", value);
-  };
   const [formData, setFormData] = useState<AuctionsFormInputs>({
     link: "",
     carModel: "",
@@ -72,14 +73,39 @@ export default function Shipping({ close }: ShippingProps) {
     location: "",
     shippedlocations: "",
     not_shippedlocations: "",
+    images: [],
   });
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+
   const handleInputChange = <T extends keyof AuctionsFormInputs>(
     key: T,
     value: AuctionsFormInputs[T]
   ): void => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const files = Array.from(event.target.files);
+      setFormData((prev) => ({ ...prev, images: files }));
 
+      const urls = files.map((file) => URL.createObjectURL(file));
+      setPreviewUrls(urls);
+    }
+  };
+  const handleRemoveImage = (index: number) => {
+    // إزالة الصورة من previewUrls
+    setPreviewUrls((prev) => prev.filter((_, i) => i !== index));
+
+    // إزالة الصورة من formData.images
+    setFormData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleOptionChange = (value: string) => {
+    handleInputChange("not_shippedlocations", value);
+  };
   const handleSubmit = () => {
     console.log("Form Data Submitted:", formData);
   };
@@ -304,6 +330,33 @@ export default function Shipping({ close }: ShippingProps) {
           </div>
           <div className="selector">
             <label>Car Images</label>
+            <input
+              type="file"
+              id="car-images"
+              accept="image/*"
+              placeholder="upload multiple images"
+              multiple
+              onChange={handleFileChange}
+              className="block w-full text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+            />
+            <div className="grid grid-cols-2 gap-4">
+              {previewUrls.map((url, index) => (
+                <div key={index} className="relative group">
+                  <img
+                    src={url}
+                    alt={`Preview ${index + 1}`}
+                    className="w-full h-32 object-cover rounded-md"
+                  />
+                  {/* زر الإزالة */}
+                  <button
+                    onClick={() => handleRemoveImage(index)}
+                    className="absolute top-2 right-2 z-50 text-red-500  rounded-full border border-red-500 p-2 "
+                  >
+                    <FaMinus />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

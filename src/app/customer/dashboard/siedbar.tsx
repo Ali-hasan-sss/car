@@ -1,6 +1,5 @@
 import { useLanguage } from "@/app/context/LanguageContext";
 import Logo from "@/components/header/top-bar/logo";
-import Search_input from "@/components/inputs/search_input";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -60,7 +59,7 @@ export default function Sidebar() {
   ];
   return (
     <div
-      className={`siedbar h-screen bg-secondary2  flex flex-col gap-[25px] ${
+      className={`siedbar h-screen bg-secondary2 overflow-y-auto  flex flex-col gap-[25px] ${
         isExpand ? "w-[40x]" : "w-[200px]"
       } ${isArabic ? "sidearab" : ""} `}
     >
@@ -89,7 +88,6 @@ export default function Sidebar() {
           </button>
         )}
       </div>
-      <Search_input isExpand={isExpand} />
       <hr className="text-gray-400" />
       <div className="flex flex-col h-screen items-between justify-between">
         <ul className="">

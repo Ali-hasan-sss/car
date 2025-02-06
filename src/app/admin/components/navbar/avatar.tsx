@@ -69,7 +69,7 @@ export default function Avatar() {
       {isOpen && (
         <ul
           tabIndex={0}
-          className={`dropdown-content rounded fixed top-[75px] menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow ${
+          className={`dropdown-content rounded fixed top-[75px] menu  rounded-box z-[100] w-52 p-2 shadow ${
             isArabic ? "left-[15px]" : "right-[15px]"
           }`}
         >

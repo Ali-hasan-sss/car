@@ -28,7 +28,12 @@ export default function Home() {
       <Reviwe />
       <Gallery />
       <Contact />
-      <CTA />
+      <CTA
+        title="See Our Car Shipping Services in Action!"
+        des="Book a personalized demo to explore how we simplify car imports and
+            shipping. Experience our seamless process firsthand!"
+        btnText="Book Your Demo Now"
+      />
       <Footer />
     </div>
   );
