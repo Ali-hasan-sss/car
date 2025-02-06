@@ -138,7 +138,7 @@ const ServicesPage: React.FC = () => {
             </div>
 
             {/* Service Boxes */}
-            <div className="items w-full flex flex-wrap items-center justify-between gap-[20px]">
+            <div className="items w-full flex flex-wrap items-center justify-center gap-[50px]">
               {services.map((service, index) => (
                 <Servic_box
                   key={index}
