@@ -1,8 +1,9 @@
 interface servic_boxProps {
   image: string;
   title: string;
-  isActive: boolean; // خاصية جديدة للتحقق من الخدمة النشطة
+  isActive: boolean;
   showDetails: () => void;
+  hideDetails: () => void;
 }
 
 export default function Servic_box({
@@ -10,6 +11,7 @@ export default function Servic_box({
   title,
   isActive,
   showDetails,
+  hideDetails,
 }: servic_boxProps) {
   return (
     <>
@@ -17,14 +19,15 @@ export default function Servic_box({
         <img src={image} alt="service" />
         <h2>{title}</h2>
         <button
-          onClick={showDetails}
-          className={`flex items-center justify-center gap-1 text-primary1 border rounded p-2 px-3 ${
+          onClick={isActive ? hideDetails : showDetails}
+          className={`flex items-center justify-center gap-1  border rounded p-2 px-3 ${
             isActive
               ? "bg-primary1 text-blue-50"
-              : "border-primary1 hover:bg-primary1 hover:text-blue-50"
+              : "border-primary1 text-primary1 hover:bg-primary1 hover:text-blue-50"
           }`}
         >
-          Show Details <img src="images/arrowDowen.png" alt="icon" />
+          {isActive ? "Hide Details" : "Show Details"}
+          <img src="images/arrowDowen.png" alt="icon" />
         </button>
       </div>
     </>

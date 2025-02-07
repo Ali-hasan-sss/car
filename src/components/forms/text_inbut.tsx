@@ -1,17 +1,18 @@
 import React from "react";
-
+import "./form_style.css";
 interface InputProps {
-  id: string;
-  placeHolder: string;
-  label: string;
+  id?: string;
+  name: string;
+  placeHolder?: string;
+  label?: string;
   type?: string;
   value: string;
-  onChange: (value: string) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string;
 }
-
 export default function TextInput({
   id,
+  name,
   placeHolder,
   label,
   type = "text",
@@ -21,17 +22,15 @@ export default function TextInput({
 }: InputProps) {
   return (
     <div className="form_group flex flex-col gap-[8px] items-start justify-start">
-      <label htmlFor={id}>
-        {label}
-        <span className="text-red-500">*</span>
-      </label>
+      <label htmlFor={id}>{label}</label>
       <input
+        name={name}
         type={type}
         id={id}
         placeholder={placeHolder}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className={`input ${error ? "input_err" : ""}`}
+        onChange={onChange}
+        className={`textinput ${error ? "input_err" : ""}`}
       />
       {error && <span className="text-red-500 text-sm">{error}</span>}
     </div>

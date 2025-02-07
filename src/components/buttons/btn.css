@@ -1,0 +1,11 @@
+.outline_btn {
+  padding: 8px 20px;
+  background-color: #008080;
+  color: #ffffff;
+  border: 1px solid transparent;
+}
+.outline_btn:hover {
+  background: transparent;
+  color: #008080;
+  border: 1px solid #008080;
+}

@@ -3,7 +3,7 @@ import { useLanguage } from "@/app/context/LanguageContext";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import LanguageSwitcher from "../btn-switch/LanguageSwitcher";
+import LanguageSwitcher from "../buttons/btn-switch/LanguageSwitcher";
 
 export default function Dropdown() {
   const [expanded, setExpanded] = useState(false);

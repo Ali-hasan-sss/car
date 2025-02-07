@@ -1,5 +1,4 @@
 import { useLanguage } from "@/app/context/LanguageContext";
-import LanguageSwitcher from "@/components/btn-switch/LanguageSwitcher";
 import Link from "next/link";
 interface Register_navProps {
   handleBack: () => void;
@@ -23,7 +22,6 @@ export default function Register_nav({ handleBack }: Register_navProps) {
           <img src="/images/back.png" alt="back" />
           <p className="text-gray-500">{t("Back")}</p>
         </div>
-        <LanguageSwitcher />
       </div>
     </div>
   );

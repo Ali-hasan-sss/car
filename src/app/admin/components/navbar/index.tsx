@@ -2,7 +2,7 @@
 
 import Logo from "@/components/header/top-bar/logo";
 import Avatar from "./avatar";
-import LanguageSwitcher from "@/components/btn-switch/LanguageSwitcher";
+import LanguageSwitcher from "@/components/buttons/btn-switch/LanguageSwitcher";
 
 export default function AdminNavbar() {
   return (

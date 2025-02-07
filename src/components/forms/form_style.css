@@ -1,25 +1,10 @@
-.form-group {
-  margin-bottom: 10px;
+.textinput {
+  background-color: #f7f7f8;
+  padding: 8px 10px;
+  outline: none;
 }
-
-.btn-submit {
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-}
-
-.grid {
-  display: grid;
-  gap: 10px;
-}
-
-.md\:grid-cols-2 {
-  grid-template-columns: 1fr 1fr;
-}
-
-@media (max-width: 768px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
+.message {
+  background-color: #f7f7f8;
+  height: 200px;
+  outline: none;
 }

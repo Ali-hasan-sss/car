@@ -3,6 +3,7 @@
 import Link from "next/link";
 import "./style.css";
 import { usePathname } from "next/navigation";
+import Sucial_icon from "../sucial_Midia/sucial_icon";
 export default function Footer() {
   const navItems = [
     { id: 1, title_en: "Home", title_ar: "الرئيسية", path: "/" },
@@ -21,6 +22,7 @@ export default function Footer() {
       path: "/contact",
     },
   ];
+  const navItemsCol2 = [{ id: 1, label: "FAQ", path: "/faq" }];
   const pathname = usePathname();
   return (
     <div className="footer flex flex-col gap-[80px] py-[30px] md:py-[70px] px-[10px] md:px-[85px]">
@@ -87,56 +89,43 @@ export default function Footer() {
                 info@bariq.tech
               </p>
             </div>
-            <div className="social flex items-center  gap-[10px]">
-              <a href="">
-                <img
-                  className="social_icon"
-                  src="/images/fb.png"
-                  alt="facebook"
-                />
-              </a>
-              <a href="">
-                <img
-                  className="social_icon"
-                  src="/images/Instagram.png"
-                  alt="Instagram"
-                />
-              </a>
-              <a href="">
-                <img
-                  className="social_icon"
-                  src="/images/LinkedIn.png"
-                  alt="facebook"
-                />
-              </a>
-              <a href="">
-                <img className="social_icon" src="/images/X.png" alt="X" />
-              </a>
-              <a href="">
-                <img
-                  className="social_icon"
-                  src="/images/Youtube.png"
-                  alt="Youtube"
-                />
-              </a>
-            </div>
+            <Sucial_icon />
           </div>
         </div>
-        <div className="w-full md:w-1/3 flex  gap-[15px]">
-          <ul className="mt-3">
-            {navItems.map((item) => (
-              <li key={item.id} className="py-2">
-                <Link
-                  className={`footer_nav text-lg p-[10px] gap-[10px] ${
-                    pathname === item.path ? "active" : ""
-                  }`}
-                  href={item.path}
-                >
-                  {item.title_en}{" "}
-                </Link>
-              </li>
-            ))}
-          </ul>
+        <div className="w-full md:w-1/3 flex   gap-[15px]">
+          <div className="flex flex-col mt-3">
+            <p className="footer_nav mx-4">Quick Links</p>
+            <div className="flex">
+              <ul>
+                {navItems.map((item) => (
+                  <li key={item.id} className="py-2">
+                    <Link
+                      className={`footer_nav text-lg p-[10px] gap-[10px] ${
+                        pathname === item.path ? "active" : ""
+                      }`}
+                      href={item.path}
+                    >
+                      {item.title_en}{" "}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <ul>
+                {navItemsCol2.map((item) => (
+                  <li key={item.id} className="py-2">
+                    <Link
+                      className={`footer_nav text-lg p-[10px] gap-[10px] ${
+                        pathname === item.path ? "active" : ""
+                      }`}
+                      href={item.path}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
       <div className="credits flex flex-col gap-[24px] ">

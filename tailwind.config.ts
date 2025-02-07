@@ -14,6 +14,8 @@ export default {
         primary1: "#008080",
         secondary1: "#F7F7F8",
         secondary2: "#F7F7F8",
+        text_title: "#333333",
+        text_des: "#666666",
         trackbtn: "#555555",
       },
     },

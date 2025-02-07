@@ -1,6 +1,6 @@
 import Avatar from "@/app/admin/components/navbar/avatar";
 import { useLanguage } from "@/app/context/LanguageContext";
-import LanguageSwitcher from "@/components/btn-switch/LanguageSwitcher";
+import LanguageSwitcher from "@/components/buttons/btn-switch/LanguageSwitcher";
 import Search_input from "@/components/inputs/search_input";
 import { FaBell } from "react-icons/fa";
 

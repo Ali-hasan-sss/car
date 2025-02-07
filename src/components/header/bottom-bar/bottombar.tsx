@@ -1,7 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/app/context/LanguageContext";
-import LanguageSwitcher from "@/components/btn-switch/LanguageSwitcher";
+import LanguageSwitcher from "@/components/buttons/btn-switch/LanguageSwitcher";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 

@@ -37,6 +37,11 @@ body {
   font-weight: 700;
   line-height: 50px;
 }
+.secondarytitle {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 50px;
+}
 .bg_image {
   background-image: url("/images/contact.png");
   background-size: cover;

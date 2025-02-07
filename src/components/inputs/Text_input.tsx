@@ -1,21 +1,23 @@
 import React from "react";
 
-interface EmailInputProps {
-  id: string;
+interface TextInputProps {
+  id?: string;
   value: string;
   placeholder?: string;
   label?: string;
   error?: string;
+  name?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Text_input: React.FC<EmailInputProps> = ({
+const Text_input: React.FC<TextInputProps> = ({
   id,
+  name,
   value,
   placeholder,
   error,
   label,
-  onChange, // التأكد من وجود الخاصية
+  onChange,
 }) => {
   return (
     <div className="form_group flex flex-col gap-[8px] items-start justify-start">
@@ -25,6 +27,7 @@ const Text_input: React.FC<EmailInputProps> = ({
       <input
         type="text"
         id={id}
+        name={name}
         placeholder={placeholder}
         value={value}
         onChange={onChange} // تمرير الخاصية مباشرة هنا
