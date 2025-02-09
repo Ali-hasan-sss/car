@@ -1,12 +1,18 @@
+"use client"; // إضافة توجيه "use client"
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useState, useEffect, useRef } from "react";
 import { FaUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
+import { useRouter } from "next/navigation";
+import { useContext } from "react";
+import { AuthContext } from "@/app/context/AuthContext";
 
 export default function Avatar() {
   const [isOpen, setIsOpen] = useState(false);
   const { t, isArabic } = useLanguage();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const { logout } = useContext(AuthContext); // استخدام السياق لإدارة تسجيل الخروج
 
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
@@ -22,7 +28,6 @@ export default function Avatar() {
         setIsOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -43,11 +48,17 @@ export default function Avatar() {
       id: 2,
       label: t("Logout"),
       icon: <FiLogOut className="text-red-500 text-2xl" />,
-      action: () => console.log("Logout clicked"),
+      action: () => handleLogout(), // استدعاء دالة تسجيل الخروج
       textColor: "text-red-600",
       hoverBg: "hover:bg-red-200",
     },
   ];
+
+  // دالة تسجيل الخروج
+  const handleLogout = () => {
+    logout(); // استدعاء دالة logout من السياق
+    router.push("/"); // إعادة توجيه المستخدم إلى الصفحة الرئيسية
+  };
 
   return (
     <div className="dropdown dropdown-bottom dropdown-end" ref={dropdownRef}>
@@ -65,11 +76,10 @@ export default function Avatar() {
         </div>
         <img src="/images/down.png" alt="down" />
       </div>
-
       {isOpen && (
         <ul
           tabIndex={0}
-          className={`dropdown-content rounded fixed top-[75px] menu  rounded-box z-[100] w-52 p-2 shadow ${
+          className={`dropdown-content rounded fixed top-[75px] menu rounded-box z-[100] w-52 p-2 shadow ${
             isArabic ? "left-[15px]" : "right-[15px]"
           }`}
         >

@@ -1,33 +1,23 @@
 export default function About_section1() {
   return (
-    <div className="py-[30px] md:py-[100px] px-[10px] md:px-[60px] bg-white ">
-      <div className="block md:flex gap-[80px] items-center justify-between  ">
-        <div className=" w-full py-4 md:w-1/2">
-          <h1 className="title1">
-            Tell the story of how your company came about
-          </h1>
-        </div>
-        <div className="w-full py-4 md:w-1/2">
-          <p className="des1">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
-            varius faucibus massa sollicitudin amet augue. Nibh metus a semper
-            purus mauris duis. Lorem eu neque, tristique quis duis. Nibh
-            scelerisque ac adipiscing velit non nulla in amet pellentesque. Sit
-            turpis pretium eget maecenas. Vestibulum dolor mattis consectetur
-            eget commodo vitae. Amet pellentesque sit pulvinar lorem mi a,
-            euismod risus rhoncus. Elementum ullamcorper nec, habitasse
-            vulputate. Eget dictum quis est sed egestas tellus, a lectus. Quam
-            ullamcorper in fringilla arcu aliquet fames arcu.Lacinia eget
-            faucibus urna, nam risus nec elementum cras porta. Sed elementum,
-            sed dolor purus dolor dui. Ut dictum nulla pulvinar vulputate sit
-            sagittis in eleifend dignissim. Natoque mauris cras molestie velit.
-            Maecenas eget adipiscing quisque viverra lectus arcu, tincidunt
-            ultrices pellentesque.
-          </p>
-        </div>
+    <div className="py-[10px] flex flex-col gap-[40px]  md:py-[50px] px-[10px] md:px-[50px] bg-white ">
+      <div className="flex flex-col gap-[10px]">
+        <h2 className="title">Our Mission</h2>
+        <p className="text-text_des text-xl">
+          Our mission is to simplify the automotive process for our customers by
+          offering transparent, reliable, and high-quality services. We aim to
+          be a one-stop destination for all your car-related needs, delivering
+          exceptional value and exceeding expectations.
+        </p>
       </div>
-      <div className="placeholder w-full ">
-        <img src="/images/Placeholder.png" alt="Placeholder" />
+      <div className="flex flex-col gap-[10px]">
+        <h2 className="title">Our Vision</h2>
+        <p className="text-text_des text-xl">
+          To become a global leader in the automotive services industry by
+          building a reputation for excellence, trust, and innovation. We strive
+          to connect buyers, sellers, and shippers through cutting-edge
+          technology and customer-focused solutions.
+        </p>
       </div>
     </div>
   );

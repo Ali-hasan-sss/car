@@ -23,11 +23,15 @@ export default function Servic_box({
           className={`flex items-center justify-center gap-1  border rounded p-2 px-3 ${
             isActive
               ? "bg-primary1 text-blue-50"
-              : "border-primary1 text-primary1 hover:bg-primary1 hover:text-blue-50"
+              : "border-primary1 text-primary1 hover:bg-secondary1"
           }`}
         >
           {isActive ? "Hide Details" : "Show Details"}
-          <img src="images/arrowDowen.png" alt="icon" />
+          {isActive ? (
+            <img src="images/arrowUp.png" alt="icon" />
+          ) : (
+            <img src="images/arrowDowen.png" alt="arrowdowen" />
+          )}
         </button>
       </div>
     </>

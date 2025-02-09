@@ -2,16 +2,15 @@
 
 import "./style.css";
 import About_section1 from "./section1";
-import About_section2 from "./section2";
 import Navbar from "@/components/header/navbar";
 import Footer from "@/components/footer";
-import Brands from "./brands";
-import Team from "./team";
-import Section3 from "./section3";
-import Section4 from "./section4";
 import { useEffect } from "react";
 import CoverImage from "@/components/Hero_general/cover_image";
 import WellCome from "@/components/Hello_section/wellcome";
+import Whay_us from "./whayUs";
+import OurValues from "./ourValues";
+import End_Section from "./section_end";
+import Our_services from "./our_services";
 
 export default function About() {
   useEffect(() => {
@@ -29,11 +28,10 @@ export default function About() {
         With years of experience and a passion for innovation, we’ve established ourselves as a reliable and efficient service provider, helping individuals and businesses achieve their automotive goals with ease and confidence."
       />
       <About_section1 />
-      <About_section2 />
-      <Brands />
-      <Team />
-      <Section3 />
-      <Section4 />
+      <Our_services />
+      <Whay_us />
+      <OurValues />
+      <End_Section />
       <Footer />
     </div>
   );

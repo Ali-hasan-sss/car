@@ -25,7 +25,7 @@ export default function Footer() {
   const navItemsCol2 = [{ id: 1, label: "FAQ", path: "/faq" }];
   const pathname = usePathname();
   return (
-    <div className="footer flex flex-col gap-[80px] py-[30px] md:py-[70px] px-[10px] md:px-[85px]">
+    <div className="footer flex flex-col gap-[80px] py-[20px] md:py-[30px] px-[10px] md:px-[85px]">
       <div className="block md:flex justify-between">
         <div className="w-full flex flex-col gap-[30px] md:w-2/3 ">
           <div className="logo p-1">

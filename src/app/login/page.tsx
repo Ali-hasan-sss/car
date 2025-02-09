@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import Register_nav from "@/components/header/register_navbar";
 import Register_footer from "@/components/footer/Register_footer";
@@ -8,7 +7,8 @@ import { useLanguage } from "../context/LanguageContext";
 import { useRouter } from "next/navigation";
 import EmailInput from "@/components/inputs/EmailInput";
 import PasswordInput from "@/components/inputs/PasswordInput";
-//import axios from "axios";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 interface LoginFormInputs {
   email: string;
@@ -25,44 +25,47 @@ const Login: React.FC = () => {
     email: "",
     password: "",
   });
-  const [errors, setErrors] = useState<Partial<LoginFormInputs>>({});
 
+  const [errors, setErrors] = useState<Partial<LoginFormInputs>>({});
   const { t } = useLanguage();
+
+  // استخدام السياق لإدارة تسجيل الدخول
+  const { login } = useContext(AuthContext);
 
   const validateForm = (): boolean => {
     const newErrors: Partial<LoginFormInputs> = {};
-
     if (!formData.email) {
       newErrors.email = "البريد الإلكتروني مطلوب.";
     } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email)) {
       newErrors.email = "يرجى إدخال بريد إلكتروني صحيح.";
     }
-
     if (!formData.password) {
       newErrors.password = "كلمة المرور مطلوبة.";
     } else if (formData.password.length < 8) {
       newErrors.password = "يجب أن تكون كلمة المرور 8 أحرف على الأقل.";
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (validateForm()) {
-      /* try {
-        const response = await axios.post("/api/auth/login", formData);
-        console.log("Login successful:", response.data);
+      try {
+        // محاولة تسجيل الدخول عبر API
+        // const response = await axios.post("/api/auth/login", formData);
+        // console.log("Login successful:", response.data);
+
+        // بدلاً من ذلك، نستخدم دالة login من السياق
+        login(); // تسجيل الدخول باستخدام السياق
+        router.push("/customer/dashboard");
       } catch (error) {
-        console.log(error);
+        console.error(error);
         setErrors({
           email: "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
           password: "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
         });
-      }*/
-      router.push("/customer/dashboard");
+      }
     }
   };
 

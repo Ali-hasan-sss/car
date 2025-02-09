@@ -1,8 +1,10 @@
 import { useLanguage } from "@/app/context/LanguageContext";
 import Link from "next/link";
+
 interface Register_navProps {
   handleBack: () => void;
 }
+
 export default function Register_nav({ handleBack }: Register_navProps) {
   const { t } = useLanguage();
   return (

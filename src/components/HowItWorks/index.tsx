@@ -1,4 +1,4 @@
-import Info_card from "./info_card";
+import InfoCard from "../cards/info_card";
 
 export default function HowItWorks() {
   const steps = [
@@ -41,7 +41,9 @@ export default function HowItWorks() {
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             {steps.map((step, index) => (
-              <Info_card
+              <InfoCard
+                width="200"
+                height="200"
                 key={index}
                 image={step.imgSrc}
                 title={step.title}

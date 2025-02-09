@@ -3,11 +3,29 @@
 import React from "react";
 import Navbar from "@/components/header/navbar";
 import Footer from "@/components/footer";
-import Info_card from "@/components/HowItWorks/info_card";
 import CoverImage from "@/components/Hero_general/cover_image";
 import WellCome from "@/components/Hello_section/wellcome";
+import InfoCard from "@/components/cards/info_card";
+import Btn_outlin from "@/components/buttons/btn/outline_btn";
 
 const ServicesPage: React.FC = () => {
+  const worksItem = [
+    {
+      image: "images/hummer.png",
+      title: "Car Auctions",
+      des: "Register on our platform to access a wide range of vehicles. Place your bids on the cars of your choice. Complete the purchase and receive assistance with delivery.",
+    },
+    {
+      image: "images/carSipping.png",
+      title: "Car Auctions",
+      des: "Provide us with the details of the vehicle and destination. Choose from our flexible shipping options. Track your shipment and receive the vehicle at the agreed time and location.",
+    },
+    {
+      image: "images/carSelling.png",
+      title: "Car Auctions",
+      des: "Register on our platform to access a wide range of vehicles. Place your bids on the cars of your choice. Complete the purchase and receive assistance with delivery.",
+    },
+  ];
   const trustItems = [
     {
       image: "images/glass.png",
@@ -88,11 +106,35 @@ const ServicesPage: React.FC = () => {
         </div>
       </div>
       <div className="flex flex-col items-center justify-center gap-[50px] bg-secondary1 py-[50px]">
+        <h1 className="title">How it works</h1>
+        <div className="flex flex-wrap items-center justify-center gap-[20px] ">
+          {worksItem.map((item, index) => (
+            <InfoCard
+              key={index}
+              height="300"
+              width="300"
+              image={item.image}
+              title={item.title}
+              des={item.des}
+            />
+          ))}
+        </div>
+        <img src="/images/Vector.png" alt="victor" className="w-2/3 py-1" />
+        <Btn_outlin
+          onclick={() => {
+            console.log("start");
+          }}
+          label="Start Now"
+        />
+      </div>
+      <div className="flex flex-col items-center justify-center gap-[50px] bg-white py-[50px]">
         <h1 className="title">Why Trust Us?</h1>
         <div className="flex flex-wrap items-center justify-center gap-[20px] ">
           {trustItems.map((item, index) => (
-            <Info_card
+            <InfoCard
               key={index}
+              height="300"
+              width="250"
               image={item.image}
               title={item.title}
               des={item.des}

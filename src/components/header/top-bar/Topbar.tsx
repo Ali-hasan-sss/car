@@ -12,6 +12,7 @@ export default function Topbar() {
       </div>
       <div className="flex d-md-none item-center justify-between w-full h-[72px]">
         <Logo />
+        <Navbutton />
         <Dropdown />
       </div>
     </>
