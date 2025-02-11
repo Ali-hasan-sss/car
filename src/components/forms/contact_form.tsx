@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import "./form_style.css";
-import Text_input from "../forms/text_inbut";
+import Text_input from "../inputs/full_text_inbut";
 import Textarea from "../inputs/Textarea";
 import Btn_outlin from "../buttons/btn/outline_btn";
 

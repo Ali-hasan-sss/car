@@ -1,5 +1,5 @@
 "use client";
-import Avatar from "@/app/admin/components/navbar/avatar";
+import Avatar from "@/components/avatar/avatar";
 import { AuthContext } from "@/app/context/AuthContext";
 import { useLanguage } from "@/app/context/LanguageContext";
 import Link from "next/link";

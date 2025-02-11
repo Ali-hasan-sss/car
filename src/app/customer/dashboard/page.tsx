@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Modal, Box } from "@mui/material";
 import Auctions from "./services/Auctions";
 import Shipping from "./services/shipping";
+import Salles from "./services/salles";
 
 const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,7 +76,7 @@ const Dashboard = () => {
             maxHeight: "90vh", // ضمان عدم تجاوز الشاشة
             bgcolor: "background.paper",
             boxShadow: 24,
-            p: 4,
+            p: 3,
             borderRadius: "8px",
             overflowY: "auto", // السماح بالتمرير عند زيادة المحتوى
             outline: "none",
@@ -84,11 +85,9 @@ const Dashboard = () => {
           {serviceKey === "Auctions" && (
             <Auctions close={() => setIsModalOpen(false)} />
           )}
-          {serviceKey === "Shipping" && (
-            <Shipping close={() => setIsModalOpen(false)} />
-          )}
+          {serviceKey === "Shipping" && <Shipping />}
           {serviceKey === "Sell" && (
-            <p>Sell & Buy Cars Component Coming Soon</p>
+            <Salles close={() => setIsModalOpen(false)} />
           )}
         </Box>
       </Modal>

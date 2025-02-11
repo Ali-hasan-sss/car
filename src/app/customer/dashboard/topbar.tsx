@@ -1,4 +1,4 @@
-import Avatar from "@/app/admin/components/navbar/avatar";
+import Avatar from "@/components/avatar/avatar";
 import { useLanguage } from "@/app/context/LanguageContext";
 import LanguageSwitcher from "@/components/buttons/btn-switch/LanguageSwitcher";
 import Search_input from "@/components/inputs/search_input";

@@ -1,8 +1,8 @@
 import React from "react";
-import "./form_style.css";
+import "../forms/form_style.css";
 interface InputProps {
   id?: string;
-  name: string;
+  name?: string;
   placeHolder?: string;
   label?: string;
   type?: string;
@@ -10,7 +10,7 @@ interface InputProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string;
 }
-export default function TextInput({
+export default function FullTextInput({
   id,
   name,
   placeHolder,
@@ -21,8 +21,10 @@ export default function TextInput({
   error,
 }: InputProps) {
   return (
-    <div className="form_group flex flex-col gap-[8px] items-start justify-start">
-      <label htmlFor={id}>{label}</label>
+    <div className="form_group flex flex-col gap-[8px] items-start  w-full justify-start">
+      <label className="text-text_des" htmlFor={id}>
+        {label}
+      </label>
       <input
         name={name}
         type={type}
@@ -30,7 +32,7 @@ export default function TextInput({
         placeholder={placeHolder}
         value={value}
         onChange={onChange}
-        className={`textinput ${error ? "input_err" : ""}`}
+        className={`textinput rounded w-full ${error ? "input_err" : ""}`}
       />
       {error && <span className="text-red-500 text-sm">{error}</span>}
     </div>

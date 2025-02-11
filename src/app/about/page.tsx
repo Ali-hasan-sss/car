@@ -10,7 +10,7 @@ import WellCome from "@/components/Hello_section/wellcome";
 import Whay_us from "./whayUs";
 import OurValues from "./ourValues";
 import End_Section from "./section_end";
-import Our_services from "./our_services";
+import Our_services from "./section2";
 
 export default function About() {
   useEffect(() => {
