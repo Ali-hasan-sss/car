@@ -1,4 +1,5 @@
 "use client";
+import Checkbox from "@/components/inputs/checkBox";
 import Chooser from "@/components/inputs/chooser";
 import FullTextInput from "@/components/inputs/full_text_inbut";
 import Text_selector from "@/components/inputs/selectors/text_selector";
@@ -124,6 +125,23 @@ export default function Shipping() {
             onChange={(value) => handleInputChange("finalPort", value)}
           />
         </div>
+        <Checkbox label="In transit to final destination" />
+        <div className="bg-text_des h-[1px] w-full"></div>
+      </div>
+      <div className="flex mt-4 flex-col w-full items-start gap-4">
+        <div className="flex items-center justify-start gap-1">
+          <img
+            src="/images/information_sec.png"
+            alt="info"
+            className="w-[20px]"
+          />
+          <h2 className="text-text_title text-2xl font-bold">
+            Commodity information
+          </h2>
+        </div>
+        <p className="text-text_title text-start font-bold text-lg">
+          Please provide details about your commodities and their shipping{" "}
+        </p>
       </div>
     </div>
   );

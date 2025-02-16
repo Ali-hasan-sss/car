@@ -2,7 +2,8 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -10,15 +11,14 @@ interface AuthGuardProps {
 
 const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
   const router = useRouter();
-
+  const authToken = useSelector((state: RootState) => state.auth.authToken);
   useEffect(() => {
-    const isAuthenticated = !!Cookies.get("Token");
-    if (!isAuthenticated) {
-      router.push("/admin/login");
+    if (!authToken) {
+      router.push("/admin/login"); // إعادة التوجيه إذا لم يكن هناك token
     }
-  }, [router]);
+  }, [authToken, router]);
 
-  return <>{children}</>;
+  return <>{children}</>; // عرض المحتوى إذا كان المستخدم مصادقًا
 };
 
 export default AuthGuard;

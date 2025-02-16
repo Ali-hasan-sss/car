@@ -1,15 +1,15 @@
 "use client";
-
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-import axios from "axios";
-import { base_url } from "@/utils/domain";
-import Cookies from "js-cookie";
+import axiosInstance from "@/utils/axiosInstance"; // استيراد axiosInstance المعدلة
+import { setAuthToken } from "@/store/Reducers/authSlice"; // استيراد Action لتخزين token
 import LoadingBTN from "../components/loadingBTN";
 import { useLanguage } from "@/app/context/LanguageContext";
 
 const AdminLogin: React.FC = () => {
   const router = useRouter();
+  const dispatch = useDispatch(); // استخدم useDispatch لربط Redux
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -20,20 +20,23 @@ const AdminLogin: React.FC = () => {
     e.preventDefault();
     setLoading(true); // تفعيل حالة التحميل
     setError(""); // إعادة تعيين الخطأ
+
     try {
-      const response = await axios.post(`${base_url}/admin/login`, {
+      const response = await axiosInstance.post(`/admin/login`, {
         email,
         password,
       });
-      Cookies.set("Token", response.data.data.access_token, {
-        expires: 7,
-        secure: true,
-        sameSite: "strict",
-      });
+
+      const token = response.data.data.access_token;
+
+      // تخزين token في Redux
+      dispatch(setAuthToken(token));
+
+      // تحويل المستخدم إلى صفحة لوحة التحكم
       router.push("/admin/dashboard");
     } catch (err) {
       setError("Invalid email or password");
-      console.log(err);
+      console.error(err);
     } finally {
       setLoading(false); // إيقاف حالة التحميل
     }
@@ -42,7 +45,7 @@ const AdminLogin: React.FC = () => {
   return (
     <>
       <div className="w-full items-center justify-between flex h-[100vh] bg-secondary1">
-        <div className=" hidden md:block md:w-1/2 w-full min-h-screen bg_image"></div>
+        <div className="hidden md:block md:w-1/2 w-full min-h-screen bg_image"></div>
         <div className="flex flex-col items-center md:w-1/2 w-full justify-center min-h-screen">
           <h1 className="text-3xl mb-4">{t("Login")}</h1>
           <form

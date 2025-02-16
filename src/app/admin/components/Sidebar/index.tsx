@@ -1,4 +1,5 @@
 import { useLanguage } from "@/app/context/LanguageContext";
+import { usePathname } from "next/navigation";
 import React from "react";
 import {
   FaHome,
@@ -14,13 +15,13 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
-  const { t } = useLanguage();
-
+  const { t, isArabic } = useLanguage();
+  const pathName = usePathname();
   const menuItems = [
     {
       icon: <FaHome className="text-2xl" />,
       label: t("Home"),
-      path: "/admin/dashboard/",
+      path: "/admin/dashboard",
     },
     {
       icon: <FaHome className="text-2xl" />,
@@ -40,12 +41,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
     {
       icon: <FaUsers className="text-2xl" />,
       label: t("profile"),
-      path: "/admin/dashboard",
+      path: "/admin/dashboard/profile",
     },
     {
       icon: <FaCog className="text-2xl " />,
       label: t("Settings"),
-      path: "/admin/dashboard",
+      path: "/admin/dashboard/settings",
     },
   ];
 
@@ -65,21 +66,18 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
           onClick={onToggle}
           className={`text-2xl rounded-full border p-2 hover:bg-primary1 hover:text-white focus:outline-none `}
         >
-          {isExpanded ? <FaArrowLeft /> : <FaArrowRight />}
+          {isExpanded || isArabic ? <FaArrowLeft /> : <FaArrowRight />}
         </button>
       </div>
 
       <div className="flex-1 overflow-y-auto">
         <ul className="space-y-4 p-3">
-          {isExpanded && (
-            <li className="  px-1 text-center gap-4 py-1 ">
-              <h3 className="text-xl">{t("Dashboard")}</h3>
-            </li>
-          )}
           {menuItems.map((item, index) => (
             <li
               key={index}
-              className="flex hover:bg-secondary1 hover:text-gray-800  items-center gap-4 cursor-pointer py-2 rounded"
+              className={`flex hover:bg-secondary1 hover:text-gray-800  items-center gap-4 cursor-pointer py-2 rounded ${
+                pathName === item.path ? "bg-secondary1 text-gray-800" : ""
+              }`}
             >
               {item.icon}
               {isExpanded && <a href={item.path}>{item.label}</a>}

@@ -4,15 +4,17 @@ import { useState, useEffect, useRef } from "react";
 import { FaUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
-import { AuthContext } from "@/app/context/AuthContext";
+import { useSelector } from "react-redux"; // استيراد useSelector
+import { RootState } from "@/store/store"; // استيراد RootState للوصول إلى الحالة من Redux
 
 export default function Avatar() {
   const [isOpen, setIsOpen] = useState(false);
   const { t, isArabic } = useLanguage();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const { logout } = useContext(AuthContext); // استخدام السياق لإدارة تسجيل الخروج
+
+  // الوصول إلى حالة تسجيل الدخول من Redux
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
@@ -56,7 +58,8 @@ export default function Avatar() {
 
   // دالة تسجيل الخروج
   const handleLogout = () => {
-    logout(); // استدعاء دالة logout من السياق
+    // هنا يمكنك تحديث حالة Redux لتسجيل الخروج
+    // dispatch(setLogout());
     router.push("/"); // إعادة توجيه المستخدم إلى الصفحة الرئيسية
   };
 
@@ -76,36 +79,37 @@ export default function Avatar() {
         </div>
         <img src="/images/down.png" alt="down" />
       </div>
-      {isOpen && (
-        <ul
-          tabIndex={0}
-          className={`dropdown-content rounded fixed top-[75px] menu rounded-box z-[100] w-52 p-2 shadow ${
-            isArabic ? "left-[15px]" : "right-[15px]"
-          }`}
-        >
-          {menuItems.map((item) => (
-            <li
-              key={item.id}
-              className={`p-3 flex items-center gap-2 rounded cursor-pointer ${
-                item.hoverBg
-              } ${isArabic ? "" : "justify-end"}`}
-              onClick={item.action}
-            >
-              {isArabic ? (
-                <>
-                  {item.icon}
-                  <span className={item.textColor}>{item.label}</span>
-                </>
-              ) : (
-                <>
-                  <span className={item.textColor}>{item.label}</span>
-                  {item.icon}
-                </>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
+      {isOpen &&
+        isLoggedIn && ( // عرض القائمة فقط إذا كان المستخدم مسجلاً دخوله
+          <ul
+            tabIndex={0}
+            className={`dropdown-content rounded fixed top-[75px] menu rounded-box z-[100] w-52 p-2 shadow ${
+              isArabic ? "left-[15px]" : "right-[15px]"
+            }`}
+          >
+            {menuItems.map((item) => (
+              <li
+                key={item.id}
+                className={`p-3 flex items-center gap-2 rounded cursor-pointer ${
+                  item.hoverBg
+                } ${isArabic ? "" : "justify-end"}`}
+                onClick={item.action}
+              >
+                {isArabic ? (
+                  <>
+                    {item.icon}
+                    <span className={item.textColor}>{item.label}</span>
+                  </>
+                ) : (
+                  <>
+                    <span className={item.textColor}>{item.label}</span>
+                    {item.icon}
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
     </div>
   );
 }

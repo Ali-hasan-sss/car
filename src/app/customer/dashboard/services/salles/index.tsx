@@ -20,6 +20,7 @@ import {
   yearOfMade,
 } from "../data";
 import { FaMinus } from "react-icons/fa";
+import Chooser from "@/components/inputs/chooser";
 
 interface SallesFormInputs {
   link: string;
@@ -103,9 +104,6 @@ export default function Salles({ close }: SallesProps) {
     }));
   };
 
-  const handleOptionChange = (value: string) => {
-    handleInputChange("not_shippedlocations", value);
-  };
   const handleSubmit = () => {
     console.log("Form Data Submitted:", formData);
   };
@@ -279,33 +277,15 @@ export default function Salles({ close }: SallesProps) {
             />
           </div>
         </div>
-        <div className="flex flex-col gap-1 items-start">
-          <label>Location of Car (If not shipped)</label>
-          <div className="flex items-center gap-[5px]">
-            <input
-              type="radio"
-              id="onTheWay"
-              name="carLocation"
-              value={formData.not_shippedlocations}
-              checked={formData.shippedlocations === "On-the-way"}
-              onChange={() => handleOptionChange("On-the-way")}
-              className="custom-radio"
-            />
-            <label htmlFor="onTheWay">On the way</label>
-          </div>
-          <div className="flex items-center gap-[10px]">
-            <input
-              type="radio"
-              id="inTransit"
-              name="carLocation"
-              value={formData.not_shippedlocations}
-              checked={formData.shippedlocations === "In-transit"}
-              onChange={() => handleOptionChange("In-transit")}
-              className="custom-radio"
-            />
-            <label htmlFor="inTransit">In transit</label>
-          </div>
-        </div>
+        <Chooser
+          question="Location of Car (If not shipped)"
+          option1="On the way"
+          value1="On the way"
+          option2="In transit"
+          value2="In transit"
+          value={formData.not_shippedlocations}
+          onChange={(value) => handleInputChange("not_shippedlocations", value)}
+        />
       </div>
       <div className="carInfo flwx fles-col items-center justify-start gap-[10px]">
         <h3 className="">Additional Features:</h3>

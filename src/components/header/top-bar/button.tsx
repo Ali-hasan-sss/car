@@ -1,21 +1,24 @@
 "use client";
+
 import Avatar from "@/components/avatar/avatar";
-import { AuthContext } from "@/app/context/AuthContext";
 import { useLanguage } from "@/app/context/LanguageContext";
 import Link from "next/link";
-import { useContext } from "react";
+import { useSelector } from "react-redux"; // استيراد useSelector
+import { RootState } from "@/store/store"; // استيراد RootState للوصول إلى الحالة من Redux
 
 export default function Navbutton() {
   const { t } = useLanguage();
-  const { isLOgedIn } = useContext(AuthContext);
 
-  return isLOgedIn ? (
+  // الوصول إلى حالة تسجيل الدخول من Redux
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+
+  return isLoggedIn ? (
     <Avatar />
   ) : (
     <div className="flex w-[209px] h-[57px] p-[5px] gap-[8px] items-center">
       <Link
         href="/login"
-        className="btn  text-blue-400 w-[89px] h-[40px] border-primary1 py-[10px] px-[14px] hover:bg-primary1 hover:text-light flex items-center justify-center"
+        className="btn text-blue-400 w-[89px] h-[40px] border-primary1 py-[10px] px-[14px] hover:bg-primary1 hover:text-light flex items-center justify-center"
       >
         {t("Sign_in")}
       </Link>

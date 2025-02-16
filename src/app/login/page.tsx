@@ -7,8 +7,6 @@ import { useLanguage } from "../context/LanguageContext";
 import { useRouter } from "next/navigation";
 import EmailInput from "@/components/inputs/EmailInput";
 import PasswordInput from "@/components/inputs/PasswordInput";
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
 
 interface LoginFormInputs {
   email: string;
@@ -28,9 +26,6 @@ const Login: React.FC = () => {
 
   const [errors, setErrors] = useState<Partial<LoginFormInputs>>({});
   const { t } = useLanguage();
-
-  // استخدام السياق لإدارة تسجيل الدخول
-  const { login } = useContext(AuthContext);
 
   const validateForm = (): boolean => {
     const newErrors: Partial<LoginFormInputs> = {};
@@ -52,12 +47,17 @@ const Login: React.FC = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
+        /*
         // محاولة تسجيل الدخول عبر API
-        // const response = await axios.post("/api/auth/login", formData);
-        // console.log("Login successful:", response.data);
+        const response = await axiosInstance.post(`/login`, {
+          formData,
+        });
+        const token = response.data.data.access_token;
+        dispatch(setAuthToken(token));
 
-        // بدلاً من ذلك، نستخدم دالة login من السياق
-        login(); // تسجيل الدخول باستخدام السياق
+        // console.log("Login successful:");
+        // */
+
         router.push("/customer/dashboard");
       } catch (error) {
         console.error(error);
