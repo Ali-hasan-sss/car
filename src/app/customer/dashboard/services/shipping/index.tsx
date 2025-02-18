@@ -3,6 +3,9 @@ import Checkbox from "@/components/inputs/checkBox";
 import Chooser from "@/components/inputs/chooser";
 import FullTextInput from "@/components/inputs/full_text_inbut";
 import Text_selector from "@/components/inputs/selectors/text_selector";
+import Text_input from "@/components/inputs/Text_input";
+import VIN_input from "@/components/inputs/VIN_input";
+import FileUploder from "@/components/uploders/fileUploder";
 import { useState } from "react";
 
 interface ShippingFormInputs {
@@ -10,6 +13,13 @@ interface ShippingFormInputs {
   finalPort: string;
   pickupRequired: string; // جديد: للتخزين إذا كان الاستلام مطلوبًا
   consolidateShipment: string; // جديد: للتخزين إذا كان الشحن مشتركًا
+  make: string;
+  model: string;
+  year: string;
+  vehicle: string;
+  vehhicelDate: string;
+  Consignee: string;
+  useType: string;
 }
 
 /*interface ShippingProps {
@@ -28,6 +38,13 @@ export default function Shipping() {
     finalPort: "",
     pickupRequired: "", // جديد: القيمة الأولية فارغة
     consolidateShipment: "", // جديد: القيمة الأولية فارغة
+    make: "",
+    model: "",
+    year: "",
+    vehicle: "",
+    vehhicelDate: "",
+    Consignee: "",
+    useType: "",
   });
 
   //const [previewUrls, setPreviewUrls] = useState<string[]>([]);
@@ -67,7 +84,7 @@ export default function Shipping() {
 
       {/* حقل نوع السلعة */}
       <div className="flex flex-col w-full items-start gap-3 pb-4 border-b">
-        <p className="text-text_title text-start font-bold text-lg">
+        <p className="text-text_des text-start font-bold text-lg">
           Please select commodity type and sale origin of your order.
         </p>
         <FullTextInput
@@ -139,10 +156,77 @@ export default function Shipping() {
             Commodity information
           </h2>
         </div>
-        <p className="text-text_title text-start font-bold text-lg">
+        <p className="text-text_des text-start font-bold text-lg">
           Please provide details about your commodities and their shipping{" "}
         </p>
+        <VIN_input />
       </div>
+      <div className="flex mt-4  justify-center w-full items-center gap-4">
+        <Text_input
+          placeholder="Enter"
+          value={formData.make}
+          onChange={(e) => e.target.value}
+          label="Make*"
+        />
+        <Text_input
+          placeholder="Enter"
+          value={formData.model}
+          onChange={(e) => e.target.value}
+          label="Model**"
+        />
+        <Text_input
+          placeholder="Enter"
+          value={formData.year}
+          onChange={(e) => e.target.value}
+          label="Year*"
+        />
+      </div>
+      <div className="bg-text_des h-[1px] w-full"></div>
+
+      <div className="flex w-1/4 justify-start  items-center gap-4">
+        <Text_input
+          labelIkon="USD"
+          value={formData.vehicle}
+          onChange={(e) => e.target.value}
+          label="Vehicle value*"
+          placeholder="Enter"
+        />
+      </div>
+      <div className="flex  w-1/4 justify-start  items-center gap-4">
+        <Text_selector
+          label="Vehicle purchase date"
+          value={formData.vehhicelDate}
+          placeholder="Select"
+          onChange={(value) => handleInputChange("vehhicelDate", value)}
+          options={PortOptions}
+        />
+      </div>
+      <div className="flex  w-1/3 justify-start  items-center gap-4">
+        <FileUploder label="Upload bill of sale in .pdf format *" />
+      </div>
+      <div className="flex  w-1/3 justify-start  items-center gap-4">
+        <FileUploder label="Upload original title in .pdf format" />
+      </div>
+      <div className="bg-text_des h-[1px] w-full"></div>
+      <div className="flex  w-1/4 justify-start  items-center gap-4">
+        <Text_selector
+          label="Consignee *"
+          value={formData.Consignee}
+          placeholder="Select"
+          onChange={(value) => handleInputChange("Consignee", value)}
+          options={PortOptions}
+        />
+      </div>
+      <p className="text-text_title text-start font-bold text-xl"></p>
+      <Chooser
+        question="Please select end use type *"
+        option1="Personal use"
+        value1="Personal"
+        option2="Resale/Wholesale/Business related use"
+        value2="Business"
+        value={formData.useType}
+        onChange={(value) => handleInputChange("useType", value)}
+      />
     </div>
   );
 }

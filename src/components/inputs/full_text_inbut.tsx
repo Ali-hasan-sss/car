@@ -22,9 +22,11 @@ export default function FullTextInput({
 }: InputProps) {
   return (
     <div className="form_group flex flex-col gap-[8px] items-start  w-full justify-start">
-      <label className="text-text_des" htmlFor={id}>
-        {label}
-      </label>
+      {label && (
+        <label className="text-text_des" htmlFor={id}>
+          {label}
+        </label>
+      )}
       <input
         name={name}
         type={type}

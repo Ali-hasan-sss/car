@@ -6,6 +6,7 @@ interface SelectorInputProps {
   value: string;
   placeholder: string;
   error?: string; // رسالة الخطأ إذا وجدت
+  label?: string;
   onChange: (value: string) => void; // دالة تمرير القيمة إلى المكون الأب
 }
 
@@ -14,6 +15,7 @@ const Text_selector: React.FC<SelectorInputProps> = ({
   placeholder,
   value,
   onChange,
+  label,
   error,
 }) => {
   const { t } = useLanguage();
@@ -25,6 +27,7 @@ const Text_selector: React.FC<SelectorInputProps> = ({
 
   return (
     <div className="flex flex-col w-full">
+      {label && <label className="text-sm mb-2">{label}</label>}
       <div className="flex border rounded bg-white w-full h-[35px] py-[8px] px-[12px]">
         <select
           id="address"

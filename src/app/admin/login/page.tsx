@@ -3,9 +3,10 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/utils/axiosInstance"; // استيراد axiosInstance المعدلة
-import { setAuthToken } from "@/store/Reducers/authSlice"; // استيراد Action لتخزين token
+import { setAuthToken } from "@/store/slice/authSlice"; // استيراد Action لتخزين token
 import LoadingBTN from "../components/loadingBTN";
 import { useLanguage } from "@/app/context/LanguageContext";
+import Cookies from "js-cookie";
 
 const AdminLogin: React.FC = () => {
   const router = useRouter();
@@ -18,27 +19,34 @@ const AdminLogin: React.FC = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true); // تفعيل حالة التحميل
-    setError(""); // إعادة تعيين الخطأ
+    setLoading(true);
+    setError("");
 
     try {
-      const response = await axiosInstance.post(`/admin/login`, {
-        email,
-        password,
-      });
+      const data = new URLSearchParams();
+      data.append("email", email);
+      data.append("password", password);
 
+      const response = await axiosInstance.post(`/admin/login`, data);
       const token = response.data.data.access_token;
 
-      // تخزين token في Redux
+      // ✅ تخزين التوكن في الكوكيز مع مدة انتهاء
+      Cookies.set("authToken", token, {
+        expires: 7,
+        secure: true,
+        sameSite: "Strict",
+      });
+
+      // ✅ تخزين التوكن في Redux
       dispatch(setAuthToken(token));
 
-      // تحويل المستخدم إلى صفحة لوحة التحكم
+      // ✅ تحويل المستخدم إلى صفحة لوحة التحكم
       router.push("/admin/dashboard");
     } catch (err) {
       setError("Invalid email or password");
       console.error(err);
     } finally {
-      setLoading(false); // إيقاف حالة التحميل
+      setLoading(false);
     }
   };
 

@@ -18,7 +18,7 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
     }
   }, [authToken, router]);
 
-  return <>{children}</>; // عرض المحتوى إذا كان المستخدم مصادقًا
+  return <>{children}</>;
 };
 
 export default AuthGuard;

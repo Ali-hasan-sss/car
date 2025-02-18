@@ -36,7 +36,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
     {
       icon: <FaUsers className="text-2xl" />,
       label: t("Accounts"),
-      path: "users",
+      path: "/admin/dashboard/services",
     },
     {
       icon: <FaUsers className="text-2xl" />,

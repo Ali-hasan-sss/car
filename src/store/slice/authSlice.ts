@@ -1,5 +1,5 @@
-// authSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 
 interface AuthState {
   authToken: string | null;
@@ -7,10 +7,12 @@ interface AuthState {
   isLoggedIn: boolean;
 }
 
+const tokenFromCookies = Cookies.get("authToken") || null;
+
 const initialState: AuthState = {
-  authToken: null,
+  authToken: tokenFromCookies,
   lang: "en",
-  isLoggedIn: false,
+  isLoggedIn: !!tokenFromCookies,
 };
 
 const authSlice = createSlice({
@@ -19,6 +21,11 @@ const authSlice = createSlice({
   reducers: {
     setAuthToken(state, action: PayloadAction<string>) {
       state.authToken = action.payload;
+      Cookies.set("authToken", action.payload, {
+        expires: 7,
+        secure: true,
+        sameSite: "Strict",
+      });
     },
     setLanguage(state, action: PayloadAction<string>) {
       state.lang = action.payload;
@@ -26,10 +33,16 @@ const authSlice = createSlice({
     setLogin(state, action: PayloadAction<string>) {
       state.isLoggedIn = true;
       state.authToken = action.payload;
+      Cookies.set("authToken", action.payload, {
+        expires: 7,
+        secure: true,
+        sameSite: "Strict",
+      });
     },
     setLogout(state) {
       state.isLoggedIn = false;
       state.authToken = null;
+      Cookies.remove("authToken");
     },
   },
 });
