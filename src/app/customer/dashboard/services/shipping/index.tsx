@@ -1,4 +1,5 @@
 "use client";
+import Btn_borded from "@/components/buttons/btn/bordered_btn";
 import Checkbox from "@/components/inputs/checkBox";
 import Chooser from "@/components/inputs/chooser";
 import FullTextInput from "@/components/inputs/full_text_inbut";
@@ -20,6 +21,12 @@ interface ShippingFormInputs {
   vehhicelDate: string;
   Consignee: string;
   useType: string;
+  packageType: string;
+  Pieces: string;
+  dimension: string;
+  length: string;
+  height: string;
+  width: string;
 }
 
 /*interface ShippingProps {
@@ -45,6 +52,12 @@ export default function Shipping() {
     vehhicelDate: "",
     Consignee: "",
     useType: "",
+    packageType: "",
+    Pieces: "",
+    dimension: "",
+    length: "",
+    height: "",
+    width: "",
   });
 
   //const [previewUrls, setPreviewUrls] = useState<string[]>([]);
@@ -227,6 +240,112 @@ export default function Shipping() {
         value={formData.useType}
         onChange={(value) => handleInputChange("useType", value)}
       />
+      <Checkbox label="Apply consignee and end use type to all vehicles" />
+      <div className="w-1/4 flex items-center gap-2">
+        <Btn_borded
+          label="Add package"
+          className="bg-transparent"
+          icon={true}
+        ></Btn_borded>
+      </div>
+      <div className="bg-text_des h-[1px] w-full"></div>
+      <div className="flex items-center justify-start gap-2">
+        <img src="/images/box.png" alt="info" className="w-[20px]" />
+        <h2 className="text-text_title text-2xl font-bold">
+          Package information
+        </h2>
+      </div>
+      <p className="text-text_des text-start font-bold text-lg">
+        Please provide details about your packages{" "}
+      </p>
+      <p className="text-text_title text-start font-bold text-xl">Package 1</p>
+      <div className="flex flex-col items-start w-full">
+        <div className="flex items-start gap-4 w-full">
+          <Text_selector
+            label="Package type *"
+            value={formData.packageType}
+            options={PortOptions}
+            onChange={(value) => handleInputChange("packageType", value)}
+            placeholder="Package type *"
+          />
+          <Text_input
+            label="Pieces *"
+            value={formData.Pieces}
+            onChange={(e) => e.target.value}
+            placeholder="Pieces *"
+          />
+        </div>
+        <label className="mt-4 text-text_des">Description</label>
+        <textarea
+          placeholder="Enter"
+          className="w-full rounded p-2 border border-gray-400 h-[70px]"
+        />
+        <div className="flex w-full mt-4 items-center justify-between gap-3">
+          <Text_selector
+            placeholder="Select"
+            label="Dimension unit"
+            options={PortOptions}
+            value={formData.dimension}
+            onChange={(value) => handleInputChange("packageType", value)}
+          />
+          <Text_input
+            value={formData.length}
+            onChange={(e) => e.target.value}
+            label="Length*"
+            placeholder="Enter"
+          />
+          <Text_input
+            value={formData.width}
+            onChange={(e) => e.target.value}
+            label="Width*"
+            placeholder="Enter"
+          />
+          <Text_input
+            value={formData.height}
+            onChange={(e) => e.target.value}
+            label="Height*"
+            placeholder="Enter"
+          />
+        </div>
+        <div className="flex w-full mt-4 items-center  gap-3">
+          <div className="w-1/3">
+            <Text_selector
+              placeholder="Select"
+              label="Weight unit"
+              options={PortOptions}
+              value={formData.dimension}
+              onChange={(value) => handleInputChange("packageType", value)}
+            />
+          </div>
+          <div className="w-1/3">
+            <Text_input
+              value={formData.length}
+              onChange={(e) => e.target.value}
+              label="Item weightt"
+              placeholder="Enter"
+            />
+          </div>
+          <h3 className="text-text_title text-xl mt-4 ">Total weight: -</h3>
+        </div>
+        <div className="flex w-full mt-4 items-center gap-3">
+          <div className="w-1/3">
+            <Text_input
+              value={formData.length}
+              onChange={(e) => e.target.value}
+              label="Item value"
+              placeholder="Enter"
+            />
+          </div>
+          <h3 className="text-text_title text-xl mt-4 ">Total value: -</h3>
+        </div>
+        <div className="w-1/4 flex mt-4 items-center gap-2">
+          <Btn_borded
+            label="Add another package"
+            className="bg-transparent"
+            icon={true}
+          ></Btn_borded>
+        </div>
+      </div>
     </div>
   );
 }

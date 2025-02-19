@@ -9,3 +9,17 @@
   color: #008080;
   border: 1px solid #008080;
 }
+.bordered_btn {
+  padding: 8px 20px;
+  background: transparent;
+  color: #008080;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.bordered_btn:hover {
+  background: transparent;
+  color: #008080;
+  border: 1px solid #008080;
+}
