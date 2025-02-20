@@ -39,7 +39,7 @@ const Budget_selector: React.FC<Budget_selectorProps> = ({
           <select
             value={value.from} // القيمة الحالية لـ "from"
             onChange={handleFromChange} // معالجة التغيير
-            className={`w-full text-lg focus:outline-none ${
+            className={`w-full bg-white text-lg focus:outline-none ${
               value.from === "" ? "text-gray-400" : "text-black"
             }`}
           >

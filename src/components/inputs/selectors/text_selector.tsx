@@ -33,7 +33,7 @@ const Text_selector: React.FC<SelectorInputProps> = ({
           id="address"
           value={value} // القيمة الحالية
           onChange={handleChange} // معالجة التغيير
-          className={`w-full text-lg focus:outline-none ${
+          className={`w-full bg-white text-lg focus:outline-none ${
             value === "" ? "text-gray-400" : "text-black"
           }`}
         >
