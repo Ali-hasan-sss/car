@@ -12,11 +12,8 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
       <Sidebar />
       <main className="w-full flex flex-col h-screen overflow-y-auto bg-secondary2 p-4">
         <Topbar />
-        <div className="wellcome flex flex-col flex-grow px-5 py-4">
-          <p>
-            Welcome back, <span> Ali</span> !
-          </p>
-          <div className="main flex-grow w-full bg-white ">{children}</div>
+        <div className="wellcome w-full flex flex-col flex-grow px-5 py-4">
+          {children}
         </div>
         <Footer />
       </main>

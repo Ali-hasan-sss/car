@@ -5,14 +5,16 @@ interface Btn_bordedProops {
   label: string;
   onclick?: () => void;
   className?: string;
-  icon?: boolean;
+  iconAdd?: boolean;
+  iconClear?: boolean;
 }
 
 export default function Btn_borded({
   label,
   onclick,
   className,
-  icon,
+  iconAdd,
+  iconClear,
 }: Btn_bordedProops) {
   return (
     <button
@@ -20,7 +22,8 @@ export default function Btn_borded({
       className={`${className} bordered_btn rounded`}
       onClick={onclick}
     >
-      {icon && <img src="/images/plus.png" className="w-[15px]" />}
+      {iconAdd && <img src="/images/plus.png" className="w-[15px]" />}
+      {iconClear && <img src="/images/clear.png" className="w-[15px]" />}
       {label}
     </button>
   );

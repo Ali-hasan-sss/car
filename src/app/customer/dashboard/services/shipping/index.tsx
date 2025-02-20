@@ -245,7 +245,7 @@ export default function Shipping() {
         <Btn_borded
           label="Add package"
           className="bg-transparent"
-          icon={true}
+          iconAdd={true}
         ></Btn_borded>
       </div>
       <div className="bg-text_des h-[1px] w-full"></div>
@@ -342,7 +342,7 @@ export default function Shipping() {
           <Btn_borded
             label="Add another package"
             className="bg-transparent"
-            icon={true}
+            iconAdd={true}
           ></Btn_borded>
         </div>
       </div>

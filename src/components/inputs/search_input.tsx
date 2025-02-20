@@ -16,18 +16,20 @@ const Search_input: React.FC<Search_inputProps> = ({
   const { isArabic } = useLanguage();
   return (
     <div
-      className={`search-input relative ${isExpand ? "w-[40px]" : "w-full"} `}
+      className={`search-input p-3 bg-white relative ${
+        isExpand ? "w-[40px]" : "w-full"
+      } `}
     >
       <input
         type="text"
         placeholder={placeholder}
         id="search"
         value={value}
-        className="w-full p-2 px-4"
+        className="w-full border rounded border-gray-400 p-1 px-4"
       />
       <FaSearch
-        className={`absolute top-3  cursor-pointer ${
-          isArabic ? "left-4" : "right-4"
+        className={`absolute top-7  cursor-pointer ${
+          isArabic ? "left-8" : "right-8"
         }`}
       />
     </div>

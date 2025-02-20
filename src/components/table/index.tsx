@@ -8,10 +8,12 @@ interface Column {
 interface ActionConfig {
   edit?: boolean;
   delete?: boolean;
+  share?: boolean;
   view?: boolean;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
   onView?: (id: string) => void;
+  onShare?: (id: string) => void;
 }
 
 interface GeneralTableProps {
@@ -124,6 +126,16 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
                           aria-label="View"
                         >
                           <img src="/images/eye.png" width={14} alt="eye" />
+                        </button>
+                      </div>
+                    )}
+                    {actions.share && (
+                      <div className="flex items-center justify-center w-[25px] h-[25px] bg-gray-300 p-1 rounded-full overflow-hidden ">
+                        <button
+                          onClick={() => actions.onShare?.(row.id)}
+                          aria-label="share"
+                        >
+                          <img src="/images/share.png" width={14} alt="eye" />
                         </button>
                       </div>
                     )}

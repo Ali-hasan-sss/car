@@ -17,10 +17,16 @@ export default function TitleBar({
     console.log("go to order");
   };
   return (
-    <div className="flex items-center justify-between py-2">
+    <div className="flex items-center w-full justify-between py-2">
       <h1 className="text-text_title font-bold text-2xl">{title}</h1>
-      <div className="flex items-center gap-4">
-        {btnLabel && <Btn_outlin label={btnLabel} onclick={goToOrder} />}
+      <div className="flex items-center  gap-4">
+        {btnLabel && (
+          <Btn_outlin
+            label={btnLabel}
+            onclick={goToOrder}
+            className="text-lgs"
+          />
+        )}
         {uploadBtn && <ExportBtn />}
         {btnImage && <img src={`/images/${btnImage}`} />}
       </div>
