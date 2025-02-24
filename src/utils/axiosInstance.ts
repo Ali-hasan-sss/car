@@ -3,7 +3,7 @@ import Store from "../store/store";
 import { base_url } from "./domain";
 
 const axiosInstance = axios.create({
-  baseURL: `http://${base_url}/api/v1`,
+  baseURL: `https://${base_url}/api/v1`,
   timeout: 100000, // زيادة المهلة إلى 10 ثوانٍ
   headers: {
     "Content-Type": "application/x-www-form-urlencoded", // تعيين Content-Type
