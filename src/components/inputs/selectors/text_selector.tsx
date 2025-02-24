@@ -33,13 +33,13 @@ const Text_selector: React.FC<SelectorInputProps> = ({
           id="address"
           value={value} // القيمة الحالية
           onChange={handleChange} // معالجة التغيير
-          className={`w-full bg-white text-lg focus:outline-none ${
+          className={`w-full bg-white text-sm focus:outline-none ${
             value === "" ? "text-gray-400" : "text-black"
           }`}
         >
           {/* خيار placeholder */}
           <option
-            className="text-gray-400"
+            className="text-gray-400 text-lg"
             value=""
             disabled
             hidden // إخفاء الخيار من القائمة

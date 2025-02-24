@@ -1,4 +1,10 @@
 input,
 textarea {
-  background-color: rgb(182, 214, 242);
+  background-color: #f7f7f8;
+  box-shadow: #000000;
+  outline: none;
+}
+textarea {
+  height: 100px;
+  overflow-y: auto;
 }

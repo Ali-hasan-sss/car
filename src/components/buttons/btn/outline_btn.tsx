@@ -3,20 +3,22 @@ import "../btn.css";
 
 interface Btn_outlinProops {
   label: string;
-  onclick: () => void; // إزالة المعلمة e
+  onClick?: () => void;
   className?: string;
+  type?: "submit" | "button" | "reset";
 }
 
 export default function Btn_outlin({
   label,
-  onclick,
+  onClick,
   className,
+  type,
 }: Btn_outlinProops) {
   return (
     <button
-      type="button"
-      className={`${className} outline_btn rounded`}
-      onClick={onclick} // استدعاء الدالة مباشرة دون تمرير الحدث
+      type={type}
+      className={`${className} outline_btn flex items-center rounded`}
+      onClick={onClick}
     >
       {label}
     </button>

@@ -36,7 +36,7 @@ const Dashboard = () => {
     },
   ];
   return (
-    <div className="flex flex-col items-center w-full  gap-[10px]">
+    <div className="flex flex-col items-center w-full  gap-[5px]">
       <TitleBar title="Orders" btnLabel="+ Create New order" uploadBtn={true} />
       <Search_input />
       <GeneralFilter label="Filter & Sort Control" />

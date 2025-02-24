@@ -6,10 +6,12 @@ import { uploadFileSuccess } from "@/store/Reducers/fileUploadReducer";
 
 interface UploadFileProps {
   onFileUpload: (fileUrl: string) => void;
+  label?: string;
 }
 
-const UploadFile: React.FC<UploadFileProps> = ({ onFileUpload }) => {
+const UploadFile: React.FC<UploadFileProps> = ({ onFileUpload, label }) => {
   const [file, setFile] = useState<File | null>(null);
+  const [fileName, setFileName] = useState("");
   const dispatch = useDispatch();
 
   const uploadFile = async (file: File) => {
@@ -19,7 +21,7 @@ const UploadFile: React.FC<UploadFileProps> = ({ onFileUpload }) => {
 
       const response = await axiosInstance.post("admin/uploadFile", formData);
 
-      const fileName = response.data.data.fileName;
+      setFileName(response.data.data.fileName);
       // const fileUrl = response.data.data.fileUrl;
 
       dispatch(uploadFileSuccess(fileName));
@@ -43,9 +45,22 @@ const UploadFile: React.FC<UploadFileProps> = ({ onFileUpload }) => {
   };
 
   return (
-    <div>
-      <label>اختر الملف</label>
-      <input type="file" onChange={handleFileChange} />
+    <div className="flex flex-col w-full ">
+      {label && (
+        <label className="text-sm font-medium text-gray-700">{label}</label>
+      )}
+
+      <div className="relative mt-2">
+        <input
+          type="file"
+          onChange={handleFileChange}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+        />
+        <div className="flex items-center justify-between w-full px-4 py-3 text-sm text-gray-400 bg-white border border-gray-300 rounded-lg shadow-sm cursor-pointer ">
+          {fileName || "Browse"}
+          <img src="/images/upload.png" className="w-[15px] " alt="ubload" />
+        </div>
+      </div>
     </div>
   );
 };

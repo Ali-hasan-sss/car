@@ -7,6 +7,8 @@ import {
   FaCog,
   FaArrowLeft,
   FaArrowRight,
+  FaBlogger,
+  FaServicestack,
 } from "react-icons/fa";
 
 interface SidebarProps {
@@ -34,9 +36,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
       path: "/admin/dashboard/users",
     },
     {
-      icon: <FaUsers className="text-2xl" />,
-      label: t("Accounts"),
+      icon: <FaServicestack className="text-2xl" />,
+      label: t("services"),
       path: "/admin/dashboard/services",
+    },
+    {
+      icon: <FaBlogger className="text-2xl" />,
+      label: t("Blogs"),
+      path: "/admin/dashboard/blogs",
     },
     {
       icon: <FaUsers className="text-2xl" />,
@@ -52,10 +59,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
 
   return (
     <div
-      className={`bg-primary1 border p-2  h-screen text-white transition-all duration-300 ${
+      className={`bg-secondary1 border p-2  overflow-y-auto text-text_title transition-all duration-300 ${
         isExpanded ? "w-64" : "w-[60px]"
       } flex flex-col`}
-      style={{ borderRadius: "0 10px 10px 0" }}
+      style={{ borderRadius: "10px" }}
     >
       <div
         className={`flex w-full p-2  ${
@@ -75,8 +82,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
           {menuItems.map((item, index) => (
             <li
               key={index}
-              className={`flex hover:bg-secondary1 hover:text-gray-800  items-center gap-4 cursor-pointer py-2 rounded ${
-                pathName === item.path ? "bg-secondary1 text-gray-800" : ""
+              className={`flex hover:bg-primary1 hover:text-white  items-center gap-4 cursor-pointer py-2 rounded ${
+                pathName === item.path ? "bg-primary1 text-white" : ""
               }`}
             >
               {item.icon}

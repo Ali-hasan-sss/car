@@ -3,7 +3,10 @@ export const translations: Record<Language, { [key: string]: string }> = {
     language: "Language",
     //navegation word
     Home: "Home",
+    Orders: "Orders",
+    Containers: "Containers",
     Services: "Services",
+    Blogs: "Blogs",
     About_us: "About us",
     Information: "Information",
     Contact_Us: "Contact Us",
@@ -51,7 +54,10 @@ export const translations: Record<Language, { [key: string]: string }> = {
     language: "اللغة",
     //navegation word
     Home: "الرئيسية",
+    Orders: "الطلبات",
+    Containers: "حاويات",
     Services: "الخدمات",
+    Blogs: "المقالات",
     About_us: "من نحن",
     Information: "معلومات",
     Contact_Us: "تواصل معنا",

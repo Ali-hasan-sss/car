@@ -47,3 +47,15 @@ body {
   background-size: cover;
   background-position: center;
 }
+.button_outline {
+  background-color: #008080;
+  border: 1px solid transparent;
+  color: #ffffff;
+  border-radius: 3px;
+}
+.button_outline:hover {
+  background: transparent;
+  border: 1px solid #008080;
+  color: #262424;
+  border-radius: 3px;
+}

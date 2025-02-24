@@ -121,7 +121,7 @@ const ServicesPage: React.FC = () => {
         </div>
         <img src="/images/Vector.png" alt="victor" className="w-2/3 py-1" />
         <Btn_outlin
-          onclick={() => {
+          onClick={() => {
             console.log("start");
           }}
           label="Start Now"

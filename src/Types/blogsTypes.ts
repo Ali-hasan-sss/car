@@ -4,7 +4,9 @@ export interface Blog {
   title: { en: string; ar: string };
   body: { en: string; ar: string };
   image: string;
-  description?: { en: string; ar: string };
+  description: { en: string; ar: string };
+  ondelete?: () => void;
+  onedit?: () => void;
 }
 
 export interface BlogsState {

@@ -1,8 +1,10 @@
 .outline_btn {
   padding: 8px 20px;
+  height: 40px;
   background-color: #008080;
   color: #ffffff;
   border: 1px solid transparent;
+  font-size: 18px;
 }
 .outline_btn:hover {
   background: transparent;

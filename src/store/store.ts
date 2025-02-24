@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slice/authSlice";
 import adminsReducer from "./Reducers/adminsReducer";
 import servicesReducer from "./Reducers/servicesReducer";
+import blogsReducer from "./Reducers/blogsReducer";
 import fileUploadReducer from "./Reducers/fileUploadReducer";
 
 const store = configureStore({
@@ -10,6 +11,8 @@ const store = configureStore({
     auth: authReducer,
     admins: adminsReducer,
     services: servicesReducer,
+    blogs: blogsReducer,
+
     fileUpload: fileUploadReducer,
   },
 });

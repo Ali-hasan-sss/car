@@ -14,7 +14,7 @@ export default function GeneralFilter({ label }: filterProps) {
     { label: "cars Color", value: "Colors" },
   ];
   return (
-    <div className="p-3 bg-white w-full flex items-center gap-4 flex-nowrap">
+    <div className="p-2 bg-white w-full flex items-center gap-4 flex-nowrap">
       <label className="text-sm  text-text_des flex-shrink-0">{label}</label>
       <Text_selector
         options={filterOption}

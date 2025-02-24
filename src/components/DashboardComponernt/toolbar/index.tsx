@@ -2,7 +2,7 @@ export default function ToolBar() {
   // const [showing, setShowing] = useState("5");
   // const [sortby, setSortby] = useState("date");
   return (
-    <div className="flex items-center w-full justify-end py-3 gap-4">
+    <div className="flex items-center w-full justify-end py-2 gap-4">
       <div className="flex gap-2">
         <label className="text-lg">Showing 1-50 of 1</label>
       </div>

@@ -6,25 +6,24 @@ interface TitleBarProps {
   btnLabel?: string;
   btnImage?: string;
   uploadBtn?: boolean;
+  onClick?: () => void;
 }
 export default function TitleBar({
   title,
   btnLabel,
   btnImage,
   uploadBtn,
+  onClick,
 }: TitleBarProps) {
-  const goToOrder = () => {
-    console.log("go to order");
-  };
   return (
-    <div className="flex items-center w-full justify-between py-2">
+    <div className="flex items-center w-full  justify-between py-2">
       <h1 className="text-text_title font-bold text-2xl">{title}</h1>
       <div className="flex items-center  gap-4">
         {btnLabel && (
           <Btn_outlin
             label={btnLabel}
-            onclick={goToOrder}
-            className="text-lgs"
+            onClick={onClick || (() => {})}
+            className="h-[12px]"
           />
         )}
         {uploadBtn && <ExportBtn />}

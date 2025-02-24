@@ -117,7 +117,7 @@ const ContactForm = () => {
           <div className="flex items-center justify-end w-full">
             <Btn_outlin
               label="Send Message"
-              onclick={() => {
+              onClick={() => {
                 console.log(formData);
               }}
             />

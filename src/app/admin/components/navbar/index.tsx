@@ -6,7 +6,7 @@ import LanguageSwitcher from "@/components/buttons/btn-switch/LanguageSwitcher";
 
 export default function AdminNavbar() {
   return (
-    <div className="w-full bg-primary1 shadow z-50  ">
+    <div className="w-full bg-secondary1 shadow-sm z-50  ">
       <div className="container flex items-center  justify-between">
         <Logo />
         <div className="flex items-center gap-4">

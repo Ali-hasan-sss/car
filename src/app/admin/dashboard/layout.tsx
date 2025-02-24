@@ -18,7 +18,7 @@ const AdminDashboardLayout: React.FC<{ children: React.ReactNode }> = ({
   return (
     <Provider store={store}>
       <AuthGuard>
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col bg-white">
           {/* Navbar */}
           <div className="flex-shrink-0">
             <AdminNavbar />
@@ -30,7 +30,10 @@ const AdminDashboardLayout: React.FC<{ children: React.ReactNode }> = ({
             </div>
 
             {/* Main Content */}
-            <div className="flex-1 bg-secondary1 overflow-y-auto p-4">
+            <div
+              className="flex-1  max-h-screen overflow-y-auto p-2"
+              style={{ height: "87vh" }}
+            >
               {children}
             </div>
           </div>

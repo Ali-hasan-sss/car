@@ -3,13 +3,7 @@ import Logo from "@/components/header/top-bar/logo";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import {
-  FaBook,
-  FaHome,
-  FaRegQuestionCircle,
-  FaSignInAlt,
-  FaUser,
-} from "react-icons/fa";
+import { FaSignInAlt, FaUser } from "react-icons/fa";
 import { FiSettings } from "react-icons/fi";
 
 export default function Sidebar() {
@@ -18,26 +12,30 @@ export default function Sidebar() {
   const pathname = usePathname();
   const sideItems_top = [
     {
-      label: t("Home"),
-      icon: <FaHome className="text-primary1 text-2xl side_icon" />,
+      label: t("Orders"),
+      icon: (
+        <div
+          className={`flex items-center justify-center rounded-xl w-[25px] h-[25px] ${
+            pathname === "/customer/dashboard" ? "bg-secondary2" : ""
+          }`}
+        >
+          <img src="/images/order.png" alt="orders" />
+        </div>
+      ),
       path: "/customer/dashboard",
     },
     {
-      label: t("My_Actions"),
+      label: t("Containers"),
       icon: (
-        <FaRegQuestionCircle className="text-primary1 text-2xl side_icon" />
+        <div
+          className={`flex items-center justify-center rounded-xl w-[25px] h-[25px] ${
+            pathname === "/customer/dashboard/Containers" ? "bg-secondary2" : ""
+          }`}
+        >
+          <img src="/images/containers.png" alt="containers" />
+        </div>
       ),
       path: "/customer/dashboard/actions",
-    },
-    {
-      label: t("Containers"),
-      icon: <FaBook className="text-primary1 text-2xl side_icon" />,
-      path: "/customer/dashboard/containers",
-    },
-    {
-      label: t("Containers"),
-      icon: <FaBook className="text-primary1 text-2xl side_icon" />,
-      path: "/customer/dashboard/containers",
     },
   ];
   const sideItems_buttom = [
@@ -59,7 +57,7 @@ export default function Sidebar() {
   ];
   return (
     <div
-      className={`siedbar h-screen bg-secondary2 overflow-y-auto  flex flex-col gap-[25px] ${
+      className={`siedbar h-screen bg-secondary1 overflow-y-auto  flex flex-col gap-[25px] ${
         isExpand ? "w-[40x]" : "w-[200px]"
       } ${isArabic ? "sidearab" : ""} `}
     >
@@ -98,7 +96,10 @@ export default function Sidebar() {
                 pathname === item.path ? "sied_item_active" : ""
               } `}
             >
-              <Link className="w-full flex items-start gap-4" href={item.path}>
+              <Link
+                className="w-full flex items-center  gap-4"
+                href={item.path}
+              >
                 {item.icon}
                 {!isExpand && <p className="text-gray-400">{item.label}</p>}
               </Link>

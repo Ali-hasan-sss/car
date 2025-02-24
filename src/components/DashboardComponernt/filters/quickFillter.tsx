@@ -13,7 +13,7 @@ export default function QuickFilter() {
     setFiltervalue("");
   };
   return (
-    <div className="bg-white px-1 py-3 w-full flex flex-col items-center gap-3">
+    <div className="bg-white px-1 py-2 w-full flex flex-col items-center gap-2">
       <div className="flex items-start w-full gap-2">
         <div className="flex flex-col w-1/3">
           <GeneralFilter label="Quick Filter" />

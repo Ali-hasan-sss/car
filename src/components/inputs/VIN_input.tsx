@@ -19,7 +19,7 @@ export default function VIN_input() {
         <Btn_outlin
           className="w-[200px]"
           label="Get info by VIN"
-          onclick={() => {
+          onClick={() => {
             console.log(vin);
           }}
         ></Btn_outlin>
