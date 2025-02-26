@@ -9,7 +9,7 @@ const Search: React.FC = () => {
       <input
         type="text"
         placeholder={t("Enter_your_tracking_number")}
-        className="input rounded p-2 w-full h-full"
+        className="input bg-white rounded p-2 w-full h-full"
       />
       {/* Button */}
       <button className="track-btn h-full px-[10px] bg-trackbtn text-light hover:bg-gray-500">

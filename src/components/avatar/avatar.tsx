@@ -1,11 +1,11 @@
-"use client"; // إضافة توجيه "use client"
+"use client";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useState, useEffect, useRef } from "react";
 import { FaUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux"; // استيراد useSelector
-import { RootState } from "@/store/store"; // استيراد RootState للوصول إلى الحالة من Redux
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 export default function Avatar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,14 +13,13 @@ export default function Avatar() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  // الوصول إلى حالة تسجيل الدخول من Redux
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
 
-  // إغلاق القائمة عند النقر خارجها
+  //click outsied menu
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -50,17 +49,16 @@ export default function Avatar() {
       id: 2,
       label: t("Logout"),
       icon: <FiLogOut className="text-red-500 text-2xl" />,
-      action: () => handleLogout(), // استدعاء دالة تسجيل الخروج
+      action: () => handleLogout(),
       textColor: "text-red-600",
       hoverBg: "hover:bg-red-200",
     },
   ];
 
-  // دالة تسجيل الخروج
   const handleLogout = () => {
     // هنا يمكنك تحديث حالة Redux لتسجيل الخروج
     // dispatch(setLogout());
-    router.push("/"); // إعادة توجيه المستخدم إلى الصفحة الرئيسية
+    router.push("/");
   };
 
   return (
@@ -79,37 +77,36 @@ export default function Avatar() {
         </div>
         <img src="/images/down.png" alt="down" />
       </div>
-      {isOpen &&
-        isLoggedIn && ( // عرض القائمة فقط إذا كان المستخدم مسجلاً دخوله
-          <ul
-            tabIndex={0}
-            className={`dropdown-content rounded fixed top-[75px] menu rounded-box z-[100] w-52 p-2 shadow ${
-              isArabic ? "left-[15px]" : "right-[15px]"
-            }`}
-          >
-            {menuItems.map((item) => (
-              <li
-                key={item.id}
-                className={`p-3 flex items-center gap-2 rounded cursor-pointer ${
-                  item.hoverBg
-                } ${isArabic ? "" : "justify-end"}`}
-                onClick={item.action}
-              >
-                {isArabic ? (
-                  <>
-                    {item.icon}
-                    <span className={item.textColor}>{item.label}</span>
-                  </>
-                ) : (
-                  <>
-                    <span className={item.textColor}>{item.label}</span>
-                    {item.icon}
-                  </>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
+      {isOpen && isLoggedIn && (
+        <ul
+          tabIndex={0}
+          className={`bg-secondary1 rounded fixed top-[60px] menu rounded-box z-[1000] w-52 p-2 shadow ${
+            isArabic ? "left-[40px]" : "right-[40px]"
+          }`}
+        >
+          {menuItems.map((item) => (
+            <li
+              key={item.id}
+              className={`p-3 flex items-center gap-2 rounded cursor-pointer ${
+                item.hoverBg
+              } ${isArabic ? "" : "justify-end"}`}
+              onClick={item.action}
+            >
+              {isArabic ? (
+                <>
+                  {item.icon}
+                  <span className={item.textColor}>{item.label}</span>
+                </>
+              ) : (
+                <>
+                  <span className={item.textColor}>{item.label}</span>
+                  {item.icon}
+                </>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

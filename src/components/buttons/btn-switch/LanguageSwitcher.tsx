@@ -49,7 +49,7 @@ export default function LanguageSwitcher() {
 
       {/* Dropdown */}
       {isDropdownOpen && (
-        <div className="absolute right-0 z-50  mt-4 w-32 bg-secondary1 border rounded shadow-lg">
+        <div className="absolute right-0 z-50  mt-4 w-32 bg-secondary1 border rounded ">
           {availableLanguages.map((lang) => (
             <button
               key={lang.code}

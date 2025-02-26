@@ -4,23 +4,35 @@ export default function Whay_us() {
   const cards = [
     {
       image: "images/experience.png",
-      title: "Experience & Expertise",
-      des: "With a team of seasoned professionals, we bring years of expertise to every service we offer.",
+      title: { ar: "Experience & Expertise", en: "dd" },
+      des: {
+        ar: "With a team of seasoned professionals, we bring years of expertise to every service we offer.",
+        en: "f",
+      },
     },
     {
       image: "images/customer-rate.png",
-      title: "Customer-Centric Approach",
-      des: "Your satisfaction is at the heart of everything we do, and we are committed to delivering a smooth and hassle-free experience.",
+      title: { ar: "Experience & Expertise", en: "dd" },
+      des: {
+        ar: "With a team of seasoned professionals, we bring years of expertise to every service we offer.",
+        en: "f",
+      },
     },
     {
       image: "images/technology.png",
-      title: "Advanced Technology",
-      des: "We leverage the latest tools and platforms to streamline processes and ensure efficiency.",
+      title: { ar: "Experience & Expertise", en: "dd" },
+      des: {
+        ar: "With a team of seasoned professionals, we bring years of expertise to every service we offer.",
+        en: "f",
+      },
     },
     {
       image: "images/location.png",
-      title: "Global Reach",
-      des: " Whether you’re bidding on cars, shipping vehicles internationally, or selling locally, we’ve got you covered with a wide network and reliable logistics.",
+      title: { ar: "Experience & Expertise", en: "dd" },
+      des: {
+        ar: "With a team of seasoned professionals, we bring years of expertise to every service we offer.",
+        en: "f",
+      },
     },
   ];
   return (

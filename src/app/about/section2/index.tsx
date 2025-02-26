@@ -4,18 +4,27 @@ export default function Our_services() {
   const cards = [
     {
       image: "images/hummer.png",
-      title: "1. Car Auctions",
-      des: "Discover a wide variety of vehicles through our transparent and user-friendly auction platform. Bid with confidence and secure the car of your dreams.",
+      title: { ar: "1. Car Auctions", en: "gdgdgdg" },
+      des: {
+        ar: "Discover a wide variety of vehicles through our transparent and user-friendly auction platform. Bid with confidence and secure the car of your dreams.",
+        en: "ss",
+      },
     },
     {
       image: "images/carSipping.png",
-      title: "1. Car Auctions",
-      des: "Discover a wide variety of vehicles through our transparent and user-friendly auction platform. Bid with confidence and secure the car of your dreams.",
+      title: { ar: "1. Car Auctions", en: "xdd" },
+      des: {
+        ar: "Discover a wide variety of vehicles through our transparent and user-friendly auction platform. Bid with confidence and secure the car of your dreams.",
+        en: "ddd",
+      },
     },
     {
       image: "images/carSelling.png",
-      title: "1. Car Auctions",
-      des: "Discover a wide variety of vehicles through our transparent and user-friendly auction platform. Bid with confidence and secure the car of your dreams.",
+      title: { ar: "1. Car Auctions", en: "ff" },
+      des: {
+        ar: "Discover a wide variety of vehicles through our transparent and user-friendly auction platform. Bid with confidence and secure the car of your dreams.",
+        en: "dcc",
+      },
     },
   ];
   return (

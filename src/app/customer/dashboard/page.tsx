@@ -5,9 +5,10 @@ import Search_input from "@/components/inputs/search_input";
 import GeneralFilter from "@/components/DashboardComponernt/filters/generalFilter";
 import QuickFilter from "@/components/DashboardComponernt/filters/quickFillter";
 import ToolBar from "@/components/DashboardComponernt/toolbar";
-import GeneralTable from "@/components/table";
+//import GeneralTable from "@/components/table";
 
 const Dashboard = () => {
+  /*
   const columns = [
     { id: "id", label: "Order Id" },
     { id: "Statu", label: "Statu" },
@@ -34,7 +35,7 @@ const Dashboard = () => {
       Description: "BMW v2024",
       Buyer_code: "0050001952",
     },
-  ];
+  ];*/
   return (
     <div className="flex flex-col items-center w-full  gap-[5px]">
       <TitleBar title="Orders" btnLabel="+ Create New order" uploadBtn={true} />
@@ -43,7 +44,7 @@ const Dashboard = () => {
       <QuickFilter />
       <ToolBar />
       <div className="bg-white w-full p-4">
-        <GeneralTable
+        {/** <GeneralTable
           columns={columns}
           data={data}
           actions={{
@@ -52,7 +53,7 @@ const Dashboard = () => {
             view: true,
             share: true,
           }}
-        />
+        />  */}
       </div>
     </div>
   );

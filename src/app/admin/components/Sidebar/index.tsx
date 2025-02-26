@@ -1,14 +1,15 @@
 import { useLanguage } from "@/app/context/LanguageContext";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import {
   FaHome,
   FaUsers,
-  FaCog,
   FaArrowLeft,
   FaArrowRight,
   FaBlogger,
   FaServicestack,
+  FaTools,
 } from "react-icons/fa";
 
 interface SidebarProps {
@@ -21,37 +22,32 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
   const pathName = usePathname();
   const menuItems = [
     {
-      icon: <FaHome className="text-2xl" />,
+      icon: <FaHome className="text-3xl" />,
       label: t("Home"),
       path: "/admin/dashboard",
     },
     {
-      icon: <FaHome className="text-2xl" />,
+      icon: <FaHome className="text-3xl" />,
       label: t("Requests"),
       path: "/admin/dashboard/requests",
     },
     {
-      icon: <FaUsers className="text-2xl" />,
+      icon: <FaUsers className="text-3xl" />,
       label: t("Users"),
       path: "/admin/dashboard/users",
     },
     {
-      icon: <FaServicestack className="text-2xl" />,
-      label: t("services"),
+      icon: <FaServicestack className="text-3xl" />,
+      label: t("Services"),
       path: "/admin/dashboard/services",
     },
     {
-      icon: <FaBlogger className="text-2xl" />,
+      icon: <FaBlogger className="text-3xl" />,
       label: t("Blogs"),
       path: "/admin/dashboard/blogs",
     },
     {
-      icon: <FaUsers className="text-2xl" />,
-      label: t("profile"),
-      path: "/admin/dashboard/profile",
-    },
-    {
-      icon: <FaCog className="text-2xl " />,
+      icon: <FaTools className="text-3xl" />,
       label: t("Settings"),
       path: "/admin/dashboard/settings",
     },
@@ -59,21 +55,29 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
 
   return (
     <div
-      className={`bg-secondary1 border p-2  overflow-y-auto text-text_title transition-all duration-300 ${
-        isExpanded ? "w-64" : "w-[60px]"
+      className={`bg-secondary1 border p-2  overflow-y-auto overflow-x-hidden text-text_title transition-all duration-300 ${
+        isExpanded ? "w-64" : "w-[75px]"
       } flex flex-col`}
       style={{ borderRadius: "10px" }}
     >
       <div
-        className={`flex w-full p-2  ${
+        className={`flex items-center justify-center w-full p-2  ${
           isExpanded ? "justify-end" : "justify-start"
         }`}
       >
         <button
           onClick={onToggle}
-          className={`text-2xl rounded-full border p-2 hover:bg-primary1 hover:text-white focus:outline-none `}
+          className={`text-2xl rounded-full border p-2 hover:bg-primary1 hover:text-white transition-all duration-300 focus:outline-none `}
         >
-          {isExpanded || isArabic ? <FaArrowLeft /> : <FaArrowRight />}
+          {!isExpanded && !isArabic ? (
+            <FaArrowRight />
+          ) : isExpanded && !isArabic ? (
+            <FaArrowLeft />
+          ) : isArabic && !isExpanded ? (
+            <FaArrowLeft />
+          ) : (
+            <FaArrowRight />
+          )}
         </button>
       </div>
 
@@ -82,12 +86,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
           {menuItems.map((item, index) => (
             <li
               key={index}
-              className={`flex hover:bg-primary1 hover:text-white  items-center gap-4 cursor-pointer py-2 rounded ${
+              className={`flex hover:bg-primary1 transition-all duration-300 hover:text-white  items-center gap-4 cursor-pointer  p-2 rounded ${
                 pathName === item.path ? "bg-primary1 text-white" : ""
               }`}
             >
               {item.icon}
-              {isExpanded && <a href={item.path}>{item.label}</a>}
+              {isExpanded && <Link href={item.path}>{item.label}</Link>}
             </li>
           ))}
         </ul>

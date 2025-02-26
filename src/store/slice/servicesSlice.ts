@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Service } from "../../Types/servicesTypes";
+import { Service } from "../../Types/adminTypes";
 
 // الحالة الأولية
 interface ServicesState {

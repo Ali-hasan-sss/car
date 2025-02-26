@@ -5,11 +5,11 @@ import Servic_box from "./sevice_box";
 import Footer from "@/components/footer";
 import CTA from "@/components/CTA";
 import CoverImage from "@/components/Hero_general/cover_image";
+import { useLanguage } from "../context/LanguageContext";
 
 const ServicesPage: React.FC = () => {
-  // حالة لتخزين الخدمة المحددة
   const [selectedService, setSelectedService] = useState<string | null>(null);
-
+  const { t } = useLanguage();
   // بيانات الخدمات مع تفاصيلها (تفاصيل كمكونات JSX)
   const services = [
     {
@@ -132,7 +132,7 @@ const ServicesPage: React.FC = () => {
       <div className="bg-secondary1">
         <div className="flex flex-col items-center justify-center pb-[50px] gap-[50px]">
           {/* Header Image */}
-          <CoverImage label="Our Services" />
+          <CoverImage label={t("Our_Services")} />
           {/* Description */}
           <div className="flex flex-col items-center justify-center px-[50px] gap-[50px]">
             <div>

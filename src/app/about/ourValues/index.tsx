@@ -4,23 +4,35 @@ export default function OurValues() {
   const cards = [
     {
       image: "images/glass.png",
-      title: "Transparency",
-      des: "Clear processes, no hidden fees, and honest communication.",
+      title: { ar: "Innovation", en: "kdkd" },
+      des: {
+        ar: "Constantly improving and adapting to provide cutting-edge solutions.",
+        en: "dfdf",
+      },
     },
     {
       image: "images/quality.png",
-      title: "Quality",
-      des: "A commitment to delivering top-notch services at every step.",
+      title: { ar: "Innovation", en: "kdkd" },
+      des: {
+        ar: "Constantly improving and adapting to provide cutting-edge solutions.",
+        en: "dfdf",
+      },
     },
     {
       image: "images/shield.png",
-      title: "Integrity",
-      des: "Building trust through ethical practices and professional conduct.",
+      title: { ar: "Innovation", en: "kdkd" },
+      des: {
+        ar: "Constantly improving and adapting to provide cutting-edge solutions.",
+        en: "dfdf",
+      },
     },
     {
       image: "images/idea.png",
-      title: "Innovation",
-      des: "Constantly improving and adapting to provide cutting-edge solutions.",
+      title: { ar: "Innovation", en: "kdkd" },
+      des: {
+        ar: "Constantly improving and adapting to provide cutting-edge solutions.",
+        en: "dfdf",
+      },
     },
   ];
   return (

@@ -18,7 +18,7 @@ const ContactPage: React.FC = () => {
           {/* Description */}
           <div className="flex flex-col items-center justify-center px-[50px] gap-[50px]">
             <div>
-              <p className="text-xl text-text_des">
+              <div className="text-xl text-text_des">
                 At{" "}
                 <span className="text-2xl font-bold text-text_title">
                   Soufan Global
@@ -44,7 +44,7 @@ const ContactPage: React.FC = () => {
                   <li> Saturday: 10:00 AM – 4:00 PM</li>
                   <li> Sunday: Closed</li>
                 </ul>
-              </p>
+              </div>
               <p className="text-xl text-text_title ">
                 With years of experience and a dedicated team, we strive to
                 deliver top-notch services backed by cutting-edge technology and

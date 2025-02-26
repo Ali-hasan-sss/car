@@ -2,172 +2,223 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axiosInstance from "@/utils/axiosInstance";
-import { Service } from "@/Types/servicesTypes";
-import UploadFile from "@/components/uploders/Uploader/UploadFile";
-import { fetchServicesSuccess } from "@/store/Reducers/servicesReducer";
-import { RootState } from "@/store/store"; // استيراد RootState للوصول إلى المخزن
-import "./style.css";
+import { Service } from "@/Types/adminTypes";
+import { RootState } from "@/store/store";
+import "../services/style.css";
+import { Box, Modal } from "@mui/material";
+import TitleBar from "@/components/DashboardComponernt/titleBar";
+import { useLanguage } from "@/app/context/LanguageContext";
+import ServiceBlogForm from "../../components/forms/service+blogForm";
+import {
+  deleteService,
+  fetchServicesSuccess,
+} from "@/store/Reducers/servicesReducer";
+import InfoCard from "@/components/cards/info_card";
+import Loader from "../../components/loadingPage";
 
-export default function AddServiceForm() {
+export default function Services() {
   const [title, setTitle] = useState({ en: "", ar: "" });
   const [body, setBody] = useState({ en: "", ar: "" });
-  const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useState("");
   const [description, setDescription] = useState({ en: "", ar: "" });
   const [loading, setLoading] = useState(false);
+  const [loadingPage, setLoadingPage] = useState(false);
+  const [isNew, setIsNew] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingService, setEditingService] = useState<Service | null>(null);
+  const { t } = useLanguage();
   const dispatch = useDispatch();
   const services = useSelector(
     (state: RootState) => state.services.servicesList
-  ); // جلب قائمة الخدمات من المخزن
+  );
+  const lastUpdated = useSelector(
+    (state: RootState) => state.services.lastUpdated
+  );
 
-  // ✅ جلب الخدمات عند تحميل المكون
+  // ✅ تحديد مدة صلاحية البيانات قبل إعادة الجلب (5 دقائق)
+  const shouldFetch = () => {
+    const now = Date.now();
+    const fiveMinutes = 5 * 60 * 1000; // 5 دقائق بالميلي ثانية
+    return now - lastUpdated > fiveMinutes || services.length === 0;
+  };
+
   useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await axiosInstance.get("/admin/services");
-        dispatch(fetchServicesSuccess(response.data.data));
-      } catch (error) {
-        console.error("فشل جلب الخدمات", error);
-      }
-    };
-    fetchServices();
-  }, [dispatch]);
+    if (shouldFetch()) {
+      const fetchServices = async () => {
+        setLoadingPage(true);
+        try {
+          const response = await axiosInstance.get("/admin/services");
+          dispatch(fetchServicesSuccess(response.data.data));
+        } catch (error) {
+          console.error("فشل جلب الخدمات", error);
+        } finally {
+          setLoadingPage(false);
+        }
+      };
+      fetchServices();
+    }
+  }, [dispatch, lastUpdated, services.length]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const openModal = (service?: Service) => {
+    if (service) {
+      setIsEditing(true);
+      setEditingService(service);
+      setTitle(service.title);
+      setBody(service.body);
 
+      // ✅ استخراج اسم الصورة فقط بدلاً من الرابط الكامل
+      const imageName = service.image?.split("/").pop() || "";
+      setImage(imageName);
+
+      setDescription(service.description);
+    } else {
+      setIsEditing(false);
+      setEditingService(null);
+      setTitle({ en: "", ar: "" });
+      setBody({ en: "", ar: "" });
+      setImage("");
+      setDescription({ en: "", ar: "" });
+    }
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSubmit = async () => {
     if (!image) {
       alert("الرجاء رفع صورة قبل إرسال النموذج");
       return;
     }
-
     try {
       setLoading(true);
-
-      const newService: Service = {
-        id: Math.floor(Math.random() * 10000),
-        title,
-        body,
-        image,
-        description,
-      };
-
       const payload = {
-        title: JSON.stringify(newService.title),
-        body: JSON.stringify(newService.body),
-        image: newService.image,
-        description: JSON.stringify(newService.description),
+        title: JSON.stringify(title),
+        body: JSON.stringify(body),
+        image,
+        description: JSON.stringify(description),
       };
 
-      await axiosInstance.post("/admin/services", payload);
+      if (isEditing && editingService) {
+        const response = await axiosInstance.put(
+          `/admin/services/${editingService.id}`,
+          payload
+        );
+        const updatedService = {
+          ...editingService,
+          title,
+          body,
+          image: response.data.data.image, // تحديث الصورة الجديدة
+          description,
+        };
+        const updatedServices = services.map((service: Service) =>
+          service.id === updatedService.id ? updatedService : service
+        );
+        dispatch(fetchServicesSuccess(updatedServices));
+        setEditingService(updatedService);
+        setImage(response.data.data.image);
+      } else {
+        const response = await axiosInstance.post("/admin/services", payload);
+        const newServices = {
+          ...response.data,
+          title,
+          body,
+          image,
+          description,
+        };
 
-      // ✅ تحديث قائمة الخدمات بعد الإضافة
-      dispatch(fetchServicesSuccess([...services, newService]));
+        dispatch(fetchServicesSuccess([...services, newServices]));
+      }
 
-      // ✅ إعادة تعيين الحقول
-      setTitle({ en: "", ar: "" });
-      setBody({ en: "", ar: "" });
-      setDescription({ en: "", ar: "" });
-      setImage(null);
+      closeModal();
     } catch (error) {
-      alert("فشل إضافة الخدمة، يرجى المحاولة لاحقاً.");
+      alert("فشل العملية، يرجى المحاولة لاحقاً.");
       console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleFileUpload = (fileUrl: string) => {
-    setImage(fileUrl);
+  const handleDelete = async (id: number) => {
+    try {
+      await axiosInstance.delete(`/admin/services/${id}`);
+      dispatch(deleteService(id));
+      const updatedServices = services.filter(
+        (service: Service) => service.id !== id
+      );
+      dispatch(fetchServicesSuccess(updatedServices));
+    } catch (error) {
+      console.error("فشل حذف المقال", error);
+    }
   };
+
   return (
     <div className="flex flex-col items-center">
-      <h3>إضافة خدمة جديدة</h3>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col items-start gap-4 bg-white p-4"
+      <TitleBar
+        title={t("Services")}
+        btnLabel={"+" + " " + t("Add_New_ٍService")}
+        onClick={() => {
+          openModal();
+          setIsNew(true);
+        }}
+      />
+
+      <Modal
+        open={isModalOpen}
+        onClose={closeModal}
+        className="flex items-center justify-center"
       >
-        <div className="flex flex-col">
-          <label className="text-text_des">العنوان (عربي)</label>
-          <input
-            className="p-1 w-full"
-            type="text"
-            value={title.ar}
-            onChange={(e) => setTitle({ ...title, ar: e.target.value })}
-            required
+        <Box sx={{ bgcolor: "white", p: 3, borderRadius: 2, width: 500 }}>
+          <h3>{isEditing ? "تعديل الخدمة" : "إضافة خدمة جديدة"}</h3>
+          <ServiceBlogForm
+            handleSubmit={handleSubmit}
+            formData={{
+              title,
+              body,
+              description,
+              image,
+            }}
+            isNew={isNew}
+            loading={loading}
+            onClose={closeModal}
+            onChange={(updatedForm) => {
+              console.log("بيانات النموذج قبل التحديث:", updatedForm); // ✅ التحقق من القيم
+              setTitle(updatedForm.title);
+              setBody(updatedForm.body);
+              setDescription(updatedForm.description);
+              setImage(updatedForm.image ?? "");
+            }}
           />
-        </div>
-        <div className="flex flex-col">
-          <label className="text-text_des">العنوان (إنجليزي)</label>
-          <input
-            className="p-1 w-full"
-            type="text"
-            value={title.en}
-            onChange={(e) => setTitle({ ...title, en: e.target.value })}
-            required
-          />
-        </div>
-        <div className="flex flex-col">
-          <label className="text-text_des">الوصف (عربي)</label>
-          <textarea
-            className="p-1 w-full"
-            value={body.ar}
-            onChange={(e) => setBody({ ...body, ar: e.target.value })}
-            required
-          />
-        </div>
-        <div className="flex flex-col">
-          <label className="text-text_des">الوصف (إنجليزي)</label>
-          <textarea
-            className="p-1 w-full"
-            value={body.en}
-            onChange={(e) => setBody({ ...body, en: e.target.value })}
-            required
-          />
-        </div>
-
-        {/* مكون رفع الملف */}
-        <UploadFile onFileUpload={handleFileUpload} />
-
-        <div className="flex flex-col">
-          <label className="text-text_des">الوصف الإضافي (عربي)</label>
-          <textarea
-            className="p-1 w-full"
-            value={description.ar}
-            onChange={(e) =>
-              setDescription({ ...description, ar: e.target.value })
-            }
-          />
-        </div>
-        <div className="flex flex-col">
-          <label className="text-text_des">الوصف الإضافي (إنجليزي)</label>
-          <textarea
-            className="p-1 w-full"
-            value={description.en}
-            onChange={(e) =>
-              setDescription({ ...description, en: e.target.value })
-            }
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="p-1 bg-primary1 text-white"
-          disabled={loading}
-        >
-          {loading ? "جاري إضافة الخدمة..." : "إضافة الخدمة"}
-        </button>
-      </form>
-
-      {/* عرض قائمة الخدمات بعد الإضافة */}
+        </Box>
+      </Modal>
       <div className="mt-5 w-full">
-        <h3>قائمة الخدمات:</h3>
-        <ul>
-          {services.map((service) => (
-            <li key={service.id} className="border p-2 my-2">
-              <strong>{service.title.ar}</strong> - {service.body.ar}
-            </li>
-          ))}
-        </ul>
+        <div className="mt-5 flex flex-wrap gap-4 w-full">
+          {loadingPage ? (
+            <div className="w-full flex items-center justify-center">
+              <Loader />
+            </div>
+          ) : (
+            services.map((service: Service) => (
+              <InfoCard
+                className="bg-secondary1"
+                key={service.id}
+                title={service.title}
+                body={service.body}
+                des={service.description}
+                image={service.image}
+                width="250"
+                height="250"
+                ondelete={() => handleDelete(service.id)}
+                onedit={() => {
+                  openModal(service);
+                  setIsNew(false);
+                }}
+              />
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

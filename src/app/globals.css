@@ -59,3 +59,15 @@ body {
   color: #262424;
   border-radius: 3px;
 }
+.button_bordered {
+  background: transparent;
+  border: 1px solid #008080;
+  color: #008080;
+  border-radius: 3px;
+}
+.button_bordered:hover {
+  background-color: #008080;
+  border: 1px solid transparent;
+  color: #ffffff;
+  border-radius: 3px;
+}

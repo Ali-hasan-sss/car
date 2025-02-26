@@ -11,15 +11,17 @@ import Whay_us from "./whayUs";
 import OurValues from "./ourValues";
 import End_Section from "./section_end";
 import Our_services from "./section2";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function About() {
+  const { t } = useLanguage();
   useEffect(() => {
     document.title = "SOUFAN GLOBAL | About Us";
   }, []);
   return (
     <div>
       <Navbar />
-      <CoverImage label="About Us" />
+      <CoverImage label={t("About_Us")} />
       <WellCome
         title="Welcome"
         titleDes="to Soufan Global your trusted partner"

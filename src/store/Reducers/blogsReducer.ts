@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Blog, BlogsState } from "./../../Types/blogsTypes";
+import { Blog, BlogsState } from "./../../Types/adminTypes";
 
 const initialState: BlogsState = {
   blogsList: [],
   selectedBlog: null,
+  lastUpdated: 0,
 };
 
 const blogsSlice = createSlice({
@@ -12,25 +13,32 @@ const blogsSlice = createSlice({
   reducers: {
     fetchBlogsSuccess(state, action: PayloadAction<Blog[]>) {
       state.blogsList = action.payload;
+      state.lastUpdated = Date.now(); // <-- تحديث وقت آخر تحديث
     },
     selectBlog(state, action: PayloadAction<Blog>) {
       state.selectedBlog = action.payload;
     },
     addBlog(state, action: PayloadAction<Blog>) {
       state.blogsList.push(action.payload);
+      state.lastUpdated = Date.now(); // <-- تحديث وقت آخر تحديث
     },
     updateBlog(state, action: PayloadAction<Blog>) {
       const index = state.blogsList.findIndex(
         (blog) => blog.id === action.payload.id
       );
       if (index !== -1) {
-        state.blogsList[index] = action.payload;
+        state.blogsList[index] = {
+          ...state.blogsList[index],
+          ...action.payload,
+        };
+        state.lastUpdated = Date.now(); // <-- تحديث وقت آخر تحديث
       }
     },
     deleteBlog(state, action: PayloadAction<number>) {
       state.blogsList = state.blogsList.filter(
         (blog) => blog.id !== action.payload
       );
+      state.lastUpdated = Date.now(); // <-- تحديث وقت آخر تحديث
     },
   },
 });

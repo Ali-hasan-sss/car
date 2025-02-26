@@ -12,40 +12,58 @@ const ServicesPage: React.FC = () => {
   const worksItem = [
     {
       image: "images/hummer.png",
-      title: "Car Auctions",
-      des: "Register on our platform to access a wide range of vehicles. Place your bids on the cars of your choice. Complete the purchase and receive assistance with delivery.",
+      title: { ar: "Car Auctions", en: "gfgfg" },
+      des: {
+        ar: "Register on our platform to access a wide range of vehicles. Place your bids on the cars of your choice. Complete the purchase and receive assistance with delivery.",
+        en: "dsg",
+      },
     },
     {
       image: "images/carSipping.png",
-      title: "Car Auctions",
-      des: "Provide us with the details of the vehicle and destination. Choose from our flexible shipping options. Track your shipment and receive the vehicle at the agreed time and location.",
+      title: { ar: "Car Auctions", en: "hvhg" },
+      des: {
+        ar: "Provide us with the details of the vehicle and destination. Choose from our flexible shipping options. Track your shipment and receive the vehicle at the agreed time and location.",
+        en: "sdgs",
+      },
     },
     {
       image: "images/carSelling.png",
-      title: "Car Auctions",
-      des: "Register on our platform to access a wide range of vehicles. Place your bids on the cars of your choice. Complete the purchase and receive assistance with delivery.",
+      title: { ar: "Car Auctions", en: "dgdf" },
+      des: {
+        ar: "Register on our platform to access a wide range of vehicles. Place your bids on the cars of your choice. Complete the purchase and receive assistance with delivery.",
+        en: "dvsdss",
+      },
     },
   ];
   const trustItems = [
     {
       image: "images/glass.png",
-      title: "Transparency",
-      des: "Clear processes and no hidden fees.",
+      title: { ar: "Transparency", en: "Transparency" },
+      des: {
+        ar: "Clear processes and no hidden fees.",
+        en: "Clear processes and no hidden fees.",
+      },
     },
     {
       image: "images/true.png",
-      title: "Professionalism",
-      des: "A team of experts dedicated to serving you.",
+      title: { ar: "Professionalism", en: "Professionalism" },
+      des: { ar: "A team of experts dedicated to serving you.", en: "dcdf" },
     },
     {
       image: "images/Group.png",
-      title: "Security",
-      des: "Full insurance coverage for car shipments and transactions.",
+      title: { ar: "Security", en: "dfg" },
+      des: {
+        ar: "Full insurance coverage for car shipments and transactions.",
+        en: "dfdf",
+      },
     },
     {
       image: "images/headphons.png",
-      title: "Customer Support",
-      des: "24/7 assistance to address all your inquiries.",
+      title: { ar: "Customer Support", en: "dfdf" },
+      des: {
+        ar: "24/7 assistance to address all your inquiries.",
+        en: "sffefeg",
+      },
     },
   ];
 

@@ -1,5 +1,5 @@
 // authReducer.ts
-import { AuthState, AuthAction } from "./../../Types/authTypes";
+import { AuthState, AuthAction } from "./../../Types/adminTypes";
 
 const initialState: AuthState = {
   authToken: null,

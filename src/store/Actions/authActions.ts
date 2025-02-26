@@ -1,5 +1,4 @@
-// authActions.ts
-import { AuthAction } from "./../../Types/authTypes";
+import { AuthAction } from "@/Types/adminTypes";
 
 export const setAuthToken = (token: string): AuthAction => ({
   type: "SET_AUTH_TOKEN",

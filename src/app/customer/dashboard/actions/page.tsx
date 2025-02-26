@@ -1,16 +1,31 @@
 "use client";
 
 import TableHeader from "@/components/headertitle/tableHeader";
-import GeneralTable from "@/components/table";
+//import GeneralTable from "@/components/table";
 
 export default function Actions() {
-  const columns = [
-    { id: "id", label: "Order Id" },
-    { id: "Manufacture", label: "Car Manufacture" },
-    { id: "Color", label: "Car Color" },
-    { id: "Model", label: "Car Model Name" },
-    { id: "Auction_no", label: "Car Auction No" },
-    { id: "Statu", label: "Statu" },
+  /*const columns = [
+    { id: "id", label: "Order Id", languageDisplay: "en", type: "text" },
+    {
+      id: "Manufacture",
+      label: "Car Manufacture",
+      languageDisplay: "en",
+      type: "text",
+    },
+    { id: "Color", label: "Car Color", languageDisplay: "en", type: "text" },
+    {
+      id: "Model",
+      label: "Car Model Name",
+      languageDisplay: "en",
+      type: "text",
+    },
+    {
+      id: "Auction_no",
+      label: "Car Auction No",
+      languageDisplay: "en",
+      type: "text",
+    },
+    { id: "Statu", label: "Statu", languageDisplay: "en", type: "text" },
   ];
 
   const data = [
@@ -64,7 +79,8 @@ export default function Actions() {
       Auction_no: "SLD123456789",
       Statu: "Active",
     },
-  ];
+  ];*/
+
   return (
     <div className="fles flex-col gap-[20px]">
       <TableHeader
@@ -72,7 +88,7 @@ export default function Actions() {
         des="Track the status of your auction submissions below.
 "
       />
-      <GeneralTable
+      {/* <GeneralTable
         columns={columns}
         data={data}
         actions={{
@@ -81,7 +97,7 @@ export default function Actions() {
           view: true,
         }}
         details={true}
-      />
+      />*/}
     </div>
   );
 }
