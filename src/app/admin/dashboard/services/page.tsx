@@ -155,7 +155,7 @@ export default function Services() {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col gap-[30px] items-center">
       <TitleBar
         title={t("Services")}
         btnLabel={"+" + " " + t("Add_New_ٍService")}

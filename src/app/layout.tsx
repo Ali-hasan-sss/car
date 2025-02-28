@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
 import ClientWrapper from "./ClientWrapper";
+import { Toaster } from "sonner";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -56,7 +56,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} `}>
-        <ClientWrapper> {children}</ClientWrapper>
+        <ClientWrapper>
+          <Toaster richColors position="top-center" />
+          {children}
+        </ClientWrapper>
       </body>
     </html>
   );

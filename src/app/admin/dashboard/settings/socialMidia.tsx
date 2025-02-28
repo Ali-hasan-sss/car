@@ -32,6 +32,9 @@ import Loader from "../../components/loadingPage";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { fetchSocialMediaSuccess } from "@/store/Reducers/socialMediaReducer";
+import LoadingBTN from "../../components/loadingBTN";
+import ComfirmMessage from "@/components/messags/comfirmMessage";
+import { toast } from "sonner";
 
 interface SocialMedia {
   id: number;
@@ -78,9 +81,12 @@ export default function SocialMediaSettings() {
   );
 
   const [open, setOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [actionloading, setActionLoading] = useState(false);
   const [editing, setEditing] = useState<SocialMedia | null>(null);
   const [newSocialMedia, setNewSocialMedia] = useState({ icon: "", link: "" });
+  const [errors, setErrors] = useState<{ icon?: string; link?: string }>({});
   const { t } = useLanguage();
   useEffect(() => {
     const fetchSocialMedia = async () => {
@@ -114,6 +120,24 @@ export default function SocialMediaSettings() {
     );
   };
 
+  const validateForm = () => {
+    const newErrors: { icon?: string; link?: string } = {};
+
+    if (!newSocialMedia.icon) newErrors.icon = t("Field_Required");
+    if (!newSocialMedia.link) {
+      newErrors.link = t("Field_Required");
+    } else if (
+      !/^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/.test(
+        newSocialMedia.link
+      )
+    ) {
+      newErrors.link = t("Invalid_URL");
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   // فتح و إغلاق الـ Modal
   const handleOpen = (socialMedia?: SocialMedia) => {
     if (socialMedia) {
@@ -140,15 +164,23 @@ export default function SocialMediaSettings() {
   // إرسال البيانات إلى API
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) return;
     try {
+      setActionLoading(true);
       let response;
       if (editing) {
         response = await axiosInstance.put(
           `/admin/socials/${editing.id}`,
           newSocialMedia
         );
+        if (response.data.success) {
+          toast.success(t("Edit_Item"));
+        } else toast.error(t("Error_Edit_Item"));
       } else {
         response = await axiosInstance.post("/admin/socials", newSocialMedia);
+        if (response.data.success) {
+          toast.success(t("Add_Item"));
+        } else toast.error(t("Error_Add_Item"));
       }
 
       if (response.data.success) {
@@ -163,22 +195,15 @@ export default function SocialMediaSettings() {
       }
     } catch (error) {
       console.error("حدث خطأ أثناء حفظ وسيلة التواصل:", error);
+      toast.error(t("Error"));
+    } finally {
+      setActionLoading(false);
     }
   };
-
-  const handleDelete = async (id: number) => {
-    try {
-      await axiosInstance.delete(`/admin/socials/${id}`);
-      dispatch(
-        fetchSocialMediaSuccess(
-          socialMediaList.filter((item) => item.id !== id)
-        )
-      );
-    } catch (error) {
-      console.error("حدث خطأ أثناء حذف وسيلة التواصل:", error);
-    }
+  const OpenDeleteMassage = (id: number) => {
+    setEditing({ id, icon: "", link: "" });
+    setOpenDelete(true);
   };
-
   return (
     <Box className="p-6 bg-white">
       <Typography variant="h5" className="font-bold mb-4 text-center">
@@ -217,14 +242,26 @@ export default function SocialMediaSettings() {
                 {item.link}
               </a>
               <div className="actions flex items-center justify-end w-full gap-3">
-                {" "}
                 <IconButton onClick={() => handleOpen(item)}>
                   <FaEdit className="text-yellow-600 text-xl" />
                 </IconButton>
-                <IconButton onClick={() => handleDelete(item.id)}>
+                <IconButton onClick={() => OpenDeleteMassage(item.id)}>
                   <FaTrash className="text-red-500 text-xl" />
                 </IconButton>
               </div>
+              <ComfirmMessage
+                API={`/admin/socials/`}
+                open={openDelete}
+                handleClose={() => setOpenDelete(false)}
+                id={editing?.id}
+                onDeleteSuccess={(id) => {
+                  dispatch(
+                    fetchSocialMediaSuccess(
+                      socialMediaList.filter((item) => item.id !== id)
+                    )
+                  );
+                }}
+              />
             </div>
           ))
         ) : (
@@ -236,7 +273,7 @@ export default function SocialMediaSettings() {
 
       {/* الـ Modal لإضافة وسيلة جديدة */}
       <Dialog open={open} onClose={handleClose}>
-        <Box className="p-6 w-96 bg-white dark:bg-gray-800 rounded-md">
+        <Box className="p-6 w-96 bg-white  rounded-md">
           <Typography variant="h6" className="font-bold mb-4">
             {editing ? t("Edit_Social") : t("Add_New_Social")}
           </Typography>
@@ -249,6 +286,9 @@ export default function SocialMediaSettings() {
               value={newSocialMedia.icon}
               onChange={handleChange}
               variant="outlined"
+              required
+              error={!!errors.icon}
+              helperText={errors.icon}
               sx={{
                 "& .MuiOutlinedInput-root": {
                   "&.Mui-focused fieldset": {
@@ -276,6 +316,9 @@ export default function SocialMediaSettings() {
               value={newSocialMedia.link}
               onChange={handleChange}
               variant="outlined"
+              required
+              error={!!errors.link}
+              helperText={errors.link}
               sx={{
                 "& .MuiOutlinedInput-root": {
                   "&.Mui-focused fieldset": {
@@ -290,10 +333,25 @@ export default function SocialMediaSettings() {
               }}
             />
             <div className="flex justify-start gap-4 mt-4">
-              <button className="button_outline  py-2 px-3">
-                {editing ? t("Save") : t("Add")}
+              <button
+                type="submit"
+                onClick={handleSubmit}
+                className="button_outline  py-2 px-3"
+                disabled={actionloading}
+              >
+                {actionloading ? (
+                  <LoadingBTN />
+                ) : editing ? (
+                  t("Save")
+                ) : (
+                  t("Add")
+                )}
               </button>
-              <button className="button_bordered  py-2 px-3">
+              <button
+                type="button"
+                onClick={handleClose}
+                className="button_bordered  py-2 px-3"
+              >
                 {t("Close")}
               </button>
             </div>

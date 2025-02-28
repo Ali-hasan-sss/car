@@ -1,10 +1,17 @@
 // adminTypes.ts
+
 export interface Admin {
   id: number;
   first_name: string;
   last_name: string;
   email?: string;
   is_active?: boolean;
+}
+
+export interface UpdatedProfile {
+  firstName: string;
+  lastName: string;
+  email: string;
 }
 
 export interface AdminsState {

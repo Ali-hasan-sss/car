@@ -12,12 +12,21 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = Store.getState().auth.authToken;
+    const state = Store.getState();
+    const token = state.auth.authToken;
+    const userRole = state.auth.user?.userRole;
+    const storedLanguage = state.auth.lang;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    config.headers["Accept-Language"] = "not"; // لجلب اللغتين للأدمن
-    config.headers["lang"] = "not"; // لجلب اللغتين للأدمن
+
+    if (userRole === "ADMIN") {
+      config.headers["Accept-Language"] = "not";
+      config.headers["lang"] = "not";
+    } else {
+      config.headers["Accept-Language"] = storedLanguage;
+      config.headers["lang"] = storedLanguage;
+    }
 
     return config;
   },

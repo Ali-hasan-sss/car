@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axiosInstance from "@/utils/axiosInstance";
 import { Blog } from "@/Types/adminTypes";
-import { deleteBlog, fetchBlogsSuccess } from "@/store/Reducers/blogsReducer";
+import { fetchBlogsSuccess } from "@/store/Reducers/blogsReducer";
 import { RootState } from "@/store/store";
 import "../services/style.css";
 import { Box, Modal } from "@mui/material";
@@ -12,6 +12,8 @@ import { useLanguage } from "@/app/context/LanguageContext";
 import ServiceBlogForm from "../../components/forms/service+blogForm";
 import BlogCard from "@/components/cards/blogCard";
 import Loader from "../../components/loadingPage";
+import { toast } from "sonner";
+import ComfirmMessage from "@/components/messags/comfirmMessage";
 
 export default function Blogs() {
   const [title, setTitle] = useState({ en: "", ar: "" });
@@ -23,6 +25,8 @@ export default function Blogs() {
   const [isNew, setIsNew] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [itemDeleted, setItemDeleted] = useState(0);
+  const [isDelete, setIsDelete] = useState(false);
   const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
   const { t } = useLanguage();
   const dispatch = useDispatch();
@@ -79,7 +83,7 @@ export default function Blogs() {
 
   const handleSubmit = async () => {
     if (!image) {
-      alert("الرجاء رفع صورة قبل إرسال النموذج");
+      toast.warning("Error_Image");
       return;
     }
     try {
@@ -103,6 +107,9 @@ export default function Blogs() {
           image: response.data.data.image,
           description,
         };
+        if (response.data.success) {
+          toast(t("Edit_Item"));
+        } else toast(t("Error_Edit_Item"));
         const updatedBlogs = blogs.map((blog) =>
           blog.id === updatedBlog.id ? updatedBlog : blog
         );
@@ -119,6 +126,9 @@ export default function Blogs() {
           description,
         };
         dispatch(fetchBlogsSuccess([...blogs, newBlog]));
+        if (response.data.success) {
+          toast(t("Add_Item"));
+        } else toast(t("Error_Add_Item"));
       }
 
       closeModal();
@@ -131,18 +141,12 @@ export default function Blogs() {
   };
 
   const handleDelete = async (id: number) => {
-    try {
-      await axiosInstance.delete(`/admin/blogs/${id}`);
-      dispatch(deleteBlog(id));
-      const updatedBlogs = blogs.filter((blog: Blog) => blog.id !== id);
-      dispatch(fetchBlogsSuccess(updatedBlogs));
-    } catch (error) {
-      console.error("فشل حذف المقال", error);
-    }
+    setItemDeleted(id);
+    setIsDelete(true);
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex gap-[30px] flex-col items-center">
       <TitleBar
         title={t("Blogs")}
         btnLabel={"+" + " " + t("Add_New_Blog")}
@@ -206,6 +210,15 @@ export default function Blogs() {
           )}
         </div>
       </div>
+      <ComfirmMessage
+        API={`/admin/blogs/`}
+        open={isDelete}
+        handleClose={() => setIsDelete(false)}
+        id={itemDeleted}
+        onDeleteSuccess={(id) => {
+          dispatch(fetchBlogsSuccess(blogs.filter((item) => item.id !== id)));
+        }}
+      />
     </div>
   );
 }

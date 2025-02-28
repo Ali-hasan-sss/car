@@ -4,8 +4,10 @@ import { useState, useEffect, useRef } from "react";
 import { FaUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setLogout } from "@/store/slice/authSlice";
 import { RootState } from "@/store/store";
+import ActionComfirm from "../messags/actionComfirm";
 
 export default function Avatar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,13 +15,31 @@ export default function Avatar() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
+  const dispatch = useDispatch();
+  const [modalOpen, setModalOpen] = useState(false);
+
+  // جلب بيانات المستخدم من Redux
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const user = useSelector((state: RootState) => state.auth.user);
+  const userRole = useSelector((state: RootState) => state.auth.user?.userRole);
+
+  // تحديث بيانات المستخدم محليًا
+  const [userData, setUserData] = useState(user || null);
+  useEffect(() => {
+    if (user) {
+      setUserData(user);
+    } else {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        setUserData(JSON.parse(storedUser));
+      }
+    }
+  }, [user]);
 
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
 
-  //click outsied menu
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -35,13 +55,28 @@ export default function Avatar() {
     };
   }, []);
 
-  // عناصر القائمة
+  const onClose = () => setModalOpen(false);
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    dispatch(setLogout());
+    router.push("/");
+    onClose();
+  };
+
+  const goToDashBoard = () => {
+    if (userRole === "ADMIN") {
+      router.push("/admin/dashboard");
+    } else {
+      router.push("/customar/dashboard");
+    }
+  };
+
   const menuItems = [
     {
       id: 1,
-      label: t("profile"),
+      label: t("dashboard"),
       icon: <FaUser className="text-gray-500 text-2xl" />,
-      action: () => console.log("Profile clicked"),
+      action: goToDashBoard,
       textColor: "text-gray-800",
       hoverBg: "hover:bg-gray-200",
     },
@@ -49,17 +84,11 @@ export default function Avatar() {
       id: 2,
       label: t("Logout"),
       icon: <FiLogOut className="text-red-500 text-2xl" />,
-      action: () => handleLogout(),
+      action: () => setModalOpen(true),
       textColor: "text-red-600",
       hoverBg: "hover:bg-red-200",
     },
   ];
-
-  const handleLogout = () => {
-    // هنا يمكنك تحديث حالة Redux لتسجيل الخروج
-    // dispatch(setLogout());
-    router.push("/");
-  };
 
   return (
     <div className="dropdown dropdown-bottom dropdown-end" ref={dropdownRef}>
@@ -67,13 +96,15 @@ export default function Avatar() {
         tabIndex={0}
         role="button"
         onClick={toggleDropdown}
-        className="avatar flex items-center gap-1 cursor-pointer"
+        className="avatar flex items-center gap-2 cursor-pointer"
       >
         <div className="w-[25px] rounded-full overflow-hidden">
           <img src="/images/avatar.png" alt="avatar" />
         </div>
         <div>
-          <h3>Ali Hasan</h3>
+          <h3>
+            {userData?.firstName} {userData?.lastName}
+          </h3>
         </div>
         <img src="/images/down.png" alt="down" />
       </div>
@@ -107,6 +138,11 @@ export default function Avatar() {
           ))}
         </ul>
       )}
+      <ActionComfirm
+        open={modalOpen}
+        onActionSuccess={handleLogout}
+        handleClose={onClose}
+      />
     </div>
   );
 }

@@ -2,6 +2,9 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { translations, Language } from "@/utils/languages";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { setLanguage } from "@/store/slice/authSlice";
 
 interface LanguageContextProps {
   language: Language;
@@ -18,26 +21,32 @@ const LanguageContext = createContext<LanguageContextProps | undefined>(
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [language, setLanguageState] = useState<Language | null>(null); // اللغة تكون null أثناء التحميل
+  const dispatch = useDispatch();
+  const storedLanguage = useSelector(
+    (state: RootState) => state.auth.lang
+  ) as Language;
 
-  // استرجاع اللغة المخزنة
+  // ✅ لا تحدد أي لغة قبل تحميل `storedLanguage`
+  const [language, setLanguageState] = useState<Language | null>(null);
+
   useEffect(() => {
-    const storedLanguage = localStorage.getItem("language") as Language;
-    setLanguageState(storedLanguage || "en"); // إذا لم يتم تخزين اللغة، يتم استخدام "en" كافتراضية
-  }, []);
+    if (storedLanguage) {
+      setLanguageState(storedLanguage);
+    }
+  }, [storedLanguage]);
 
-  const setLanguage = (lang: Language) => {
+  const changeLanguage = (lang: Language) => {
+    dispatch(setLanguage(lang));
     setLanguageState(lang);
-    localStorage.setItem("language", lang);
   };
 
   const t = (key: string): string => {
-    if (!language) return key; // تجنب الخطأ إذا لم يتم تحميل اللغة بعد
-    const translation = translations[language];
+    const translation = translations[language || "ar"]; // استخدام "ar" كافتراضية لتجنب الأخطاء
     return translation[key as keyof typeof translation] || key;
   };
 
   const dir = language === "ar" ? "rtl" : "ltr";
+  const isArabic = language === "ar";
 
   useEffect(() => {
     if (language) {
@@ -46,16 +55,14 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [dir, language]);
 
-  const isArabic = language === "ar";
-
+  // ✅ منع عرض المحتوى حتى تحميل اللغة
   if (!language) {
-    // يمكن وضع شاشة تحميل هنا أو مجرد إخفاء المحتوى
     return null;
   }
 
   return (
     <LanguageContext.Provider
-      value={{ language, setLanguage, t, dir, isArabic }}
+      value={{ language, setLanguage: changeLanguage, t, dir, isArabic }}
     >
       {children}
     </LanguageContext.Provider>

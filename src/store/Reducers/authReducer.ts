@@ -3,7 +3,8 @@ import { AuthState, AuthAction } from "./../../Types/adminTypes";
 
 const initialState: AuthState = {
   authToken: null,
-  lang: "en",
+  lang:
+    (typeof window !== "undefined" && localStorage.getItem("language")) || "en",
 };
 
 const authReducer = (state = initialState, action: AuthAction): AuthState => {

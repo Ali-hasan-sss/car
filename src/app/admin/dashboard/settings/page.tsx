@@ -1,36 +1,63 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axiosInstance from "@/utils/axiosInstance";
 import { Box, Modal, TextField, Typography } from "@mui/material";
 import SocialMediaSettings from "./socialMidia";
 import { useLanguage } from "@/app/context/LanguageContext";
+import { toast } from "sonner";
+import LoadingBTN from "../../components/loadingBTN";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "@/store/slice/authSlice";
+import { UpdatedProfile } from "@/Types/adminTypes";
+import { RootState } from "@/store/store";
 
 export default function Settings() {
   const [openModal, setOpenModal] = useState("");
+  const [loading, setLoading] = useState(false);
   const { t } = useLanguage();
+  const dispatch = useDispatch();
+
+  // جلب بيانات المستخدم من Redux
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  // حالة تخزين بيانات المستخدم عند فتح الصفحة
   const [profile, setProfile] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    email: user?.email || "",
   });
+
   const [passwords, setPasswords] = useState({
     oldPassword: "",
     newPassword: "",
   });
+
   const [fireBase, setFireBase] = useState({
     oldFireBase: "",
     newFireBase: "",
   });
 
+  // تحديث بيانات الملف الشخصي عند تعديل Redux
+  useEffect(() => {
+    if (user) {
+      setProfile({
+        firstName: user.firstName, // تأكد أن Redux يخزنها بنفس الصيغة
+        lastName: user.lastName,
+        email: user.email,
+      });
+    }
+  }, [user]);
+
   const handleSubmit = async (action: string) => {
     try {
+      setLoading(true);
       let data = {};
       let endpoint = "";
 
       switch (action) {
         case "profile":
           data = {
-            first_name: profile.firstName,
+            first_name: profile.firstName, // تحويل الاسم هنا
             last_name: profile.lastName,
             email: profile.email,
           };
@@ -52,36 +79,51 @@ export default function Settings() {
           break;
       }
 
-      await axiosInstance.post(endpoint, data);
-      alert("تم التنفيذ بنجاح");
+      const response = await axiosInstance.post(endpoint, data);
+
+      if (action === "profile") {
+        const updatedProfile: UpdatedProfile = {
+          firstName: response.data.data.first_name, // تأكد من تحويلها عند التحديث
+          lastName: response.data.data.last_name,
+          email: response.data.data.email,
+        };
+
+        dispatch(setUser(updatedProfile));
+        localStorage.setItem("user", JSON.stringify(updatedProfile));
+        setProfile(updatedProfile);
+      }
+
+      toast.success(t("Edit_Success"));
       setOpenModal("");
     } catch (error) {
-      alert("حدث خطأ");
+      toast.error(t("Edit_Error"));
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="container mx-auto p-6 bg-white dark:bg-gray-900 shadow-md rounded-md space-y-6">
+    <div className="container mx-auto p-6 bg-white shadow-md rounded-md space-y-6">
       <Typography variant="h4" className="font-bold text-center">
         {t("Settings")}
       </Typography>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <button
-          className="button_outline  py-2 px-3"
+          className="button_outline py-2 px-3"
           onClick={() => setOpenModal("profile")}
         >
           {t("Edit_Profile")}
         </button>
         <button
-          className="button_outline  py-2 px-3"
+          className="button_outline py-2 px-3"
           onClick={() => setOpenModal("password")}
         >
           {t("Change") + " " + t("Password")}
         </button>
         <button
-          className="button_outline  py-2 px-3"
+          className="button_outline py-2 px-3"
           onClick={() => setOpenModal("firebase")}
         >
           {t("Change") + " " + "Firebase Token"}
@@ -91,13 +133,13 @@ export default function Settings() {
 
       {/* مودال عام */}
       <Modal open={!!openModal} onClose={() => setOpenModal("")}>
-        <Box className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-md mx-auto mt-20">
+        <Box className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto mt-20">
           <Typography variant="h6" className="mb-4">
             {openModal === "profile"
-              ? "تعديل الملف الشخصي"
+              ? t("Edit_Profile")
               : openModal === "password"
-              ? "تغيير كلمة المرور"
-              : "تغيير Firebase Token"}
+              ? t("Change") + " " + t("Password")
+              : t("Change") + " " + "Firebase Token"}
           </Typography>
 
           {openModal === "profile" && (
@@ -105,24 +147,13 @@ export default function Settings() {
               <TextField
                 fullWidth
                 label={t("First_Name")}
-                value={profile.firstName}
+                value={profile.firstName} // تأكد من استخدام نفس المفتاح هنا
                 onChange={(e) =>
                   setProfile({ ...profile, firstName: e.target.value })
                 }
-                className="mb-4"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#008080", // تغيير لون الإطار عند الفوكس
-                    },
-                  },
-                  "& .MuiInputLabel-root": {
-                    "&.Mui-focused": {
-                      color: "#008080", // تغيير لون التسمية عند الفوكس
-                    },
-                  },
-                }}
+                sx={{ mb: 2 }}
               />
+
               <TextField
                 fullWidth
                 label={t("Last_Name")}
@@ -130,19 +161,7 @@ export default function Settings() {
                 onChange={(e) =>
                   setProfile({ ...profile, lastName: e.target.value })
                 }
-                className="mb-4"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#008080", // تغيير لون الإطار عند الفوكس
-                    },
-                  },
-                  "& .MuiInputLabel-root": {
-                    "&.Mui-focused": {
-                      color: "#008080", // تغيير لون التسمية عند الفوكس
-                    },
-                  },
-                }}
+                sx={{ mb: 2 }}
               />
               <TextField
                 fullWidth
@@ -151,19 +170,7 @@ export default function Settings() {
                 onChange={(e) =>
                   setProfile({ ...profile, email: e.target.value })
                 }
-                className="mb-2"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#008080", // تغيير لون الإطار عند الفوكس
-                    },
-                  },
-                  "& .MuiInputLabel-root": {
-                    "&.Mui-focused": {
-                      color: "#008080", // تغيير لون التسمية عند الفوكس
-                    },
-                  },
-                }}
+                sx={{ mb: 2 }}
               />
             </>
           )}
@@ -178,19 +185,7 @@ export default function Settings() {
                 onChange={(e) =>
                   setPasswords({ ...passwords, oldPassword: e.target.value })
                 }
-                className="mb-4"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#008080", // تغيير لون الإطار عند الفوكس
-                    },
-                  },
-                  "& .MuiInputLabel-root": {
-                    "&.Mui-focused": {
-                      color: "#008080", // تغيير لون التسمية عند الفوكس
-                    },
-                  },
-                }}
+                sx={{ mb: 2 }}
               />
               <TextField
                 fullWidth
@@ -200,19 +195,7 @@ export default function Settings() {
                 onChange={(e) =>
                   setPasswords({ ...passwords, newPassword: e.target.value })
                 }
-                className="mb-2"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#008080", // تغيير لون الإطار عند الفوكس
-                    },
-                  },
-                  "& .MuiInputLabel-root": {
-                    "&.Mui-focused": {
-                      color: "#008080", // تغيير لون التسمية عند الفوكس
-                    },
-                  },
-                }}
+                sx={{ mb: 2 }}
               />
             </>
           )}
@@ -226,19 +209,7 @@ export default function Settings() {
                 onChange={(e) =>
                   setFireBase({ ...fireBase, oldFireBase: e.target.value })
                 }
-                className="mb-4"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#008080", // تغيير لون الإطار عند الفوكس
-                    },
-                  },
-                  "& .MuiInputLabel-root": {
-                    "&.Mui-focused": {
-                      color: "#008080", // تغيير لون التسمية عند الفوكس
-                    },
-                  },
-                }}
+                sx={{ mb: 2 }}
               />
               <TextField
                 fullWidth
@@ -247,19 +218,7 @@ export default function Settings() {
                 onChange={(e) =>
                   setFireBase({ ...fireBase, newFireBase: e.target.value })
                 }
-                className="mb-2"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#008080", // تغيير لون الإطار عند الفوكس
-                    },
-                  },
-                  "& .MuiInputLabel-root": {
-                    "&.Mui-focused": {
-                      color: "#008080", // تغيير لون التسمية عند الفوكس
-                    },
-                  },
-                }}
+                sx={{ mb: 2 }}
               />
             </>
           )}
@@ -272,10 +231,11 @@ export default function Settings() {
               {t("Close")}
             </button>
             <button
+              type="submit"
               onClick={() => handleSubmit(openModal)}
-              className="button_outline  py-2 px-3"
+              className="button_outline py-2 px-3"
             >
-              {t("Save")}
+              {loading ? <LoadingBTN /> : t("Save")}
             </button>
           </div>
         </Box>

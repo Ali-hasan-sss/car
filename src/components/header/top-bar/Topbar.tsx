@@ -5,12 +5,12 @@ import Logo from "./logo";
 export default function Topbar() {
   return (
     <>
-      <div className="d-none top-bar  d-md-flex item-center justify-between w-full h-[72px] p-[0px 96px]">
+      <div className="hidden w-full md:flex items-center justify-between w-full h-[72px] px-[50px]">
         <Logo />
         <Search />
         <Navbutton />
       </div>
-      <div className="flex d-md-none item-center justify-between w-full h-[72px]">
+      <div className="flex md:hidden items-center justify-between w-full h-[72px] px-[20px]">
         <Logo />
         <Navbutton />
         <Dropdown />

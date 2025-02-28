@@ -4,12 +4,13 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import {
   FaHome,
-  FaUsers,
   FaArrowLeft,
   FaArrowRight,
-  FaBlogger,
-  FaServicestack,
-  FaTools,
+  FaClipboardList,
+  FaUserFriends,
+  FaCogs,
+  FaNewspaper,
+  FaSlidersH,
 } from "react-icons/fa";
 
 interface SidebarProps {
@@ -27,27 +28,27 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
       path: "/admin/dashboard",
     },
     {
-      icon: <FaHome className="text-3xl" />,
+      icon: <FaClipboardList className="text-3xl" />,
       label: t("Requests"),
       path: "/admin/dashboard/requests",
     },
     {
-      icon: <FaUsers className="text-3xl" />,
+      icon: <FaUserFriends className="text-3xl" />,
       label: t("Users"),
       path: "/admin/dashboard/users",
     },
     {
-      icon: <FaServicestack className="text-3xl" />,
+      icon: <FaCogs className="text-3xl" />,
       label: t("Services"),
       path: "/admin/dashboard/services",
     },
     {
-      icon: <FaBlogger className="text-3xl" />,
+      icon: <FaNewspaper className="text-3xl" />,
       label: t("Blogs"),
       path: "/admin/dashboard/blogs",
     },
     {
-      icon: <FaTools className="text-3xl" />,
+      icon: <FaSlidersH className="text-3xl" />,
       label: t("Settings"),
       path: "/admin/dashboard/settings",
     },
@@ -86,12 +87,18 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
           {menuItems.map((item, index) => (
             <li
               key={index}
-              className={`flex hover:bg-primary1 transition-all duration-300 hover:text-white  items-center gap-4 cursor-pointer  p-2 rounded ${
+              className={`flex hover:bg-primary1 transition-all duration-300 hover:text-white ${
+                !isExpanded ? "justify-center" : ""
+              } items-center gap-4 cursor-pointer  p-2 rounded ${
                 pathName === item.path ? "bg-primary1 text-white" : ""
               }`}
             >
-              {item.icon}
-              {isExpanded && <Link href={item.path}>{item.label}</Link>}
+              <Link href={item.path}> {item.icon}</Link>
+              {isExpanded && (
+                <Link className="w-full" href={item.path}>
+                  {item.label}
+                </Link>
+              )}
             </li>
           ))}
         </ul>

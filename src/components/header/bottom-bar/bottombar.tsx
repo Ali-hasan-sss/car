@@ -24,8 +24,8 @@ export default function Bottombar() {
     },
   ];
   return (
-    <div className="menu d-none d-md-block w-full h-[47px]  ">
-      <ul className="flex item-center gap-[12px] px-[2px] ">
+    <div className="menu px-[10px] md:px-[50px] hidden md:block w-full h-[47px]  ">
+      <ul className="flex item-center gap-[12px]">
         {navItems.map((item) => (
           <li key={item.id}>
             <Link
