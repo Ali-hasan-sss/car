@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLogout } from "@/store/slice/authSlice";
 import { RootState } from "@/store/store";
 import ActionComfirm from "../messags/actionComfirm";
+import { ChevronDown } from "lucide-react";
 
 export default function Avatar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -106,7 +107,7 @@ export default function Avatar() {
             {userData?.firstName} {userData?.lastName}
           </h3>
         </div>
-        <img src="/images/down.png" alt="down" />
+        <ChevronDown className="w-5 h-5 text-gray-500" />
       </div>
       {isOpen && isLoggedIn && (
         <ul
@@ -142,6 +143,7 @@ export default function Avatar() {
         open={modalOpen}
         onActionSuccess={handleLogout}
         handleClose={onClose}
+        message={t("Confirm_logout")}
       />
     </div>
   );

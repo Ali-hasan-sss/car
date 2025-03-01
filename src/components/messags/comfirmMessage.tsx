@@ -63,9 +63,16 @@ export default function ConfirmMessage({
     >
       <Box className="p-6 w-96 bg-white rounded-md">
         <Typography variant="h6" className="font-bold mb-4">
-          {t("Confirm_delete")}
+          {t("Comfirm_dellete")}
         </Typography>
         <div className="flex justify-start gap-4 mt-4">
+          <button
+            type="button"
+            onClick={handleClose}
+            className="button_bordered py-2 px-3"
+          >
+            {t("No")}
+          </button>
           <button
             type="submit"
             onClick={handleDelete}
@@ -73,13 +80,6 @@ export default function ConfirmMessage({
             disabled={loading}
           >
             {loading ? <LoadingBTN /> : t("Yes")}
-          </button>
-          <button
-            type="button"
-            onClick={handleClose}
-            className="button_bordered py-2 px-3"
-          >
-            {t("No")}
           </button>
         </div>
       </Box>

@@ -4,12 +4,14 @@ import { Box, Dialog, Typography } from "@mui/material";
 interface ActionComfirm {
   handleClose: () => void;
   open: boolean;
+  message: string;
   onActionSuccess?: () => void; // دالة يتم استدعاؤها بعد الحذف
 }
 
 export default function ActionComfirm({
   handleClose,
   open,
+  message,
   onActionSuccess,
 }: ActionComfirm) {
   const { t } = useLanguage();
@@ -32,22 +34,22 @@ export default function ActionComfirm({
     >
       <Box className="p-6 w-96 bg-white rounded-md">
         <Typography variant="h6" className="font-bold mb-4">
-          {t("Confirm_logout")}
+          {message}
         </Typography>
         <div className="flex justify-between gap-4 mt-4">
-          <button
-            type="submit"
-            onClick={onActionSuccess}
-            className="button_outline py-2 px-3"
-          >
-            {t("Yes")}
-          </button>
           <button
             type="button"
             onClick={handleClose}
             className="button_bordered py-2 px-3"
           >
             {t("No")}
+          </button>
+          <button
+            type="submit"
+            onClick={onActionSuccess}
+            className="button_outline py-2 px-3"
+          >
+            {t("Yes")}
           </button>
         </div>
       </Box>

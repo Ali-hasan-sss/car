@@ -13,7 +13,7 @@ import {
   deleteService,
   fetchServicesSuccess,
 } from "@/store/Reducers/servicesReducer";
-import InfoCard from "@/components/cards/info_card";
+import InfoCard from "@/components/cards/adminCard/info_card";
 import Loader from "../../components/loadingPage";
 
 export default function Services() {
@@ -209,7 +209,7 @@ export default function Services() {
                 des={service.description}
                 image={service.image}
                 width="250"
-                height="250"
+                height="300"
                 ondelete={() => handleDelete(service.id)}
                 onedit={() => {
                   openModal(service);

@@ -15,7 +15,7 @@ export default function BlogCard({
   const [imageSrc, setImageSrc] = useState(image);
   const [loading, setLoading] = useState(false);
   const [isArabic, setIsArabic] = useState(true);
-  const [showDescription, setShowDescription] = useState(false); // حالة عرض الوصف
+  const [showDescription, setShowDescription] = useState(false);
 
   useEffect(() => {
     setImageSrc(image);

@@ -3,23 +3,31 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axiosInstance from "@/utils/axiosInstance";
 import { Blog } from "@/Types/adminTypes";
-import { fetchBlogsSuccess } from "@/store/Reducers/blogsReducer";
+import {
+  addBlog,
+  deleteBlog,
+  fetchBlogsSuccess,
+  updateBlog,
+} from "@/store/Reducers/blogsReducer";
 import { RootState } from "@/store/store";
 import "../services/style.css";
 import { Box, Modal } from "@mui/material";
 import TitleBar from "@/components/DashboardComponernt/titleBar";
 import { useLanguage } from "@/app/context/LanguageContext";
 import ServiceBlogForm from "../../components/forms/service+blogForm";
-import BlogCard from "@/components/cards/blogCard";
+import BlogCard from "@/components/cards/adminCard/blogCard";
 import Loader from "../../components/loadingPage";
 import { toast } from "sonner";
 import ComfirmMessage from "@/components/messags/comfirmMessage";
 
 export default function Blogs() {
-  const [title, setTitle] = useState({ en: "", ar: "" });
-  const [body, setBody] = useState({ en: "", ar: "" });
-  const [image, setImage] = useState("");
-  const [description, setDescription] = useState({ en: "", ar: "" });
+  const [formData, setFormData] = useState<Partial<Blog>>({
+    title: { en: "", ar: "" },
+    body: { en: "", ar: "" },
+    description: { en: "", ar: "" },
+    image: "",
+  });
+
   const [loading, setLoading] = useState(false);
   const [loadingPage, setLoadingPage] = useState(false);
   const [isNew, setIsNew] = useState(false);
@@ -36,7 +44,7 @@ export default function Blogs() {
   );
 
   useEffect(() => {
-    const fetchServices = async () => {
+    const fetchBlogs = async () => {
       setLoadingPage(true);
       try {
         const response = await axiosInstance.get("/admin/blogs");
@@ -52,7 +60,7 @@ export default function Blogs() {
       !lastUpdated ||
       Date.now() - new Date(lastUpdated).getTime() > 5 * 60 * 1000
     ) {
-      fetchServices();
+      fetchBlogs();
     }
   }, [dispatch, blogs.length, lastUpdated]);
 
@@ -60,19 +68,21 @@ export default function Blogs() {
     if (blog) {
       setIsEditing(true);
       setEditingBlog(blog);
-      setTitle(blog.title);
-      setBody(blog.body);
-      const imageName = blog.image ? blog.image.split("/").pop() ?? "" : "";
-      setImage(imageName);
-
-      setDescription(blog.description);
+      setFormData({
+        title: blog.title,
+        body: blog.body,
+        image: blog.image ? blog.image.split("/").pop() ?? "" : "",
+        description: blog.description,
+      });
     } else {
       setIsEditing(false);
       setEditingBlog(null);
-      setTitle({ en: "", ar: "" });
-      setBody({ en: "", ar: "" });
-      setImage("");
-      setDescription({ en: "", ar: "" });
+      setFormData({
+        title: { en: "", ar: "" },
+        body: { en: "", ar: "" },
+        image: "",
+        description: { en: "", ar: "" },
+      });
     }
     setIsModalOpen(true);
   };
@@ -82,17 +92,17 @@ export default function Blogs() {
   };
 
   const handleSubmit = async () => {
-    if (!image) {
+    if (!formData.image) {
       toast.warning("Error_Image");
       return;
     }
     try {
       setLoading(true);
       const payload = {
-        title: JSON.stringify(title),
-        body: JSON.stringify(body),
-        image,
-        description: JSON.stringify(description),
+        title: JSON.stringify(formData.title),
+        body: JSON.stringify(formData.body),
+        image: formData.image,
+        description: JSON.stringify(formData.description),
       };
 
       if (isEditing && editingBlog) {
@@ -100,40 +110,47 @@ export default function Blogs() {
           `/admin/blogs/${editingBlog.id}`,
           payload
         );
-        const updatedBlog = {
-          ...editingBlog,
-          title,
-          body,
-          image: response.data.data.image,
-          description,
-        };
+
         if (response.data.success) {
-          toast(t("Edit_Item"));
-        } else toast(t("Error_Edit_Item"));
-        const updatedBlogs = blogs.map((blog) =>
-          blog.id === updatedBlog.id ? updatedBlog : blog
-        );
-        dispatch(fetchBlogsSuccess(updatedBlogs));
-        setEditingBlog(updatedBlog);
-        setImage(response.data.data.image);
+          const updatedBlog = {
+            ...editingBlog,
+            ...formData,
+            image: response.data.data?.image || editingBlog.image,
+          };
+          dispatch(updateBlog(updatedBlog));
+          toast.success(t("Edit_Item"));
+          setEditingBlog(updatedBlog);
+
+          // تأخير تحديث الصورة لتجنب إعادة التهيئة الفورية
+          setTimeout(() => {
+            setFormData((prev) => ({ ...prev, image: updatedBlog.image }));
+          }, 0);
+        } else {
+          toast.error(t("Error_Edit_Item"));
+        }
       } else {
         const response = await axiosInstance.post("/admin/blogs", payload);
-        const newBlog = {
-          ...response.data,
-          title,
-          body,
-          image: response.data.image,
-          description,
-        };
-        dispatch(fetchBlogsSuccess([...blogs, newBlog]));
         if (response.data.success) {
-          toast(t("Add_Item"));
-        } else toast(t("Error_Add_Item"));
+          const newBlog = {
+            ...response.data.data,
+            ...formData,
+            image: response.data.data?.image || "",
+          };
+          dispatch(addBlog(newBlog));
+          toast.success(t("Add_Item"));
+
+          // تأخير تحديث الصورة لتجنب الخطأ
+          setTimeout(() => {
+            setFormData((prev) => ({ ...prev, image: newBlog.image }));
+          }, 0);
+        } else {
+          toast.error(t("Error_Add_Item"));
+        }
       }
 
       closeModal();
     } catch (error) {
-      alert("فشل العملية، يرجى المحاولة لاحقاً.");
+      toast.error("فشل العملية، يرجى المحاولة لاحقاً.");
       console.error(error);
     } finally {
       setLoading(false);
@@ -166,19 +183,16 @@ export default function Blogs() {
           <ServiceBlogForm
             handleSubmit={handleSubmit}
             formData={{
-              title,
-              body,
-              description,
-              image,
+              title: formData.title ?? { en: "", ar: "" },
+              body: formData.body ?? { en: "", ar: "" },
+              description: formData.description ?? { en: "", ar: "" },
+              image: formData.image ?? "",
             }}
             isNew={isNew}
             loading={loading}
             onClose={closeModal}
             onChange={(updatedForm) => {
-              setTitle(updatedForm.title);
-              setBody(updatedForm.body);
-              setDescription(updatedForm.description);
-              setImage(updatedForm.image ?? "");
+              setFormData((prev) => ({ ...prev, ...updatedForm }));
             }}
           />
         </Box>
@@ -216,7 +230,7 @@ export default function Blogs() {
         handleClose={() => setIsDelete(false)}
         id={itemDeleted}
         onDeleteSuccess={(id) => {
-          dispatch(fetchBlogsSuccess(blogs.filter((item) => item.id !== id)));
+          dispatch(deleteBlog(id));
         }}
       />
     </div>

@@ -1,4 +1,4 @@
-import InfoCard from "@/components/cards/info_card";
+import InfoCard from "@/components/cards/adminCard/info_card";
 
 export default function Whay_us() {
   const cards = [

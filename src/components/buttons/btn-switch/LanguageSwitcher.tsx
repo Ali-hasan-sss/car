@@ -3,6 +3,7 @@ import { FaGlobe } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { setLanguage } from "@/store/slice/authSlice";
 import { RootState } from "@/store/store";
+import { ChevronDown } from "lucide-react";
 
 type Language = "en" | "ar";
 
@@ -52,7 +53,7 @@ export default function LanguageSwitcher() {
       >
         <FaGlobe className="text-xl mx-1" />
         {language === "en" ? "English" : "العربية"}
-        <img src="/images/down.png" alt="down" />
+        <ChevronDown className="w-5 h-5 text-gray-500" />
       </button>
 
       {/* القائمة المنسدلة */}
