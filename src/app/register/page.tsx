@@ -124,6 +124,7 @@ const Signup: React.FC = () => {
 
     if (validateStep3()) {
       try {
+        console.log(formData);
         const response = await axios.post("/api/auth/signup", formData);
         console.log("Signup successful:", response.data);
         // تنفيذ ما تريده بعد التسجيل
@@ -171,10 +172,14 @@ const Signup: React.FC = () => {
               <h1 className="title">{t("Signup")}</h1>
               {step === 1 ? (
                 <p className="des">{t("Signup_step1")} </p>
-              ) : step === 2 ? (
+              ) : step === 2 && accountType === "1" ? (
                 <p className="des">{t("Signup_step2_private")} </p>
+              ) : step === 2 && accountType === "2" ? (
+                <p className="des">{t("Signup_step2_company")} </p>
+              ) : step === 3 && accountType === "1" ? (
+                <p className="des">{t("Signup_step3_private")} </p>
               ) : (
-                <p className="des">{t("Signup_step3")} </p>
+                <p className="des">{t("Signup_step3_company")} </p>
               )}
             </div>
             {/* Form Inputs */}
@@ -214,14 +219,14 @@ const Signup: React.FC = () => {
                     onClick={handleNextStep}
                     className="w-full h-[40px] buttom"
                   >
-                    Next
+                    {t("Next")}
                   </button>
                 ) : (
                   <button
                     onClick={handleFinalSubmit}
                     className="w-full h-[40px] buttom"
                   >
-                    Sign up
+                    {t("Signup")}
                   </button>
                 )}
               </div>
@@ -230,19 +235,18 @@ const Signup: React.FC = () => {
               <div className="terms-box w-full px-[20px] flex flex-col gap-[15px] items-center justify-center">
                 <div className="text w-full flex mt-3 items-center justify-start">
                   <p className="text-gray-500 px-[5px]">
-                    Already have an account?
+                    {t("Already_have_an_account")}
                   </p>
                   <a href="/login" className="text-blue-500 ">
-                    Log in
+                    {t("Login")}
                   </a>
                 </div>
                 <div className="text w-full items-center justify-start">
                   <a href="#" className="text-gray-900">
-                    Terms & Conditions:
+                    {t("Terms") + " " + "&" + " " + t("Conditions") + " " + ":"}
                   </a>
                   <span className="text-gray-500 ">
-                    “By signing up, you agree to our Terms & Conditions and
-                    Privacy Policy.”
+                    {t("Privacy_Policy_des")}
                   </span>
                 </div>
               </div>

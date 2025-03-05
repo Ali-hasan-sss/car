@@ -12,7 +12,7 @@ const Search: React.FC = () => {
         className="input bg-white rounded p-2 w-full h-full"
       />
       {/* Button */}
-      <button className="track-btn h-full px-[10px] bg-trackbtn text-light hover:bg-gray-500">
+      <button className="track-btn h-full px-[10px] bg-trackbtn  text-white hover:bg-primary1">
         {t("Track")}
       </button>
     </div>

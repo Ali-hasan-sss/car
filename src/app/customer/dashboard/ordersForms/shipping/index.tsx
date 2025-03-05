@@ -6,7 +6,7 @@ import FullTextInput from "@/components/inputs/full_text_inbut";
 import Text_selector from "@/components/inputs/selectors/text_selector";
 import Text_input from "@/components/inputs/Text_input";
 import VIN_input from "@/components/inputs/VIN_input";
-import FileUploder from "@/components/uploders/fileUploder";
+import FileUploder from "@/components/uploders/Uploader/UploadFile";
 import { useState } from "react";
 
 interface ShippingFormInputs {
@@ -215,10 +215,16 @@ export default function Shipping() {
         />
       </div>
       <div className="flex  w-1/3 justify-start  items-center gap-4">
-        <FileUploder label="Upload bill of sale in .pdf format *" />
+        <FileUploder
+          onFileUpload={() => console.log("done")}
+          label="Upload bill of sale in .pdf format *"
+        />
       </div>
       <div className="flex  w-1/3 justify-start  items-center gap-4">
-        <FileUploder label="Upload original title in .pdf format" />
+        <FileUploder
+          label="Upload original title in .pdf format"
+          onFileUpload={() => console.log("done")}
+        />
       </div>
       <div className="bg-text_des h-[1px] w-full"></div>
       <div className="flex  w-1/4 justify-start  items-center gap-4">

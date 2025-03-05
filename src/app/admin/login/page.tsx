@@ -1,11 +1,14 @@
 "use client";
+import "../../login/login.css";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/utils/axiosInstance";
 import { setLogin } from "@/store/slice/authSlice"; // استيراد الأكشن المعدل
-import LoadingBTN from "../components/loadingBTN";
+import LoadingBTN from "../../../components/loading/loadingBTN";
 import { useLanguage } from "@/app/context/LanguageContext";
+import EmailInput from "@/components/inputs/EmailInput";
+import PasswordInput from "@/components/inputs/PasswordInput";
 
 const AdminLogin: React.FC = () => {
   const router = useRouter();
@@ -63,26 +66,20 @@ const AdminLogin: React.FC = () => {
       <div className="hidden md:block md:w-1/2 w-full min-h-screen bg_image"></div>
       <div className="flex flex-col items-center md:w-1/2 w-full justify-center min-h-screen">
         <h1 className="text-3xl mb-4">{t("Login")}</h1>
-        <form onSubmit={handleLogin} className="flex flex-col w-[300px] gap-4">
-          <input
-            type="email"
-            placeholder={t("Email") + "..."}
+        <form onSubmit={handleLogin} className="flex  flex-col w-[300px] gap-4">
+          <EmailInput
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="p-3 text-xl w-full border rounded"
-            disabled={loading}
+            error={error}
           />
-          <input
-            type="password"
-            placeholder={t("Password") + "..."}
+          <PasswordInput
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="p-3 text-xl w-full border rounded"
-            disabled={loading}
+            error={error}
           />
           <button
             type="submit"
-            className="p-2 bg-primary1 hover:bg-blue-700 text-white rounded flex items-center justify-center"
+            className="p-2 button_outline flex items-center justify-center"
             disabled={loading}
           >
             {loading ? <LoadingBTN /> : t("Login")}

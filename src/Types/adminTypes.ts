@@ -28,11 +28,27 @@ export interface AuthState {
   authToken: string | null;
   lang: string;
 }
+export interface ServiceBlogFormProps {
+  formData: {
+    title: { en: string; ar: string };
+    body: { en: string; ar: string };
+    description: { en: string; ar: string };
+    image: string;
+    images: string[];
+  };
+  onChange: (updatedData: ServiceBlogFormProps["formData"]) => void;
+  handleSubmit: () => void;
+  isNew: boolean;
+  loading: boolean;
+  onClose: () => void;
+}
+
 export interface Blog {
   id: number;
   title: { en: string; ar: string };
   body: { en: string; ar: string };
   image: string;
+  images?: string[];
   description: { en: string; ar: string };
   ondelete?: () => void;
   onedit?: () => void;
@@ -49,6 +65,7 @@ export interface Service {
   title: { en: string; ar: string };
   body: { en: string; ar: string };
   image: string;
+  images?: string[];
   description: { en: string; ar: string };
   ondelete?: () => void;
   onedit?: () => void;

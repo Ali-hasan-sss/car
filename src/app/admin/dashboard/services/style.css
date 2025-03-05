@@ -5,6 +5,6 @@ textarea {
   outline: none;
 }
 textarea {
-  height: 100px;
+  height: 75px;
   overflow-y: auto;
 }

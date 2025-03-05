@@ -34,6 +34,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
         <input
           type={showPassword ? "text" : "password"}
           id="password"
+          name="password"
           placeholder={t("Password") + "..."}
           value={value}
           onChange={onChange}

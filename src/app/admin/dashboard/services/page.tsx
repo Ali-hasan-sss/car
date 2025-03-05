@@ -1,32 +1,48 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axiosInstance from "@/utils/axiosInstance";
-import { Service } from "@/Types/adminTypes";
+import { Service, ServiceBlogFormProps } from "@/Types/adminTypes";
 import { RootState } from "@/store/store";
 import "../services/style.css";
-import { Box, Modal } from "@mui/material";
 import TitleBar from "@/components/DashboardComponernt/titleBar";
 import { useLanguage } from "@/app/context/LanguageContext";
-import ServiceBlogForm from "../../components/forms/service+blogForm";
+import ServiceBlogForm from "../../../../components/adminComponents/forms/service+blogForm";
 import {
+  addService,
   deleteService,
   fetchServicesSuccess,
+  updateService,
 } from "@/store/Reducers/servicesReducer";
-import InfoCard from "@/components/cards/adminCard/info_card";
-import Loader from "../../components/loadingPage";
+import InfoCard from "@/components/adminComponents/cards/info_card";
+import Loader from "../../../../components/loading/loadingPage";
+import { toast } from "sonner";
+import AnimatedModal from "@/components/modal/AnimatedModal";
+import ComfirmMessage from "@/components/messags/deleteMessage";
 
 export default function Services() {
-  const [title, setTitle] = useState({ en: "", ar: "" });
-  const [body, setBody] = useState({ en: "", ar: "" });
-  const [image, setImage] = useState("");
-  const [description, setDescription] = useState({ en: "", ar: "" });
+  const [formData, setFormData] = useState<{
+    title: { en: string; ar: string };
+    body: { en: string; ar: string };
+    description: { en: string; ar: string };
+    image: string;
+    images: string[];
+  }>({
+    title: { en: "", ar: "" },
+    body: { en: "", ar: "" },
+    description: { en: "", ar: "" },
+    image: "",
+    images: [],
+  });
+
   const [loading, setLoading] = useState(false);
   const [loadingPage, setLoadingPage] = useState(false);
   const [isNew, setIsNew] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingService, setEditingService] = useState<Service | null>(null);
+  const [itemDeleted, setItemDeleted] = useState(0);
+  const [isDelete, setIsDelete] = useState(false);
   const { t } = useLanguage();
   const dispatch = useDispatch();
   const services = useSelector(
@@ -36,10 +52,9 @@ export default function Services() {
     (state: RootState) => state.services.lastUpdated
   );
 
-  // ✅ تحديد مدة صلاحية البيانات قبل إعادة الجلب (5 دقائق)
   const shouldFetch = () => {
     const now = Date.now();
-    const fiveMinutes = 5 * 60 * 1000; // 5 دقائق بالميلي ثانية
+    const fiveMinutes = 5 * 60 * 1000;
     return now - lastUpdated > fiveMinutes || services.length === 0;
   };
 
@@ -59,26 +74,39 @@ export default function Services() {
       fetchServices();
     }
   }, [dispatch, lastUpdated, services.length]);
-
+  const onFormChange = useCallback(
+    (updatedData: ServiceBlogFormProps["formData"]) => {
+      setFormData((prev) => {
+        if (JSON.stringify(prev) !== JSON.stringify(updatedData)) {
+          return { ...prev, ...updatedData };
+        }
+        return prev;
+      });
+    },
+    []
+  );
   const openModal = (service?: Service) => {
     if (service) {
       setIsEditing(true);
       setEditingService(service);
-      setTitle(service.title);
-      setBody(service.body);
-
-      // ✅ استخراج اسم الصورة فقط بدلاً من الرابط الكامل
-      const imageName = service.image?.split("/").pop() || "";
-      setImage(imageName);
-
-      setDescription(service.description);
+      setFormData({
+        title: service.title ?? { en: "", ar: "" },
+        body: service.body ?? { en: "", ar: "" },
+        description: service.description ?? { en: "", ar: "" },
+        image: service.image ? service.image.split("/").pop() ?? "" : "", // استخراج اسم الصورة الرئيسية فقط
+        images:
+          service.images?.map((img: string) => img.split("/").pop() ?? "") ||
+          [],
+      });
     } else {
       setIsEditing(false);
-      setEditingService(null);
-      setTitle({ en: "", ar: "" });
-      setBody({ en: "", ar: "" });
-      setImage("");
-      setDescription({ en: "", ar: "" });
+      setFormData({
+        title: { en: "", ar: "" },
+        body: { en: "", ar: "" },
+        description: { en: "", ar: "" },
+        image: "",
+        images: [],
+      });
     }
     setIsModalOpen(true);
   };
@@ -88,48 +116,51 @@ export default function Services() {
   };
 
   const handleSubmit = async () => {
-    if (!image) {
-      alert("الرجاء رفع صورة قبل إرسال النموذج");
+    if (!formData.image) {
+      toast.warning("يجب رفع صورة رئيسية للمقال");
       return;
     }
+
     try {
       setLoading(true);
       const payload = {
-        title: JSON.stringify(title),
-        body: JSON.stringify(body),
-        image,
-        description: JSON.stringify(description),
+        title: JSON.stringify(formData.title),
+        body: JSON.stringify(formData.body),
+        image: formData.image, // إرسال الاسم فقط
+        description: JSON.stringify(formData.description),
+        images: formData.images.length > 0 ? formData.images : undefined, // إرسال أسماء الصور فقط
       };
-
       if (isEditing && editingService) {
         const response = await axiosInstance.put(
           `/admin/services/${editingService.id}`,
           payload
         );
-        const updatedService = {
-          ...editingService,
-          title,
-          body,
-          image: response.data.data.image, // تحديث الصورة الجديدة
-          description,
-        };
-        const updatedServices = services.map((service: Service) =>
-          service.id === updatedService.id ? updatedService : service
-        );
-        dispatch(fetchServicesSuccess(updatedServices));
-        setEditingService(updatedService);
-        setImage(response.data.data.image);
+        if (response.data.success) {
+          const updatedServices = {
+            ...editingService,
+            ...formData,
+            image: response.data.data?.image || editingService.image,
+          };
+          dispatch(updateService(updatedServices));
+          toast.success(t("Edit_Item"));
+          setEditingService(updatedServices);
+        } else {
+          toast.error(t("Error_Edit_Item"));
+        }
       } else {
         const response = await axiosInstance.post("/admin/services", payload);
-        const newServices = {
-          ...response.data,
-          title,
-          body,
-          image,
-          description,
-        };
-
-        dispatch(fetchServicesSuccess([...services, newServices]));
+        if (response.data.success) {
+          const newService = {
+            ...response.data.data,
+            ...formData,
+            image: response.data.data?.image || "",
+            images: response.data.data?.image || [],
+          };
+          dispatch(addService(newService));
+          toast.success(t("Add_Item"));
+        } else {
+          toast.error(t("Error_Add_Item"));
+        }
       }
 
       closeModal();
@@ -142,16 +173,8 @@ export default function Services() {
   };
 
   const handleDelete = async (id: number) => {
-    try {
-      await axiosInstance.delete(`/admin/services/${id}`);
-      dispatch(deleteService(id));
-      const updatedServices = services.filter(
-        (service: Service) => service.id !== id
-      );
-      dispatch(fetchServicesSuccess(updatedServices));
-    } catch (error) {
-      console.error("فشل حذف المقال", error);
-    }
+    setItemDeleted(id);
+    setIsDelete(true);
   };
 
   return (
@@ -165,34 +188,21 @@ export default function Services() {
         }}
       />
 
-      <Modal
+      <AnimatedModal
         open={isModalOpen}
-        onClose={closeModal}
-        className="flex items-center justify-center"
+        handleClose={() => setIsModalOpen(false)}
+        style={{ width: "500px" }}
       >
-        <Box sx={{ bgcolor: "white", p: 3, borderRadius: 2, width: 500 }}>
-          <h3>{isEditing ? "تعديل الخدمة" : "إضافة خدمة جديدة"}</h3>
-          <ServiceBlogForm
-            handleSubmit={handleSubmit}
-            formData={{
-              title,
-              body,
-              description,
-              image,
-            }}
-            isNew={isNew}
-            loading={loading}
-            onClose={closeModal}
-            onChange={(updatedForm) => {
-              console.log("بيانات النموذج قبل التحديث:", updatedForm); // ✅ التحقق من القيم
-              setTitle(updatedForm.title);
-              setBody(updatedForm.body);
-              setDescription(updatedForm.description);
-              setImage(updatedForm.image ?? "");
-            }}
-          />
-        </Box>
-      </Modal>
+        <h3> {isEditing ? t("Edit_Service") : t("Add_New_ٍService")}</h3>
+        <ServiceBlogForm
+          handleSubmit={handleSubmit}
+          formData={formData}
+          isNew={isNew}
+          loading={loading}
+          onClose={closeModal}
+          onChange={onFormChange}
+        />
+      </AnimatedModal>
       <div className="mt-5 w-full">
         <div className="mt-5 flex flex-wrap gap-4 w-full">
           {loadingPage ? (
@@ -220,6 +230,13 @@ export default function Services() {
           )}
         </div>
       </div>
+      <ComfirmMessage
+        API={`/admin/servicess/`}
+        open={isDelete}
+        handleClose={() => setIsDelete(false)}
+        id={itemDeleted}
+        onDeleteSuccess={(id: number) => dispatch(deleteService(id))}
+      />
     </div>
   );
 }

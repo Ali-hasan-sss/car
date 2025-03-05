@@ -21,17 +21,7 @@ body {
   overflow: auto !important;
   padding-right: 0 !important;
 }
-.start-btn {
-  background-color: #008080;
-  border: 1px solid transparent;
-  color: #ffffff;
-  border-radius: 3px;
-}
-.start-btn:hover {
-  background-color: transparent;
-  border: 1px solid #008080;
-  color: #000000;
-}
+/*--------------buttons-------------*/
 .title {
   font-size: 40px;
   font-weight: 700;
@@ -52,22 +42,50 @@ body {
   border: 1px solid transparent;
   color: #ffffff;
   border-radius: 3px;
+  cursor: pointer;
 }
 .button_outline:hover {
-  background: transparent;
-  border: 1px solid #008080;
-  color: #262424;
-  border-radius: 3px;
-}
-.button_bordered {
   background: transparent;
   border: 1px solid #008080;
   color: #008080;
   border-radius: 3px;
 }
+
+.button_bordered {
+  background-color: transparent;
+  border: 1px solid #008080;
+  color: #008080;
+  border-radius: 3px;
+  cursor: pointer;
+}
 .button_bordered:hover {
   background-color: #008080;
   border: 1px solid transparent;
   color: #ffffff;
+  border-radius: 3px;
+}
+.disabled {
+  cursor: not-allowed;
+  background: #dfdbdb;
+  color: #ffffff;
+  border: none;
+}
+.disabled:hover {
+  cursor: not-allowed;
+  background: #dfdbdb;
+  color: #ffffff;
+  border: none;
+}
+.button_close {
+  background: #e53232;
+  border: 1px solid transparent;
+  color: #ffffff;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.button_close:hover {
+  background: transparent;
+  border: 1px solid #df1515;
+  color: #df1515;
   border-radius: 3px;
 }

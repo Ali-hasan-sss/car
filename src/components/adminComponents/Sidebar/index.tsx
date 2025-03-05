@@ -1,5 +1,6 @@
 import { useLanguage } from "@/app/context/LanguageContext";
 import {
+  BellRing,
   ChevronLeft,
   ChevronRight,
   HomeIcon,
@@ -47,6 +48,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
       icon: <Newspaper className="text-3xl" />,
       label: t("Blogs"),
       path: "/admin/dashboard/blogs",
+    },
+    {
+      icon: <BellRing className="text-3xl" />,
+      label: t("Notfications"),
+      path: "/admin/dashboard/notfications",
     },
     {
       icon: <Settings className="text-3xl" />,

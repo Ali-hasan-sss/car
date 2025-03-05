@@ -1,17 +1,17 @@
 "use client";
-import "../dashboard.css";
-import Search_input from "@/components/inputs/search_input";
+
+import { useLanguage } from "@/app/context/LanguageContext";
 import GeneralFilter from "@/components/DashboardComponernt/filters/generalFilter";
 import QuickFilter from "@/components/DashboardComponernt/filters/quickFillter";
-import ToolBar from "@/components/DashboardComponernt/toolbar";
 import TableHeader from "@/components/DashboardComponernt/titleBar/tableHeader";
-import { useLanguage } from "@/app/context/LanguageContext";
+import ToolBar from "@/components/DashboardComponernt/toolbar";
+import Search_input from "@/components/inputs/search_input";
+import { Modal, Box } from "@mui/material";
 import { useState } from "react";
 import Auctions from "../ordersForms/Auctions";
-import { Box, Modal } from "@mui/material";
 //import GeneralTable from "@/components/table";
 
-const Orders = () => {
+export default function Actions() {
   const { t } = useLanguage();
   const [openFilter, setOpenFilter] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -20,38 +20,87 @@ const Orders = () => {
   };
 
   const handleTogleFilter = () => setOpenFilter(!openFilter);
-  /*
-  const columns = [
-    { id: "id", label: "Order Id" },
-    { id: "Statu", label: "Statu" },
-    { id: "VIN", label: "VIN" },
-    { id: "lot_no", label: "LOT No" },
-    { id: "Description", label: "Description" },
-    { id: "Buyer_code", label: "Buyer code" },
+  /*const columns = [
+    { id: "id", label: "Order Id", languageDisplay: "en", type: "text" },
+    {
+      id: "Manufacture",
+      label: "Car Manufacture",
+      languageDisplay: "en",
+      type: "text",
+    },
+    { id: "Color", label: "Car Color", languageDisplay: "en", type: "text" },
+    {
+      id: "Model",
+      label: "Car Model Name",
+      languageDisplay: "en",
+      type: "text",
+    },
+    {
+      id: "Auction_no",
+      label: "Car Auction No",
+      languageDisplay: "en",
+      type: "text",
+    },
+    { id: "Statu", label: "Statu", languageDisplay: "en", type: "text" },
   ];
 
   const data = [
     {
       id: "TEST23122024",
-      Statu: "New",
-      VIN: "WBSPM9C52BE20****",
-      lot_no: "00125400",
-      Description: "KIA v2024",
-      Buyer_code: "0000001452",
+      Manufacture: "German",
+      Color: "blue",
+      Model: "KIA",
+      Auction_no: "SLD123456789",
+      Statu: "Active",
+    },
+
+    {
+      id: "TEST23122024",
+      Manufacture: "German",
+      Color: "blue",
+      Model: "KIA",
+      Auction_no: "SLD123456789",
+      Statu: "Active",
+    },
+
+    {
+      id: "TEST23122024",
+      Manufacture: "German",
+      Color: "red",
+      Model: "BMW",
+      Auction_no: "SLD123456789",
+      Statu: "Active",
     },
     {
-      id: "TEST23152027",
-      Statu: "Old",
-      VIN: "WBSPM9C52BE80****",
-      lot_no: "00125700",
-      Description: "BMW v2024",
-      Buyer_code: "0050001952",
+      id: "TEST853122024",
+      Manufacture: "German",
+      Color: "white",
+      Model: "Huondai",
+      Auction_no: "SLD123456789",
+      Statu: "Active",
+    },
+    {
+      id: "TEST731220544",
+      Manufacture: "German",
+      Color: "blue",
+      Model: "KIA",
+      Auction_no: "SLD123456789",
+      Statu: "Active",
+    },
+    {
+      id: "TEST23122024",
+      Manufacture: "German",
+      Color: "blue",
+      Model: "KIA",
+      Auction_no: "SLD123456789",
+      Statu: "Active",
     },
   ];*/
+
   return (
     <div className="flex flex-col items-center w-full  gap-[5px]">
       <TableHeader
-        title={t("Orders")}
+        title={t("Auctions")}
         action={{
           filter: true,
           export: true,
@@ -59,7 +108,7 @@ const Orders = () => {
           addNewActiom: () => setOpenModal(true),
           filterActiom: handleTogleFilter,
         }}
-      />{" "}
+      />
       <Search_input />
       {openFilter && (
         <>
@@ -68,18 +117,16 @@ const Orders = () => {
         </>
       )}
       <ToolBar />
-      <div className="bg-white w-full p-4">
-        {/** <GeneralTable
-          columns={columns}
-          data={data}
-          actions={{
-            edit: true,
-            delete: true,
-            view: true,
-            share: true,
-          }}
-        />  */}
-      </div>
+      {/* <GeneralTable
+        columns={columns}
+        data={data}
+        actions={{
+          edit: true,
+          delete: true,
+          view: true,
+        }}
+        details={true}
+      />*/}
       {openModal && (
         <Modal open={openModal} onClose={closeModal}>
           <Box
@@ -106,6 +153,4 @@ const Orders = () => {
       )}
     </div>
   );
-};
-
-export default Orders;
+}

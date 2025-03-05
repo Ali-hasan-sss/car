@@ -1,10 +1,18 @@
 import { useLanguage } from "@/app/context/LanguageContext";
 import Logo from "@/components/header/top-bar/logo";
+import {
+  Box,
+  ChevronsLeft,
+  ChevronsRight,
+  Container,
+  Settings,
+  ShoppingCart,
+  Store,
+  User,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { FaSignInAlt, FaUser } from "react-icons/fa";
-import { FiSettings } from "react-icons/fi";
 
 export default function Sidebar() {
   const { t, isArabic } = useLanguage();
@@ -14,75 +22,123 @@ export default function Sidebar() {
     {
       label: t("Orders"),
       icon: (
-        <div
-          className={`flex items-center justify-center rounded-xl w-[25px] h-[25px] ${
-            pathname === "/customer/dashboard" ? "bg-secondary2" : ""
+        <ShoppingCart
+          className={`text-primary1 rounded-lg text-2xl side_icon ${
+            pathname === "/customer/dashboard/orders"
+              ? "bg-primary1 text-white"
+              : ""
           }`}
-        >
-          <img src="/images/order.png" alt="orders" />
-        </div>
+        />
       ),
-      path: "/customer/dashboard",
+      path: "/customer/dashboard/orders",
     },
     {
-      label: t("Containers"),
+      label: t("Auction"),
       icon: (
-        <div
-          className={`flex items-center justify-center rounded-xl w-[25px] h-[25px] ${
-            pathname === "/customer/dashboard/Containers" ? "bg-secondary2" : ""
+        <Box
+          className={`text-primary1 rounded-lg text-2xl side_icon ${
+            pathname === "/customer/dashboard/auction"
+              ? "bg-primary1 text-white"
+              : ""
           }`}
-        >
-          <img src="/images/containers.png" alt="containers" />
-        </div>
+        />
       ),
-      path: "/customer/dashboard/actions",
+      path: "/customer/dashboard/auction",
+    },
+    {
+      label: t("Shipping"),
+      icon: (
+        <Container
+          className={`text-primary1 rounded-lg text-2xl side_icon ${
+            pathname === "/customer/dashboard/shipping"
+              ? "bg-primary1 text-white"
+              : ""
+          }`}
+        />
+      ),
+      path: "/customer/dashboard/shipping",
+    },
+    {
+      label: t("Salles"),
+      icon: (
+        <Store
+          className={`text-primary1 rounded-lg text-2xl side_icon ${
+            pathname === "/customer/dashboard/salles"
+              ? "bg-primary1 text-white"
+              : ""
+          }`}
+        />
+      ),
+      path: "/customer/dashboard/salles",
     },
   ];
   const sideItems_buttom = [
     {
       label: t("profile"),
-      icon: <FaUser className="text-primary1 text-2xl side_icon" />,
+      icon: (
+        <User
+          className={`text-primary1 rounded-lg text-2xl side_icon ${
+            pathname === "/customer/dashboard/profile"
+              ? "bg-primary1 text-white"
+              : ""
+          }`}
+        />
+      ),
       path: "/customer/dashboard/profile",
     },
-    {
-      label: t("Sign in"),
-      icon: <FaSignInAlt className="text-primary1 text-2xl side_icon" />,
-      path: "/",
-    },
+
     {
       label: t("Settings"),
-      icon: <FiSettings className="text-primary1 text-2xl side_icon" />,
+      icon: (
+        <Settings
+          className={`text-primary1 rounded-lg text-2xl side_icon ${
+            pathname === "/customer/dashboard/settings"
+              ? "bg-primary1 text-white"
+              : ""
+          }`}
+        />
+      ),
       path: "/customer/dashboard/settings",
     },
   ];
   return (
     <div
       className={`siedbar h-screen bg-secondary1 overflow-y-auto  flex flex-col gap-[25px] ${
-        isExpand ? "w-[40x]" : "w-[200px]"
+        isExpand ? "w-[40x] " : "w-[200px]"
       } ${isArabic ? "sidearab" : ""} `}
     >
       <div className="header  flex items-center justify-between">
-        {!isExpand && <Logo />}
+        {!isExpand ? <Logo /> : <div className="h-[73px] w-4"></div>}
 
         {!isExpand ? (
           <button
             onClick={() => {
               setIsExpand(!isExpand);
             }}
-            className={`w-[20px]  flex ${isExpand ? "m-2" : ""} `}
+            className={`w-[25px] rounded-full hover:bg-primary1 hover:text-white p-1 flex items-center justify-center ${
+              isExpand ? "m-2" : ""
+            } `}
           >
-            <img src="/images/arrow-left.png" alt="arrow" />
-            <img src="/images/arrow-left.png" alt="arrow" />
+            {isArabic ? (
+              <ChevronsRight className="text-2xl " />
+            ) : (
+              <ChevronsLeft className="text-2xl " />
+            )}
           </button>
         ) : (
           <button
             onClick={() => {
               setIsExpand(!isExpand);
             }}
-            className={`w-[20px]  flex ${isExpand ? "m-2" : ""} `}
+            className={`w-[25px] rounded-full hover:bg-primary1 hover:text-white p-1 flex items-center justify-center  ${
+              isExpand ? "m-2" : ""
+            } `}
           >
-            <img src="/images/arrow-left.png" alt="arrow" />
-            <img src="/images/arrow-left.png" alt="arrow" />
+            {isArabic ? (
+              <ChevronsLeft className="text-2xl " />
+            ) : (
+              <ChevronsRight className="text-2xl " />
+            )}
           </button>
         )}
       </div>
@@ -92,7 +148,7 @@ export default function Sidebar() {
           {sideItems_top.map((item, index) => (
             <li
               key={index}
-              className={`sied_item ${
+              className={`sied_item mb-1 flex items-center gap-2 ${
                 pathname === item.path ? "sied_item_active" : ""
               } `}
             >
@@ -110,11 +166,11 @@ export default function Sidebar() {
           {sideItems_buttom.map((item, index) => (
             <li
               key={index}
-              className={`sied_item ${
+              className={`sied_item mb-1 flex items-center gap-2 ${
                 pathname === item.path ? "sied_item_active" : ""
               } `}
             >
-              <Link className="w-full flex items-start gap-4" href={item.path}>
+              <Link className="w-full flex items-center gap-4" href={item.path}>
                 {item.icon}
                 {!isExpand && <p className="text-gray-400">{item.label}</p>}
               </Link>

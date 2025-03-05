@@ -1,7 +1,7 @@
 "use client";
 
 import Logo from "@/components/header/top-bar/logo";
-import Avatar from "../../../../components/avatar/avatar";
+import Avatar from "../../avatar/avatar";
 import LanguageSwitcher from "@/components/buttons/btn-switch/LanguageSwitcher";
 
 export default function AdminNavbar() {

@@ -7,7 +7,6 @@ import {
   TextField,
   MenuItem,
   IconButton,
-  Dialog,
 } from "@mui/material";
 import {
   FaFacebook,
@@ -28,13 +27,14 @@ import {
 } from "react-icons/fa6";
 import { FaEdit, FaSnapchatGhost, FaTrash } from "react-icons/fa";
 import { useLanguage } from "@/app/context/LanguageContext";
-import Loader from "../../components/loadingPage";
+import Loader from "../../../../components/loading/loadingPage";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { fetchSocialMediaSuccess } from "@/store/Reducers/socialMediaReducer";
-import LoadingBTN from "../../components/loadingBTN";
-import ComfirmMessage from "@/components/messags/comfirmMessage";
+import LoadingBTN from "../../../../components/loading/loadingBTN";
 import { toast } from "sonner";
+import DeleteMessage from "@/components/messags/deleteMessage";
+import AnimatedModal from "@/components/modal/AnimatedModal";
 
 interface SocialMedia {
   id: number;
@@ -69,9 +69,9 @@ const iconOptions = [
   },
   { name: "reddit", icon: <FaReddit className="text-orange-500 text-2xl" /> },
   { name: "twitch", icon: <FaTwitch className="text-purple-600 text-2xl" /> },
-  { name: "email", icon: <FaEnvelope className="text-gray-600 text-2xl" /> }, // البريد الإلكتروني
-  { name: "x", icon: <FaXTwitter className="text-black text-2xl" /> }, // منصة X (تويتر سابقًا)
-  { name: "website", icon: <FaGlobe className="text-gray-600 text-2xl" /> }, // أيقونة افتراضية للمواقع
+  { name: "email", icon: <FaEnvelope className="text-gray-600 text-2xl" /> },
+  { name: "x", icon: <FaXTwitter className="text-black text-2xl" /> },
+  { name: "website", icon: <FaGlobe className="text-gray-600 text-2xl" /> },
 ];
 
 export default function SocialMediaSettings() {
@@ -249,7 +249,7 @@ export default function SocialMediaSettings() {
                   <FaTrash className="text-red-500 text-xl" />
                 </IconButton>
               </div>
-              <ComfirmMessage
+              <DeleteMessage
                 API={`/admin/socials/`}
                 open={openDelete}
                 handleClose={() => setOpenDelete(false)}
@@ -272,92 +272,88 @@ export default function SocialMediaSettings() {
       </div>
 
       {/* الـ Modal لإضافة وسيلة جديدة */}
-      <Dialog open={open} onClose={handleClose}>
-        <Box className="p-6 w-96 bg-white  rounded-md">
-          <Typography variant="h6" className="font-bold mb-4">
-            {editing ? t("Edit_Social") : t("Add_New_Social")}
-          </Typography>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <TextField
-              select
-              fullWidth
-              label={t("Choose_Icon")}
-              name="icon"
-              value={newSocialMedia.icon}
-              onChange={handleChange}
-              variant="outlined"
-              required
-              error={!!errors.icon}
-              helperText={errors.icon}
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#008080", // تغيير لون الإطار عند الفوكس
-                  },
+      <AnimatedModal
+        open={open}
+        handleClose={handleClose}
+        className="w-[400px]"
+      >
+        <Typography variant="h6" className="font-bold mb-4">
+          {editing ? t("Edit_Social") : t("Add_New_Social")}
+        </Typography>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <TextField
+            select
+            fullWidth
+            label={t("Choose_Icon")}
+            name="icon"
+            value={newSocialMedia.icon}
+            onChange={handleChange}
+            variant="outlined"
+            required
+            error={!!errors.icon}
+            helperText={errors.icon}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "&.Mui-focused fieldset": {
+                  borderColor: "#008080", // تغيير لون الإطار عند الفوكس
                 },
-                "& .MuiInputLabel-root": {
-                  "&.Mui-focused": {
-                    color: "#008080", // تغيير لون التسمية عند الفوكس
-                  },
+              },
+              "& .MuiInputLabel-root": {
+                "&.Mui-focused": {
+                  color: "#008080", // تغيير لون التسمية عند الفوكس
                 },
-              }}
-            >
-              {iconOptions.map((option) => (
-                <MenuItem key={option.name} value={option.name}>
-                  {option.icon} <span className="ml-2">{option.name}</span>
-                </MenuItem>
-              ))}
-            </TextField>
+              },
+            }}
+          >
+            {iconOptions.map((option) => (
+              <MenuItem key={option.name} value={option.name}>
+                {option.icon} <span className="ml-2">{option.name}</span>
+              </MenuItem>
+            ))}
+          </TextField>
 
-            <TextField
-              fullWidth
-              label={t("Enter_The_Link")}
-              name="link"
-              value={newSocialMedia.link}
-              onChange={handleChange}
-              variant="outlined"
-              required
-              error={!!errors.link}
-              helperText={errors.link}
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#008080", // تغيير لون الإطار عند الفوكس
-                  },
+          <TextField
+            fullWidth
+            label={t("Enter_The_Link")}
+            name="link"
+            value={newSocialMedia.link}
+            onChange={handleChange}
+            variant="outlined"
+            required
+            error={!!errors.link}
+            helperText={errors.link}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "&.Mui-focused fieldset": {
+                  borderColor: "#008080", // تغيير لون الإطار عند الفوكس
                 },
-                "& .MuiInputLabel-root": {
-                  "&.Mui-focused": {
-                    color: "#008080", // تغيير لون التسمية عند الفوكس
-                  },
+              },
+              "& .MuiInputLabel-root": {
+                "&.Mui-focused": {
+                  color: "#008080", // تغيير لون التسمية عند الفوكس
                 },
-              }}
-            />
-            <div className="flex justify-start gap-4 mt-4">
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                className="button_outline  py-2 px-3"
-                disabled={actionloading}
-              >
-                {actionloading ? (
-                  <LoadingBTN />
-                ) : editing ? (
-                  t("Save")
-                ) : (
-                  t("Add")
-                )}
-              </button>
-              <button
-                type="button"
-                onClick={handleClose}
-                className="button_bordered  py-2 px-3"
-              >
-                {t("Close")}
-              </button>
-            </div>
-          </form>
-        </Box>
-      </Dialog>
+              },
+            }}
+          />
+          <div className="flex justify-between gap-4 mt-4">
+            <button
+              type="button"
+              onClick={handleClose}
+              className="button_close  py-2 px-3"
+            >
+              {t("Close")}
+            </button>
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              className="button_outline  py-2 px-3"
+              disabled={actionloading}
+            >
+              {actionloading ? <LoadingBTN /> : editing ? t("Save") : t("Add")}
+            </button>
+          </div>
+        </form>
+      </AnimatedModal>
     </Box>
   );
 }

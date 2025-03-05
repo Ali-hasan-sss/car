@@ -24,7 +24,7 @@ const Personal_step1: React.FC<Personal_step1> = ({
     <div className="w-full ">
       <div className="form_group w-full flex flex-col gap-[4px] items-start justify-start">
         <label htmlFor="name">
-          {t("Full_name")}
+          {t("Full_Name")}
           <span className="text-red-500">*</span>
         </label>
         <input

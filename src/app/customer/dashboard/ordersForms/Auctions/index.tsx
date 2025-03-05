@@ -69,7 +69,7 @@ export default function Auctions({ close }: AuctionsProps) {
   };
 
   return (
-    <div className="flex flex-col gap-[16px] px-[15px]">
+    <div className="flex w-full flex-col gap-[16px] px-[15px]">
       <div className="heading_form flex item-center justify-center">
         <h2 className="title">Select a Car for Auction</h2>
       </div>
@@ -215,14 +215,11 @@ export default function Auctions({ close }: AuctionsProps) {
         </div>
       </div>
       <div className="flex flex-wrap actions w-full gap-[10px] mt-4 py-4 items-center justify-between">
-        <button
-          className="btn w-[200px] py-3 border-primary1 text-primary1 hover:bg-primary1 hover:text-light"
-          onClick={close}
-        >
+        <button className=" w-[200px] py-3 button_bordered" onClick={close}>
           Cancel
         </button>
         <button
-          className="btn w-[200px] py-3 bg-primary1 hover:bg-transparent hover:border-primary1 hover:text-black text-light"
+          className=" w-[200px] py-3 button_outline"
           onClick={handleSubmit}
         >
           Save Car Details

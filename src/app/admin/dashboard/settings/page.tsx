@@ -1,15 +1,16 @@
 "use client";
 import { useState, useEffect } from "react";
 import axiosInstance from "@/utils/axiosInstance";
-import { Box, Modal, TextField, Typography } from "@mui/material";
+import { TextField, Typography } from "@mui/material";
 import SocialMediaSettings from "./socialMidia";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { toast } from "sonner";
-import LoadingBTN from "../../components/loadingBTN";
+import LoadingBTN from "../../../../components/loading/loadingBTN";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/store/slice/authSlice";
 import { UpdatedProfile } from "@/Types/adminTypes";
 import { RootState } from "@/store/store";
+import AnimatedModal from "@/components/modal/AnimatedModal";
 
 export default function Settings() {
   const [openModal, setOpenModal] = useState("");
@@ -83,6 +84,7 @@ export default function Settings() {
 
       if (action === "profile") {
         const updatedProfile: UpdatedProfile = {
+          ...user,
           firstName: response.data.data.first_name, // تأكد من تحويلها عند التحديث
           lastName: response.data.data.last_name,
           email: response.data.data.email,
@@ -132,114 +134,120 @@ export default function Settings() {
       <SocialMediaSettings />
 
       {/* مودال عام */}
-      <Modal open={!!openModal} onClose={() => setOpenModal("")}>
-        <Box className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto mt-20">
-          <Typography variant="h6" className="mb-4">
-            {openModal === "profile"
-              ? t("Edit_Profile")
-              : openModal === "password"
-              ? t("Change") + " " + t("Password")
-              : t("Change") + " " + "Firebase Token"}
-          </Typography>
+      <AnimatedModal
+        open={
+          openModal === "profile" ||
+          openModal === "password" ||
+          openModal === "firebase"
+        }
+        handleClose={() => setOpenModal("")}
+        className="w-[400px]"
+      >
+        <Typography variant="h6" className="mb-4">
+          {openModal === "profile"
+            ? t("Edit_Profile")
+            : openModal === "password"
+            ? t("Change") + " " + t("Password")
+            : t("Change") + " " + "Firebase Token"}
+        </Typography>
 
-          {openModal === "profile" && (
-            <>
-              <TextField
-                fullWidth
-                label={t("First_Name")}
-                value={profile.firstName} // تأكد من استخدام نفس المفتاح هنا
-                onChange={(e) =>
-                  setProfile({ ...profile, firstName: e.target.value })
-                }
-                sx={{ mb: 2 }}
-              />
+        {openModal === "profile" && (
+          <>
+            <TextField
+              fullWidth
+              label={t("First_Name")}
+              value={profile.firstName} // تأكد من استخدام نفس المفتاح هنا
+              onChange={(e) =>
+                setProfile({ ...profile, firstName: e.target.value })
+              }
+              sx={{ mb: 2 }}
+            />
 
-              <TextField
-                fullWidth
-                label={t("Last_Name")}
-                value={profile.lastName}
-                onChange={(e) =>
-                  setProfile({ ...profile, lastName: e.target.value })
-                }
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                fullWidth
-                label={t("Email")}
-                value={profile.email}
-                onChange={(e) =>
-                  setProfile({ ...profile, email: e.target.value })
-                }
-                sx={{ mb: 2 }}
-              />
-            </>
-          )}
+            <TextField
+              fullWidth
+              label={t("Last_Name")}
+              value={profile.lastName}
+              onChange={(e) =>
+                setProfile({ ...profile, lastName: e.target.value })
+              }
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              fullWidth
+              label={t("Email")}
+              value={profile.email}
+              onChange={(e) =>
+                setProfile({ ...profile, email: e.target.value })
+              }
+              sx={{ mb: 2 }}
+            />
+          </>
+        )}
 
-          {openModal === "password" && (
-            <>
-              <TextField
-                fullWidth
-                type="password"
-                label={t("Old_Password")}
-                value={passwords.oldPassword}
-                onChange={(e) =>
-                  setPasswords({ ...passwords, oldPassword: e.target.value })
-                }
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                fullWidth
-                type="password"
-                label={t("New_Password")}
-                value={passwords.newPassword}
-                onChange={(e) =>
-                  setPasswords({ ...passwords, newPassword: e.target.value })
-                }
-                sx={{ mb: 2 }}
-              />
-            </>
-          )}
+        {openModal === "password" && (
+          <>
+            <TextField
+              fullWidth
+              type="password"
+              label={t("Old_Password")}
+              value={passwords.oldPassword}
+              onChange={(e) =>
+                setPasswords({ ...passwords, oldPassword: e.target.value })
+              }
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              fullWidth
+              type="password"
+              label={t("New_Password")}
+              value={passwords.newPassword}
+              onChange={(e) =>
+                setPasswords({ ...passwords, newPassword: e.target.value })
+              }
+              sx={{ mb: 2 }}
+            />
+          </>
+        )}
 
-          {openModal === "firebase" && (
-            <>
-              <TextField
-                fullWidth
-                label="Old Firebase Token"
-                value={fireBase.oldFireBase}
-                onChange={(e) =>
-                  setFireBase({ ...fireBase, oldFireBase: e.target.value })
-                }
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                fullWidth
-                label="New Firebase Token"
-                value={fireBase.newFireBase}
-                onChange={(e) =>
-                  setFireBase({ ...fireBase, newFireBase: e.target.value })
-                }
-                sx={{ mb: 2 }}
-              />
-            </>
-          )}
+        {openModal === "firebase" && (
+          <>
+            <TextField
+              fullWidth
+              label="Old Firebase Token"
+              value={fireBase.oldFireBase}
+              onChange={(e) =>
+                setFireBase({ ...fireBase, oldFireBase: e.target.value })
+              }
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              fullWidth
+              label="New Firebase Token"
+              value={fireBase.newFireBase}
+              onChange={(e) =>
+                setFireBase({ ...fireBase, newFireBase: e.target.value })
+              }
+              sx={{ mb: 2 }}
+            />
+          </>
+        )}
 
-          <div className="flex justify-end gap-4 mt-4">
-            <button
-              onClick={() => setOpenModal("")}
-              className="button_bordered py-2 bg-red-300 px-3"
-            >
-              {t("Close")}
-            </button>
-            <button
-              type="submit"
-              onClick={() => handleSubmit(openModal)}
-              className="button_outline py-2 px-3"
-            >
-              {loading ? <LoadingBTN /> : t("Save")}
-            </button>
-          </div>
-        </Box>
-      </Modal>
+        <div className="flex justify-between gap-4 mt-4">
+          <button
+            onClick={() => setOpenModal("")}
+            className="button_close py-2  px-3"
+          >
+            {t("Close")}
+          </button>
+          <button
+            type="submit"
+            onClick={() => handleSubmit(openModal)}
+            className="button_outline py-2 px-3"
+          >
+            {loading ? <LoadingBTN /> : t("Save")}
+          </button>
+        </div>
+      </AnimatedModal>
     </div>
   );
 }

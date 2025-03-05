@@ -5,7 +5,7 @@ import Navbar from "@/components/header/navbar";
 import Footer from "@/components/footer";
 import CoverImage from "@/components/Hero_general/cover_image";
 import WellCome from "@/components/Hello_section/wellcome";
-import InfoCard from "@/components/cards/adminCard/info_card";
+import InfoCard from "@/components/adminComponents/cards/info_card";
 import Btn_outlin from "@/components/buttons/btn/outline_btn";
 
 const ServicesPage: React.FC = () => {

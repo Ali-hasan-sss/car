@@ -9,8 +9,8 @@ import type { Blog } from "@/Types/adminTypes";
 import { toast } from "sonner";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { Modal, Box } from "@mui/material";
-import ServiceBlogForm from "@/app/admin/components/forms/service+blogForm";
-import Loader from "../../../components/loadingPage";
+import ServiceBlogForm from "@/components/adminComponents/forms/service+blogForm";
+import Loader from "../../../../../components/loading/loadingPage";
 import { EditIcon } from "lucide-react";
 
 export default function Blog() {
@@ -19,6 +19,7 @@ export default function Blog() {
   const [title, setTitle] = useState({ en: "", ar: "" });
   const [body, setBody] = useState({ en: "", ar: "" });
   const [image, setImage] = useState("");
+  const [images, setImages] = useState<string[]>([]);
   const [description, setDescription] = useState({ en: "", ar: "" });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -50,7 +51,10 @@ export default function Blog() {
     setTitle(blog.title);
     setBody(blog.body);
     const imageName = blog.image ? blog.image.split("/").pop() ?? "" : "";
+    const imagesNames =
+      blog.images?.map((img: string) => img.split("/").pop() ?? "") || [];
     setImage(imageName);
+    setImages(imagesNames);
     setDescription(blog.description);
     setIsModalOpen(true);
   };
@@ -91,6 +95,7 @@ export default function Blog() {
       setBlog(updatedBlog);
 
       setImage(response.data.data.image);
+      setImages(response.data.data.images);
       closeModal();
     } catch (error) {
       toast.error("فشل العملية، يرجى المحاولة لاحقاً.");
@@ -178,7 +183,7 @@ export default function Blog() {
           <h3 className="text-xl font-bold mb-3">تعديل المقالة</h3>
           <ServiceBlogForm
             handleSubmit={handleSubmit}
-            formData={{ title, body, description, image }}
+            formData={{ title, body, description, image, images }}
             isNew={false}
             loading={loading}
             onClose={closeModal}
@@ -187,6 +192,7 @@ export default function Blog() {
               setBody(updatedForm.body);
               setDescription(updatedForm.description);
               setImage(updatedForm.image ?? "");
+              setImages(updatedForm.images ?? []);
             }}
           />
         </Box>

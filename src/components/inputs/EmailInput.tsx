@@ -17,6 +17,7 @@ const EmailInput: React.FC<EmailInputProps> = ({ value, error, onChange }) => {
       </label>
       <input
         type="email"
+        name="email"
         id="email"
         placeholder="soufang@mail.com"
         value={value}
