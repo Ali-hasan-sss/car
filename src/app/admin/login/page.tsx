@@ -49,7 +49,16 @@ const AdminLogin: React.FC = () => {
       };
 
       // ✅ تخزين التوكن والمستخدم في Redux
-      dispatch(setLogin({ token: access_token, user: userData }));
+      const userDataTransformed = {
+        id: userData.id,
+        email: userData.email,
+        first_name: userData.firstName, // تحويل الحقول هنا
+        last_name: userData.lastName, // تحويل الحقول هنا
+        is_active: userData.is_active,
+        userRole: userData.userRole,
+      };
+
+      dispatch(setLogin({ token: access_token, user: userDataTransformed }));
 
       // ✅ تحويل المستخدم إلى صفحة لوحة التحكم
       router.push("/admin/dashboard");

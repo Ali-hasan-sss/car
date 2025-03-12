@@ -1,8 +1,10 @@
 import { useLanguage } from "@/app/context/LanguageContext";
 import {
   BellRing,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
   HomeIcon,
   ListChecks,
   Newspaper,
@@ -12,7 +14,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 
 interface SidebarProps {
   isExpanded: boolean;
@@ -22,6 +24,13 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
   const { t, isArabic } = useLanguage();
   const pathName = usePathname();
+
+  // تحكم بفتح وإغلاق القائمة المنسدلة
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
+  const toggleDropdown = (label: string) => {
+    setOpenDropdown(openDropdown === label ? null : label);
+  };
 
   const menuItems = [
     {
@@ -40,7 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
       path: "/admin/dashboard/users",
     },
     {
-      icon: <Wrench className="text-3xl" />, // أكثر تعبيرًا عن الخدمات من FaCogs
+      icon: <Wrench className="text-3xl" />,
       label: t("Services"),
       path: "/admin/dashboard/services",
     },
@@ -51,25 +60,56 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
     },
     {
       icon: <BellRing className="text-3xl" />,
-      label: t("Notfications"),
-      path: "/admin/dashboard/notfications",
+      label: t("Notifications"),
+      path: "/admin/dashboard/notifications",
+    },
+    {
+      icon: <Settings className="text-3xl" />,
+      label: t("Systim_Category"),
+      path: "#",
+      subItems: [
+        {
+          label: t("Category"),
+          path: "/admin/dashboard/category",
+        },
+        {
+          label: t("Manufacturers"),
+          path: "/admin/dashboard/manufacturers",
+        },
+        {
+          label: t("Countries"),
+          path: "/admin/dashboard/countries",
+        },
+      ],
     },
     {
       icon: <Settings className="text-3xl" />,
       label: t("Settings"),
-      path: "/admin/dashboard/settings",
+      path: "#",
+      subItems: [
+        {
+          label: t("Settings"),
+          path: "/admin/dashboard/settings",
+        },
+        {
+          label: t("Accounts"),
+          path: "/admin/dashboard/settings/accounts",
+        },
+        { label: t("Security"), path: "/admin/dashboard/settings/" },
+      ],
     },
   ];
 
   return (
     <div
-      className={`bg-secondary1 border p-2  overflow-y-auto overflow-x-hidden text-text_title transition-all duration-300 ${
+      className={`bg-secondary1 border p-2 overflow-y-auto overflow-x-hidden text-text_title transition-all duration-300 ${
         isExpanded ? "w-64" : "w-[70px]"
       } flex flex-col`}
       style={{ borderRadius: "10px" }}
     >
+      {/* زر التحكم في فتح/إغلاق السايدبار */}
       <div
-        className={`flex items-center justify-center w-full p-2  ${
+        className={`flex items-center justify-center w-full p-2 ${
           isExpanded ? "justify-end" : "justify-start"
         }`}
       >
@@ -92,20 +132,61 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        <ul className="space-y-4  p-3">
+        <ul className="space-y-2 p-2">
           {menuItems.map((item, index) => (
-            <li
-              key={index}
-              className={`flex  hover:bg-primary1 transition-all duration-300 hover:text-white ${
-                !isExpanded ? "justify-center rounded-full " : ""
-              } items-center gap-4 cursor-pointer  p-2 rounded ${
-                pathName === item.path ? "bg-primary1 text-white" : ""
-              }`}
-            >
-              <Link href={item.path}> {item.icon}</Link>
-              {isExpanded && (
-                <Link className="w-full" href={item.path}>
-                  {item.label}
+            <li key={index} className="cursor-pointer">
+              {/* إذا كان لديه عناصر فرعية */}
+              {item.subItems ? (
+                <div>
+                  <div
+                    className={`flex items-center gap-4 p-2 rounded hover:bg-primary1 transition-all duration-300 hover:text-white ${
+                      !isExpanded ? "justify-center rounded-full" : ""
+                    } ${
+                      openDropdown === item.label
+                        ? "bg-primary1 text-white"
+                        : ""
+                    }`}
+                    onClick={() => toggleDropdown(item.label)}
+                  >
+                    {item.icon}
+                    {isExpanded && <span className="flex-1">{item.label}</span>}
+                    {isExpanded &&
+                      (openDropdown === item.label ? (
+                        <ChevronUp />
+                      ) : (
+                        <ChevronDown />
+                      ))}
+                  </div>
+
+                  {/* عرض القائمة المنسدلة إذا كانت مفتوحة */}
+                  {openDropdown === item.label && isExpanded && (
+                    <ul className=" border-l mt-2 border-gray-400 pl-3 space-y-2">
+                      {item.subItems.map((subItem, subIndex) => (
+                        <li key={subIndex}>
+                          <Link
+                            href={subItem.path}
+                            className={`block p-2 rounded hover:bg-primary1 hover:text-white transition-all duration-300 ${
+                              pathName === subItem.path
+                                ? "bg-primary1 text-white"
+                                : ""
+                            }`}
+                          >
+                            {subItem.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ) : (
+                <Link
+                  href={item.path}
+                  className={`flex items-center gap-4 p-2 rounded hover:bg-primary1 transition-all duration-300 hover:text-white ${
+                    !isExpanded ? "justify-center rounded-full" : ""
+                  } ${pathName === item.path ? "bg-primary1 text-white" : ""}`}
+                >
+                  {item.icon}
+                  {isExpanded && <span>{item.label}</span>}
                 </Link>
               )}
             </li>

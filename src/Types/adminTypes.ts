@@ -4,10 +4,20 @@ export interface Admin {
   id: number;
   first_name: string;
   last_name: string;
-  email?: string;
-  is_active?: boolean;
+  email: string;
+  is_active: number;
+  userRole?: string;
+  password?: string;
 }
-
+export interface User {
+  id: number;
+  email: string;
+  first_name: string;
+  last_name: string;
+  is_active: number;
+  userRole?: string;
+  password?: string;
+}
 export interface UpdatedProfile {
   firstName: string;
   lastName: string;
@@ -23,6 +33,10 @@ export interface Column {
   label: string;
   type?: "image" | "text";
   languageDisplay?: "both" | "en" | "ar";
+}
+export interface TableRow {
+  id: number;
+  [key: string]: string | number;
 }
 export interface AuthState {
   authToken: string | null;
@@ -86,6 +100,17 @@ export interface SocialMedia {
 export interface SocialMediaState {
   socialMediaList: SocialMedia[];
   selectedSocialMedia: SocialMedia | null;
+  lastUpdated: number;
+}
+export interface Country {
+  id: number;
+  title: string;
+  code: string;
+}
+
+export interface CountriesState {
+  countriesList: Country[];
+  selectedCountry: Country | null;
   lastUpdated: number;
 }
 

@@ -104,7 +104,7 @@ export default function Avatar() {
         </div>
         <div>
           <h3>
-            {userData?.firstName} {userData?.lastName}
+            {userData?.first_name} {userData?.last_name}
           </h3>
         </div>
         <ChevronDown className="w-5 h-5 text-gray-500" />

@@ -231,7 +231,7 @@ export default function Services() {
         </div>
       </div>
       <ComfirmMessage
-        API={`/admin/servicess/`}
+        API={`/admin/servicess`}
         open={isDelete}
         handleClose={() => setIsDelete(false)}
         id={itemDeleted}

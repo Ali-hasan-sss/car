@@ -140,6 +140,9 @@ export default function Blogs() {
             ...editingBlog,
             ...formData,
             image: response.data.data?.image || editingBlog.image,
+            images: response.data.data?.images?.map(
+              (img: string) => img.split("/").pop() ?? ""
+            ),
           };
           dispatch(updateBlog(updatedBlog));
           toast.success(t("Edit_Item"));
@@ -225,7 +228,7 @@ export default function Blogs() {
       </div>
 
       <ComfirmMessage
-        API={`/admin/blogs/`}
+        API={`/admin/blogs`}
         open={isDelete}
         handleClose={() => setIsDelete(false)}
         id={itemDeleted}

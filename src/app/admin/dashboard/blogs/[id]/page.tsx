@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "next/navigation";
 import axiosInstance from "@/utils/axiosInstance";
-import { fetchBlogsSuccess } from "@/store/Reducers/blogsReducer";
-import type { Blog } from "@/Types/adminTypes";
+import { fetchBlogsSuccess, updateBlog } from "@/store/Reducers/blogsReducer";
+import type { Blog, ServiceBlogFormProps } from "@/Types/adminTypes";
 import { toast } from "sonner";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { Modal, Box } from "@mui/material";
@@ -16,17 +16,38 @@ import { EditIcon } from "lucide-react";
 export default function Blog() {
   const dispatch = useDispatch();
   const [blog, setBlog] = useState<Blog | null>(null);
-  const [title, setTitle] = useState({ en: "", ar: "" });
-  const [body, setBody] = useState({ en: "", ar: "" });
-  const [image, setImage] = useState("");
-  const [images, setImages] = useState<string[]>([]);
-  const [description, setDescription] = useState({ en: "", ar: "" });
+  const [formData, setFormData] = useState<{
+    title: { en: string; ar: string };
+    body: { en: string; ar: string };
+    description: { en: string; ar: string };
+    image: string;
+    images: string[];
+  }>({
+    title: { en: "", ar: "" },
+    body: { en: "", ar: "" },
+    description: { en: "", ar: "" },
+    image: "",
+    images: [],
+  });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingPage, setLoadingPage] = useState(false);
   const { t } = useLanguage();
   const { id: paramId } = useParams();
   const id = Number(paramId);
+
+  const onFormChange = useCallback(
+    (updatedData: ServiceBlogFormProps["formData"]) => {
+      setFormData((prev) => {
+        if (JSON.stringify(prev) !== JSON.stringify(updatedData)) {
+          return { ...prev, ...updatedData };
+        }
+        return prev;
+      });
+    },
+    []
+  );
+
   useEffect(() => {
     if (!id) return;
 
@@ -48,22 +69,21 @@ export default function Blog() {
 
   const openModal = () => {
     if (!blog) return;
-    setTitle(blog.title);
-    setBody(blog.body);
-    const imageName = blog.image ? blog.image.split("/").pop() ?? "" : "";
-    const imagesNames =
-      blog.images?.map((img: string) => img.split("/").pop() ?? "") || [];
-    setImage(imageName);
-    setImages(imagesNames);
-    setDescription(blog.description);
-    setIsModalOpen(true);
+    setFormData({
+      title: blog.title ?? { en: "", ar: "" },
+      body: blog.body ?? { en: "", ar: "" },
+      description: blog.description ?? { en: "", ar: "" },
+      image: blog.image ? blog.image.split("/").pop() ?? "" : "", // استخراج اسم الصورة الرئيسية فقط
+      images:
+        blog.images?.map((img: string) => img.split("/").pop() ?? "") || [],
+    });
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
   };
   const handleSubmit = async () => {
-    if (!image) {
+    if (!formData.image) {
       toast.warning("Error_Image");
       return;
     }
@@ -71,31 +91,31 @@ export default function Blog() {
     try {
       setLoading(true);
       const payload = {
-        title: JSON.stringify(title),
-        body: JSON.stringify(body),
-        image,
-        description: JSON.stringify(description),
+        title: JSON.stringify(formData.title),
+        body: JSON.stringify(formData.body),
+        image: formData.image, // إرسال الاسم فقط
+        description: JSON.stringify(formData.description),
+        images: formData.images.length > 0 ? formData.images : undefined,
       };
 
       const response = await axiosInstance.put(`/admin/blogs/${id}`, payload);
-      const updatedBlog: Blog = {
-        id, // تأكد من أن `id` موجود
-        title,
-        body,
-        image: response.data.data.image,
-        description,
+      const updatedBlog = {
+        ...blog,
+        ...formData,
+        image: response.data.data?.image,
+        images: response.data.data?.images?.map(
+          (img: string) => img.split("/").pop() ?? ""
+        ),
+        id: blog?.id ?? 0, // تعيين قيمة افتراضية إذا لم يكن هناك id
       };
+
+      dispatch(updateBlog(updatedBlog));
 
       if (response.data.success) {
         toast.success(t("Edit_Item"));
       } else {
         toast.error(t("Error_Edit_Item"));
       }
-
-      setBlog(updatedBlog);
-
-      setImage(response.data.data.image);
-      setImages(response.data.data.images);
       closeModal();
     } catch (error) {
       toast.error("فشل العملية، يرجى المحاولة لاحقاً.");
@@ -183,17 +203,11 @@ export default function Blog() {
           <h3 className="text-xl font-bold mb-3">تعديل المقالة</h3>
           <ServiceBlogForm
             handleSubmit={handleSubmit}
-            formData={{ title, body, description, image, images }}
+            formData={formData}
             isNew={false}
             loading={loading}
             onClose={closeModal}
-            onChange={(updatedForm) => {
-              setTitle(updatedForm.title);
-              setBody(updatedForm.body);
-              setDescription(updatedForm.description);
-              setImage(updatedForm.image ?? "");
-              setImages(updatedForm.images ?? []);
-            }}
+            onChange={onFormChange}
           />
         </Box>
       </Modal>

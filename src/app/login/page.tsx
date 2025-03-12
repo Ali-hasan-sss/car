@@ -7,6 +7,9 @@ import { useLanguage } from "../context/LanguageContext";
 import { useRouter } from "next/navigation";
 import EmailInput from "@/components/inputs/EmailInput";
 import PasswordInput from "@/components/inputs/PasswordInput";
+import axiosInstance from "@/utils/axiosInstance";
+import { useDispatch } from "react-redux";
+import { setAuthToken } from "@/store/slice/authSlice";
 
 interface LoginFormInputs {
   email: string;
@@ -15,6 +18,8 @@ interface LoginFormInputs {
 
 const Login: React.FC = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
+
   const handleBack = () => {
     router.push("/");
   };
@@ -47,16 +52,13 @@ const Login: React.FC = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        /*
         // محاولة تسجيل الدخول عبر API
-        const response = await axiosInstance.post(`/login`, {
-          formData,
-        });
+        const response = await axiosInstance.post(`customer/login`, formData);
+
         const token = response.data.data.access_token;
         dispatch(setAuthToken(token));
 
         // console.log("Login successful:");
-        // */
 
         router.push("/customer/dashboard");
       } catch (error) {

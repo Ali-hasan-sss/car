@@ -1,15 +1,7 @@
+import { User } from "@/Types/adminTypes";
 import { Language } from "@/utils/languages";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
-
-interface User {
-  id?: number;
-  email: string;
-  firstName: string;
-  lastName: string;
-  is_active?: boolean;
-  userRole?: string;
-}
 
 interface AuthState {
   authToken: string | null;

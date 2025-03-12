@@ -1,70 +1,71 @@
-// @ts-nocheck
-/* eslint-disable */
-
 import { setTableData } from "@/store/Reducers/tableDataReducer";
 import { AppDispatch } from "@/store/store";
 import axiosInstance from "@/utils/axiosInstance";
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { makeSelectTableData } from "../../store/selectors/tableSelectors";
+import DeleteMessage from "../messags/deleteMessage";
+import DynamicForm from "../adminComponents/forms/DynamicForm";
+import AnimatedModal from "../modal/AnimatedModal";
+import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 
-interface Column {
+export interface Column {
   id: string;
   label: string;
-  type?: "image" | "text"; // نوع البيانات
   languageDisplay: "both" | "en" | "ar";
 }
 interface TableRow {
   id: number;
-  data: {
-    title: { en: string; ar: string };
-    description: { en: string; ar: string };
-    body: { en: string; ar: string };
-    image: string;
-  };
+  [key: string]: string | number;
 }
-
 interface ActionConfig {
-  edit?: boolean;
   delete?: boolean;
-  share?: boolean;
-  view?: boolean;
-  onEdit?: (row: TableRow) => void;
-  onDelete?: (id: number) => void;
-  onView?: (id: number) => void;
-  onShare?: (id: number) => void;
+  edit?: boolean;
+  add?: boolean;
+  view?: (id: number) => void; // Function to handle view action
+  share?: (id: number) => void;
 }
 
 interface GeneralTableProps {
   columns: Column[];
+  title: string;
+  AddButtonLabel?: string;
   apiUrl: string;
   actions?: ActionConfig;
-  details?: boolean;
 }
 
 type Order = "asc" | "desc";
 
 const GeneralTable: React.FC<GeneralTableProps> = ({
   columns,
+  title,
+  AddButtonLabel,
   apiUrl,
   actions,
-  details,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<string | null>(null);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [deleteId, setDeleteId] = useState(0);
+  const [openForm, setOpenForm] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [editData, setEditData] = useState<Record<string, any> | null>(null);
   const selectTableData = useMemo(() => makeSelectTableData(apiUrl), [apiUrl]);
-  const tableData = useSelector(selectTableData);
+  const tableData = useSelector(selectTableData) as TableRow[];
+
   // تحميل البيانات عند تغيير apiUrl
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
-        const response = await axiosInstance.get(apiUrl); // استدعاء API باستخدام Axios
+        const response = await axiosInstance.get(apiUrl); // جلب البيانات
         dispatch(setTableData({ key: apiUrl, data: response.data.data })); // تخزين البيانات
       } catch (error) {
         console.error("❌ فشل جلب البيانات:", error);
       }
+      setIsLoading(false);
     };
 
     fetchData();
@@ -75,8 +76,8 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
-
-    const sortedData = [...tableData].sort((a, b) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const sortedData = [...tableData].sort((a: any, b: any) => {
       if (a[property] < b[property]) return isAsc ? -1 : 1;
       if (a[property] > b[property]) return isAsc ? 1 : -1;
       return 0;
@@ -85,8 +86,41 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
     dispatch(setTableData({ key: apiUrl, data: sortedData }));
   };
 
+  // دالة التعديل باستخدام نفس الرابط مع معرف السطر
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleEdit = (rowData: any) => {
+    setEditData(rowData);
+    console.log(`data:${rowData}`);
+    setOpenForm(true);
+  };
+  const handleAdd = () => {
+    setEditData(null);
+    setOpenForm(true);
+  };
+
+  const handleDeleteSuccess = (id: number) => {
+    dispatch(
+      setTableData({
+        key: apiUrl,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        data: tableData.filter((item: any) => item.id !== id),
+      })
+    );
+  };
+
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <div className="flex items-center justify-between w-full border border-secondary1 px-4 py-2">
+        <h2 className="text-text_title">{title}</h2>
+
+        <div className="flex items-center gap-3 bg-secondary1">
+          {actions?.add && (
+            <button onClick={handleAdd} className="button_outline px-4 py-2">
+              {AddButtonLabel}
+            </button>
+          )}
+        </div>
+      </div>
       <table className="w-full text-sm text-left rtl:text-right text-gray-500">
         <thead className="text-xs text-gray-500 uppercase bg-gray-50">
           <tr>
@@ -94,29 +128,40 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
               <th key={column.id} scope="col" className="px-6 py-3">
                 <div className="flex items-center">
                   {column.label}
-                  {column.type !== "image" && (
-                    <button
-                      onClick={() => handleSort(column.id)}
-                      className="ml-2"
+                  <button
+                    onClick={() => handleSort(column.id)}
+                    className="ml-2"
+                  >
+                    <svg
+                      className="w-3 h-3"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                      <svg
-                        className="w-3 h-3"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
-                      </svg>
-                    </button>
-                  )}
+                      <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
+                    </svg>
+                  </button>
                 </div>
               </th>
             ))}
             {actions && <th className="px-6 py-3">Actions</th>}
-            {details && <th className="px-6 py-3"></th>}
           </tr>
         </thead>
         <tbody>
+          {isLoading && (
+            <tr>
+              <td
+                colSpan={columns.length + (actions ? 1 : 0)}
+                className="px-6 py-2"
+              >
+                <div className="h-1 w-full bg-gray-300 relative overflow-hidden">
+                  <div className="absolute h-1 bg-blue-500 animate-loadingBar"></div>
+                </div>
+              </td>
+            </tr>
+          )}
+
           {tableData.length > 0 ? (
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             tableData.map((row: any, index: number) => (
               <tr
                 key={index}
@@ -126,76 +171,43 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
               >
                 {columns.map((column) => (
                   <td key={column.id} className="px-6 py-4">
-                    {column.type === "image" ? (
-                      <img
-                        src={row[column.id]}
-                        alt={column.label}
-                        className="w-10 h-10 rounded-md"
-                      />
-                    ) : row[column.id] && typeof row[column.id] === "object" ? (
-                      row[column.id].en && row[column.id].ar ? (
-                        column.languageDisplay === "both" ? (
-                          `${row[column.id].en} / ${row[column.id].ar}`
-                        ) : column.languageDisplay === "en" ? (
-                          row[column.id].en
-                        ) : (
-                          row[column.id].ar
-                        )
-                      ) : (
-                        JSON.stringify(row[column.id]) // عرض البيانات كـ JSON إن لم تكن كائنًا نصيًا
-                      )
-                    ) : (
-                      row[column.id] ?? "غير متوفر"
-                    )}
+                    {row[column.id] ?? "غير متوفر"}
                   </td>
                 ))}
                 {actions && (
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
                       {actions.delete && (
-                        <button onClick={() => actions.onDelete?.(row.id)}>
-                          <img
-                            src="/images/redtrash.png"
-                            width={14}
-                            alt="delete"
+                        <>
+                          <button
+                            onClick={() => {
+                              console.log("حذف العنصر بمعرف:", row.id);
+                              setDeleteId(row.id);
+                              setOpenDelete(true);
+                            }}
+                          >
+                            <FaTrash className="text-red-500 text-lg mx-2" />
+                          </button>
+                          <DeleteMessage
+                            API={apiUrl}
+                            open={openDelete}
+                            handleClose={() => setOpenDelete(false)}
+                            id={deleteId}
+                            onDeleteSuccess={handleDeleteSuccess}
                           />
-                        </button>
+                        </>
                       )}
                       {actions.edit && (
-                        <button
-                          onClick={() => {
-                            if (!row || !row.data) {
-                              console.error(
-                                "❌ البيانات غير متوفرة أو غير صالحة:",
-                                row
-                              );
-                              return;
-                            }
-                            actions.onEdit?.(row);
-                          }}
-                        >
-                          <img src="/images/edit.png" width={14} alt="edit" />
+                        <button onClick={() => handleEdit(row)}>
+                          <FaEdit className="text-yellow-500 text-lg mx-2" />
                         </button>
                       )}
-
                       {actions.view && (
-                        <button onClick={() => actions.onView?.(row.id)}>
-                          <img src="/images/eye.png" width={14} alt="view" />
-                        </button>
-                      )}
-                      {actions.share && (
-                        <button onClick={() => actions.onShare?.(row.id)}>
-                          <img src="/images/share.png" width={14} alt="share" />
+                        <button onClick={() => actions.view?.(row.id)}>
+                          <FaEye className="text-blue-500 text-lg mx-2" />
                         </button>
                       )}
                     </div>
-                  </td>
-                )}
-                {details && (
-                  <td className="px-6 py-4">
-                    <button>
-                      <img src="/images/list.png" alt="list" />
-                    </button>
                   </td>
                 )}
               </tr>
@@ -209,6 +221,39 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
           )}
         </tbody>
       </table>
+      <AnimatedModal
+        open={openForm}
+        handleClose={() => setOpenForm(false)}
+        className="w-[400px]"
+      >
+        <DynamicForm
+          key={editData?.id || "new"}
+          open={openForm}
+          onClose={() => setOpenForm(false)}
+          apiUrl={apiUrl}
+          fields={columns}
+          initialData={editData}
+        />
+      </AnimatedModal>
+      <style jsx>{`
+        @keyframes loadingBar {
+          0% {
+            left: -100%;
+            width: 0;
+          }
+          50% {
+            left: 50%;
+            width: 50%;
+          }
+          100% {
+            left: 100%;
+            width: 0;
+          }
+        }
+        .animate-loadingBar {
+          animation: loadingBar 1.5s infinite;
+        }
+      `}</style>
     </div>
   );
 };

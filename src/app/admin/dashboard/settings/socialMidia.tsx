@@ -250,7 +250,7 @@ export default function SocialMediaSettings() {
                 </IconButton>
               </div>
               <DeleteMessage
-                API={`/admin/socials/`}
+                API={`/admin/socials`}
                 open={openDelete}
                 handleClose={() => setOpenDelete(false)}
                 id={editing?.id}

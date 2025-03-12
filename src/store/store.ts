@@ -6,6 +6,7 @@ import blogsReducer from "./Reducers/blogsReducer";
 import fileUploadReducer from "./Reducers/fileUploadReducer";
 import tableDataReducer from "./Reducers/tableDataReducer";
 import socialMediaReducer from "./Reducers/socialMediaReducer"; // ✅ تحديث الاستيراد
+import countriesReducer from "./slice/countriesSlice";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     blogs: blogsReducer,
     fileUpload: fileUploadReducer,
     tableData: tableDataReducer,
+    countries: countriesReducer,
   },
 });
 

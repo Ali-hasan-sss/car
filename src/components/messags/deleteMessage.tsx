@@ -29,7 +29,7 @@ export default function DeleteMessage({
 
     try {
       setLoading(true);
-      await axiosInstance.delete(`${API}${id}`);
+      await axiosInstance.delete(`${API}/${id}`);
 
       if (onDeleteSuccess) {
         onDeleteSuccess(id);

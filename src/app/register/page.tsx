@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Register_nav from "@/components/header/register_navbar";
 import Register_footer from "@/components/footer/Register_footer";
 import "../login/login.css";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { useLanguage } from "../context/LanguageContext";
 import Step1 from "./step1";
 import Personal_step1 from "./personal_steps/step1";
@@ -12,6 +12,7 @@ import Company_step1 from "./company_steps/step1";
 import Personal_step2 from "./personal_steps/step2";
 import Company_step2 from "./company_steps/step2";
 import { useRouter } from "next/navigation";
+import axiosInstance from "@/utils/axiosInstance";
 
 interface SignupFormInputs {
   name: string;
@@ -125,8 +126,8 @@ const Signup: React.FC = () => {
     if (validateStep3()) {
       try {
         console.log(formData);
-        const response = await axios.post("/api/auth/signup", formData);
-        console.log("Signup successful:", response.data);
+        const response = await axiosInstance.post("customer/login", formData);
+        console.log("Signup successful:", response.data.data);
         // تنفيذ ما تريده بعد التسجيل
       } catch (error) {
         const axiosError = error as AxiosError;
