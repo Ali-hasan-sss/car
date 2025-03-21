@@ -4,11 +4,8 @@ import Text_selector from "@/components/inputs/selectors/text_selector";
 import Text_input from "@/components/inputs/Text_input";
 import { useState } from "react";
 import {
-  carCategory,
-  carModels,
-  Model,
-  Mileageoptions,
-  PriceOptions,
+  mileageOptions,
+  budgetOptions,
   CarStatusOptions,
   carLocations,
   CarfaxOptions,
@@ -21,16 +18,21 @@ import {
 } from "../data";
 import { FaMinus } from "react-icons/fa";
 import Chooser from "@/components/inputs/chooser";
+import Budget_selector from "@/components/inputs/selectors/budget_selector";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import DainamicSelector from "@/components/inputs/selectors/DainamicSelector";
 
 interface SallesFormInputs {
   link: string;
-  carModel: string;
-  Model: string;
+  manufacturer: number | null;
+  cmodel_id: number | null;
+  category_id: number | null;
   Mileage: string;
-  price: string;
+  from_budget: string;
+  to_budget: string;
   status: string;
   Carfax: string;
-  category: string;
   yearOfMade: string;
   transmission: string;
   driveSystem: string;
@@ -52,14 +54,19 @@ interface SallesProps {
 }
 
 export default function Salles({ close }: SallesProps) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [categories, setCategories] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [models, setModels] = useState<any[]>([]);
   const [formData, setFormData] = useState<SallesFormInputs>({
     link: "",
-    carModel: "",
-    Model: "",
+    manufacturer: null,
+    category_id: null,
+    cmodel_id: null,
     Mileage: "",
-    price: "",
+    from_budget: "",
+    to_budget: "",
     status: "",
-    category: "",
     Carfax: "",
     yearOfMade: "",
     shippingOption: "",
@@ -77,7 +84,47 @@ export default function Salles({ close }: SallesProps) {
     images: [],
   });
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const { manufacturers } = useSelector(
+    (state: RootState) => state.manufacturer
+  );
+  const handleManufacturerChange = (value: number | null) => {
+    setFormData((prev) => ({
+      ...prev,
+      manufacturer: value,
+      category_id: null,
+      cmodel_id: null,
+    }));
 
+    const selectedManufacturer = manufacturers.find((m) => m.id === value);
+    if (selectedManufacturer && selectedManufacturer.categories) {
+      setCategories(selectedManufacturer.categories);
+    } else {
+      setCategories([]);
+    }
+    setModels([]); // Reset models
+  };
+
+  const handleCategoryChange = (value: number | null) => {
+    setFormData((prev) => ({
+      ...prev,
+      category_id: value,
+      cmodel_id: null,
+    }));
+
+    const selectedCategory = categories.find((c) => c.id === value);
+    if (selectedCategory && selectedCategory.cmodels) {
+      setModels(selectedCategory.cmodels);
+    } else {
+      setModels([]);
+    }
+  };
+
+  const handleModelChange = (value: number | null) => {
+    setFormData((prev) => ({
+      ...prev,
+      cmodel_id: value,
+    }));
+  };
   const handleInputChange = <T extends keyof SallesFormInputs>(
     key: T,
     value: SallesFormInputs[T]
@@ -118,20 +165,26 @@ export default function Salles({ close }: SallesProps) {
         <div className="flex flex-wrap items-center justify-between  gap-[15px]">
           <div className="selector">
             <label>Car Manufacturer and Model:</label>
-            <Text_selector
-              options={carModels}
-              placeholder="toyota corola"
-              value={formData.carModel}
-              onChange={(value) => handleInputChange("carModel", value)}
+            <DainamicSelector
+              data={manufacturers}
+              value={formData.manufacturer}
+              onChange={handleManufacturerChange}
+            />
+          </div>
+          <div className="selector">
+            <label>Car Manufacturer and Model:</label>
+            <DainamicSelector
+              data={categories}
+              value={formData.category_id}
+              onChange={handleCategoryChange}
             />
           </div>
           <div className="selector">
             <label>Category:</label>
-            <Text_selector
-              options={carCategory}
-              placeholder="Sedan, SUV, Truck"
-              value={formData.category}
-              onChange={(value) => handleInputChange("category", value)}
+            <DainamicSelector
+              data={models}
+              value={formData.cmodel_id}
+              onChange={handleModelChange}
             />
           </div>
           <div className="selector">
@@ -146,18 +199,9 @@ export default function Salles({ close }: SallesProps) {
         </div>
         <div className="flex flex-wrap items-center justify-between  gap-[10px]">
           <div className="selector">
-            <label>Model:</label>
-            <Text_selector
-              options={carModels}
-              placeholder="toyota corola"
-              value={formData.Model}
-              onChange={(value) => handleInputChange("Model", value)}
-            />
-          </div>
-          <div className="selector">
             <label>Mileage:</label>
             <Text_selector
-              options={Mileageoptions}
+              options={mileageOptions}
               placeholder="Sedan, SUV, Truck"
               value={formData.Mileage}
               onChange={(value) => handleInputChange("Mileage", value)}
@@ -170,17 +214,6 @@ export default function Salles({ close }: SallesProps) {
               placeholder="2018"
               value={formData.driveSystem}
               onChange={(value) => handleInputChange("driveSystem", value)}
-            />
-          </div>
-        </div>
-        <div className="flex flex-wrap items-center justify-centet w-full  gap-[10px]">
-          <div className="selector">
-            <label>Transmission Type:</label>
-            <Text_selector
-              options={Model}
-              placeholder="Manual..."
-              value={formData.transmission}
-              onChange={(value) => handleInputChange("transmission", value)}
             />
           </div>
         </div>
@@ -208,11 +241,13 @@ export default function Salles({ close }: SallesProps) {
           </div>
           <div className="selector">
             <label>Price</label>
-            <Text_selector
-              options={PriceOptions}
-              placeholder="2018"
-              value={formData.price}
-              onChange={(value) => handleInputChange("price", value)}
+            <Budget_selector
+              from_budget={formData.from_budget}
+              to_budget={formData.to_budget}
+              options={budgetOptions}
+              placeholder={{ from: "اختر الحد الأدنى", to: "اختر الحد الأعلى" }}
+              onFromChange={(value) => handleInputChange("from_budget", value)}
+              onToChange={(value) => handleInputChange("to_budget", value)}
             />
           </div>
         </div>

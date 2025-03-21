@@ -69,10 +69,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
       path: "#",
       subItems: [
         {
-          label: t("Category"),
-          path: "/admin/dashboard/category",
-        },
-        {
           label: t("Manufacturers"),
           path: "/admin/dashboard/manufacturers",
         },
@@ -95,7 +91,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
           label: t("Accounts"),
           path: "/admin/dashboard/settings/accounts",
         },
-        { label: t("Security"), path: "/admin/dashboard/settings/" },
       ],
     },
   ];

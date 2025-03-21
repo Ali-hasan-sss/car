@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // إضافة useEffect
 import Register_nav from "@/components/header/register_navbar";
 import Register_footer from "@/components/footer/Register_footer";
 import "./login.css";
@@ -8,8 +8,9 @@ import { useRouter } from "next/navigation";
 import EmailInput from "@/components/inputs/EmailInput";
 import PasswordInput from "@/components/inputs/PasswordInput";
 import axiosInstance from "@/utils/axiosInstance";
-import { useDispatch } from "react-redux";
-import { setAuthToken } from "@/store/slice/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setAuthToken, setUser } from "@/store/slice/authSlice";
+import { RootState } from "@/store/store";
 
 interface LoginFormInputs {
   email: string;
@@ -19,6 +20,14 @@ interface LoginFormInputs {
 const Login: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+
+  // التحقق من حالة تسجيل الدخول عند تحميل المكون
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.push("/customer/dashboard"); // إعادة توجيه المستخدم إلى لوحة التحكم
+    }
+  }, [isLoggedIn, router]);
 
   const handleBack = () => {
     router.push("/");
@@ -54,12 +63,40 @@ const Login: React.FC = () => {
       try {
         // محاولة تسجيل الدخول عبر API
         const response = await axiosInstance.post(`customer/login`, formData);
+        const {
+          id,
+          name,
+          type,
+          email,
+          token,
+          is_full_data,
+          contact,
+          idDetail,
+        } = response.data.data;
 
-        const token = response.data.data.access_token;
+        // تقسيم الاسم إلى اسم أول واسم ثاني
+        const [first_name, last_name] = name.split(" ");
+
+        // تحويل البيانات إلى كائن يطابق واجهة User
+        const userData = {
+          id,
+          email,
+          first_name: first_name || "",
+          last_name: last_name || "",
+          userRole: type === 1 ? "USER" : "COMPANY",
+          type, // نوع المستخدم (1 أو 2)
+          is_full_data: is_full_data === 1,
+          contact: contact || null,
+          idDetail: idDetail || null,
+        };
+
+        // تحديث رمز التوثيق في الحالة
         dispatch(setAuthToken(token));
 
-        // console.log("Login successful:");
+        // تحديث بيانات المستخدم في الحالة
+        dispatch(setUser(userData));
 
+        // إعادة توجيه المستخدم إلى لوحة التحكم
         router.push("/customer/dashboard");
       } catch (error) {
         console.error(error);
@@ -78,6 +115,11 @@ const Login: React.FC = () => {
       [id]: value,
     }));
   };
+
+  // إذا كان المستخدم مسجلًا بالفعل، لا يتم عرض المكون
+  if (isLoggedIn) {
+    return null; // أو يمكنك عرض رسالة أو إعادة توجيه مباشرة
+  }
 
   return (
     <div className="flex flex-col min-h-screen">

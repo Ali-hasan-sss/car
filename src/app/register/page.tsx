@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Register_nav from "@/components/header/register_navbar";
 import Register_footer from "@/components/footer/Register_footer";
 import "../login/login.css";
-import { AxiosError } from "axios";
 import { useLanguage } from "../context/LanguageContext";
 import Step1 from "./step1";
 import Personal_step1 from "./personal_steps/step1";
@@ -13,6 +12,10 @@ import Personal_step2 from "./personal_steps/step2";
 import Company_step2 from "./company_steps/step2";
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/utils/axiosInstance";
+import { setLogin } from "@/store/slice/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import LoadingBTN from "@/components/loading/loadingBTN";
 
 interface SignupFormInputs {
   name: string;
@@ -26,6 +29,7 @@ const Signup: React.FC = () => {
   const { t } = useLanguage();
   const [step, setStep] = useState(1);
   const [accountType, setAccountType] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<SignupFormInputs>({
     name: "",
     company: "",
@@ -34,12 +38,23 @@ const Signup: React.FC = () => {
     type: "",
   });
   const [errors, setErrors] = useState<Partial<SignupFormInputs>>({});
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const is_full_data = useSelector(
+    (state: RootState) => state.auth.user?.is_full_data
+  );
 
-  const Router = useRouter();
+  //التحقق من تسجيل الدخول
+  useEffect(() => {
+    if (isLoggedIn && is_full_data) {
+      router.push("/customer/dashboard"); // إعادة توجيه المستخدم إلى لوحة التحكم
+    }
+  }, [isLoggedIn, router]);
 
   const handleBack = () => {
     if (step === 1) {
-      Router.push("/");
+      router.push("/");
     } else {
       setStep(step - 1);
     }
@@ -122,23 +137,40 @@ const Signup: React.FC = () => {
 
   const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setErrors({});
 
     if (validateStep3()) {
       try {
         console.log(formData);
-        const response = await axiosInstance.post("customer/login", formData);
-        console.log("Signup successful:", response.data.data);
-        // تنفيذ ما تريده بعد التسجيل
-      } catch (error) {
-        const axiosError = error as AxiosError;
-        console.error(
-          "Signup failed:",
-          axiosError.response?.data || axiosError.message
+
+        // ✅ إرسال طلب التسجيل
+        const registerResponse = await axiosInstance.post(
+          "customer/register",
+          formData
         );
-        setErrors({
-          email: "Invalid email or password.",
-          password: "Invalid email or password.",
-        });
+        //  console.log("Signup successful:", registerResponse.data);
+        const { id, name, email, type, token } = registerResponse.data.data;
+
+        const userDataTransformed = {
+          id,
+          email,
+          first_name: name.split(" ")[0] || "",
+          last_name: name.split(" ")[1] || "",
+          is_active: 1, // أو أي قيمة منطقية تناسب حالتك
+          userRole: type === 1 ? "USER" : "COMPANY",
+          type: type,
+        };
+
+        // ✅ تخزين البيانات في Redux
+        dispatch(setLogin({ token, user: userDataTransformed }));
+
+        // ✅ إعادة التوجيه بعد النجاح
+        router.push("register/complete");
+      } catch (error) {
+        console.error("Signup failed:", error);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -227,7 +259,7 @@ const Signup: React.FC = () => {
                     onClick={handleFinalSubmit}
                     className="w-full h-[40px] buttom"
                   >
-                    {t("Signup")}
+                    {loading ? <LoadingBTN /> : t("Signup")}
                   </button>
                 )}
               </div>

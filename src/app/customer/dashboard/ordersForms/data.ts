@@ -1,15 +1,3 @@
-export const carModels = [
-  { value: "toyota", label: "toyota , corola" },
-  { value: "toyota", label: "toyota , FG" },
-  { value: "BMW", label: "BMW, M5" },
-];
-
-export const carCategory = [
-  { value: "sedan", label: "sedan" },
-  { value: "SUV", label: "SUV" },
-  { value: "truck", label: "truck" },
-];
-
 export const yearOfMade = [
   { value: "2010", label: "2010" },
   { value: "2011", label: "2011" },
@@ -17,12 +5,14 @@ export const yearOfMade = [
 ];
 
 export const TransmissionTypeOptions = [
-  { value: "manual", label: "manual" },
-  { value: "auto", label: "auto" },
+  { value: "1", label: "manual" },
+  { value: "2", label: "auto" },
+  { value: "4", label: "Tiptronic" },
 ];
 export const driveSystemOPtions = [
-  { value: "fwd", label: "FWD" },
-  { value: "sdh", label: "SDH" },
+  { value: "1", label: "FWD" },
+  { value: "2", label: "RWD" },
+  { value: "3", label: "4WD" },
 ];
 export const NumberOfCylinders = [
   { value: "3", label: "3" },
@@ -32,27 +22,41 @@ export const NumberOfCylinders = [
   { value: "10", label: "10" },
   { value: "12", label: "12" },
 ];
-export const budgetoptions = {
-  fromOptions: [
-    { value: "100", label: "100" },
-    { value: "200", label: "200" },
-    { value: "300", label: "300" },
-  ],
-  toOptions: [
-    { value: "500", label: "500" },
-    { value: "1000", label: "1000" },
-    { value: "1500", label: "1500" },
-  ],
-};
-export const ShippingOption = [
-  { value: "container", label: "container" },
-  { value: "group", label: "group" },
+export const budgetoptions = [
+  { value: "0", label: "0" },
+  { value: "1000", label: "1000" },
+  { value: "2500", label: "2500" },
+  { value: "5000", label: "50000" },
+  { value: "10000", label: "10000" },
+  { value: "20000", label: "20000" },
+  { value: "30000", label: "30000" },
+  { value: "40000", label: "40000" },
+  { value: "50000", label: "50000" },
+  { value: "+50000", label: "+50000" },
 ];
+
+export const ShippingOption = [
+  { value: "1", label: "container" },
+  { value: "2", label: "group" },
+];
+export const mileageOptions = [
+  { value: "5000", label: "-5000" },
+  { value: "5000", label: "5000-10000" },
+  { value: "10000", label: "10000-25000" },
+  { value: "25000", label: "25000-50000" },
+  { value: "50000", label: "50000-100000" },
+  { value: "100000", label: "100000-150000" },
+  { value: "150000", label: "150000-200000" },
+  { value: "200000", label: "+200000" },
+];
+
 export const fuelTypeOptions = [
-  { value: "desel", label: "desel" },
-  { value: "solar", label: "solar" },
-  { value: "gaz", label: "Gaz" },
-  { value: "elctrec", label: "elctrec" },
+  { value: "1", label: "Petrol" },
+  { value: "2", label: "Disel" },
+  { value: "3", label: "CNG (Gaz)" },
+  { value: "4", label: "Flex Fuel" },
+  { value: "5", label: "Hybrid" },
+  { value: "6", label: "Electric" },
 ];
 export const ExteriorColor = [
   { value: "white", label: "white" },
@@ -67,33 +71,34 @@ export const InteriorColor = [
   { value: "black", label: "black" },
 ];
 export const ShippingCountry = [
-  { value: "canada", label: "canada" },
-  { value: "usa", label: "USA" },
+  { value: "1", label: "CND" },
+  { value: "2", label: "USA" },
 ];
-export const Model = [
-  { value: "camry", label: "camry" },
-  { value: "corola", label: "corola" },
-];
-export const Mileageoptions = [
-  { value: "40000", label: "40000" },
-  { value: "50000", label: "50000" },
-  { value: "100000", label: "100000" },
-  { value: "150000", label: "150000" },
-  { value: "200000", label: "200000" },
-  { value: "250000", label: "250000" },
-];
-export const PriceOptions = [
-  { value: "1000", label: "1000" },
-  { value: "2500", label: "2500" },
-  { value: "5000", label: "5000" },
-  { value: "10000", label: "10000" },
-  { value: "20000", label: "20000" },
-  { value: "25000", label: "25000" },
-];
+export const budgetOptions = {
+  fromOptions: [
+    { value: "1000", label: "1000" },
+    { value: "2500", label: "2500" },
+    { value: "5000", label: "5000" },
+    { value: "10000", label: "10000" },
+    { value: "20000", label: "20000" },
+    { value: "25000", label: "25000" },
+  ],
+  toOptions: [
+    { value: "1000", label: "1000" },
+    { value: "2500", label: "2500" },
+    { value: "5000", label: "5000" },
+    { value: "10000", label: "10000" },
+    { value: "20000", label: "20000" },
+    { value: "25000", label: "25000" },
+  ],
+};
+
 export const CarStatusOptions = [
   { value: "new", label: "New" },
   { value: "Used", label: "Used" },
-  { value: "proken", label: "proken" },
+  { value: "Modified", label: "Modified" },
+  { value: "Accidented", label: "Accidented" },
+  { value: "Disabled", label: "Disabled" },
 ];
 export const carLocations = [
   { value: "canada", label: "Canada" },

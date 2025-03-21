@@ -46,6 +46,7 @@ const AdminLogin: React.FC = () => {
         lastName: last_name,
         is_active,
         userRole: "ADMIN",
+        type: 1,
       };
 
       // ✅ تخزين التوكن والمستخدم في Redux
@@ -56,6 +57,7 @@ const AdminLogin: React.FC = () => {
         last_name: userData.lastName, // تحويل الحقول هنا
         is_active: userData.is_active,
         userRole: userData.userRole,
+        type: userData.type,
       };
 
       dispatch(setLogin({ token: access_token, user: userDataTransformed }));

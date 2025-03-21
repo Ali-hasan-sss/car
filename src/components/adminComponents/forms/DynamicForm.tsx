@@ -51,6 +51,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   const [manufacturers, setManufacturers] = useState<
     { id: number; title: string }[]
   >([]);
+  const [Categories, setCategories] = useState<{ id: number; title: string }[]>(
+    []
+  );
   const { t } = useLanguage();
 
   // جلب الأنواع عند فتح الفورم
@@ -60,6 +63,16 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         .get("admin/manufacturers") // تعديل الرابط حسب API الخاص بك
         .then((res) => setManufacturers(res.data.data))
         .catch((err) => console.error("❌ خطأ في جلب الأنواع:", err));
+    }
+    reset(initialData || {});
+  }, [open, initialData, reset]);
+  // جلب الأنواع عند فتح الفورم
+  useEffect(() => {
+    if (open) {
+      axiosInstance
+        .get("admin/categories") // تعديل الرابط حسب API الخاص بك
+        .then((res) => setCategories(res.data.data))
+        .catch((err) => console.error("❌ خطأ في جلب الفئات:", err));
     }
     reset(initialData || {});
   }, [open, initialData, reset]);
@@ -125,6 +138,30 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
                       {manufacturers.map((manufacturer) => (
                         <MenuItem key={manufacturer.id} value={manufacturer.id}>
                           {manufacturer.title}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                )}
+              />
+            ) : field.id === "category_id" ? (
+              <Controller
+                key={field.id}
+                name={field.id}
+                control={control}
+                defaultValue={initialData?.[field.id] || []}
+                rules={{ required: true }}
+                render={({ field: controllerField }) => (
+                  <FormControl
+                    fullWidth
+                    margin="dense"
+                    error={!!errors[field.id]}
+                  >
+                    <InputLabel>{field.label}</InputLabel>
+                    <Select {...controllerField}>
+                      {Categories.map((category) => (
+                        <MenuItem key={category.id} value={category.id}>
+                          {category.title}
                         </MenuItem>
                       ))}
                     </Select>

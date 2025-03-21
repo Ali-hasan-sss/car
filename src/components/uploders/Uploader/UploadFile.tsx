@@ -20,8 +20,7 @@ const UploadFile: React.FC<UploadFileProps> = ({ onFileUpload, label }) => {
     try {
       const formData = new FormData();
       formData.append("file", file);
-
-      const response = await axiosInstance.post("admin/uploadFile", formData);
+      const response = await axiosInstance.post("uploadFile", formData);
 
       const uploadedFileName = response.data?.data?.fileName;
       if (!uploadedFileName) {

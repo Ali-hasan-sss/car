@@ -2,22 +2,57 @@
 
 export interface Admin {
   id: number;
+  name?: string;
   first_name: string;
   last_name: string;
   email: string;
-  is_active: number;
+  is_active?: number;
   userRole?: string;
   password?: string;
 }
+
+// واجهة لبيانات الاتصال
+export interface Contact {
+  id: number;
+  mobile: string;
+  country_id: number;
+  language: string;
+  address1: string;
+  address2?: string | null;
+  city: string;
+  zip_code: string;
+  other_mobile?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// واجهة لتفاصيل الهوية
+export interface IdDetail {
+  id: number;
+  type: number;
+  id_number: string;
+  id_file: string;
+  cr_certificate?: string | null;
+  tax_info?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// واجهة المستخدم الرئيسية
 export interface User {
   id: number;
   email: string;
   first_name: string;
   last_name: string;
-  is_active: number;
+  type: number;
+  is_active?: number;
+  is_full_data?: boolean;
   userRole?: string;
   password?: string;
+  contact?: Contact | null;
+  idDetail?: IdDetail | null;
 }
+
 export interface UpdatedProfile {
   firstName: string;
   lastName: string;
@@ -38,6 +73,7 @@ export interface TableRow {
   id: number;
   [key: string]: string | number;
 }
+
 export interface AuthState {
   authToken: string | null;
   lang: string;
@@ -106,6 +142,16 @@ export interface Country {
   id: number;
   title: string;
   code: string;
+}
+export interface manufacturers {
+  id: number;
+  title: string;
+  manufacturer_id: number | null;
+}
+export interface category {
+  id: number;
+  title: string;
+  category_id?: number | null;
 }
 
 export interface CountriesState {

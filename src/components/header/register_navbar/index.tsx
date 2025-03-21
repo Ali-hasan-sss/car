@@ -4,7 +4,7 @@ import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import Link from "next/link";
 
 interface Register_navProps {
-  handleBack: () => void;
+  handleBack?: () => void;
 }
 
 export default function Register_nav({ handleBack }: Register_navProps) {

@@ -1,58 +1,125 @@
 "use client";
 
-import Budget_selector from "@/components/inputs/selectors/budget_selector";
 import Text_selector from "@/components/inputs/selectors/text_selector";
 import Text_input from "@/components/inputs/Text_input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  budgetoptions,
-  carCategory,
-  carModels,
+  mileageOptions,
   driveSystemOPtions,
   ExteriorColor,
+  CarStatusOptions,
   fuelTypeOptions,
   InteriorColor,
   NumberOfCylinders,
-  ShippingCountry,
   ShippingOption,
   TransmissionTypeOptions,
   yearOfMade,
+  budgetOptions,
 } from "../data";
+import DainamicSelector from "@/components/inputs/selectors/DainamicSelector";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { fetchManufacturers } from "@/store/slice/manufacturerSlice";
+import axiosInstance from "@/utils/axiosInstance";
+import { toast } from "sonner";
+import Budget_selector from "@/components/inputs/selectors/budget_selector";
+import { fetchTableData } from "@/store/slice/tableDataSlice";
 
 interface AuctionsFormInputs {
-  link: string;
-  carModel: string;
-  category: string;
-  yearOfMade: string;
-  transmission: string;
-  driveSystem: string;
-  fuelType: string;
+  auction_link: string;
+  manufacturer: number | null;
+  cmodel_id: number | null;
+  category_id: number | null;
+  mileage: string;
+  year: string;
+  transmission_type: string;
+  drive_system: string;
+  fuel_type: string;
   cylinders: string;
-  budget: { from: string; to: string };
-  exteriorColor: string;
-  interiorColor: string;
+  from_budget: string;
+  country_id: number | null;
+  to_budget: string;
+  shipping_option: string;
+  car_status: string;
+  ex_color: string;
+  in_color: string;
   destinationCountry: string;
-  shippingOption: string;
+  shipping_from: string;
 }
 interface AuctionsProps {
   close: () => void;
 }
 export default function Auctions({ close }: AuctionsProps) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [categories, setCategories] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [models, setModels] = useState<any[]>([]);
+
   const [formData, setFormData] = useState<AuctionsFormInputs>({
-    link: "",
-    carModel: "",
-    category: "",
-    yearOfMade: "",
-    shippingOption: "",
-    transmission: "",
-    driveSystem: "",
-    fuelType: "",
+    auction_link: "",
+    manufacturer: null,
+    category_id: null,
+    cmodel_id: null,
+    mileage: "",
+    year: "",
+    shipping_from: "",
+    transmission_type: "",
+    drive_system: "",
+    fuel_type: "",
     cylinders: "",
-    budget: { from: "", to: "" },
-    exteriorColor: "",
-    interiorColor: "",
+    country_id: null,
+    from_budget: "",
+    to_budget: "",
+    shipping_option: "",
+    car_status: "",
+    ex_color: "",
+    in_color: "",
     destinationCountry: "",
   });
+  const dispatch = useDispatch<AppDispatch>();
+  const { manufacturers, status } = useSelector(
+    (state: RootState) => state.manufacturer
+  );
+
+  const handleManufacturerChange = (value: number | null) => {
+    setFormData((prev) => ({
+      ...prev,
+      manufacturer: value,
+      category_id: null,
+      cmodel_id: null,
+    }));
+
+    const selectedManufacturer = manufacturers.find((m) => m.id === value);
+    if (selectedManufacturer && selectedManufacturer.categories) {
+      setCategories(selectedManufacturer.categories);
+    } else {
+      setCategories([]);
+    }
+    setModels([]); // Reset models
+  };
+
+  const handleCategoryChange = (value: number | null) => {
+    setFormData((prev) => ({
+      ...prev,
+      category_id: value,
+      cmodel_id: null,
+    }));
+
+    const selectedCategory = categories.find((c) => c.id === value);
+    if (selectedCategory && selectedCategory.cmodels) {
+      setModels(selectedCategory.cmodels);
+    } else {
+      setModels([]);
+    }
+  };
+
+  const handleModelChange = (value: number | null) => {
+    setFormData((prev) => ({
+      ...prev,
+      cmodel_id: value,
+    }));
+  };
+  // const [selectedModelId, setSelectedModelId] = useState<number | null>(null);
   const handleInputChange = <T extends keyof AuctionsFormInputs>(
     key: T,
     value: AuctionsFormInputs[T]
@@ -60,25 +127,37 @@ export default function Auctions({ close }: AuctionsProps) {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleBudgetChange = (newBudget: { from: string; to: string }) => {
-    setFormData((prev) => ({ ...prev, budget: newBudget }));
-  };
+  const handleSubmit = async () => {
+    try {
+      await axiosInstance.post(`customer/car-auctions`, formData);
 
-  const handleSubmit = () => {
-    console.log("Form Data Submitted:", formData);
-  };
+      // ✅ تحديث بيانات الجدول بعد الإضافة
+      const apiUrl = "customer/car-auctions"; // نفس رابط API الذي تستخدمه لجلب بيانات الجدول
+      dispatch(fetchTableData(apiUrl)); // إعادة تحميل البيانات
 
+      toast.success("تم إرسال الطلب بنجاح");
+      console.log("Form Data Submitted:", formData);
+    } catch (error) {
+      console.error(error);
+      toast.error("حدث خطأ أثناء الإرسال");
+    }
+  };
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchManufacturers());
+    }
+  }, [dispatch, status]);
   return (
     <div className="flex w-full flex-col gap-[16px] px-[15px]">
       <div className="heading_form flex item-center justify-center">
         <h2 className="title">Select a Car for Auction</h2>
       </div>
       <Text_input
-        value={formData.link}
+        value={formData.auction_link}
         id="link"
         placeholder="https://www.copart.com/dashboard"
         label="Please Enter Car Auction Link"
-        onChange={(e) => handleInputChange("link", e.target.value)}
+        onChange={(e) => handleInputChange("auction_link", e.target.value)}
       />
       <div className="flex items-center justify-between">
         <div className="w-1/2 flex items-center justify-start">
@@ -94,20 +173,26 @@ export default function Auctions({ close }: AuctionsProps) {
       <div className="flex flex-wrap items-center justify-between  gap-[10px]">
         <div className="selector">
           <label>Car Manufacturer and Model:</label>
-          <Text_selector
-            options={carModels}
-            placeholder="toyota corola"
-            value={formData.carModel}
-            onChange={(value) => handleInputChange("carModel", value)}
+          <DainamicSelector
+            data={manufacturers}
+            value={formData.manufacturer}
+            onChange={handleManufacturerChange}
+          />
+        </div>
+        <div className="selector">
+          <label>Car Manufacturer and Model:</label>
+          <DainamicSelector
+            data={categories}
+            value={formData.category_id}
+            onChange={handleCategoryChange}
           />
         </div>
         <div className="selector">
           <label>Category:</label>
-          <Text_selector
-            options={carCategory}
-            placeholder="Sedan, SUV, Truck"
-            value={formData.category}
-            onChange={(value) => handleInputChange("category", value)}
+          <DainamicSelector
+            data={models}
+            value={formData.cmodel_id}
+            onChange={handleModelChange}
           />
         </div>
         <div className="selector">
@@ -115,8 +200,8 @@ export default function Auctions({ close }: AuctionsProps) {
           <Text_selector
             options={yearOfMade}
             placeholder="2018"
-            value={formData.yearOfMade}
-            onChange={(value) => handleInputChange("yearOfMade", value)}
+            value={formData.year}
+            onChange={(value) => handleInputChange("year", value)}
           />
         </div>
       </div>
@@ -126,8 +211,8 @@ export default function Auctions({ close }: AuctionsProps) {
           <Text_selector
             options={TransmissionTypeOptions}
             placeholder="Manual..."
-            value={formData.transmission}
-            onChange={(value) => handleInputChange("transmission", value)}
+            value={formData.transmission_type}
+            onChange={(value) => handleInputChange("transmission_type", value)}
           />
         </div>
         <div className="selector">
@@ -135,8 +220,8 @@ export default function Auctions({ close }: AuctionsProps) {
           <Text_selector
             options={driveSystemOPtions}
             placeholder="FWD..."
-            value={formData.driveSystem}
-            onChange={(value) => handleInputChange("driveSystem", value)}
+            value={formData.drive_system}
+            onChange={(value) => handleInputChange("drive_system", value)}
           />
         </div>
         <div className="selector">
@@ -144,8 +229,8 @@ export default function Auctions({ close }: AuctionsProps) {
           <Text_selector
             options={fuelTypeOptions}
             placeholder="Petrole...."
-            value={formData.fuelType}
-            onChange={(value) => handleInputChange("fuelType", value)}
+            value={formData.fuel_type}
+            onChange={(value) => handleInputChange("fuel_type", value)}
           />
         </div>
       </div>
@@ -162,17 +247,36 @@ export default function Auctions({ close }: AuctionsProps) {
         <div className="selector">
           <label>Budget Range (From - To):</label>
           <Budget_selector
-            options={budgetoptions}
-            value={formData.budget}
-            placeholder={{ from: "Select Min Budget", to: "Select Max Budget" }}
-            onChange={handleBudgetChange}
-            error={
-              formData.budget.from &&
-              formData.budget.to &&
-              Number(formData.budget.from) > Number(formData.budget.to)
-                ? "Invalid Range"
-                : undefined
-            }
+            from_budget={formData.from_budget}
+            to_budget={formData.to_budget}
+            options={budgetOptions}
+            placeholder={{ from: "اختر الحد الأدنى", to: "اختر الحد الأعلى" }}
+            onFromChange={(value) => handleInputChange("from_budget", value)}
+            onToChange={(value) => handleInputChange("to_budget", value)}
+          />
+        </div>
+        <div className="selector">
+          <label>Mileage:</label>
+          <Text_selector
+            placeholder="5000KM"
+            options={mileageOptions}
+            value={formData.mileage}
+            onChange={(value) => {
+              setFormData({ ...formData, mileage: value });
+              console.log(categories);
+            }}
+          />
+        </div>
+        <div className="selector">
+          <label>Car status:</label>
+          <Text_selector
+            placeholder="used"
+            options={CarStatusOptions}
+            value={formData.car_status}
+            onChange={(value) => {
+              setFormData({ ...formData, car_status: value });
+              console.log(categories);
+            }}
           />
         </div>
         <div className="selector">
@@ -180,8 +284,8 @@ export default function Auctions({ close }: AuctionsProps) {
           <Text_selector
             options={ShippingOption}
             placeholder="container..."
-            value={formData.shippingOption}
-            onChange={(value) => handleInputChange("shippingOption", value)}
+            value={formData.shipping_option}
+            onChange={(value) => handleInputChange("shipping_option", value)}
           />
         </div>
       </div>
@@ -191,8 +295,8 @@ export default function Auctions({ close }: AuctionsProps) {
           <Text_selector
             options={ExteriorColor}
             placeholder="white..."
-            value={formData.exteriorColor}
-            onChange={(value) => handleInputChange("exteriorColor", value)}
+            value={formData.ex_color}
+            onChange={(value) => handleInputChange("ex_color", value)}
           />
         </div>
         <div className="selector">
@@ -200,26 +304,27 @@ export default function Auctions({ close }: AuctionsProps) {
           <Text_selector
             options={InteriorColor}
             placeholder="white..."
-            value={formData.interiorColor}
-            onChange={(value) => handleInputChange("interiorColor", value)}
+            value={formData.in_color}
+            onChange={(value) => handleInputChange("in_color", value)}
           />
         </div>
         <div className="selector">
           <label>Shipping Destination Country:</label>
-          <Text_selector
-            options={ShippingCountry}
-            placeholder="toyota corola"
-            value={formData.destinationCountry}
-            onChange={(value) => handleInputChange("destinationCountry", value)}
+          <DainamicSelector
+            value={formData.country_id}
+            onChange={(value) =>
+              setFormData({ ...formData, country_id: value })
+            }
+            Api_URL="customer/countries?is_shown_auction=1"
           />
         </div>
       </div>
       <div className="flex flex-wrap actions w-full gap-[10px] mt-4 py-4 items-center justify-between">
-        <button className=" w-[200px] py-3 button_bordered" onClick={close}>
+        <button className=" w-[150px] py-3 button_bordered" onClick={close}>
           Cancel
         </button>
         <button
-          className=" w-[200px] py-3 button_outline"
+          className=" w-[150px] py-3 button_outline"
           onClick={handleSubmit}
         >
           Save Car Details

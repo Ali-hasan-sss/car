@@ -9,6 +9,7 @@ import Search_input from "@/components/inputs/search_input";
 import { Modal, Box } from "@mui/material";
 import { useState } from "react";
 import Auctions from "../ordersForms/Auctions";
+import GeneralTable, { Column } from "@/components/table";
 //import GeneralTable from "@/components/table";
 
 export default function Actions() {
@@ -20,82 +21,40 @@ export default function Actions() {
   };
 
   const handleTogleFilter = () => setOpenFilter(!openFilter);
-  /*const columns = [
-    { id: "id", label: "Order Id", languageDisplay: "en", type: "text" },
+  const columns: Column[] = [
     {
-      id: "Manufacture",
-      label: "Car Manufacture",
+      id: "category.manufacturer.title",
+      label: "الشركة الصانعة",
       languageDisplay: "en",
-      type: "text",
-    },
-    { id: "Color", label: "Car Color", languageDisplay: "en", type: "text" },
-    {
-      id: "Model",
-      label: "Car Model Name",
-      languageDisplay: "en",
-      type: "text",
+      includeInForm: true,
     },
     {
-      id: "Auction_no",
-      label: "Car Auction No",
+      id: "category.title",
+      label: "الموديل",
       languageDisplay: "en",
-      type: "text",
+      includeInForm: true,
     },
-    { id: "Statu", label: "Statu", languageDisplay: "en", type: "text" },
+    {
+      id: "created_at",
+      label: "تاريخ انشاء الطلب",
+      languageDisplay: "en",
+      includeInForm: false,
+    },
+    {
+      id: "status",
+      label: "حالة الطلب",
+      languageDisplay: "en",
+      includeInForm: false,
+    },
   ];
+  const apiUrl = "customer/car-auctions";
 
-  const data = [
-    {
-      id: "TEST23122024",
-      Manufacture: "German",
-      Color: "blue",
-      Model: "KIA",
-      Auction_no: "SLD123456789",
-      Statu: "Active",
-    },
-
-    {
-      id: "TEST23122024",
-      Manufacture: "German",
-      Color: "blue",
-      Model: "KIA",
-      Auction_no: "SLD123456789",
-      Statu: "Active",
-    },
-
-    {
-      id: "TEST23122024",
-      Manufacture: "German",
-      Color: "red",
-      Model: "BMW",
-      Auction_no: "SLD123456789",
-      Statu: "Active",
-    },
-    {
-      id: "TEST853122024",
-      Manufacture: "German",
-      Color: "white",
-      Model: "Huondai",
-      Auction_no: "SLD123456789",
-      Statu: "Active",
-    },
-    {
-      id: "TEST731220544",
-      Manufacture: "German",
-      Color: "blue",
-      Model: "KIA",
-      Auction_no: "SLD123456789",
-      Statu: "Active",
-    },
-    {
-      id: "TEST23122024",
-      Manufacture: "German",
-      Color: "blue",
-      Model: "KIA",
-      Auction_no: "SLD123456789",
-      Statu: "Active",
-    },
-  ];*/
+  const [actions] = useState({
+    edit: true,
+    add: true,
+    delete: true,
+    view: true,
+  });
 
   return (
     <div className="flex flex-col items-center w-full  gap-[5px]">
@@ -117,16 +76,7 @@ export default function Actions() {
         </>
       )}
       <ToolBar />
-      {/* <GeneralTable
-        columns={columns}
-        data={data}
-        actions={{
-          edit: true,
-          delete: true,
-          view: true,
-        }}
-        details={true}
-      />*/}
+      <GeneralTable columns={columns} apiUrl={apiUrl} actions={actions} />
       {openModal && (
         <Modal open={openModal} onClose={closeModal}>
           <Box

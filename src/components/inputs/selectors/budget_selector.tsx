@@ -1,35 +1,29 @@
 import { useLanguage } from "@/app/context/LanguageContext";
 import React from "react";
 
-interface Budget_selectorProps {
+interface BudgetSelectorProps {
+  from_budget: string; // القيمة الحالية لـ from
+  to_budget: string; // القيمة الحالية لـ to
   options: {
     fromOptions: { value: string; label: string }[];
     toOptions: { value: string; label: string }[];
-  }; // مصفوفة الخيارات
-  value: { from: string; to: string }; // القيم الحالية (من، إلى)
-  placeholder: { from: string; to: string }; // النصوص الافتراضية
-  onChange: (budget: { from: string; to: string }) => void; // دالة تمرير القيمة النهائية
-  error?: string; // رسالة الخطأ إذا وجدت
+  };
+  placeholder: { from: string; to: string };
+  onFromChange: (value: string) => void; // دالة تغيير from_budget
+  onToChange: (value: string) => void; // دالة تغيير to_budget
+  error?: string;
 }
 
-const Budget_selector: React.FC<Budget_selectorProps> = ({
+const Budget_selector: React.FC<BudgetSelectorProps> = ({
+  from_budget,
+  to_budget,
   options,
-  value,
   placeholder,
-  onChange,
+  onFromChange,
+  onToChange,
   error,
 }) => {
   const { t } = useLanguage();
-
-  // معالجة تغيير قيمة "from"
-  const handleFromChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    onChange({ ...value, from: e.target.value }); // تحديث قيمة "from"
-  };
-
-  // معالجة تغيير قيمة "to"
-  const handleToChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    onChange({ ...value, to: e.target.value }); // تحديث قيمة "to"
-  };
 
   return (
     <div className="flex items-center w-full gap-4">
@@ -37,10 +31,10 @@ const Budget_selector: React.FC<Budget_selectorProps> = ({
       <div className="flex flex-col">
         <div className="flex border rounded bg-white w-full h-[35px] py-[8px] px-[12px]">
           <select
-            value={value.from} // القيمة الحالية لـ "from"
-            onChange={handleFromChange} // معالجة التغيير
+            value={from_budget}
+            onChange={(e) => onFromChange(e.target.value)}
             className={`w-full bg-white text-lg focus:outline-none ${
-              value.from === "" ? "text-gray-400" : "text-black"
+              from_budget === "" ? "text-gray-400" : "text-black"
             }`}
           >
             <option value="" disabled>
@@ -59,10 +53,10 @@ const Budget_selector: React.FC<Budget_selectorProps> = ({
       <div className="flex flex-col">
         <div className="flex border rounded bg-white w-full h-[35px] py-[8px] px-[12px]">
           <select
-            value={value.to} // القيمة الحالية لـ "to"
-            onChange={handleToChange} // معالجة التغيير
+            value={to_budget}
+            onChange={(e) => onToChange(e.target.value)}
             className={`w-full text-lg focus:outline-none ${
-              value.to === "" ? "text-gray-400" : "text-black"
+              to_budget === "" ? "text-gray-400" : "text-black"
             }`}
           >
             <option value="" disabled>

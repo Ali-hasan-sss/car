@@ -8,30 +8,36 @@ import DeleteMessage from "../messags/deleteMessage";
 import DynamicForm from "../adminComponents/forms/DynamicForm";
 import AnimatedModal from "../modal/AnimatedModal";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
+import { usePathname, useRouter } from "next/navigation";
 
 export interface Column {
   id: string;
   label: string;
   languageDisplay: "both" | "en" | "ar";
+  includeInForm?: boolean;
+  formOnly?: boolean;
 }
+
 interface TableRow {
   id: number;
   [key: string]: string | number;
 }
+
 interface ActionConfig {
   delete?: boolean;
   edit?: boolean;
   add?: boolean;
-  view?: (id: number) => void; // Function to handle view action
-  share?: (id: number) => void;
+  view?: boolean;
 }
 
 interface GeneralTableProps {
   columns: Column[];
-  title: string;
+  title?: string;
   AddButtonLabel?: string;
   apiUrl: string;
+  apiForForm?: string;
   actions?: ActionConfig;
+  formColumns?: Column[]; // خاصية جديدة لاختيار الأعمدة التي يتم تمريرها إلى الفورم
 }
 
 type Order = "asc" | "desc";
@@ -41,7 +47,9 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
   title,
   AddButtonLabel,
   apiUrl,
+  apiForForm,
   actions,
+  formColumns,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -54,7 +62,8 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
   const [editData, setEditData] = useState<Record<string, any> | null>(null);
   const selectTableData = useMemo(() => makeSelectTableData(apiUrl), [apiUrl]);
   const tableData = useSelector(selectTableData) as TableRow[];
-
+  const router = useRouter();
+  const pathname = usePathname();
   // تحميل البيانات عند تغيير apiUrl
   useEffect(() => {
     const fetchData = async () => {
@@ -70,6 +79,47 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
 
     fetchData();
   }, [apiUrl, dispatch]);
+  // يمكن وضعها خارج الجدول أو في ملف منفصل
+  const statusMap: Record<number, { label: string; color: string }> = {
+    0: { label: "محذوف", color: "bg-erd-500 text-white" },
+    1: { label: "قيد الانتظار", color: "bg-yellow-600 text-white" },
+    2: { label: "قيد التنفيذ", color: "bg-blue-600 text-white" },
+    3: { label: "منجز", color: "bg-green-600 text-white" },
+  };
+  const formatDateTime = (dateString: string): string => {
+    if (!dateString) return "غير متوفر";
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return new Date(dateString).toLocaleDateString("ar-EG", options);
+  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const getNestedValue = (obj: any, path: string): any => {
+    return path.split(".").reduce((acc, part) => {
+      if (acc && Array.isArray(acc)) {
+        // إذا كانت القيمة مصفوفة، نحاول إيجاد العنصر الذي نبحث عنه
+        const index = parseInt(part, 10);
+
+        // إذا كان المسار يشير إلى فهرس داخل المصفوفة، نرجع العنصر في ذلك الفهرس
+        if (!isNaN(index)) {
+          return acc[index]; // الوصول إلى العنصر باستخدام الفهرس
+        }
+
+        // إذا كان المسار يشير إلى اسم خاصية، نرجع جميع العناصر في المصفوفة بشكل مفصل
+        return acc.map((item) => item[part]); // معالجة العناصر في المصفوفة مع نفس المفتاح
+      }
+
+      // إذا كان الكائن يحتوي على الخاصية المطلوبة
+      return acc && acc[part];
+    }, obj);
+  };
+
+  const formFields = columns.filter((col) => col.includeInForm);
+  const tableColumns = columns.filter((col) => !col.formOnly);
 
   // ترتيب البيانات عند النقر على عنوان العمود
   const handleSort = (property: string) => {
@@ -97,6 +147,9 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
     setEditData(null);
     setOpenForm(true);
   };
+  const handleView = (id: number) => {
+    router.push(`${pathname}/${id}`);
+  };
 
   const handleDeleteSuccess = (id: number) => {
     dispatch(
@@ -109,24 +162,26 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
   };
 
   return (
-    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-      <div className="flex items-center justify-between w-full border border-secondary1 px-4 py-2">
-        <h2 className="text-text_title">{title}</h2>
+    <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
+      {title && (
+        <div className="flex items-center justify-between w-full border border-secondary1 px-4 py-2">
+          <h2 className="text-text_title">{title}</h2>
 
-        <div className="flex items-center gap-3 bg-secondary1">
-          {actions?.add && (
-            <button onClick={handleAdd} className="button_outline px-4 py-2">
-              {AddButtonLabel}
-            </button>
-          )}
+          <div className="flex items-center gap-3 bg-secondary1">
+            {actions?.add && (
+              <button onClick={handleAdd} className="button_outline px-4 py-2">
+                {AddButtonLabel}
+              </button>
+            )}
+          </div>
         </div>
-      </div>
+      )}
       <table className="w-full text-sm text-left rtl:text-right text-gray-500">
         <thead className="text-xs text-gray-500 uppercase bg-gray-50">
           <tr>
-            {columns.map((column) => (
+            {tableColumns.map((column) => (
               <th key={column.id} scope="col" className="px-6 py-3">
-                <div className="flex items-center">
+                <div className="flex items-center text-center">
                   {column.label}
                   <button
                     onClick={() => handleSort(column.id)}
@@ -167,26 +222,46 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
                 key={index}
                 className={`${
                   index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                } border-b`}
+                } border-b text-[11px]`} // تصغير الخط هنا
               >
-                {columns.map((column) => (
-                  <td key={column.id} className="px-6 py-4">
-                    {row[column.id] ?? "غير متوفر"}
-                  </td>
-                ))}
+                {tableColumns.map((column) => {
+                  const value = getNestedValue(row, column.id);
+                  return (
+                    <td key={column.id} className="px-3 py-4 text-[10px]">
+                      {" "}
+                      {/* تقليل البادينغ */}
+                      {column.id === "status" ? (
+                        <div
+                          className={`px-2 py-[1px] w-[70px] rounded-full flex items-center justify-center text-[10px]  ${statusMap[value]?.color}`}
+                        >
+                          {statusMap[value]?.label || "غير معروف"}
+                        </div>
+                      ) : column.id === "created_at" ? (
+                        <div className="text-[10px]">
+                          {formatDateTime(value)}
+                        </div>
+                      ) : (
+                        <div className="text-[10px]">
+                          {value ?? "غير متوفر"}
+                        </div>
+                      )}
+                    </td>
+                  );
+                })}
                 {actions && (
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
+                  <td className="px-2 py-1">
+                    {" "}
+                    {/* تقليل البادينغ */}
+                    <div className="flex items-center gap-3">
                       {actions.delete && (
                         <>
                           <button
                             onClick={() => {
-                              console.log("حذف العنصر بمعرف:", row.id);
                               setDeleteId(row.id);
                               setOpenDelete(true);
                             }}
                           >
-                            <FaTrash className="text-red-500 text-lg mx-2" />
+                            <FaTrash className="text-red-500 text-base" />
                           </button>
                           <DeleteMessage
                             API={apiUrl}
@@ -199,12 +274,12 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
                       )}
                       {actions.edit && (
                         <button onClick={() => handleEdit(row)}>
-                          <FaEdit className="text-yellow-500 text-lg mx-2" />
+                          <FaEdit className="text-yellow-500 text-base" />
                         </button>
                       )}
                       {actions.view && (
-                        <button onClick={() => actions.view?.(row.id)}>
-                          <FaEye className="text-blue-500 text-lg mx-2" />
+                        <button onClick={() => handleView(row.id)}>
+                          <FaEye className="text-blue-500 text-base" />
                         </button>
                       )}
                     </div>
@@ -214,7 +289,10 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
             ))
           ) : (
             <tr>
-              <td colSpan={columns.length} className="text-center py-4">
+              <td
+                colSpan={columns.length}
+                className="text-center py-4 text-[11px]"
+              >
                 لا توجد بيانات متاحة
               </td>
             </tr>
@@ -230,8 +308,8 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
           key={editData?.id || "new"}
           open={openForm}
           onClose={() => setOpenForm(false)}
-          apiUrl={apiUrl}
-          fields={columns}
+          apiUrl={apiForForm ? apiForForm : apiUrl}
+          fields={formColumns ? formColumns : formFields}
           initialData={editData}
         />
       </AnimatedModal>

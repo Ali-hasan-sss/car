@@ -1,16 +1,23 @@
 import { useLanguage } from "@/app/context/LanguageContext";
 import React from "react";
+import {
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  FormHelperText,
+} from "@mui/material";
 
 interface SelectorInputProps {
-  options: { value: string; label: string }[]; // مصفوفة الخيارات
+  options: { value: string; label: string }[];
   value: string;
   placeholder: string;
-  error?: string; // رسالة الخطأ إذا وجدت
+  error?: string;
   label?: string;
-  onChange: (value: string) => void; // دالة تمرير القيمة إلى المكون الأب
+  onChange: (value: string) => void;
 }
 
-const Text_selector: React.FC<SelectorInputProps> = ({
+const TextSelector: React.FC<SelectorInputProps> = ({
   options,
   placeholder,
   value,
@@ -20,48 +27,39 @@ const Text_selector: React.FC<SelectorInputProps> = ({
 }) => {
   const { t } = useLanguage();
 
-  // معالجة تغيير الخيار
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    onChange(e.target.value); // إرسال القيمة المختارة إلى المكون الأب
-  };
-
   return (
-    <div className="flex flex-col w-full">
-      {label && <label className="text-sm mb-2">{label}</label>}
-      <div className="flex border rounded bg-white w-full h-[35px] py-[8px] px-[12px]">
-        <select
-          id="address"
-          value={value} // القيمة الحالية
-          onChange={handleChange} // معالجة التغيير
-          className={`w-full bg-white text-sm focus:outline-none ${
-            value === "" ? "text-gray-400" : "text-black"
-          }`}
-        >
-          {/* خيار placeholder */}
-          <option
-            className="text-gray-400 text-lg"
-            value=""
-            disabled
-            hidden // إخفاء الخيار من القائمة
-          >
-            {placeholder}
-          </option>
-          {/* عرض الخيارات */}
-          {options.map((option, index) => (
-            <option
-              key={index}
-              value={option.value}
-              className="text-black" // لون النص العادي
-            >
-              {t(option.label)} {/* ترجمة النص إذا لزم */}
-            </option>
-          ))}
-        </select>
-      </div>
-      {/* عرض الخطأ إذا وجد */}
-      {error && <p className="text-red-500 text-sm mt-1">{t(error)}</p>}
-    </div>
+    <FormControl fullWidth error={!!error} size="small">
+      {label && <InputLabel>{label}</InputLabel>}
+      <Select
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        displayEmpty
+        renderValue={(selected) =>
+          selected
+            ? t(options.find((o) => o.value === selected)?.label || "")
+            : placeholder
+        }
+        sx={{
+          backgroundColor: "white",
+          height: 35,
+          "& .MuiSelect-select": { paddingY: "8px", paddingX: "12px" },
+        }}
+      >
+        {/* Placeholder option (hidden but shown when no value is selected) */}
+        <MenuItem disabled value="">
+          <span className="text-gray-400">{placeholder}</span>
+        </MenuItem>
+
+        {/* Render options */}
+        {options.map((option, index) => (
+          <MenuItem key={index} value={option.value}>
+            {t(option.label)}
+          </MenuItem>
+        ))}
+      </Select>
+      {error && <FormHelperText>{t(error)}</FormHelperText>}
+    </FormControl>
   );
 };
 
-export default Text_selector;
+export default TextSelector;
