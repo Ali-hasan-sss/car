@@ -1,18 +1,20 @@
 import { useLanguage } from "@/app/context/LanguageContext";
 import Logo from "@/components/header/top-bar/logo";
 import {
+  BellRing,
   Box,
   ChevronsLeft,
   ChevronsRight,
   Container,
+  HomeIcon,
   Settings,
-  ShoppingCart,
   Store,
   User,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import ButtomNavBar from "./buttomNav";
 
 export default function Sidebar() {
   const { t, isArabic } = useLanguage();
@@ -20,9 +22,9 @@ export default function Sidebar() {
   const pathname = usePathname();
   const sideItems_top = [
     {
-      label: t("Orders"),
+      label: t("Home"),
       icon: (
-        <ShoppingCart
+        <HomeIcon
           className={`text-primary1 rounded-lg text-2xl side_icon ${
             pathname === "/customer/dashboard/orders"
               ? "bg-primary1 text-white"
@@ -31,6 +33,7 @@ export default function Sidebar() {
         />
       ),
       path: "/customer/dashboard/orders",
+      tooltip: t("Home"), // التعديل هنا
     },
     {
       label: t("Auction"),
@@ -44,6 +47,7 @@ export default function Sidebar() {
         />
       ),
       path: "/customer/dashboard/auction",
+      tooltip: t("Auction"), // التعديل هنا
     },
     {
       label: t("Shipping"),
@@ -57,6 +61,7 @@ export default function Sidebar() {
         />
       ),
       path: "/customer/dashboard/shipping",
+      tooltip: t("Shipping"), // التعديل هنا
     },
     {
       label: t("Salles"),
@@ -70,8 +75,24 @@ export default function Sidebar() {
         />
       ),
       path: "/customer/dashboard/salles",
+      tooltip: t("Salles"), // التعديل هنا
+    },
+    {
+      label: t("Notifications"),
+      icon: (
+        <BellRing
+          className={`text-primary1 rounded-lg text-2xl side_icon ${
+            pathname === "/customer/dashboard/notifications"
+              ? "bg-primary1 text-white"
+              : ""
+          }`}
+        />
+      ),
+      path: "/customer/dashboard/notifications",
+      tooltip: t("Notifications"), // التعديل هنا
     },
   ];
+
   const sideItems_buttom = [
     {
       label: t("profile"),
@@ -102,82 +123,89 @@ export default function Sidebar() {
     },
   ];
   return (
-    <div
-      className={`siedbar h-screen bg-secondary1 overflow-y-auto  flex flex-col gap-[25px] ${
-        isExpand ? "w-[40x] " : "w-[200px]"
-      } ${isArabic ? "sidearab" : ""} `}
-    >
-      <div className="header  flex items-center justify-between">
-        {!isExpand ? <Logo /> : <div className="h-[73px] w-4"></div>}
+    <>
+      <div
+        className={`siedbar hidden md:flex h-screen bg-secondary1 overflow-y-auto   flex-col gap-[25px] ${
+          isExpand ? "w-[40x] " : "w-[200px]"
+        } ${isArabic ? "sidearab" : ""} `}
+      >
+        <div className="header  flex items-center justify-between">
+          {!isExpand ? <Logo /> : <div className="h-[73px] w-4"></div>}
 
-        {!isExpand ? (
-          <button
-            onClick={() => {
-              setIsExpand(!isExpand);
-            }}
-            className={`w-[25px] rounded-full hover:bg-primary1 hover:text-white p-1 flex items-center justify-center ${
-              isExpand ? "m-2" : ""
-            } `}
-          >
-            {isArabic ? (
-              <ChevronsRight className="text-2xl " />
-            ) : (
-              <ChevronsLeft className="text-2xl " />
-            )}
-          </button>
-        ) : (
-          <button
-            onClick={() => {
-              setIsExpand(!isExpand);
-            }}
-            className={`w-[25px] rounded-full hover:bg-primary1 hover:text-white p-1 flex items-center justify-center  ${
-              isExpand ? "m-2" : ""
-            } `}
-          >
-            {isArabic ? (
-              <ChevronsLeft className="text-2xl " />
-            ) : (
-              <ChevronsRight className="text-2xl " />
-            )}
-          </button>
-        )}
-      </div>
-      <hr className="text-gray-400" />
-      <div className="flex flex-col h-screen items-between justify-between">
-        <ul className="">
-          {sideItems_top.map((item, index) => (
-            <li
-              key={index}
-              className={`sied_item mb-1 flex items-center gap-2 ${
-                pathname === item.path ? "sied_item_active" : ""
+          {!isExpand ? (
+            <button
+              onClick={() => {
+                setIsExpand(!isExpand);
+              }}
+              className={`w-[25px] rounded-full hover:bg-primary1 hover:text-white p-1 flex items-center justify-center ${
+                isExpand ? "m-2" : ""
               } `}
             >
-              <Link
-                className="w-full flex items-center  gap-4"
-                href={item.path}
+              {isArabic ? (
+                <ChevronsRight className="text-2xl " />
+              ) : (
+                <ChevronsLeft className="text-2xl " />
+              )}
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                setIsExpand(!isExpand);
+              }}
+              className={`w-[25px] rounded-full hover:bg-primary1 hover:text-white p-1 flex items-center justify-center  ${
+                isExpand ? "m-2" : ""
+              } `}
+            >
+              {isArabic ? (
+                <ChevronsLeft className="text-2xl " />
+              ) : (
+                <ChevronsRight className="text-2xl " />
+              )}
+            </button>
+          )}
+        </div>
+        <hr className="text-gray-400" />
+        <div className="flex flex-col h-screen items-between justify-between">
+          <ul className="">
+            {sideItems_top.map((item, index) => (
+              <li
+                key={index}
+                className={`sied_item mb-1 flex items-center gap-2 ${
+                  pathname === item.path ? "sied_item_active" : ""
+                } `}
               >
-                {item.icon}
-                {!isExpand && <p className="text-gray-400">{item.label}</p>}
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <ul className="">
-          {sideItems_buttom.map((item, index) => (
-            <li
-              key={index}
-              className={`sied_item mb-1 flex items-center gap-2 ${
-                pathname === item.path ? "sied_item_active" : ""
-              } `}
-            >
-              <Link className="w-full flex items-center gap-4" href={item.path}>
-                {item.icon}
-                {!isExpand && <p className="text-gray-400">{item.label}</p>}
-              </Link>
-            </li>
-          ))}
-        </ul>
+                <Link
+                  className="w-full flex items-center gap-4"
+                  href={item.path}
+                  title={isExpand ? item.tooltip : ""}
+                >
+                  {item.icon}
+                  {!isExpand && <p className="text-gray-400">{item.label}</p>}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <ul className="">
+            {sideItems_buttom.map((item, index) => (
+              <li
+                key={index}
+                className={`sied_item mb-1 flex items-center gap-2 ${
+                  pathname === item.path ? "sied_item_active" : ""
+                } `}
+              >
+                <Link
+                  className="w-full flex items-center gap-4"
+                  href={item.path}
+                >
+                  {item.icon}
+                  {!isExpand && <p className="text-gray-400">{item.label}</p>}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-    </div>
+      <ButtomNavBar items={sideItems_top} />
+    </>
   );
 }

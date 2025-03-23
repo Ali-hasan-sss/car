@@ -16,9 +16,11 @@ export default function TitleBar({
   onClick,
 }: TitleBarProps) {
   return (
-    <div className="flex items-center w-full  justify-between py-2">
-      <h1 className="text-text_title font-bold text-2xl">{title}</h1>
-      <div className="flex items-center  gap-4">
+    <div className="flex items-center w-full justify-between py-2">
+      <h1 className="text-text_title font-bold text-2xl mb-2 md:mb-0">
+        {title}
+      </h1>
+      <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
         {btnLabel && (
           <Btn_outlin
             label={btnLabel}

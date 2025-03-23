@@ -1,4 +1,6 @@
 "use client";
+import ToolBar from "@/components/DashboardComponernt/toolbar";
+import Search_input from "@/components/inputs/search_input";
 import GeneralTable, { Column } from "@/components/table";
 import { useState } from "react";
 
@@ -8,6 +10,9 @@ const CountryList = () => {
     { id: "title", label: "البلد", languageDisplay: "en" },
     { id: "code", label: "الرمز البريدي", languageDisplay: "en" },
   ];
+  const [totalCount, setTotalCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showing, setShowing] = useState(10);
   const [actions] = useState({
     edit: true,
     add: true,
@@ -15,13 +20,22 @@ const CountryList = () => {
   });
   return (
     <div>
-      <h1 className="text-xl font-bold mb-4">أنواع السيارات</h1>
+      <Search_input value={searchTerm} onChange={setSearchTerm} />
+
+      <ToolBar
+        showing={showing}
+        onShowingChange={setShowing}
+        totalItems={totalCount}
+      />
       <GeneralTable
         title="انواع السيارات"
-        AddButtonLabel="اضافة نوع جديد"
+        AddButtonLabel="اضافة بلد جديد"
         columns={columns}
         apiUrl={apiUrl}
         actions={actions}
+        onTotalCountChange={setTotalCount}
+        showing={showing}
+        searchTerm={searchTerm}
       />
     </div>
   );

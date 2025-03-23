@@ -33,7 +33,7 @@ interface ShippingFormInputs {
   close: () => void;
 }*/
 
-export default function Shipping() {
+export default function ShippingForm() {
   const PortOptions = [
     { value: "masqat", label: "Masqat" },
     { value: "SUV", label: "SUV" },

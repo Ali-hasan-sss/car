@@ -7,19 +7,27 @@ import TableHeader from "@/components/DashboardComponernt/titleBar/tableHeader";
 import ToolBar from "@/components/DashboardComponernt/toolbar";
 import Search_input from "@/components/inputs/search_input";
 import { Modal, Box } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Auctions from "../ordersForms/Auctions";
 import GeneralTable, { Column } from "@/components/table";
+import Grid_View from "@/components/table/gridView";
+import { fetchOrders } from "@/store/slice/orderSlice";
+import { useAppDispatch } from "@/store/Reducers/hooks";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 //import GeneralTable from "@/components/table";
 
 export default function Actions() {
   const { t } = useLanguage();
   const [openFilter, setOpenFilter] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [showing, setShowing] = useState(10);
+  const [totalCount, setTotalCount] = useState(0);
+  const [sortby, setSortby] = useState("date");
   const closeModal = () => {
     setOpenModal(false);
   };
-
+  const [searchTerm, setSearchTerm] = useState("");
   const handleTogleFilter = () => setOpenFilter(!openFilter);
   const columns: Column[] = [
     {
@@ -31,6 +39,24 @@ export default function Actions() {
     {
       id: "category.title",
       label: "الموديل",
+      languageDisplay: "en",
+      includeInForm: true,
+    },
+    {
+      id: "year",
+      label: "سنة الصنع",
+      languageDisplay: "en",
+      includeInForm: true,
+    },
+    {
+      id: "ex_color",
+      label: "اللون",
+      languageDisplay: "en",
+      includeInForm: true,
+    },
+    {
+      id: "country.title",
+      label: "بلد الشحن",
       languageDisplay: "en",
       includeInForm: true,
     },
@@ -48,6 +74,11 @@ export default function Actions() {
     },
   ];
   const apiUrl = "customer/car-auctions";
+  const [view, setView] = useState("table");
+  const dispatch = useAppDispatch();
+  const { orders, loading, error } = useSelector(
+    (state: RootState) => state.orders
+  );
 
   const [actions] = useState({
     edit: true,
@@ -55,7 +86,11 @@ export default function Actions() {
     delete: true,
     view: true,
   });
+  useEffect(() => {
+    dispatch(fetchOrders("customer/car-auctions"));
+  }, [dispatch]);
 
+  if (error) return <div>{error}</div>;
   return (
     <div className="flex flex-col items-center w-full  gap-[5px]">
       <TableHeader
@@ -68,15 +103,45 @@ export default function Actions() {
           filterActiom: handleTogleFilter,
         }}
       />
-      <Search_input />
+      <Search_input value={searchTerm} onChange={setSearchTerm} />
       {openFilter && (
         <>
           <GeneralFilter label="Filter & Sort Control" />
           <QuickFilter />
         </>
       )}
-      <ToolBar />
-      <GeneralTable columns={columns} apiUrl={apiUrl} actions={actions} />
+      <ToolBar
+        view={view}
+        setView={setView}
+        showing={showing}
+        sortby={sortby}
+        onShowingChange={setShowing}
+        onSortByChange={setSortby}
+        totalItems={totalCount}
+      />
+      {view === "table" ? (
+        <GeneralTable
+          loading={loading}
+          columns={columns}
+          apiUrl={apiUrl}
+          actions={actions}
+          initialData={orders}
+          onTotalCountChange={setTotalCount}
+          sortBy={sortby}
+          showing={showing}
+          searchTerm={searchTerm}
+        />
+      ) : (
+        <Grid_View
+          loading={loading}
+          data={orders}
+          sortBy={sortby}
+          showing={showing}
+          onTotalCountChange={setTotalCount}
+          searchTerm={searchTerm}
+        />
+      )}
+
       {openModal && (
         <Modal open={openModal} onClose={closeModal}>
           <Box

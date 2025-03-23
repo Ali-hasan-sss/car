@@ -1,0 +1,132 @@
+import axiosInstance from "@/utils/axiosInstance";
+import { useEffect, useState } from "react";
+import OrderCard from "../adminComponents/cards/order_card";
+import { Order } from "@/Types/orderTypes";
+import Pagenation from "../pagination";
+import Loader from "../loading/loadingPage";
+
+interface Grid_ViewProps {
+  API?: string;
+  data?: Order[];
+  sortBy: string;
+  searchTerm?: string;
+  showing: number;
+  onTotalCountChange: (count: number) => void;
+  loading?: boolean;
+}
+
+export default function Grid_View({
+  API,
+  data,
+  sortBy,
+  searchTerm,
+  showing,
+  onTotalCountChange,
+  loading: externalLoading, // <-- إعادة التسمية لتمييزه عن الداخلي
+}: Grid_ViewProps) {
+  const [fullData, setFullData] = useState<Order[] | null>(null);
+  const [displayedData, setDisplayedData] = useState<Order[] | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [internalLoading, setInternalLoading] = useState(false);
+  const totalPages = fullData ? Math.ceil(fullData.length / showing) : 1;
+
+  const fetchData = async () => {
+    if (!API) return;
+    try {
+      setInternalLoading(true);
+      const res = await axiosInstance.get(API);
+      const responseData: Order[] = res.data.data;
+
+      setFullData(responseData);
+      onTotalCountChange(responseData.length);
+      setCurrentPage(1);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setInternalLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (data) {
+      setFullData(data);
+      onTotalCountChange(data.length);
+      setCurrentPage(1);
+    } else if (API) {
+      fetchData();
+    }
+  }, [API, data]);
+
+  const sortData = (data: Order[], sortBy: string) => {
+    const sorted = [...data];
+    switch (sortBy) {
+      case "date":
+        sorted.sort(
+          (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+        break;
+      case "status":
+        sorted.sort((a, b) => String(a.status).localeCompare(String(b.status)));
+        break;
+      case "model":
+        sorted.sort((a, b) =>
+          a.category.manufacturer.title.localeCompare(
+            b.category.manufacturer.title
+          )
+        );
+        break;
+      default:
+        break;
+    }
+    return sorted;
+  };
+
+  useEffect(() => {
+    if (fullData) {
+      let filteredData = fullData;
+
+      // تصفية حسب البحث إذا كانت قيمة البحث موجودة
+      if (searchTerm && searchTerm.trim() !== "") {
+        const lowerSearch = searchTerm.toLowerCase();
+        filteredData = fullData.filter(
+          (order) =>
+            order.category.manufacturer.title
+              .toLowerCase()
+              .includes(lowerSearch) ||
+            order.category.title.toLowerCase().includes(lowerSearch)
+        );
+      }
+
+      const sorted = sortData(filteredData, sortBy);
+      const startIndex = (currentPage - 1) * showing;
+      const sliced = sorted.slice(startIndex, startIndex + showing);
+      setDisplayedData(sliced);
+    }
+  }, [fullData, sortBy, showing, currentPage, searchTerm]);
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  const isLoading =
+    externalLoading !== undefined ? externalLoading : internalLoading;
+
+  return (
+    <div className="w-full flex flex-col">
+      <div className="flex w-full flex-wrap items-center min-h-[200px] justify-center gap-2 mb-4">
+        {isLoading ? (
+          <Loader />
+        ) : (
+          displayedData &&
+          displayedData.map((item, index) => (
+            <OrderCard key={index} order={item} />
+          ))
+        )}
+      </div>
+      <Pagenation totalPages={totalPages} onPageChange={handlePageChange} />
+    </div>
+  );
+}

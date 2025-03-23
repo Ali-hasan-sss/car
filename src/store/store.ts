@@ -10,6 +10,8 @@ import countriesReducer from "./slice/countriesSlice";
 import manufacturerReducer from "./slice/manufacturerSlice";
 import adminManufacturerSlice from "./slice/adminManufacturerSlice";
 import usersReducer from "./slice/usersSlice";
+import ordersReducer from "./slice/orderSlice";
+
 const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -23,6 +25,7 @@ const store = configureStore({
     countries: countriesReducer,
     manufacturer: manufacturerReducer,
     adminManufacturer: adminManufacturerSlice,
+    orders: ordersReducer,
   },
 });
 

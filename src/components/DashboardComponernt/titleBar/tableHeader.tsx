@@ -14,8 +14,8 @@ interface TableHeaderProps {
 export default function TableHeader({ title, action }: TableHeaderProps) {
   const { t } = useLanguage();
   return (
-    <div className="flex w-full items-center justify-between">
-      <div className="headind flex flex-col items-start p-[16px] ">
+    <div className="flex flex-col md:flex-row w-full items-center justify-between">
+      <div className="headind flex flex-col p-[16px] ">
         <h2 className="text-text_title text-2xl font-bold"> {title}</h2>
       </div>
       <div className="flex items-center gap-3">

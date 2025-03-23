@@ -7,100 +7,93 @@ import TableHeader from "@/components/DashboardComponernt/titleBar/tableHeader";
 import ToolBar from "@/components/DashboardComponernt/toolbar";
 import Search_input from "@/components/inputs/search_input";
 import { Modal, Box } from "@mui/material";
-import { useState } from "react";
-import Shipping from "../ordersForms/shipping";
-//import GeneralTable from "@/components/table";
+import { useEffect, useState } from "react";
+import GeneralTable, { Column } from "@/components/table";
+import Grid_View from "@/components/table/gridView";
+import { fetchOrders } from "@/store/slice/orderSlice";
+import { useAppDispatch } from "@/store/Reducers/hooks";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import ShippingForm from "../ordersForms/shipping";
 
-export default function Shippingppage() {
+export default function Shipping() {
   const { t } = useLanguage();
   const [openFilter, setOpenFilter] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [showing, setShowing] = useState(10);
+  const [totalCount, setTotalCount] = useState(0);
+  const [sortby, setSortby] = useState("date");
   const closeModal = () => {
     setOpenModal(false);
   };
-
+  const [searchTerm, setSearchTerm] = useState("");
   const handleTogleFilter = () => setOpenFilter(!openFilter);
-  /*const columns = [
-    { id: "id", label: "Order Id", languageDisplay: "en", type: "text" },
+  const columns: Column[] = [
     {
-      id: "Manufacture",
-      label: "Car Manufacture",
+      id: "category.manufacturer.title",
+      label: "الشركة الصانعة",
       languageDisplay: "en",
-      type: "text",
-    },
-    { id: "Color", label: "Car Color", languageDisplay: "en", type: "text" },
-    {
-      id: "Model",
-      label: "Car Model Name",
-      languageDisplay: "en",
-      type: "text",
+      includeInForm: true,
     },
     {
-      id: "Auction_no",
-      label: "Car Auction No",
+      id: "category.title",
+      label: "الموديل",
       languageDisplay: "en",
-      type: "text",
+      includeInForm: true,
     },
-    { id: "Statu", label: "Statu", languageDisplay: "en", type: "text" },
+    {
+      id: "year",
+      label: "سنة الصنع",
+      languageDisplay: "en",
+      includeInForm: true,
+    },
+    {
+      id: "ex_color",
+      label: "اللون",
+      languageDisplay: "en",
+      includeInForm: true,
+    },
+    {
+      id: "country.title",
+      label: "بلد الشحن",
+      languageDisplay: "en",
+      includeInForm: true,
+    },
+    {
+      id: "created_at",
+      label: "تاريخ انشاء الطلب",
+      languageDisplay: "en",
+      includeInForm: false,
+    },
+    {
+      id: "status",
+      label: "حالة الطلب",
+      languageDisplay: "en",
+      includeInForm: false,
+    },
   ];
+  const apiUrl = "customer/car-shippings";
+  const [view, setView] = useState("table");
+  const dispatch = useAppDispatch();
+  const { orders, loading, error } = useSelector(
+    (state: RootState) => state.orders
+  );
 
-  const data = [
-    {
-      id: "TEST23122024",
-      Manufacture: "German",
-      Color: "blue",
-      Model: "KIA",
-      Auction_no: "SLD123456789",
-      Statu: "Active",
-    },
+  const [actions] = useState({
+    edit: true,
+    add: true,
+    delete: true,
+    view: true,
+  });
+  useEffect(() => {
+    dispatch(fetchOrders("customer/car-shippings"));
+  }, [dispatch]);
 
-    {
-      id: "TEST23122024",
-      Manufacture: "German",
-      Color: "blue",
-      Model: "KIA",
-      Auction_no: "SLD123456789",
-      Statu: "Active",
-    },
-
-    {
-      id: "TEST23122024",
-      Manufacture: "German",
-      Color: "red",
-      Model: "BMW",
-      Auction_no: "SLD123456789",
-      Statu: "Active",
-    },
-    {
-      id: "TEST853122024",
-      Manufacture: "German",
-      Color: "white",
-      Model: "Huondai",
-      Auction_no: "SLD123456789",
-      Statu: "Active",
-    },
-    {
-      id: "TEST731220544",
-      Manufacture: "German",
-      Color: "blue",
-      Model: "KIA",
-      Auction_no: "SLD123456789",
-      Statu: "Active",
-    },
-    {
-      id: "TEST23122024",
-      Manufacture: "German",
-      Color: "blue",
-      Model: "KIA",
-      Auction_no: "SLD123456789",
-      Statu: "Active",
-    },
-  ];*/
-
+  if (error) return <div>{error}</div>;
   return (
     <div className="flex flex-col items-center w-full  gap-[5px]">
       <TableHeader
-        title={t("Shipping")}
+        title={t("Auctions")}
         action={{
           filter: true,
           export: true,
@@ -109,24 +102,45 @@ export default function Shippingppage() {
           filterActiom: handleTogleFilter,
         }}
       />
-      <Search_input />
+      <Search_input value={searchTerm} onChange={setSearchTerm} />
       {openFilter && (
         <>
           <GeneralFilter label="Filter & Sort Control" />
           <QuickFilter />
         </>
       )}
-      <ToolBar />
-      {/* <GeneralTable
-        columns={columns}
-        data={data}
-        actions={{
-          edit: true,
-          delete: true,
-          view: true,
-        }}
-        details={true}
-      />*/}
+      <ToolBar
+        view={view}
+        setView={setView}
+        showing={showing}
+        sortby={sortby}
+        onShowingChange={setShowing}
+        onSortByChange={setSortby}
+        totalItems={totalCount}
+      />
+      {view === "table" ? (
+        <GeneralTable
+          loading={loading}
+          columns={columns}
+          apiUrl={apiUrl}
+          actions={actions}
+          initialData={orders}
+          onTotalCountChange={setTotalCount}
+          sortBy={sortby}
+          showing={showing}
+          searchTerm={searchTerm}
+        />
+      ) : (
+        <Grid_View
+          loading={loading}
+          data={orders}
+          sortBy={sortby}
+          showing={showing}
+          onTotalCountChange={setTotalCount}
+          searchTerm={searchTerm}
+        />
+      )}
+
       {openModal && (
         <Modal open={openModal} onClose={closeModal}>
           <Box
@@ -147,7 +161,7 @@ export default function Shippingppage() {
               outline: "none",
             }}
           >
-            <Shipping />
+            <ShippingForm />
           </Box>
         </Modal>
       )}

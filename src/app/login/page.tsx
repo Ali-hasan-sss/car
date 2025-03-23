@@ -11,6 +11,7 @@ import axiosInstance from "@/utils/axiosInstance";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthToken, setUser } from "@/store/slice/authSlice";
 import { RootState } from "@/store/store";
+import LoadingBTN from "@/components/loading/loadingBTN";
 
 interface LoginFormInputs {
   email: string;
@@ -20,6 +21,7 @@ interface LoginFormInputs {
 const Login: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   // التحقق من حالة تسجيل الدخول عند تحميل المكون
@@ -60,6 +62,7 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
+      setLoading(true);
       try {
         // محاولة تسجيل الدخول عبر API
         const response = await axiosInstance.post(`customer/login`, formData);
@@ -104,6 +107,8 @@ const Login: React.FC = () => {
           email: "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
           password: "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
         });
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -146,8 +151,11 @@ const Login: React.FC = () => {
                 onChange={handleInputChange}
               />
               <div className="form_group flex flex-col gap-[8px] items-start justify-start">
-                <button type="submit" className="w-full bg-primary1 submit">
-                  {t("Login")}
+                <button
+                  type="submit"
+                  className="w-full flex items-center justify-center bg-primary1 submit"
+                >
+                  {loading ? <LoadingBTN /> : t("Login")}
                 </button>
                 <p className="dont_have">
                   {t("Dont_have_an_account")}
