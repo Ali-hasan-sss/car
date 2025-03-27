@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAuthToken, setUser } from "@/store/slice/authSlice";
 import { RootState } from "@/store/store";
 import LoadingBTN from "@/components/loading/loadingBTN";
+import { toast } from "sonner";
 
 interface LoginFormInputs {
   email: string;
@@ -98,11 +99,12 @@ const Login: React.FC = () => {
 
         // تحديث بيانات المستخدم في الحالة
         dispatch(setUser(userData));
-
+        toast.success("تم تسجيل الدخول بنجاح");
         // إعادة توجيه المستخدم إلى لوحة التحكم
         router.push("/customer/dashboard");
       } catch (error) {
         console.error(error);
+        toast.error("حدث خطا اثناء تسجيل الدخول");
         setErrors({
           email: "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
           password: "البريد الإلكتروني أو كلمة المرور غير صحيحة.",

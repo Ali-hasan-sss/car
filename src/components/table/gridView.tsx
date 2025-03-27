@@ -2,8 +2,9 @@ import axiosInstance from "@/utils/axiosInstance";
 import { useEffect, useState } from "react";
 import OrderCard from "../adminComponents/cards/order_card";
 import { Order } from "@/Types/orderTypes";
-import Pagenation from "../pagination";
+//import Pagenation from "../pagination";
 import Loader from "../loading/loadingPage";
+//import CustomPagination from "../pagination/extrnalPagenation";
 
 interface Grid_ViewProps {
   API?: string;
@@ -13,6 +14,9 @@ interface Grid_ViewProps {
   showing: number;
   onTotalCountChange: (count: number) => void;
   loading?: boolean;
+  onDelete?: (id: number) => void;
+  onEdit?: (order: Order) => void;
+  onChangeStatus?: (id: number, type: "accept" | "reject" | "finish") => void;
 }
 
 export default function Grid_View({
@@ -21,6 +25,9 @@ export default function Grid_View({
   sortBy,
   searchTerm,
   showing,
+  onDelete,
+  onEdit,
+  onChangeStatus,
   onTotalCountChange,
   loading: externalLoading, // <-- إعادة التسمية لتمييزه عن الداخلي
 }: Grid_ViewProps) {
@@ -28,13 +35,13 @@ export default function Grid_View({
   const [displayedData, setDisplayedData] = useState<Order[] | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [internalLoading, setInternalLoading] = useState(false);
-  const totalPages = fullData ? Math.ceil(fullData.length / showing) : 1;
+  //const totalPages = fullData ? Math.ceil(fullData.length / showing) : 1;
 
   const fetchData = async () => {
     if (!API) return;
     try {
       setInternalLoading(true);
-      const res = await axiosInstance.get(API);
+      const res = await axiosInstance.get(`${API}?page=${currentPage}`);
       const responseData: Order[] = res.data.data;
 
       setFullData(responseData);
@@ -57,8 +64,11 @@ export default function Grid_View({
     }
   }, [API, data]);
 
-  const sortData = (data: Order[], sortBy: string) => {
+  const sortData = (data: Order[] | undefined, sortBy: string): Order[] => {
+    if (!Array.isArray(data) || data.length === 0) return []; // التحقق من أن البيانات ليست فارغة
+
     const sorted = [...data];
+
     switch (sortBy) {
       case "date":
         sorted.sort(
@@ -66,19 +76,25 @@ export default function Grid_View({
             new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         );
         break;
+
       case "status":
-        sorted.sort((a, b) => String(a.status).localeCompare(String(b.status)));
+        sorted.sort((a, b) =>
+          String(a.status || "").localeCompare(String(b.status || ""))
+        );
         break;
+
       case "model":
         sorted.sort((a, b) =>
-          a.category.manufacturer.title.localeCompare(
-            b.category.manufacturer.title
+          (a.category?.manufacturer?.title || "").localeCompare(
+            b.category?.manufacturer?.title || ""
           )
         );
         break;
+
       default:
         break;
     }
+
     return sorted;
   };
 
@@ -91,10 +107,10 @@ export default function Grid_View({
         const lowerSearch = searchTerm.toLowerCase();
         filteredData = fullData.filter(
           (order) =>
-            order.category.manufacturer.title
+            order.category?.manufacturer?.title
               .toLowerCase()
               .includes(lowerSearch) ||
-            order.category.title.toLowerCase().includes(lowerSearch)
+            order.category?.title.toLowerCase().includes(lowerSearch)
         );
       }
 
@@ -105,11 +121,11 @@ export default function Grid_View({
     }
   }, [fullData, sortBy, showing, currentPage, searchTerm]);
 
-  const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
+  // const handlePageChange = (page: number) => {
+  //   if (page >= 1 && page <= totalPages) {
+  //     setCurrentPage(page);
+  //   }
+  // };
 
   const isLoading =
     externalLoading !== undefined ? externalLoading : internalLoading;
@@ -117,16 +133,23 @@ export default function Grid_View({
   return (
     <div className="w-full flex flex-col">
       <div className="flex w-full flex-wrap items-center min-h-[200px] justify-center gap-2 mb-4">
-        {isLoading ? (
-          <Loader />
-        ) : (
-          displayedData &&
+        {isLoading && <Loader />}
+        {displayedData &&
           displayedData.map((item, index) => (
-            <OrderCard key={index} order={item} />
-          ))
-        )}
+            <OrderCard
+              key={index}
+              order={item}
+              onDelete={(id) =>
+                onDelete ? onDelete(id) : console.log("deleted")
+              }
+              onEdit={(order) =>
+                onEdit ? onEdit(order) : console.log(`editing: ${order}`)
+              }
+              onChangeStatus={onChangeStatus}
+            />
+          ))}
       </div>
-      <Pagenation totalPages={totalPages} onPageChange={handlePageChange} />
+      {/* <Pagenation totalPages={totalPages} onPageChange={handlePageChange} /> */}
     </div>
   );
 }

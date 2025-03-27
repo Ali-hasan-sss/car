@@ -8,24 +8,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLogout } from "@/store/slice/authSlice";
 import { RootState } from "@/store/store";
 import ActionComfirm from "../messags/actionComfirm";
-import { ChevronDown } from "lucide-react";
 
 export default function Avatar() {
   const [isOpen, setIsOpen] = useState(false);
   const { t, isArabic } = useLanguage();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
-
   const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
 
-  // جلب بيانات المستخدم من Redux
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const user = useSelector((state: RootState) => state.auth.user);
-  const userRole = useSelector((state: RootState) => state.auth.user?.userRole);
+  const userRole = user?.userRole;
 
-  // تحديث بيانات المستخدم محليًا
   const [userData, setUserData] = useState(user || null);
+
   useEffect(() => {
     if (user) {
       setUserData(user);
@@ -45,11 +43,14 @@ export default function Avatar() {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        !dropdownRef.current.contains(event.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node)
       ) {
         setIsOpen(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -57,6 +58,7 @@ export default function Avatar() {
   }, []);
 
   const onClose = () => setModalOpen(false);
+
   const handleLogout = () => {
     localStorage.removeItem("user");
     dispatch(setLogout());
@@ -65,11 +67,9 @@ export default function Avatar() {
   };
 
   const goToDashBoard = () => {
-    if (userRole === "ADMIN") {
-      router.push("/admin/dashboard");
-    } else {
-      router.push("/customar/dashboard");
-    }
+    router.push(
+      userRole === "ADMIN" ? "/admin/dashboard" : "/customar/dashboard"
+    );
   };
 
   const menuItems = [
@@ -92,53 +92,78 @@ export default function Avatar() {
   ];
 
   return (
-    <div className="dropdown dropdown-bottom dropdown-end" ref={dropdownRef}>
-      <div
-        tabIndex={0}
-        role="button"
+    <div className="relative">
+      {/* زر فتح القائمة */}
+      <button
+        ref={buttonRef}
+        className="flex items-center text-lg font-bold text-text_title rounded-full focus:outline-none"
+        type="button"
         onClick={toggleDropdown}
-        className="avatar flex items-center gap-2 cursor-pointer"
       >
-        <div className="w-[25px] rounded-full overflow-hidden">
-          <img src="/images/avatar.png" alt="avatar" />
-        </div>
-        <div>
-          <h3>
-            {userData?.first_name} {userData?.last_name}
-          </h3>
-        </div>
-        <ChevronDown className="w-5 h-5 text-gray-500" />
-      </div>
+        <img
+          className="w-8 h-8 me-2 rounded-full"
+          src="/images/avatar.png"
+          alt="user photo"
+        />
+        {userData?.first_name} {userData?.last_name}
+        <svg
+          className="w-2.5 h-2.5 ms-3"
+          aria-hidden="true"
+          fill="none"
+          viewBox="0 0 10 6"
+        >
+          <path
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="m1 1 4 4 4-4"
+          />
+        </svg>
+      </button>
+
+      {/* القائمة المنسدلة */}
       {isOpen && isLoggedIn && (
-        <ul
-          tabIndex={0}
-          className={`bg-secondary1 rounded fixed top-[60px] menu rounded-box z-[1000] w-52 p-2 shadow ${
-            isArabic ? "left-[40px]" : "right-[40px]"
+        <div
+          ref={dropdownRef}
+          className={`absolute  mt-2 w-50 bg-white divide-y divide-gray-100 rounded-lg shadow-lg z-50 ${
+            isArabic ? "left-0" : "right-0"
           }`}
         >
-          {menuItems.map((item) => (
-            <li
-              key={item.id}
-              className={`p-3 flex items-center gap-2 rounded cursor-pointer ${
-                item.hoverBg
-              } ${isArabic ? "" : "justify-end"}`}
-              onClick={item.action}
-            >
-              {isArabic ? (
-                <>
-                  {item.icon}
-                  <span className={item.textColor}>{item.label}</span>
-                </>
-              ) : (
-                <>
-                  <span className={item.textColor}>{item.label}</span>
-                  {item.icon}
-                </>
-              )}
-            </li>
-          ))}
-        </ul>
+          <div className="px-4 py-3 text-sm text-gray-900 ">
+            <div className="font-medium text-center">
+              {userData?.first_name} {userData?.last_name}
+            </div>
+            <div className="truncate text-center">{userData?.email}</div>
+          </div>
+
+          <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+            {menuItems.map((item) => (
+              <li
+                key={item.id}
+                className={`flex items-center gap-2 px-4 py-2 cursor-pointer ${
+                  item.hoverBg
+                } ${isArabic ? "justify-start" : "justify-end"}`}
+                onClick={item.action}
+              >
+                {isArabic ? (
+                  <>
+                    {item.icon}
+                    <span className={item.textColor}>{item.label}</span>
+                  </>
+                ) : (
+                  <>
+                    <span className={item.textColor}>{item.label}</span>
+                    {item.icon}
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
+
+      {/* نافذة تأكيد تسجيل الخروج */}
       <ActionComfirm
         open={modalOpen}
         onActionSuccess={handleLogout}

@@ -11,18 +11,25 @@ import { useEffect, useState } from "react";
 import Auctions from "../ordersForms/Auctions";
 import GeneralTable, { Column } from "@/components/table";
 import Grid_View from "@/components/table/gridView";
-import { fetchOrders } from "@/store/slice/orderSlice";
+import { deleteOrderLocal, fetchOrders } from "@/store/slice/orderSlice";
 import { useAppDispatch } from "@/store/Reducers/hooks";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { AuctionsFormInputs, Order } from "@/Types/orderTypes";
+import DeleteMessage from "@/components/messags/deleteMessage";
+import CustomPagination from "@/components/pagination/extrnalPagenation";
 //import GeneralTable from "@/components/table";
 
 export default function Actions() {
   const { t } = useLanguage();
   const [openFilter, setOpenFilter] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(0);
+  const [initForm, setInitForm] = useState<AuctionsFormInputs | null>(null);
   const [showing, setShowing] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [sortby, setSortby] = useState("date");
   const closeModal = () => {
     setOpenModal(false);
@@ -73,10 +80,10 @@ export default function Actions() {
       includeInForm: false,
     },
   ];
-  const apiUrl = "customer/car-auctions";
   const [view, setView] = useState("table");
   const dispatch = useAppDispatch();
-  const { orders, loading, error } = useSelector(
+  const apiUrl = "customer/car-auctions";
+  const { orders, loading, error, totalPages } = useSelector(
     (state: RootState) => state.orders
   );
 
@@ -87,9 +94,41 @@ export default function Actions() {
     view: true,
   });
   useEffect(() => {
-    dispatch(fetchOrders("customer/car-auctions"));
+    const apiUrl = `customer/car-auctions?page_size=${showing}&page=${currentPage}`;
+    dispatch(fetchOrders({ API: apiUrl }));
   }, [dispatch]);
+  const handleDelete = (id: number) => {
+    console.log("تم النقر على حذف، رقم الطلب:", id);
+    setOpenDeleteModal(true);
+    setDeleteId(id);
+  };
 
+  const handleEdit = (order: Order) => {
+    const mapOrderToFormInputs = (order: Order): AuctionsFormInputs => {
+      return {
+        auction_link: order.auction_link || "", // الرابط الخاص بالمزاد
+        manufacturer: order.category?.manufacturer?.id || null, // تحويل category إلى manufacturer (في حال كان category يحتوي على id)
+        category_id: order.category?.id || null, // نفس الشيء مع category
+        year: order.year.toString() || "", // تحويل السنة إلى نص
+        transmission_type: order.transmission_type.toString() || "", // نفس الشيء مع transmission_type
+        drive_system: order.drive_system.toString() || "", // نفس الشيء مع drive_system
+        fuel_type: order.fuel_type.toString() || "", // نفس الشيء مع fuel_type
+        cylinders: order.cylinders.toString() || "", // نفس الشيء مع cylinders
+        from_budget: order.from_budget.toString() || "", // تحويل القيمة إلى نص
+        to_budget: order.to_budget.toString() || "", // تحويل القيمة إلى نص
+        shipping_option: order.shipping_option.toString() || "", // نفس الشيء مع shipping_option
+        car_status: order.status?.toString() || "", // تحويل الحالة إلى نص
+        ex_color: order.ex_color || "", // اللون الخارجي
+        in_color: order.in_color || "", // اللون الداخلي
+        country_id: order.country?.id || null,
+        shipping_from: order.country.id.toString(),
+        id: order.id,
+      };
+    };
+    const formData = mapOrderToFormInputs(order);
+    setInitForm(formData);
+    setOpenModal(true);
+  };
   if (error) return <div>{error}</div>;
   return (
     <div className="flex flex-col items-center w-full  gap-[5px]">
@@ -99,7 +138,10 @@ export default function Actions() {
           filter: true,
           export: true,
           add: true,
-          addNewActiom: () => setOpenModal(true),
+          addNewActiom: () => {
+            setOpenModal(true);
+            setInitForm(null);
+          },
           filterActiom: handleTogleFilter,
         }}
       />
@@ -139,9 +181,24 @@ export default function Actions() {
           showing={showing}
           onTotalCountChange={setTotalCount}
           searchTerm={searchTerm}
+          onDelete={(id) => handleDelete(id)}
+          onEdit={(order) => handleEdit(order)}
         />
       )}
-
+      <CustomPagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+      />
+      {openDeleteModal && (
+        <DeleteMessage
+          API={apiUrl}
+          open={openDeleteModal}
+          id={deleteId}
+          handleClose={() => setOpenDeleteModal(false)}
+          onDeleteSuccess={() => dispatch(deleteOrderLocal(deleteId))}
+        />
+      )}
       {openModal && (
         <Modal open={openModal} onClose={closeModal}>
           <Box
@@ -162,7 +219,13 @@ export default function Actions() {
               outline: "none",
             }}
           >
-            <Auctions close={() => setOpenModal(false)} />
+            <Auctions
+              close={closeModal}
+              onSubmit={(data) => {
+                console.log(data);
+              }}
+              initialData={initForm}
+            />
           </Box>
         </Modal>
       )}

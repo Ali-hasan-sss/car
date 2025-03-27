@@ -1,16 +1,41 @@
 import { Order } from "@/Types/orderTypes";
-import React from "react";
+import {
+  getFuelText,
+  getShippingText,
+  getStatusInfo,
+  getTimeAgo,
+  getTransmissionText,
+} from "@/utils/orderUtils";
+import { IconButton, Menu, MenuItem } from "@mui/material";
+import {
+  Check,
+  CheckCircle,
+  Edit,
+  EllipsisVertical,
+  Eye,
+  Trash,
+  XCircle,
+} from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useState } from "react";
 
 interface OrderCardProps {
   order: Order;
+  onDelete: (id: number) => void;
+  onEdit: (order: Order) => void;
+  onChangeStatus?: (id: number, type: "accept" | "reject" | "finish") => void;
 }
 
-const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
+const OrderCard: React.FC<OrderCardProps> = ({
+  order,
+  onDelete,
+  onEdit,
+  onChangeStatus,
+}) => {
   const {
+    id,
     category,
     year,
-    transmission_type,
-    fuel_type,
     cylinders,
     from_budget,
     to_budget,
@@ -18,29 +43,122 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
     in_color,
     country,
     user,
-    status,
-    shipping_option,
     created_at,
   } = order;
+  const router = useRouter();
+  const pathname = usePathname();
+  const transmissionText = getTransmissionText(order.transmission_type);
+  const fuelText = getFuelText(order.fuel_type);
+  const shippingText = getShippingText(order.shipping_option);
+  const statusInfo = getStatusInfo(order.status);
+  const timeAgo = getTimeAgo(order.created_at);
+  const createdDate = new Date(created_at);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleView = (id: number) => {
+    router.push(`${pathname}/${id}`);
+    handleMenuClose();
+  };
+  const [accept, setAccept] = useState<number | null>(null);
+  const [reject, setReject] = useState<number | null>(null);
+  const [finish, setFinish] = useState<number | null>(null);
+  const [selectedRow, setSelectedRow] = useState<number | null>(null);
 
-  const transmissionText = transmission_type === 1 ? "Automatic" : "Manual";
-  const fuelText = fuel_type === 1 ? "Petrol" : "Diesel";
-  const shippingText = shipping_option === 1 ? "Yes" : "No";
-  const statusMap: Record<number, { label: string; color: string }> = {
-    0: { label: "محذوف", color: "bg-red-500 text-white" },
-    1: { label: "قيد الانتظار", color: "bg-yellow-400 text-white" },
-    2: { label: "قيد التنفيذ", color: "bg-blue-500 text-white" },
-    3: { label: "منجز", color: "bg-green-500 text-white" },
+  const handleMenuOpen = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    id: number
+  ) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedRow(id);
   };
 
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedRow(null);
+  };
+  const handleAccept = (id: number) => {
+    setAccept(id);
+    console.log(accept);
+    if (onChangeStatus) {
+      onChangeStatus(id, "accept");
+    }
+    handleMenuClose();
+  };
+
+  const handleReject = (id: number) => {
+    setReject(id);
+    console.log(reject);
+    if (onChangeStatus) onChangeStatus(id, "reject");
+    handleMenuClose();
+  };
+  const handleFinish = (id: number) => {
+    setFinish(id);
+    console.log(finish);
+    if (onChangeStatus) onChangeStatus(id, "finish");
+    handleMenuClose();
+  };
   return (
     <div className="bg-white shadow-lg rounded-xl border border-gray-200 w-full mx-auto mb-4">
       {/* Card Header */}
-      <h2
-        className={`text-2xl font-bold rounded-t-xl text-gray-800 mb-2 w-full p-2 ${statusMap[status].color} col-span-full`}
+      <div
+        className={`flex items-center justify-between px-1 rounded-t-xl w-full  ${statusInfo.color}`}
       >
-        {category?.manufacturer.title} {category?.title} - {year}
-      </h2>
+        {" "}
+        <h2
+          className={`text-2xl font-bold rounded-t-xl text-gray-800  w-full p-2  col-span-full`}
+        >
+          {category?.manufacturer.title} {category?.title} - {year}
+        </h2>
+        <div className="flex items-center">
+          <IconButton onClick={(event) => handleMenuOpen(event, order.id)}>
+            <EllipsisVertical className="text-gray-600 text-lg" />
+          </IconButton>
+
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl) && selectedRow === order.id}
+            onClose={handleMenuClose}
+            PaperProps={{
+              style: { minWidth: "150px" }, // تعيين عرض القائمة
+            }}
+          >
+            <MenuItem onClick={() => handleView(order.id)}>
+              <Eye className="text-blue-500 mr-2" /> عرض التفاصيل
+            </MenuItem>
+
+            <MenuItem onClick={() => onEdit(order)}>
+              <Edit className="text-yellow-500 mr-2" /> تعديل
+            </MenuItem>
+
+            <MenuItem onClick={() => onDelete(id)}>
+              <Trash className="text-red-500 mr-2" /> حذف
+            </MenuItem>
+
+            <MenuItem
+              onClick={() => {
+                handleAccept(order.id);
+              }}
+            >
+              <CheckCircle className="text-green-500 mr-2" /> قبول
+            </MenuItem>
+
+            <MenuItem
+              onClick={() => {
+                handleReject(order.id);
+              }}
+            >
+              <XCircle className="text-red-500 mr-2" /> رفض
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleFinish(order.id);
+              }}
+            >
+              <Check className="text-green-500 mr-2" /> تعيين ك منجز
+            </MenuItem>
+          </Menu>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="flex flex-col space-y-4 px-3 py-1 text-gray-700 text-lg sm:col-span-1 lg:col-span-1">
           {/* Car Info */}
@@ -107,9 +225,9 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
             <p className="flex items-center gap-2">
               <span className="font-semibold text-lg">Status:</span>
               <span
-                className={`text-white text-xs font-medium me-2 px-2.5 py-0.5 rounded-full ${statusMap[status]?.color}`}
+                className={`text-white text-xs font-medium me-2 px-2.5 py-0.5 rounded-full ${statusInfo.color}`}
               >
-                {statusMap[status]?.label}
+                {statusInfo.label}
               </span>
             </p>
           </div>
@@ -117,13 +235,23 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
       </div>
 
       {/* Order created date */}
-      <div className="mt-2 text-xs bg-gray-200 text-gray-500 px-6 py-2 text-center">
-        Order created on:{" "}
-        {new Date(created_at).toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        })}
+      <div className="mt-2 text-xs bg-gray-300 rounded-b-lg text-gray-500 px-6 py-2 text-center flex flex-col sm:flex-row justify-center items-center gap-2">
+        <span>
+          تم إنشاء الطلب في:{" "}
+          {createdDate.toLocaleDateString("ar-EG", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}{" "}
+          -{" "}
+          {createdDate.toLocaleTimeString("ar-EG", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </span>
+        <span className="bg-blue-400 text-white px-2 py-1 rounded-full text-xs">
+          منذ {timeAgo}
+        </span>
       </div>
     </div>
   );

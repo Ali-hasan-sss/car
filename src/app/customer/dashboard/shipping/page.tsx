@@ -15,6 +15,7 @@ import { useAppDispatch } from "@/store/Reducers/hooks";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import ShippingForm from "../ordersForms/shipping";
+import CustomPagination from "@/components/pagination/extrnalPagenation";
 
 export default function Shipping() {
   const { t } = useLanguage();
@@ -23,6 +24,8 @@ export default function Shipping() {
   const [showing, setShowing] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
   const [sortby, setSortby] = useState("date");
+  const [currentPage, setCurrentPage] = useState(1);
+
   const closeModal = () => {
     setOpenModal(false);
   };
@@ -75,7 +78,7 @@ export default function Shipping() {
   const apiUrl = "customer/car-shippings";
   const [view, setView] = useState("table");
   const dispatch = useAppDispatch();
-  const { orders, loading, error } = useSelector(
+  const { orders, loading, error, totalPages } = useSelector(
     (state: RootState) => state.orders
   );
 
@@ -86,7 +89,8 @@ export default function Shipping() {
     view: true,
   });
   useEffect(() => {
-    dispatch(fetchOrders("customer/car-shippings"));
+    const apiUrl = `customer/car-shippings?page_size=${showing}&page=${currentPage}`;
+    dispatch(fetchOrders({ API: apiUrl }));
   }, [dispatch]);
 
   if (error) return <div>{error}</div>;
@@ -140,7 +144,11 @@ export default function Shipping() {
           searchTerm={searchTerm}
         />
       )}
-
+      <CustomPagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+      />
       {openModal && (
         <Modal open={openModal} onClose={closeModal}>
           <Box

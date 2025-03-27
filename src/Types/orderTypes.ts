@@ -74,7 +74,27 @@ export interface Order {
   in_color: string;
   country: Country;
   user: User;
-  status: number;
+  status: number | null;
   created_at: string;
   updated_at: string;
+}
+
+export interface AuctionsFormInputs {
+  auction_link: string;
+  manufacturer: number | null;
+  category_id: number | null;
+  year: string;
+  transmission_type: string;
+  drive_system: string;
+  fuel_type: string;
+  cylinders: string;
+  from_budget: string;
+  country_id: number | null;
+  to_budget: string;
+  shipping_option: string;
+  car_status: string;
+  ex_color: string;
+  in_color: string;
+  shipping_from: string;
+  id?: number; // لإجراء التعديل نحتاج الـ id
 }

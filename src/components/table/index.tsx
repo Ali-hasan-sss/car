@@ -6,9 +6,17 @@ import { useDispatch } from "react-redux";
 import DeleteMessage from "../messags/deleteMessage";
 import DynamicForm from "../adminComponents/forms/DynamicForm";
 import AnimatedModal from "../modal/AnimatedModal";
-import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import { usePathname, useRouter } from "next/navigation";
-import Pagination from "../pagination";
+import { IconButton, Menu, MenuItem } from "@mui/material";
+import {
+  Check,
+  CheckCircle,
+  Edit,
+  EllipsisVertical,
+  Eye,
+  Trash,
+  XCircle,
+} from "lucide-react";
 
 export interface Column {
   id: string;
@@ -28,6 +36,9 @@ interface ActionConfig {
   edit?: boolean;
   add?: boolean;
   view?: boolean;
+  accept?: boolean;
+  reject?: boolean;
+  finish?: boolean;
 }
 
 interface GeneralTableProps {
@@ -44,6 +55,7 @@ interface GeneralTableProps {
   initialData?: any[];
   apiForForm?: string;
   actions?: ActionConfig;
+  onChangeStatus?: (id: number, type: "accept" | "reject" | "finish") => void;
   formColumns?: Column[];
 }
 
@@ -62,6 +74,7 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
   sortBy,
   searchTerm,
   formColumns,
+  onChangeStatus,
   loading: externalLoading,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -70,6 +83,10 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
   const [orderBy, setOrderBy] = useState<string | null>(null);
   const [openDelete, setOpenDelete] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
+  const [accept, setAccept] = useState<number | null>(null);
+  const [reject, setReject] = useState<number | null>(null);
+  const [finish, setFinish] = useState<number | null>(null);
+
   const [openForm, setOpenForm] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [editData, setEditData] = useState<Record<string, any> | null>(null);
@@ -78,11 +95,23 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
   );
   const [displayedData, setDisplayedData] = useState<TableRow[] | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const totalPages =
-    showing && localTableData ? Math.ceil(localTableData.length / showing) : 1;
-
   const router = useRouter();
   const pathname = usePathname();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedRow, setSelectedRow] = useState<number | null>(null);
+
+  const handleMenuOpen = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    id: number
+  ) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedRow(id);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedRow(null);
+  };
   // تحميل البيانات عند تغيير apiUrl
   useEffect(() => {
     const fetchData = async () => {
@@ -110,7 +139,7 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
     fetchData();
   }, [apiUrl, dispatch, initialData]);
   const statusMap: Record<number, { label: string; color: string }> = {
-    0: { label: "محذوف", color: "bg-erd-500 text-white" },
+    0: { label: "مرفوض", color: "bg-red-500 text-white" },
     1: { label: "قيد الانتظار", color: "bg-yellow-600 text-white" },
     2: { label: "قيد التنفيذ", color: "bg-blue-600 text-white" },
     3: { label: "منجز", color: "bg-green-600 text-white" },
@@ -180,42 +209,45 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
     return sorted;
   };
   useEffect(() => {
-    if (localTableData) {
-      let processedData = [...localTableData];
+    if (!Array.isArray(localTableData)) {
+      setDisplayedData([]); // تعيين مصفوفة فارغة لتجنب الأخطاء
+      return;
+    }
 
-      // ✅ فلترة فقط إذا تم تمرير searchTerm
-      if (searchTerm && searchTerm.trim() !== "") {
-        const lowerSearch = searchTerm.toLowerCase();
-        processedData = processedData.filter((row) =>
-          Object.values(row).some((value) => {
-            if (typeof value === "string") {
-              return value.toLowerCase().includes(lowerSearch);
-            }
-            if (typeof value === "number") {
-              return value.toString().includes(lowerSearch);
-            }
-            if (typeof value === "object" && value !== null) {
-              return JSON.stringify(value).toLowerCase().includes(lowerSearch);
-            }
-            return false;
-          })
-        );
-      }
+    let processedData = [...localTableData];
 
-      // ✅ ترتيب فقط إذا تم تمرير sortBy
-      if (sortBy) {
-        processedData = sortData(processedData, sortBy);
-      }
+    // ✅ فلترة فقط إذا تم تمرير searchTerm
+    if (searchTerm && searchTerm.trim() !== "") {
+      const lowerSearch = searchTerm.toLowerCase();
+      processedData = processedData.filter((row) =>
+        Object.values(row).some((value) => {
+          if (typeof value === "string") {
+            return value.toLowerCase().includes(lowerSearch);
+          }
+          if (typeof value === "number") {
+            return value.toString().includes(lowerSearch);
+          }
+          if (typeof value === "object" && value !== null) {
+            return JSON.stringify(value).toLowerCase().includes(lowerSearch);
+          }
+          return false;
+        })
+      );
+    }
 
-      // ✅ تقسيم البيانات المعالجة بناءً على الصفحة الحالية وعدد العناصر (إذا تم تمرير showing)
-      if (showing) {
-        const startIndex = (currentPage - 1) * showing;
-        const sliced = processedData.slice(startIndex, startIndex + showing);
-        setDisplayedData(sliced);
-      } else {
-        // في حال لم يتم تمرير showing، نعرض كل البيانات
-        setDisplayedData(processedData);
-      }
+    // ✅ ترتيب فقط إذا تم تمرير sortBy
+    if (sortBy) {
+      processedData = sortData(processedData, sortBy);
+    }
+
+    // ✅ تقسيم البيانات المعالجة بناءً على الصفحة الحالية وعدد العناصر (إذا تم تمرير showing)
+    if (showing) {
+      const startIndex = (currentPage - 1) * showing;
+      const sliced = processedData.slice(startIndex, startIndex + showing);
+      setDisplayedData(sliced);
+    } else {
+      // في حال لم يتم تمرير showing، نعرض كل البيانات
+      setDisplayedData(processedData);
     }
   }, [localTableData, sortBy, showing, currentPage, searchTerm]);
 
@@ -244,13 +276,17 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
     setEditData(rowData);
     console.log(`data:${rowData}`);
     setOpenForm(true);
+    handleMenuClose();
   };
+
   const handleAdd = () => {
     setEditData(null);
     setOpenForm(true);
+    handleMenuClose();
   };
   const handleView = (id: number) => {
     router.push(`${pathname}/${id}`);
+    handleMenuClose();
   };
 
   const handleDeleteSuccess = (id: number) => {
@@ -261,12 +297,31 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
       dispatch(setTableData({ key: apiUrl, data: updatedData }));
     }
   };
-  // التنقل بين الصفحات
-  const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
+  const handleAccept = (id: number) => {
+    setAccept(id);
+    console.log(accept);
+    if (onChangeStatus) onChangeStatus(id, "accept");
+    handleMenuClose();
   };
+
+  const handleReject = (id: number) => {
+    setReject(id);
+    console.log(reject);
+    if (onChangeStatus) onChangeStatus(id, "reject");
+    handleMenuClose();
+  };
+  const handleFinish = (id: number) => {
+    setFinish(id);
+    console.log(finish);
+    if (onChangeStatus) onChangeStatus(id, "finish");
+    handleMenuClose();
+  };
+  // // التنقل بين الصفحات
+  // const handlePageChange = (page: number) => {
+  //   if (page >= 1 && page <= totalPages) {
+  //     setCurrentPage(page);
+  //   }
+  // };
   const isLoading =
     externalLoading !== undefined ? externalLoading : internalLoading;
   return (
@@ -369,38 +424,82 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
                   })}
                   {actions && (
                     <td className="px-2 py-1">
-                      {" "}
-                      {/* تقليل البادينغ */}
-                      <div className="flex items-center gap-3">
-                        {actions.delete && (
-                          <>
-                            <button
+                      <div className="flex items-center">
+                        <IconButton
+                          onClick={(event) => handleMenuOpen(event, row.id)}
+                        >
+                          <EllipsisVertical className="text-gray-600 text-lg" />
+                        </IconButton>
+
+                        <Menu
+                          anchorEl={anchorEl}
+                          open={Boolean(anchorEl) && selectedRow === row.id}
+                          onClose={handleMenuClose}
+                          PaperProps={{
+                            style: { minWidth: "150px" }, // تعيين عرض القائمة
+                          }}
+                        >
+                          {actions.view && (
+                            <MenuItem onClick={() => handleView(row.id)}>
+                              <Eye className="text-blue-500 mr-2" /> عرض
+                              التفاصيل
+                            </MenuItem>
+                          )}
+                          {actions.edit && (
+                            <MenuItem onClick={() => handleEdit(row)}>
+                              <Edit className="text-yellow-500 mr-2" /> تعديل
+                            </MenuItem>
+                          )}
+                          {actions.delete && (
+                            <MenuItem
                               onClick={() => {
                                 setDeleteId(row.id);
                                 setOpenDelete(true);
+                                handleMenuClose();
                               }}
                             >
-                              <FaTrash className="text-red-500 text-base" />
-                            </button>
-                            <DeleteMessage
-                              API={apiUrl}
-                              open={openDelete}
-                              handleClose={() => setOpenDelete(false)}
-                              id={deleteId}
-                              onDeleteSuccess={handleDeleteSuccess}
-                            />
-                          </>
-                        )}
-                        {actions.edit && (
-                          <button onClick={() => handleEdit(row)}>
-                            <FaEdit className="text-yellow-500 text-base" />
-                          </button>
-                        )}
-                        {actions.view && (
-                          <button onClick={() => handleView(row.id)}>
-                            <FaEye className="text-blue-500 text-base" />
-                          </button>
-                        )}
+                              <Trash className="text-red-500 mr-2" /> حذف
+                            </MenuItem>
+                          )}
+                          {actions.accept && (
+                            <MenuItem
+                              onClick={() => {
+                                handleAccept(row.id);
+                              }}
+                            >
+                              <CheckCircle className="text-green-500 mr-2" />{" "}
+                              قبول
+                            </MenuItem>
+                          )}
+                          {actions.reject && (
+                            <MenuItem
+                              onClick={() => {
+                                handleReject(row.id);
+                              }}
+                            >
+                              <XCircle className="text-red-500 mr-2" /> رفض
+                            </MenuItem>
+                          )}
+                          {actions.finish && (
+                            <MenuItem
+                              onClick={() => {
+                                handleFinish(row.id);
+                              }}
+                            >
+                              <Check className="text-green-500 mr-2" /> تعيين ك
+                              منجز
+                            </MenuItem>
+                          )}
+                        </Menu>
+
+                        {/* مكون حذف الطلب */}
+                        <DeleteMessage
+                          API={apiUrl}
+                          open={openDelete}
+                          handleClose={() => setOpenDelete(false)}
+                          id={deleteId}
+                          onDeleteSuccess={handleDeleteSuccess}
+                        />
                       </div>
                     </td>
                   )}
@@ -454,7 +553,7 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
           }
         `}</style>
       </div>
-      <Pagination totalPages={totalPages} onPageChange={handlePageChange} />
+      {/* <Pagination totalPages={totalPages} onPageChange={handlePageChange} /> */}
     </div>
   );
 };

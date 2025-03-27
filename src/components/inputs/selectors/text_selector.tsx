@@ -31,25 +31,33 @@ const TextSelector: React.FC<SelectorInputProps> = ({
     <FormControl fullWidth error={!!error} size="small">
       {label && <InputLabel>{label}</InputLabel>}
       <Select
+        placeholder={placeholder}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         displayEmpty
-        renderValue={(selected) =>
-          selected
-            ? t(options.find((o) => o.value === selected)?.label || "")
-            : placeholder
-        }
+        renderValue={(selected) => {
+          if (!selected) {
+            return (
+              <span style={{ color: "#9ca3af" /* Tailwind's gray-400 */ }}>
+                {placeholder}
+              </span>
+            );
+          }
+          return (
+            <span style={{ color: "#111827" /* Tailwind's gray-900 */ }}>
+              {t(options.find((o) => o.value === selected)?.label || "")}
+            </span>
+          );
+        }}
         sx={{
           backgroundColor: "white",
           height: 35,
-          "& .MuiSelect-select": { paddingY: "8px", paddingX: "12px" },
+          "& .MuiSelect-select": {
+            paddingY: "8px",
+            paddingX: "12px",
+          },
         }}
       >
-        {/* Placeholder option (hidden but shown when no value is selected) */}
-        <MenuItem disabled value="">
-          <span className="text-gray-400">{placeholder}</span>
-        </MenuItem>
-
         {/* Render options */}
         {options.map((option, index) => (
           <MenuItem key={index} value={option.value}>

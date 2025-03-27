@@ -100,7 +100,10 @@ const Orders = () => {
               outline: "none",
             }}
           >
-            <Auctions close={() => setOpenModal(false)} />
+            <Auctions
+              onSubmit={() => console.log("done")}
+              close={() => setOpenModal(false)}
+            />
           </Box>
         </Modal>
       )}

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { TextField, Autocomplete } from "@mui/material";
+import { TextField, Autocomplete, CircularProgress } from "@mui/material";
 import axiosInstance from "@/utils/axiosInstance";
 
 interface Category {
@@ -20,27 +20,36 @@ interface Manufacturer {
 }
 
 const DainamicSelector: React.FC<{
-  value: number | null; // قيمة العنصر المختار حاليًا
-  data?: Manufacturer[]; // بيانات مباشرة (اختيارية)
-  Api_URL?: string; // عنوان API للحصول على البيانات (اختياري)
-  onChange: (value: number | null) => void; // دالة لتحديث القيمة المختارة
-  onCategoriesChange?: (categories: Category[]) => void; // دالة لتمرير الفئات المرتبطة (اختيارية)
-}> = ({ value, data, Api_URL, onChange, onCategoriesChange }) => {
+  value: number | null;
+  data?: Manufacturer[];
+  Api_URL?: string;
+  onChange: (value: number | null) => void;
+  onCategoriesChange?: (categories: Category[]) => void;
+  placeholder?: string;
+  error?: string;
+  dataLoading?: boolean;
+}> = ({
+  value,
+  data,
+  Api_URL,
+  onChange,
+  onCategoriesChange,
+  placeholder,
+  error,
+  dataLoading,
+}) => {
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // تحديد مصدر البيانات: من API أو من المصفوفة
   useEffect(() => {
     if (data) {
-      // إذا تم تمرير البيانات مباشرة، يتم استخدامها
       setManufacturers(data);
       setLoading(false);
     } else if (Api_URL) {
-      // إذا تم تمرير رابط API، يتم جلب البيانات
       const fetchManufacturers = async () => {
         try {
           const response = await axiosInstance.get(Api_URL);
-          setManufacturers(response.data.data); // تخزين البيانات في الحالة
+          setManufacturers(response.data.data);
         } catch (err) {
           console.error("Error fetching manufacturers:", err);
         } finally {
@@ -50,22 +59,16 @@ const DainamicSelector: React.FC<{
 
       fetchManufacturers();
     } else {
-      // إذا لم يتم تمرير أي بيانات أو رابط API
       console.warn("لم يتم تمرير بيانات أو رابط API.");
       setLoading(false);
     }
   }, [data, Api_URL]);
 
-  // العثور على العنصر المختار حاليًا
   const selectedManufacturer =
     manufacturers.find((manufacturer) => manufacturer.id === value) || null;
 
-  // تحديث القيمة المختارة والفئات المرتبطة
   const handleSelectionChange = (newValue: Manufacturer | null) => {
-    // تمرير ID العنصر المختار إلى المكون الأب
     onChange(newValue ? newValue.id : null);
-
-    // تمرير الفئات المرتبطة بالعنصر المختار إذا كانت الدالة متوفرة
     if (onCategoriesChange) {
       onCategoriesChange(newValue ? newValue.categories : []);
     }
@@ -75,37 +78,57 @@ const DainamicSelector: React.FC<{
     <div className="w-full">
       <Autocomplete
         options={manufacturers}
-        getOptionLabel={(option) => option.title} // عرض العنوان في القائمة
-        value={selectedManufacturer} // تحديد القيمة المختارة
-        onChange={(event, newValue) => handleSelectionChange(newValue)} // عند تغيير الاختيار
+        getOptionLabel={(option) => option.title}
+        value={selectedManufacturer}
+        onChange={(event, newValue) => handleSelectionChange(newValue)}
         className="w-full"
+        loading={data ? dataLoading : loading}
+        loadingText="جاري التحميل..."
+        noOptionsText="لا توجد خيارات متاحة"
         renderInput={(params) => (
-          <TextField
-            {...params}
-            fullWidth
-            margin="normal"
-            sx={{
-              backgroundColor: "white",
-              borderRadius: "6px",
-              "& .MuiOutlinedInput-root": {
-                height: 35, // ضبط الارتفاع
-                paddingY: "8px",
-                paddingX: "12px",
-                "& fieldset": {
-                  borderColor: "#d1d5db", // لون الحدود (رمادي فاتح مثل السابق)
+          <div style={{ position: "relative", width: "100%" }}>
+            <TextField
+              {...params}
+              placeholder={placeholder || "اختر العنصر"}
+              fullWidth
+              margin="normal"
+              error={!!error}
+              helperText={error}
+              slotProps={{
+                input: {
+                  ...params.InputProps,
+                  endAdornment: (
+                    <>
+                      {loading || dataLoading ? (
+                        <CircularProgress color="inherit" size={20} />
+                      ) : null}
+                      {params.InputProps.endAdornment}
+                    </>
+                  ),
                 },
-                "&:hover fieldset": {
-                  borderColor: "#a1a1aa", // لون الحدود عند التحويم
+              }}
+              sx={{
+                backgroundColor: "white",
+                borderRadius: "6px",
+                "& .MuiOutlinedInput-root": {
+                  height: 35,
+                  paddingY: "8px",
+                  paddingX: "12px",
+                  borderColor: error ? "#dc2626" : "#d1d5db", // ✅ تغيير لون البوردر عند الخطأ
+                  "& fieldset": {
+                    borderColor: error ? "#dc2626" : "#d1d5db",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: error ? "#b91c1c" : "#a1a1aa",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: error ? "#991b1b" : "#6366f1",
+                  },
                 },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#6366f1", // لون الحدود عند التركيز (لون أزرق فاتح)
-                },
-              },
-            }}
-          />
+              }}
+            />
+          </div>
         )}
-        loading={loading}
-        noOptionsText="لا توجد صناعات متاحة" // رسالة عند عدم وجود خيارات
       />
     </div>
   );
