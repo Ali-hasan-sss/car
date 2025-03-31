@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Switch } from "@mui/material";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 interface InfoCardProps {
   image: string;
@@ -27,7 +29,7 @@ export default function InfoCard({
   const [imageSrc, setImageSrc] = useState(image);
   const [loading, setLoading] = useState(true);
   const [isArabic, setIsArabic] = useState(true);
-
+  const user = useSelector((state: RootState) => state.auth.user);
   useEffect(() => {
     setImageSrc(image);
     setLoading(true);
@@ -63,33 +65,39 @@ export default function InfoCard({
         <h2 className="text-text_title text-2xl font-bold text-center">
           {isArabic ? title.ar : title.en}
         </h2>
-        <div className="px-2 flex items-center gap-2">
-          <span className="text-sm font-medium">{isArabic ? "AR" : "EN"}</span>
-          <Switch
-            checked={isArabic}
-            onChange={() => setIsArabic((prev) => !prev)}
-            color="primary"
-          />
-        </div>
+        {user?.userRole === "ADMIN" && (
+          <div className="px-2 flex items-center gap-2">
+            <span className="text-sm font-medium">
+              {isArabic ? "AR" : "EN"}
+            </span>
+            <Switch
+              checked={isArabic}
+              onChange={() => setIsArabic((prev) => !prev)}
+              color="primary"
+            />
+          </div>
+        )}
       </div>
       <p className="text-text_des text-xl">{isArabic ? des.ar : des.en}</p>
       {body && (
         <p className="text-text_des text-xl">{isArabic ? body.ar : body.en}</p>
       )}
-      <div className="flex w-full items-center px-5 py-2 gap-4">
-        <button
-          onClick={ondelete}
-          className="flex items-center justify-center w-[30px] h-[30px] bg-red-100 p-1 rounded-full"
-        >
-          <img src="/images/redtrash.png" width={14} alt="trash" />
-        </button>
-        <button
-          onClick={onedit}
-          className="flex items-center justify-center w-[30px] h-[30px] bg-yellow-100 p-1 rounded-full"
-        >
-          <img src="/images/edit.png" width={14} alt="edit" />
-        </button>
-      </div>
+      {user?.userRole === "ADMIN" && (
+        <div className="flex w-full items-center px-5 py-2 gap-4">
+          <button
+            onClick={ondelete}
+            className="flex items-center justify-center w-[30px] h-[30px] bg-red-100 p-1 rounded-full"
+          >
+            <img src="/images/redtrash.png" width={14} alt="trash" />
+          </button>
+          <button
+            onClick={onedit}
+            className="flex items-center justify-center w-[30px] h-[30px] bg-yellow-100 p-1 rounded-full"
+          >
+            <img src="/images/edit.png" width={14} alt="edit" />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

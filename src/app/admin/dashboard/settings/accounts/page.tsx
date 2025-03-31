@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../../../../context/LanguageContext";
 import PasswordForm from "@/components/adminComponents/forms/changePassword";
 import ProfileForm from "@/components/adminComponents/forms/ProfileForm";
 import AnimatedModal from "@/components/modal/AnimatedModal";
@@ -90,7 +90,7 @@ export default function Accounts() {
           {t("Change") + " " + t("Password")}
         </button>
         <button
-          className="button_primary py-2 px-3"
+          className="button_outline py-2 px-3"
           onClick={() => {
             setSelectedAdmin(null);
             setOpenModal("add-admin");

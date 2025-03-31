@@ -1,6 +1,6 @@
 "use client";
 import React, { useContext } from "react";
-import { AppContext } from "@/app/context/AppContext";
+import { AppContext } from "../../../context/AppContext";
 import { FormControlLabel, Switch } from "@mui/material";
 import { FaMoon, FaSun } from "react-icons/fa";
 const RegisterPage = () => {

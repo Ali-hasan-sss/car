@@ -2,9 +2,9 @@
 "use client";
 
 import { Provider } from "react-redux";
-import { LanguageProvider } from "./context/LanguageContext";
+import { LanguageProvider } from "../context/LanguageContext";
 import store from "@/store/store";
-import AuthProvider from "./context/AuthContext";
+import AuthProvider from "../context/AuthContext";
 
 interface ClientWrapperProps {
   children: React.ReactNode;

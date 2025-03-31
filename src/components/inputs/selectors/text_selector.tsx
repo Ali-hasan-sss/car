@@ -1,4 +1,4 @@
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../../context/LanguageContext";
 import React from "react";
 import {
   Select,
@@ -9,12 +9,12 @@ import {
 } from "@mui/material";
 
 interface SelectorInputProps {
-  options: { value: string; label: string }[];
-  value: string;
+  options: { value: string | number; label: string }[];
+  value: string | number;
   placeholder: string;
   error?: string;
   label?: string;
-  onChange: (value: string) => void;
+  onChange: (value: string | number) => void;
 }
 
 const TextSelector: React.FC<SelectorInputProps> = ({
@@ -33,10 +33,16 @@ const TextSelector: React.FC<SelectorInputProps> = ({
       <Select
         placeholder={placeholder}
         value={value}
-        onChange={(event) => onChange(event.target.value)}
+        onChange={(event) => {
+          const selectedValue = event.target.value;
+          const option = options.find(
+            (o) => o.value.toString() === selectedValue
+          );
+          onChange(option ? option.value : selectedValue);
+        }}
         displayEmpty
         renderValue={(selected) => {
-          if (!selected) {
+          if (selected === "" || selected === undefined) {
             return (
               <span style={{ color: "#9ca3af" /* Tailwind's gray-400 */ }}>
                 {placeholder}
@@ -60,7 +66,7 @@ const TextSelector: React.FC<SelectorInputProps> = ({
       >
         {/* Render options */}
         {options.map((option, index) => (
-          <MenuItem key={index} value={option.value}>
+          <MenuItem key={index} value={option.value.toString()}>
             {t(option.label)}
           </MenuItem>
         ))}

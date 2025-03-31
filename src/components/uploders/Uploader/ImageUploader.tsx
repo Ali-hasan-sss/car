@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axiosInstance from "@/utils/axiosInstance";
 import { useDropzone } from "react-dropzone";
 import { Image, Trash2 } from "lucide-react";
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../../context/LanguageContext";
 import LoadingBTN from "@/components/loading/loadingBTN";
 
 const BASE_IMAGE_URL = "https://test.smarty.design/assets/img/common/";

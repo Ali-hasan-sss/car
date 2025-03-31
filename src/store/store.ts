@@ -9,14 +9,13 @@ import socialMediaReducer from "./Reducers/socialMediaReducer";
 import countriesReducer from "./slice/countriesSlice";
 import manufacturerReducer from "./slice/manufacturerSlice";
 import adminManufacturerSlice from "./slice/adminManufacturerSlice";
-import usersReducer from "./slice/usersSlice";
-import ordersReducer from "./slice/orderSlice";
-
+import auctionSlice from "./slice/AuctionsSlice";
+import carSalesReducer from "./slice/carSalesSlice";
+import userReducer from "./slice/userSlice";
 const store = configureStore({
   reducer: {
     auth: authReducer,
     admins: adminsReducer,
-    users: usersReducer,
     socialMedia: socialMediaReducer,
     services: servicesReducer,
     blogs: blogsReducer,
@@ -25,7 +24,9 @@ const store = configureStore({
     countries: countriesReducer,
     manufacturer: manufacturerReducer,
     adminManufacturer: adminManufacturerSlice,
-    orders: ordersReducer,
+    auctions: auctionSlice,
+    carSales: carSalesReducer,
+    users: userReducer,
   },
 });
 

@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setTableData } from "@/store/Reducers/tableDataReducer";
 import LoadingBTN from "@/components/loading/loadingBTN";
 import { toast } from "sonner";
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../../context/LanguageContext";
 import { TableRow } from "@/Types/adminTypes";
 import { RootState } from "@/store/store";
 

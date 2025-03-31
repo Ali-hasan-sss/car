@@ -1,4 +1,4 @@
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../../context/LanguageContext";
 import EmailInput from "@/components/inputs/EmailInput";
 import React from "react";
 

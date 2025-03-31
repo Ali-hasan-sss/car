@@ -1,7 +1,7 @@
 "use client";
 
 import Avatar from "@/components/avatar/avatar";
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../../context/LanguageContext";
 import Link from "next/link";
 import { useSelector } from "react-redux"; // استيراد useSelector
 import { RootState } from "@/store/store"; // استيراد RootState للوصول إلى الحالة من Redux

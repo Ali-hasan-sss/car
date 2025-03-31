@@ -1,4 +1,4 @@
-import { Order } from "@/Types/orderTypes";
+import { Auction } from "@/Types/AuctionTypes";
 import {
   getFuelText,
   getShippingText,
@@ -20,9 +20,9 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 interface OrderCardProps {
-  order: Order;
+  order: Auction;
   onDelete: (id: number) => void;
-  onEdit: (order: Order) => void;
+  onEdit: (order: Auction) => void;
   onChangeStatus?: (id: number, type: "accept" | "reject" | "finish") => void;
 }
 

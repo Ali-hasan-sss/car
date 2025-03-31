@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { TextField } from "@mui/material";
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../../context/LanguageContext";
 import ImageUploader from "@/components/uploders/Uploader/ImageUploader";
 import LoadingBTN from "../../loading/loadingBTN";
 import { ServiceBlogFormProps } from "@/Types/adminTypes";
@@ -44,12 +44,10 @@ export default function ServiceBlogForm({
   };
 
   return (
-    <div className="max-w-lg mx-auto">
-      {/* Stepper مع الخطوط بين الخطوات */}
+    <div className="max-w-lg py-4 mx-auto">
       <div className="flex w-full items-center justify-around mb-4 gap-1">
         {steps.map((label, index) => (
           <div key={index} className="flex flex-col items-center">
-            {/* دائرة الخطوة مع أيقونة صح عند الاكتمال */}
             <div
               className={`w-10 h-10 flex items-center justify-center rounded-full cursor-pointer ${
                 activeStep === index

@@ -5,7 +5,7 @@ import Servic_box from "./sevice_box";
 import Footer from "@/components/footer";
 import CTA from "@/components/CTA";
 import CoverImage from "@/components/Hero_general/cover_image";
-import { useLanguage } from "../context/LanguageContext";
+import { useLanguage } from "../../context/LanguageContext";
 
 const ServicesPage: React.FC = () => {
   const [selectedService, setSelectedService] = useState<string | null>(null);
@@ -181,11 +181,9 @@ const ServicesPage: React.FC = () => {
         </div>
       )}
       <CTA
-        title="Get Started with Us Today!
-
-"
-        des="Whether you’re bidding on your dream car, shipping a vehicle with care, or selling a car seamlessly, we are here to provide solutions tailored to your needs.Contact us now to learn more and take the first step toward a hassle-free automotive experience!"
-        btnText="Contact Us"
+        title={t("servises_CTA_Title")}
+        des={t("servises_CTA_Body")}
+        btnText={t("Contact_Us")}
       />
       {/* Footer */}
       <Footer />

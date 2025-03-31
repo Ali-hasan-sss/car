@@ -2,10 +2,15 @@
 import TableHeader from "@/components/DashboardComponernt/titleBar/tableHeader";
 import ToolBar from "@/components/DashboardComponernt/toolbar";
 import Search_input from "@/components/inputs/search_input";
+//import CustomPagination from "@/components/pagination/extrnalPagenation";
 import GeneralTable, { Column } from "@/components/table";
-import React, { useState } from "react";
+import { useAppDispatch } from "@/store/Reducers/hooks";
+import { fetchUsers } from "@/store/slice/userSlice";
+import { RootState } from "@/store/store";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
-const CarTypes: React.FC = () => {
+const Users: React.FC = () => {
   const columns: Column[] = [
     {
       id: "name",
@@ -35,16 +40,22 @@ const CarTypes: React.FC = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [showing, setShowing] = useState(10);
-
+  const dispatch = useAppDispatch();
+  const { users, loading, error } = useSelector(
+    (state: RootState) => state.users
+  );
   const apiUrl = "admin/users";
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
   const [actions] = useState({
-    edit: true,
+    edit: false,
     add: true,
     delete: true,
     view: true,
   });
-
+  if (error) return <p>حدث خطأ: {error}</p>;
   return (
     <div>
       <TableHeader
@@ -69,9 +80,16 @@ const CarTypes: React.FC = () => {
         onTotalCountChange={setTotalCount}
         showing={showing}
         searchTerm={searchTerm}
+        initialData={users}
+        loading={loading}
       />
+      {/*<CustomPagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+      />*/}
     </div>
   );
 };
 
-export default CarTypes;
+export default Users;

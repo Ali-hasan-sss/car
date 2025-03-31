@@ -6,7 +6,7 @@ import { Service, ServiceBlogFormProps } from "@/Types/adminTypes";
 import { RootState } from "@/store/store";
 import "../services/style.css";
 import TitleBar from "@/components/DashboardComponernt/titleBar";
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../../../context/LanguageContext";
 import ServiceBlogForm from "../../../../components/adminComponents/forms/service+blogForm";
 import {
   addService,
@@ -14,7 +14,7 @@ import {
   fetchServicesSuccess,
   updateService,
 } from "@/store/Reducers/servicesReducer";
-import InfoCard from "@/components/adminComponents/cards/info_card";
+import InfoCard from "@/components/cards/info_card";
 import Loader from "../../../../components/loading/loadingPage";
 import { toast } from "sonner";
 import AnimatedModal from "@/components/modal/AnimatedModal";

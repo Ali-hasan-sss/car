@@ -1,4 +1,4 @@
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../../context/LanguageContext";
 import React from "react";
 
 interface Company_step1 {

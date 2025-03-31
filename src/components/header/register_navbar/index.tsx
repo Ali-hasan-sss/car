@@ -1,4 +1,4 @@
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../../context/LanguageContext";
 import LanguageSwitcher from "@/components/buttons/btn-switch/LanguageSwitcher";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import Link from "next/link";

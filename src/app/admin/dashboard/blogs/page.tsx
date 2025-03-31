@@ -12,9 +12,9 @@ import {
 import { RootState } from "@/store/store";
 import "../services/style.css";
 import TitleBar from "@/components/DashboardComponernt/titleBar";
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../../../context/LanguageContext";
 import ServiceBlogForm from "../../../../components/adminComponents/forms/service+blogForm";
-import BlogCard from "@/components/adminComponents/cards/blogCard";
+import BlogCard from "@/components/cards/blogCard";
 import Loader from "../../../../components/loading/loadingPage";
 import { toast } from "sonner";
 import ComfirmMessage from "@/components/messags/deleteMessage";

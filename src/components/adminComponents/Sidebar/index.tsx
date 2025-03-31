@@ -1,4 +1,4 @@
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../../context/LanguageContext";
 import {
   BellRing,
   ChevronDown,
@@ -9,6 +9,7 @@ import {
   ListChecks,
   Newspaper,
   Settings,
+  ShoppingCart,
   Users,
   Wrench,
 } from "lucide-react";
@@ -41,7 +42,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
     {
       icon: <ListChecks className="text-3xl" />,
       label: t("Requests"),
-      path: "/admin/dashboard/requests",
+      path: "/admin/dashboard/auctions",
+    },
+    {
+      icon: <ShoppingCart className="text-3xl" />,
+      label: t("Sales"),
+      path: "/admin/dashboard/sales",
     },
     {
       icon: <Users className="text-3xl" />,

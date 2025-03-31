@@ -1,4 +1,4 @@
-import InfoCard from "@/components/adminComponents/cards/info_card";
+import InfoCard from "@/components/cards/info_card";
 
 export default function OurValues() {
   const cards = [

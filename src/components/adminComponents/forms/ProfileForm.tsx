@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import LoadingBTN from "@/components/loading/loadingBTN";
 import { RootState } from "@/store/store";
 import { Admin } from "@/Types/adminTypes";
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../../context/LanguageContext";
 import { Eye, EyeOff } from "lucide-react";
 
 interface ProfileFormProps {
@@ -86,7 +86,7 @@ export default function ProfileForm({
   };
 
   return (
-    <>
+    <div className="p-4">
       <TextField
         fullWidth
         label={t("First_Name")}
@@ -148,6 +148,6 @@ export default function ProfileForm({
           {loading ? <LoadingBTN /> : isNew ? t("Add") : t("Save")}
         </button>
       </div>
-    </>
+    </div>
   );
 }

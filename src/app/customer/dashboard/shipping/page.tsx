@@ -1,102 +1,101 @@
 "use client";
 
-import { useLanguage } from "@/app/context/LanguageContext";
-import GeneralFilter from "@/components/DashboardComponernt/filters/generalFilter";
-import QuickFilter from "@/components/DashboardComponernt/filters/quickFillter";
-import TableHeader from "@/components/DashboardComponernt/titleBar/tableHeader";
-import ToolBar from "@/components/DashboardComponernt/toolbar";
-import Search_input from "@/components/inputs/search_input";
-import { Modal, Box } from "@mui/material";
-import { useEffect, useState } from "react";
-import GeneralTable, { Column } from "@/components/table";
-import Grid_View from "@/components/table/gridView";
-import { fetchOrders } from "@/store/slice/orderSlice";
-import { useAppDispatch } from "@/store/Reducers/hooks";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import ShippingForm from "../ordersForms/shipping";
-import CustomPagination from "@/components/pagination/extrnalPagenation";
+// import { useLanguage } from "../../../../context/LanguageContext";
+// import GeneralFilter from "@/components/DashboardComponernt/filters/generalFilter";
+// import QuickFilter from "@/components/DashboardComponernt/filters/quickFillter";
+// import TableHeader from "@/components/DashboardComponernt/titleBar/tableHeader";
+// import ToolBar from "@/components/DashboardComponernt/toolbar";
+// import Search_input from "@/components/inputs/search_input";
+// import { Modal, Box } from "@mui/material";
+// import { useEffect, useState } from "react";
+// import GeneralTable, { Column } from "@/components/table";
+// import Grid_View from "@/components/table/gridView";
+// import { useAppDispatch } from "@/store/Reducers/hooks";
+// import { useSelector } from "react-redux";
+// import { RootState } from "@/store/store";
+// //import ShippingForm from "../ordersForms/shipping";
+// import CustomPagination from "@/components/pagination/extrnalPagenation";
 
 export default function Shipping() {
-  const { t } = useLanguage();
-  const [openFilter, setOpenFilter] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
-  const [showing, setShowing] = useState(10);
-  const [totalCount, setTotalCount] = useState(0);
-  const [sortby, setSortby] = useState("date");
-  const [currentPage, setCurrentPage] = useState(1);
+  // const { t } = useLanguage();
+  // const [openFilter, setOpenFilter] = useState(false);
+  // const [openModal, setOpenModal] = useState(false);
+  // const [showing, setShowing] = useState(10);
+  // const [totalCount, setTotalCount] = useState(0);
+  // const [sortby, setSortby] = useState("date");
+  // const [currentPage, setCurrentPage] = useState(1);
 
-  const closeModal = () => {
-    setOpenModal(false);
-  };
-  const [searchTerm, setSearchTerm] = useState("");
-  const handleTogleFilter = () => setOpenFilter(!openFilter);
-  const columns: Column[] = [
-    {
-      id: "category.manufacturer.title",
-      label: "الشركة الصانعة",
-      languageDisplay: "en",
-      includeInForm: true,
-    },
-    {
-      id: "category.title",
-      label: "الموديل",
-      languageDisplay: "en",
-      includeInForm: true,
-    },
-    {
-      id: "year",
-      label: "سنة الصنع",
-      languageDisplay: "en",
-      includeInForm: true,
-    },
-    {
-      id: "ex_color",
-      label: "اللون",
-      languageDisplay: "en",
-      includeInForm: true,
-    },
-    {
-      id: "country.title",
-      label: "بلد الشحن",
-      languageDisplay: "en",
-      includeInForm: true,
-    },
-    {
-      id: "created_at",
-      label: "تاريخ انشاء الطلب",
-      languageDisplay: "en",
-      includeInForm: false,
-    },
-    {
-      id: "status",
-      label: "حالة الطلب",
-      languageDisplay: "en",
-      includeInForm: false,
-    },
-  ];
-  const apiUrl = "customer/car-shippings";
-  const [view, setView] = useState("table");
-  const dispatch = useAppDispatch();
-  const { orders, loading, error, totalPages } = useSelector(
-    (state: RootState) => state.orders
-  );
+  // const closeModal = () => {
+  //   setOpenModal(false);
+  // };
+  // const [searchTerm, setSearchTerm] = useState("");
+  // const handleTogleFilter = () => setOpenFilter(!openFilter);
+  // const columns: Column[] = [
+  //   {
+  //     id: "category.manufacturer.title",
+  //     label: "الشركة الصانعة",
+  //     languageDisplay: "en",
+  //     includeInForm: true,
+  //   },
+  //   {
+  //     id: "category.title",
+  //     label: "الموديل",
+  //     languageDisplay: "en",
+  //     includeInForm: true,
+  //   },
+  //   {
+  //     id: "year",
+  //     label: "سنة الصنع",
+  //     languageDisplay: "en",
+  //     includeInForm: true,
+  //   },
+  //   {
+  //     id: "ex_color",
+  //     label: "اللون",
+  //     languageDisplay: "en",
+  //     includeInForm: true,
+  //   },
+  //   {
+  //     id: "country.title",
+  //     label: "بلد الشحن",
+  //     languageDisplay: "en",
+  //     includeInForm: true,
+  //   },
+  //   {
+  //     id: "created_at",
+  //     label: "تاريخ انشاء الطلب",
+  //     languageDisplay: "en",
+  //     includeInForm: false,
+  //   },
+  //   {
+  //     id: "status",
+  //     label: "حالة الطلب",
+  //     languageDisplay: "en",
+  //     includeInForm: false,
+  //   },
+  // ];
+  // const apiUrl = "customer/car-shippings";
+  // const [view, setView] = useState("table");
+  // const dispatch = useAppDispatch();
+  // const { orders, loading, error, totalPages } = useSelector(
+  //   (state: RootState) => state.orders
+  // );
 
-  const [actions] = useState({
-    edit: true,
-    add: true,
-    delete: true,
-    view: true,
-  });
-  useEffect(() => {
-    const apiUrl = `customer/car-shippings?page_size=${showing}&page=${currentPage}`;
-    dispatch(fetchOrders({ API: apiUrl }));
-  }, [dispatch]);
+  // const [actions] = useState({
+  //   edit: true,
+  //   add: true,
+  //   delete: true,
+  //   view: true,
+  // });
+  // useEffect(() => {
+  //   const apiUrl = `customer/car-shippings?page_size=${showing}&page=${currentPage}`;
+  //   dispatch(fetchOrders({ API: apiUrl }));
+  // }, [dispatch]);
 
-  if (error) return <div>{error}</div>;
+  // if (error) return <div>{error}</div>;
   return (
     <div className="flex flex-col items-center w-full  gap-[5px]">
-      <TableHeader
+      {/* <TableHeader
         title={t("Auctions")}
         action={{
           filter: true,
@@ -172,7 +171,7 @@ export default function Shipping() {
             <ShippingForm />
           </Box>
         </Modal>
-      )}
+      )} */}
     </div>
   );
 }

@@ -19,11 +19,11 @@ import { AppDispatch, RootState } from "@/store/store";
 import { fetchManufacturers } from "@/store/slice/manufacturerSlice";
 import Budget_selector from "@/components/inputs/selectors/budget_selector";
 import {
-  addOrder,
-  selectOrdersLoading,
-  updateOrder,
-} from "@/store/slice/orderSlice";
-import { AuctionsFormInputs } from "@/Types/orderTypes";
+  addAuction,
+  selectAuctionsLoading,
+  updateAuction,
+} from "@/store/slice/AuctionsSlice";
+import { AuctionsFormInputs } from "@/Types/AuctionTypes";
 import LoadingBTN from "@/components/loading/loadingBTN";
 
 interface AuctionsProps {
@@ -47,14 +47,14 @@ export default function Auctions({
     category_id: null,
     year: "",
     shipping_from: "",
-    transmission_type: "",
-    drive_system: "",
-    fuel_type: "",
-    cylinders: "",
+    transmission_type: 1,
+    drive_system: 1,
+    fuel_type: 1,
+    cylinders: 4,
     country_id: null,
     from_budget: "",
     to_budget: "",
-    shipping_option: "",
+    shipping_option: 1,
     car_status: "",
     ex_color: "",
     in_color: "",
@@ -69,7 +69,7 @@ export default function Auctions({
   const { manufacturers, status } = useSelector(
     (state: RootState) => state.manufacturer
   );
-  const loading = useSelector(selectOrdersLoading);
+  const loading = useSelector(selectAuctionsLoading);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const validateForm = () => {
@@ -141,9 +141,12 @@ export default function Auctions({
   };
   const handleInputChange = <T extends keyof AuctionsFormInputs>(
     key: T,
-    value: AuctionsFormInputs[T]
+    value: string | number
   ): void => {
-    setFormData((prev) => ({ ...prev, [key]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [key]: typeof prev[key] === "number" ? Number(value) : value,
+    }));
   };
 
   const handleSubmit = async () => {
@@ -152,7 +155,7 @@ export default function Auctions({
         // ✅ تعديل
         if (validateForm()) {
           await dispatch(
-            updateOrder({
+            updateAuction({
               apiUrl: "customer/car-auctions",
               id: initialData.id,
               updatedData: formData,
@@ -163,7 +166,10 @@ export default function Auctions({
         // ✅ إضافة
         if (validateForm()) {
           await dispatch(
-            addOrder({ apiUrl: "customer/car-auctions", orderData: formData })
+            addAuction({
+              apiUrl: "customer/car-auctions",
+              auctionData: formData,
+            })
           );
         } else return;
       }

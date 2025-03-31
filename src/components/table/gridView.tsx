@@ -1,21 +1,21 @@
 import axiosInstance from "@/utils/axiosInstance";
 import { useEffect, useState } from "react";
-import OrderCard from "../adminComponents/cards/order_card";
-import { Order } from "@/Types/orderTypes";
+import OrderCard from "../cards/order_card";
 //import Pagenation from "../pagination";
 import Loader from "../loading/loadingPage";
+import { Auction } from "@/Types/AuctionTypes";
 //import CustomPagination from "../pagination/extrnalPagenation";
 
 interface Grid_ViewProps {
   API?: string;
-  data?: Order[];
+  data?: Auction[];
   sortBy: string;
   searchTerm?: string;
   showing: number;
   onTotalCountChange: (count: number) => void;
   loading?: boolean;
   onDelete?: (id: number) => void;
-  onEdit?: (order: Order) => void;
+  onEdit?: (order: Auction) => void;
   onChangeStatus?: (id: number, type: "accept" | "reject" | "finish") => void;
 }
 
@@ -31,8 +31,8 @@ export default function Grid_View({
   onTotalCountChange,
   loading: externalLoading, // <-- إعادة التسمية لتمييزه عن الداخلي
 }: Grid_ViewProps) {
-  const [fullData, setFullData] = useState<Order[] | null>(null);
-  const [displayedData, setDisplayedData] = useState<Order[] | null>(null);
+  const [fullData, setFullData] = useState<Auction[] | null>(null);
+  const [displayedData, setDisplayedData] = useState<Auction[] | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [internalLoading, setInternalLoading] = useState(false);
   //const totalPages = fullData ? Math.ceil(fullData.length / showing) : 1;
@@ -42,7 +42,7 @@ export default function Grid_View({
     try {
       setInternalLoading(true);
       const res = await axiosInstance.get(`${API}?page=${currentPage}`);
-      const responseData: Order[] = res.data.data;
+      const responseData: Auction[] = res.data.data;
 
       setFullData(responseData);
       onTotalCountChange(responseData.length);
@@ -64,7 +64,7 @@ export default function Grid_View({
     }
   }, [API, data]);
 
-  const sortData = (data: Order[] | undefined, sortBy: string): Order[] => {
+  const sortData = (data: Auction[] | undefined, sortBy: string): Auction[] => {
     if (!Array.isArray(data) || data.length === 0) return []; // التحقق من أن البيانات ليست فارغة
 
     const sorted = [...data];

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Register_nav from "@/components/header/register_navbar";
 import Register_footer from "@/components/footer/Register_footer";
 import "../login/login.css";
-import { useLanguage } from "../context/LanguageContext";
+import { useLanguage } from "../../context/LanguageContext";
 import Step1 from "./step1";
 import Personal_step1 from "./personal_steps/step1";
 import Company_step1 from "./company_steps/step1";

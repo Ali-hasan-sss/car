@@ -1,60 +1,105 @@
 "use client";
-import TitleBar from "@/components/DashboardComponernt/titleBar";
 import "./dashboard.css";
-import Search_input from "@/components/inputs/search_input";
-import GeneralFilter from "@/components/DashboardComponernt/filters/generalFilter";
-import QuickFilter from "@/components/DashboardComponernt/filters/quickFillter";
-import ToolBar from "@/components/DashboardComponernt/toolbar";
-//import GeneralTable from "@/components/table";
+import { useState } from "react";
+import { Modal, Box } from "@mui/material";
+// import Auctions from "./ordersForms/Auctions";
+// import Shipping from "./shipping/page";
+// import Salles from "./ordersForms/salles";
+import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
-  /*
-  const columns = [
-    { id: "id", label: "Order Id" },
-    { id: "Statu", label: "Statu" },
-    { id: "VIN", label: "VIN" },
-    { id: "lot_no", label: "LOT No" },
-    { id: "Description", label: "Description" },
-    { id: "Buyer_code", label: "Buyer code" },
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [serviceKey, setServiceKey] = useState("");
+  const router = useRouter();
+  const services = [
+    {
+      title: "Auctions",
+      des: "Bid on your favourite cars with ease",
+      key: "Auctions",
+      link: "/customer/dashboard/auction",
+    },
+    {
+      title: "Shipping",
+      des: "Track your shipping progress easily",
+      key: "Shipping",
+      link: "/customer/dashboard/shipping",
+    },
+    {
+      title: "Sell Cars",
+      des: "Sell and buy cars effortlessly",
+      key: "Sell",
+      link: "/customer/dashboard/salles",
+    },
   ];
 
-  const data = [
-    {
-      id: "TEST23122024",
-      Statu: "New",
-      VIN: "WBSPM9C52BE20****",
-      lot_no: "00125400",
-      Description: "KIA v2024",
-      Buyer_code: "0000001452",
-    },
-    {
-      id: "TEST23152027",
-      Statu: "Old",
-      VIN: "WBSPM9C52BE80****",
-      lot_no: "00125700",
-      Description: "BMW v2024",
-      Buyer_code: "0050001952",
-    },
-  ];*/
+  // const handleTabChange = (key: string) => {
+  //   setServiceKey(key);
+  //   setIsModalOpen(true);
+  // };
+
   return (
-    <div className="flex flex-col items-center w-full  gap-[5px]">
-      <TitleBar title="Orders" btnLabel="+ Create New order" uploadBtn={true} />
-      <Search_input />
-      <GeneralFilter label="Filter & Sort Control" />
-      <QuickFilter />
-      <ToolBar />
-      <div className="bg-white w-full p-4">
-        {/** <GeneralTable
-          columns={columns}
-          data={data}
-          actions={{
-            edit: true,
-            delete: true,
-            view: true,
-            share: true,
-          }}
-        />  */}
+    <div className="flex flex-col items-center justify-center gap-[60px]">
+      <div className="w-full flex flex-col items-start gap-[10px]">
+        <h3 className="title text-gray-800">
+          Welcome to Your Car Services Dashboard
+        </h3>
+        <p className="heading_des text-gray-400">
+          Select a service below to get started: manage auctions, track
+          shipping, or buy and sell cars with ease.
+        </p>
       </div>
+      <div className="services_boxs flex items-center justify-center py-[10px] gap-[20px] flex-wrap">
+        {services.map((service) => (
+          <div
+            onClick={() => {
+              // handleTabChange(service.key);
+              router.push(service.link);
+            }}
+            key={service.key}
+            className="box flex flex-col items-center justify-center gap-[20px] py-[20px] px-[15px] cursor-pointer"
+          >
+            <h4 className="title text-gray-800">{service.title}</h4>
+            <p className="heading_des text-gray-400">{service.des}</p>
+          </div>
+        ))}
+      </div>
+
+      <Modal
+        open={isModalOpen}
+        className="madal"
+        onClose={() => setIsModalOpen(false)}
+      >
+        <Box
+          sx={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "80%", // 80% من عرض الشاشة (يبقى 10% من الجوانب)
+            maxWidth: "1000px", // الحد الأقصى لعرض المودال
+            height: "80%", // 80% من ارتفاع الشاشة (يبقى 10% من الأعلى والأسفل)
+            maxHeight: "90vh", // ضمان عدم تجاوز الشاشة
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 3,
+            borderRadius: "8px",
+            overflowY: "auto", // السماح بالتمرير عند زيادة المحتوى
+            outline: "none",
+          }}
+        >
+          {/* {serviceKey === "Auctions" && (
+            <Auctions
+              initialData={}
+              onSubmit={}
+              close={() => setIsModalOpen(false)}
+            />
+          )}
+          {serviceKey === "Shipping" && <Shipping />}
+          {serviceKey === "Sell" && (
+            <Salles close={() => setIsModalOpen(false)} />
+          )} */}
+        </Box>
+      </Modal>
     </div>
   );
 };

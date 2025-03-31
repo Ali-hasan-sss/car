@@ -1,5 +1,5 @@
 "use client";
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../context/LanguageContext";
 import { useState, useEffect, useRef } from "react";
 import { FaUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
@@ -68,7 +68,7 @@ export default function Avatar() {
 
   const goToDashBoard = () => {
     router.push(
-      userRole === "ADMIN" ? "/admin/dashboard" : "/customar/dashboard"
+      userRole === "ADMIN" ? "/admin/dashboard" : "/customer/dashboard"
     );
   };
 

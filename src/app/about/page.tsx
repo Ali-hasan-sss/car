@@ -11,7 +11,7 @@ import Whay_us from "./whayUs";
 import OurValues from "./ourValues";
 import End_Section from "./section_end";
 import Our_services from "./section2";
-import { useLanguage } from "../context/LanguageContext";
+import { useLanguage } from "../../context/LanguageContext";
 
 export default function About() {
   const { t } = useLanguage();

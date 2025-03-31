@@ -1,6 +1,6 @@
 "use client";
 
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../../../context/LanguageContext";
 import GeneralFilter from "@/components/DashboardComponernt/filters/generalFilter";
 import QuickFilter from "@/components/DashboardComponernt/filters/quickFillter";
 import TableHeader from "@/components/DashboardComponernt/titleBar/tableHeader";
@@ -9,17 +9,18 @@ import Search_input from "@/components/inputs/search_input";
 import { useEffect, useState } from "react";
 import GeneralTable, { Column } from "@/components/table";
 import Grid_View from "@/components/table/gridView";
-import {
-  deleteOrderLocal,
-  fetchOrders,
-  updateOrder,
-} from "@/store/slice/orderSlice";
+
 import { useAppDispatch } from "@/store/Reducers/hooks";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { AuctionsFormInputs, Order } from "@/Types/orderTypes";
+import { Auction, AuctionsFormInputs } from "@/Types/AuctionTypes";
 import DeleteMessage from "@/components/messags/deleteMessage";
 import CustomPagination from "@/components/pagination/extrnalPagenation";
+import {
+  deleteAuctionLocal,
+  fetchAuctions,
+  updateAuction,
+} from "@/store/slice/AuctionsSlice";
 //import GeneralTable from "@/components/table";
 
 export default function Actions() {
@@ -93,8 +94,8 @@ export default function Actions() {
   const apiUrl = `admin/car-auctions`;
   const [view, setView] = useState("table");
   const dispatch = useAppDispatch();
-  const { orders, loading, error, totalPages } = useSelector(
-    (state: RootState) => state.orders
+  const { auctions, loading, error, totalPages } = useSelector(
+    (state: RootState) => state.auctions
   );
   console.log(totalPages);
   const [actions] = useState({
@@ -108,7 +109,7 @@ export default function Actions() {
   });
   useEffect(() => {
     const apiUrl = `admin/car-auctions?page_size=${showing}&page=${currentPage}`;
-    dispatch(fetchOrders({ API: apiUrl }));
+    dispatch(fetchAuctions({ API: apiUrl }));
   }, [dispatch, currentPage, showing]);
 
   const handleDelete = (id: number) => {
@@ -124,7 +125,7 @@ export default function Actions() {
     try {
       //await axiosInstance.put(`${apiUrl}/${id}`, { status });
       dispatch(
-        updateOrder({
+        updateAuction({
           apiUrl: apiUrl,
           id: id,
           updatedData: { status },
@@ -140,20 +141,20 @@ export default function Actions() {
     }
   };
 
-  const handleEdit = (order: Order) => {
-    const mapOrderToFormInputs = (order: Order): AuctionsFormInputs => {
+  const handleEdit = (order: Auction) => {
+    const mapOrderToFormInputs = (order: Auction): AuctionsFormInputs => {
       return {
         auction_link: order.auction_link || "", // الرابط الخاص بالمزاد
         manufacturer: order.category?.manufacturer?.id || null, // تحويل category إلى manufacturer (في حال كان category يحتوي على id)
         category_id: order.category?.id || null, // نفس الشيء مع category
         year: order.year.toString() || "", // تحويل السنة إلى نص
-        transmission_type: order.transmission_type.toString() || "", // نفس الشيء مع transmission_type
-        drive_system: order.drive_system.toString() || "", // نفس الشيء مع drive_system
-        fuel_type: order.fuel_type.toString() || "", // نفس الشيء مع fuel_type
-        cylinders: order.cylinders.toString() || "", // نفس الشيء مع cylinders
+        transmission_type: order.transmission_type || 1, // نفس الشيء مع transmission_type
+        drive_system: order.drive_system || 1, // نفس الشيء مع drive_system
+        fuel_type: order.fuel_type || 1, // نفس الشيء مع fuel_type
+        cylinders: order.cylinders || 4, // نفس الشيء مع cylinders
         from_budget: order.from_budget.toString() || "", // تحويل القيمة إلى نص
         to_budget: order.to_budget.toString() || "", // تحويل القيمة إلى نص
-        shipping_option: order.shipping_option.toString() || "", // نفس الشيء مع shipping_option
+        shipping_option: order.shipping_option || 1, // نفس الشيء مع shipping_option
         car_status: order.status?.toString() || "", // تحويل الحالة إلى نص
         ex_color: order.ex_color || "", // اللون الخارجي
         in_color: order.in_color || "", // اللون الداخلي
@@ -204,7 +205,7 @@ export default function Actions() {
           columns={columns}
           apiUrl={apiUrl}
           actions={actions}
-          initialData={orders}
+          initialData={auctions}
           onTotalCountChange={setTotalCount}
           onChangeStatus={handleAcceptReject}
           sortBy={sortby}
@@ -214,7 +215,7 @@ export default function Actions() {
       ) : (
         <Grid_View
           loading={loading}
-          data={orders}
+          data={auctions}
           sortBy={sortby}
           showing={showing}
           onTotalCountChange={setTotalCount}
@@ -235,7 +236,7 @@ export default function Actions() {
           open={openDeleteModal}
           id={deleteId}
           handleClose={() => setOpenDeleteModal(false)}
-          onDeleteSuccess={() => dispatch(deleteOrderLocal(deleteId))}
+          onDeleteSuccess={() => dispatch(deleteAuctionLocal(deleteId))}
         />
       )}
     </div>

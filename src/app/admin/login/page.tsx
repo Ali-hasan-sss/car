@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import axiosInstance from "@/utils/axiosInstance";
 import { setLogin } from "@/store/slice/authSlice"; // استيراد الأكشن المعدل
 import LoadingBTN from "../../../components/loading/loadingBTN";
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../../context/LanguageContext";
 import EmailInput from "@/components/inputs/EmailInput";
 import PasswordInput from "@/components/inputs/PasswordInput";
 

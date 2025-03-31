@@ -44,13 +44,14 @@ export interface User {
   email: string;
   first_name: string;
   last_name: string;
-  type: number;
+  type: number | string;
   is_active?: number;
   is_full_data?: boolean;
   userRole?: string;
   password?: string;
   contact?: Contact | null;
   idDetail?: IdDetail | null;
+  created_at?: string;
 }
 
 export interface UpdatedProfile {

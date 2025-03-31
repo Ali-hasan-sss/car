@@ -7,7 +7,7 @@ import axiosInstance from "@/utils/axiosInstance";
 import { fetchBlogsSuccess, updateBlog } from "@/store/Reducers/blogsReducer";
 import type { Blog, ServiceBlogFormProps } from "@/Types/adminTypes";
 import { toast } from "sonner";
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../../../../context/LanguageContext";
 import { Modal, Box } from "@mui/material";
 import ServiceBlogForm from "@/components/adminComponents/forms/service+blogForm";
 import Loader from "../../../../../components/loading/loadingPage";

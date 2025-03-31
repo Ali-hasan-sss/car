@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { TextField } from "@mui/material";
 import { toast } from "sonner";
 import LoadingBTN from "@/components/loading/loadingBTN";
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../../../context/LanguageContext";
 import axiosInstance from "@/utils/axiosInstance";
 import DainamicSelector from "@/components/inputs/selectors/DainamicSelector";
 import { category } from "@/Types/adminTypes";

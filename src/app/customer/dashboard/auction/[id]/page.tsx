@@ -1,9 +1,12 @@
 "use client";
 import Loader from "@/components/loading/loadingPage";
 import { useAppDispatch } from "@/store/Reducers/hooks";
-import { fetchOrderById, selectOrdersLoading } from "@/store/slice/orderSlice";
+import {
+  fetchAuctionById,
+  selectAuctionsLoading,
+} from "@/store/slice/AuctionsSlice";
 import { RootState } from "@/store/store";
-import { Order } from "@/Types/orderTypes";
+import { Auction } from "@/Types/AuctionTypes";
 import {
   getFuelText,
   getShippingText,
@@ -21,9 +24,9 @@ export default function AuctionDetails() {
   const id = Number(paramId);
   const apiUrl = "customer/car-auctions";
   const dispatch = useAppDispatch();
-  const loading = useSelector(selectOrdersLoading);
-  const orderData = useSelector((state: RootState) => state.orders.order); // اجلب الطلب من الحالة
-  const [order, setOrder] = useState<Order | null>(null);
+  const loading = useSelector(selectAuctionsLoading);
+  const orderData = useSelector((state: RootState) => state.auctions.auction); // اجلب الطلب من الحالة
+  const [order, setOrder] = useState<Auction | null>(null);
   const transmissionText =
     order && getTransmissionText(order.transmission_type);
   const fuelText = order && getFuelText(order.fuel_type);
@@ -35,7 +38,7 @@ export default function AuctionDetails() {
   const updatedDate = order && new Date(order.updated_at);
 
   useEffect(() => {
-    dispatch(fetchOrderById({ apiUrl: apiUrl, id: id }));
+    dispatch(fetchAuctionById({ apiUrl: apiUrl, id: id }));
   }, [dispatch, id]);
   useEffect(() => {
     if (orderData) {

@@ -102,6 +102,9 @@ export const translations: Record<Language, { [key: string]: string }> = {
     desc_en: "Description (English)",
     title_ar: "Title (Arabic)",
     title_en: "Title (English)",
+    servises_CTA_Title: "Get Started with Us Today!",
+    servises_CTA_Body:
+      "Whether you’re bidding on your dream car, shipping a vehicle with care, or selling a car seamlessly, we are here to provide solutions tailored to your needs.Contact us now to learn more and take the first step toward a hassle-free automotive experience!",
     //titles
     Arabic_Info: "Arabic Info",
     English_Info: "English Info",
@@ -222,6 +225,8 @@ export const translations: Record<Language, { [key: string]: string }> = {
     desc_en: "الوصف (انجليزي)",
     title_ar: "العنوان (عربي)",
     title_en: "العنوان (انجليزي)",
+    servises_CTA_Title: "ابدأ تجربتك معنا اليوم !",
+    servises_CTA_Body: "ابدأ معنا اليوم !",
     Upload_Main_Image: "اختر الصورة الرئيسية",
     Upload_Additional_Images: "ارفع المزيد من الصور(اختياري)...",
     //titles

@@ -1,6 +1,6 @@
-import { Order } from "@/Types/orderTypes";
+import { Auction } from "@/Types/AuctionTypes";
 
-export const extractOrderDetails = (order: Order) => {
+export const extractOrderDetails = (order: Auction) => {
   const {
     id,
     category,
@@ -69,7 +69,7 @@ export const statusMap: Record<
   { label: string; color: string }
 > = {
   0: { label: "مرفوض", color: "bg-red-500 text-white" },
-  1: { label: "قيد الانتظار", color: "bg-yellow-400 text-white" },
+  1: { label: "قيد الانتظار", color: "bg-yellow-400 text-black" },
   2: { label: "قيد التنفيذ", color: "bg-blue-500 text-white" },
   3: { label: "منجز", color: "bg-green-500 text-white" },
   null: { label: "غير محدد", color: "bg-gray-400 text-white" },

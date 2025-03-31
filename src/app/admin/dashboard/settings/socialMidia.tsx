@@ -26,7 +26,7 @@ import {
   FaXTwitter,
 } from "react-icons/fa6";
 import { FaEdit, FaSnapchatGhost, FaTrash } from "react-icons/fa";
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../../../context/LanguageContext";
 import Loader from "../../../../components/loading/loadingPage";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";

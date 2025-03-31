@@ -1,4 +1,4 @@
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../context/LanguageContext";
 import Logo from "@/components/header/top-bar/logo";
 import {
   BellRing,
@@ -32,7 +32,7 @@ export default function Sidebar() {
           }`}
         />
       ),
-      path: "/customer/dashboard/orders",
+      path: "/customer/dashboard/",
       tooltip: t("Home"), // التعديل هنا
     },
     {

@@ -1,4 +1,4 @@
-import InfoCard from "../adminComponents/cards/info_card";
+import InfoCard from "../cards/info_card";
 
 export default function HowItWorks() {
   const steps = [

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { TextField, InputAdornment, IconButton } from "@mui/material";
 import axiosInstance from "@/utils/axiosInstance";
 import { toast } from "sonner";
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../../context/LanguageContext";
 import LoadingBTN from "@/components/loading/loadingBTN";
 import { Eye, EyeOff } from "lucide-react";
 import axios from "axios";

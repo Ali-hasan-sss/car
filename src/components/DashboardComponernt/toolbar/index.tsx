@@ -1,4 +1,4 @@
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "../../../context/LanguageContext";
 import { Grid2X2, List, Settings } from "lucide-react";
 import { useEffect } from "react";
 

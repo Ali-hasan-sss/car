@@ -58,17 +58,17 @@ interface User {
   updated_at: string;
 }
 
-export interface Order {
+export interface Auction {
   id: number;
   auction_link: string | null;
   category: Category;
-  year: number;
+  year: string;
   transmission_type: number;
   drive_system: number;
   fuel_type: number;
   cylinders: number;
-  from_budget: number;
-  to_budget: number;
+  from_budget: string;
+  to_budget: string;
   shipping_option: number;
   ex_color: string;
   in_color: string;
@@ -84,17 +84,57 @@ export interface AuctionsFormInputs {
   manufacturer: number | null;
   category_id: number | null;
   year: string;
-  transmission_type: string;
-  drive_system: string;
-  fuel_type: string;
-  cylinders: string;
+  transmission_type: number;
+  drive_system: number;
+  fuel_type: number;
+  cylinders: number;
   from_budget: string;
   country_id: number | null;
   to_budget: string;
-  shipping_option: string;
+  shipping_option: number;
   car_status: string;
   ex_color: string;
   in_color: string;
   shipping_from: string;
   id?: number; // لإجراء التعديل نحتاج الـ id
+}
+export interface CarSale {
+  id: number;
+  manufacturer: number | null;
+  user_id: number;
+  category_id: number | null;
+  cmodel_id: number | null;
+  year: string;
+  mileage: number;
+  drive_system: number;
+  transmission_type: number;
+  cylinders: number;
+  fuel_type: number;
+  price: string;
+  ex_color: string;
+  in_color: string;
+  shipping_from: number | null;
+  car_status: number;
+  status: number;
+  location_of_car?: string | null;
+  car_fax?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+export interface SallesFormInputs {
+  manufacturer: number | null;
+  cmodel_id: number | null;
+  category_id: number | null;
+  mileage: number;
+  year: string;
+  drive_system: number;
+  transmission_type: number;
+  cylinders: number;
+  fuel_type: number;
+  price: string;
+  shipping_from: number | null;
+  car_status: number;
+  ex_color: string;
+  in_color: string;
+  id?: number;
 }

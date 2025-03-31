@@ -2,91 +2,95 @@
 
 import Text_selector from "@/components/inputs/selectors/text_selector";
 import Text_input from "@/components/inputs/Text_input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   mileageOptions,
-  budgetOptions,
   CarStatusOptions,
-  carLocations,
-  CarfaxOptions,
+  //CarfaxOptions,
   driveSystemOPtions,
-  ExteriorColor,
   fuelTypeOptions,
-  InteriorColor,
   NumberOfCylinders,
-  yearOfMade,
+  TransmissionTypeOptions,
+  InteriorColor,
+  ExteriorColor,
 } from "../data";
-import { FaMinus } from "react-icons/fa";
-import Chooser from "@/components/inputs/chooser";
-import Budget_selector from "@/components/inputs/selectors/budget_selector";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import DainamicSelector from "@/components/inputs/selectors/DainamicSelector";
 
-interface SallesFormInputs {
-  link: string;
-  manufacturer: number | null;
-  cmodel_id: number | null;
-  category_id: number | null;
-  Mileage: string;
-  from_budget: string;
-  to_budget: string;
-  status: string;
-  Carfax: string;
-  yearOfMade: string;
-  transmission: string;
-  driveSystem: string;
-  fuelType: string;
-  cylinders: string;
-  budget: { from: string; to: string };
-  exteriorColor: string;
-  interiorColor: string;
-  destinationCountry: string;
-  location: string;
-  shippingOption: string;
-  shippedlocations: string;
-  not_shippedlocations: string;
-  images: File[];
-}
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import DainamicSelector from "@/components/inputs/selectors/DainamicSelector";
+import { fetchManufacturers } from "@/store/slice/manufacturerSlice";
+import { addCarSale, updateCarSale } from "@/store/slice/carSalesSlice";
+import { SallesFormInputs } from "@/Types/AuctionTypes";
 
 interface SallesProps {
   close: () => void;
+  initialData?: SallesFormInputs | null;
+  onSubmit: (data: SallesFormInputs) => void;
 }
 
-export default function Salles({ close }: SallesProps) {
+export default function Salles({ close, initialData, onSubmit }: SallesProps) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [categories, setCategories] = useState<any[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [models, setModels] = useState<any[]>([]);
+  const [manufacturerLoading, setManufacturerLoading] = useState(false);
   const [formData, setFormData] = useState<SallesFormInputs>({
-    link: "",
     manufacturer: null,
     category_id: null,
     cmodel_id: null,
-    Mileage: "",
-    from_budget: "",
-    to_budget: "",
-    status: "",
-    Carfax: "",
-    yearOfMade: "",
-    shippingOption: "",
-    transmission: "",
-    driveSystem: "",
-    fuelType: "",
-    cylinders: "",
-    budget: { from: "", to: "" },
-    exteriorColor: "",
-    interiorColor: "",
-    destinationCountry: "",
-    location: "",
-    shippedlocations: "",
-    not_shippedlocations: "",
-    images: [],
+    mileage: 0,
+    year: "",
+    drive_system: 1,
+    transmission_type: 1,
+    cylinders: 4,
+    fuel_type: 1,
+    price: "",
+    shipping_from: 0,
+    car_status: 1,
+    //Carfax: "",
+    //shippingOption: "",
+    //budget: { from: "", to: "" },
+    ex_color: "",
+    in_color: "",
+    // destinationCountry: "",
+    // location: "",
+
+    // not_shippedlocations: "",
+    // images: [],
   });
-  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
-  const { manufacturers } = useSelector(
+  // const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
+  const { manufacturers, status } = useSelector(
     (state: RootState) => state.manufacturer
   );
+  const currentYear = new Date().getFullYear();
+  const yearOfMade = Array.from({ length: 30 }, (_, i) => {
+    const yearString = (currentYear - i).toString();
+    return { value: yearString, label: yearString };
+  });
+  useEffect(() => {
+    if (initialData) {
+      setFormData(initialData);
+      // تحميل الكاتيجوري والموديل بناءً على البيانات
+      const selectedManufacturer = manufacturers.find(
+        (m) => m.id === initialData.manufacturer
+      );
+      if (selectedManufacturer?.categories) {
+        setCategories(selectedManufacturer.categories);
+      }
+    }
+  }, [initialData, manufacturers]);
+  useEffect(() => {
+    if (status === "idle") {
+      setManufacturerLoading(true);
+      dispatch(fetchManufacturers());
+    }
+  }, [dispatch, status]);
+  useEffect(() => {
+    if (status === "succeeded" || status === "failed") {
+      setManufacturerLoading(false);
+    }
+  }, [status]);
   const handleManufacturerChange = (value: number | null) => {
     setFormData((prev) => ({
       ...prev,
@@ -131,48 +135,98 @@ export default function Salles({ close }: SallesProps) {
   ): void => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      const files = Array.from(event.target.files);
-      setFormData((prev) => ({ ...prev, images: files }));
 
-      const urls = files.map((file) => URL.createObjectURL(file));
-      setPreviewUrls(urls);
+  // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (event.target.files) {
+  //     const files = Array.from(event.target.files);
+  //     setFormData((prev) => ({ ...prev, images: files }));
+
+  //     const urls = files.map((file) => URL.createObjectURL(file));
+  //     setPreviewUrls(urls);
+  //   }
+  // };
+  // const handleRemoveImage = (index: number) => {
+  //   // إزالة الصورة من previewUrls
+  //   setPreviewUrls((prev) => prev.filter((_, i) => i !== index));
+
+  //   // إزالة الصورة من formData.images
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     images: prev.images.filter((_, i) => i !== index),
+  //   }));
+  // };
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const validateForm = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (!formData.manufacturer)
+      newErrors.manufacturer = "يرجى اختيار الشركة المصنعة.";
+    if (!formData.category_id) newErrors.category_id = "يرجى اختيار الموديل.";
+    if (!formData.year) newErrors.year = "يرجى تحديد سنة الصنع.";
+    if (!formData.transmission_type)
+      newErrors.transmission_type = "يرجى تحديد نوع ناقل الحركة.";
+    if (!formData.drive_system)
+      newErrors.drive_system = "يرجى اختيار نظام الدفع.";
+    if (!formData.fuel_type) newErrors.fuel_type = "يرجى تحديد نوع الوقود.";
+    if (!formData.cylinders) newErrors.cylinders = "يرجى تحديد عدد الأسطوانات.";
+    if (!formData.price) newErrors.price = "يرجى إدخال سعر.";
+    // if (!formData.ex_color)
+    //   newErrors.ex_color = "يرجى تحديد لون السيارة الخارجي.";
+    // if (!formData.in_color)
+    //  newErrors.in_color = "يرجى تحديد لون السيارة الداخلي.";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  const handleSubmit = async () => {
+    try {
+      if (initialData?.id) {
+        // ✅ تعديل
+        if (validateForm()) {
+          await dispatch(
+            updateCarSale({
+              apiUrl: "customer/car-sales",
+              id: initialData.id,
+              updatedData: formData,
+            })
+          );
+        } else return;
+      } else {
+        // ✅ إضافة
+        if (validateForm()) {
+          await dispatch(
+            addCarSale({ apiUrl: "customer/car-sales", carSaleData: formData })
+          );
+        } else return;
+      }
+      // ✅ تحديث الحالة في المكون الأب
+      onSubmit(formData);
+      close();
+    } catch (error) {
+      console.error(error);
     }
-  };
-  const handleRemoveImage = (index: number) => {
-    // إزالة الصورة من previewUrls
-    setPreviewUrls((prev) => prev.filter((_, i) => i !== index));
-
-    // إزالة الصورة من formData.images
-    setFormData((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index),
-    }));
-  };
-
-  const handleSubmit = () => {
-    console.log("Form Data Submitted:", formData);
   };
 
   return (
     <div className="flex flex-col gap-[16px] px-[15px]">
       <div className="heading_form flex item-center justify-center">
-        <h2 className="title">Car Shipping</h2>
+        <h2 className="title">Car Sales</h2>
       </div>
       <div className="carInfo flwx fles-col items-center justify-start gap-[15px]">
         <h3 className="">Car Information:</h3>
         <div className="flex flex-wrap items-center justify-between  gap-[15px]">
           <div className="selector">
-            <label>Car Manufacturer and Model:</label>
+            <label>Car Manufacturer:</label>
             <DainamicSelector
+              placeholder="BMW , Audi , kia ..."
               data={manufacturers}
               value={formData.manufacturer}
               onChange={handleManufacturerChange}
+              error={errors.manufacturer}
+              dataLoading={manufacturerLoading}
             />
           </div>
           <div className="selector">
-            <label>Car Manufacturer and Model:</label>
+            <label>Car Model:</label>
             <DainamicSelector
               data={categories}
               value={formData.category_id}
@@ -192,8 +246,8 @@ export default function Salles({ close }: SallesProps) {
             <Text_selector
               options={yearOfMade}
               placeholder="2018"
-              value={formData.yearOfMade}
-              onChange={(value) => handleInputChange("yearOfMade", value)}
+              value={formData.year}
+              onChange={(value) => handleInputChange("year", String(value))}
             />
           </div>
         </div>
@@ -203,17 +257,19 @@ export default function Salles({ close }: SallesProps) {
             <Text_selector
               options={mileageOptions}
               placeholder="Sedan, SUV, Truck"
-              value={formData.Mileage}
-              onChange={(value) => handleInputChange("Mileage", value)}
+              value={formData.mileage}
+              onChange={(value) => handleInputChange("mileage", Number(value))}
             />
           </div>
           <div className="selector">
             <label> Drive System:</label>
             <Text_selector
               options={driveSystemOPtions}
-              placeholder="2018"
-              value={formData.driveSystem}
-              onChange={(value) => handleInputChange("driveSystem", value)}
+              placeholder="auto..."
+              value={formData.drive_system}
+              onChange={(value) =>
+                handleInputChange("drive_system", Number(value))
+              }
             />
           </div>
         </div>
@@ -227,40 +283,44 @@ export default function Salles({ close }: SallesProps) {
               options={NumberOfCylinders}
               placeholder="toyota corola"
               value={formData.cylinders}
-              onChange={(value) => handleInputChange("cylinders", value)}
+              onChange={(value) =>
+                handleInputChange("cylinders", Number(value))
+              }
+            />
+          </div>
+          <div className="selector">
+            <label>Transmission Type:</label>
+            <Text_selector
+              options={TransmissionTypeOptions}
+              placeholder="Manual..."
+              value={formData.transmission_type}
+              onChange={(value) =>
+                handleInputChange("transmission_type", Number(value))
+              }
+              error={errors.transmission_type}
             />
           </div>
           <div className="selector">
             <label>Fuel Type</label>
             <Text_selector
               options={fuelTypeOptions}
-              placeholder="Sedan, SUV, Truck"
-              value={formData.fuelType}
-              onChange={(value) => handleInputChange("fuelType", value)}
+              placeholder="Petrol..."
+              value={formData.fuel_type}
+              onChange={(value) =>
+                handleInputChange("fuel_type", Number(value))
+              }
             />
           </div>
           <div className="selector">
             <label>Price</label>
-            <Budget_selector
-              from_budget={formData.from_budget}
-              to_budget={formData.to_budget}
-              options={budgetOptions}
-              placeholder={{ from: "اختر الحد الأدنى", to: "اختر الحد الأعلى" }}
-              onFromChange={(value) => handleInputChange("from_budget", value)}
-              onToChange={(value) => handleInputChange("to_budget", value)}
+            <Text_input
+              placeholder="Sedan, SUV, Truck"
+              value={formData.price}
+              onChange={(e) => handleInputChange("price", e.target.value)}
             />
           </div>
         </div>
-        <div className="flex flex-wrap items-center justify-between  gap-[10px]">
-          <div className="selector">
-            <label>Number of Cylinders:</label>
-            <Text_selector
-              options={NumberOfCylinders}
-              placeholder="toyota corola"
-              value={formData.cylinders}
-              onChange={(value) => handleInputChange("cylinders", value)}
-            />
-          </div>
+        {/* <div className="flex flex-wrap items-center justify-between  gap-[10px]">
           <div className="selector">
             <label>Exterior Color:</label>
             <Text_selector
@@ -279,40 +339,64 @@ export default function Salles({ close }: SallesProps) {
               onChange={(value) => handleInputChange("interiorColor", value)}
             />
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="carInfo flwx fles-col items-center justify-start gap-[10px]">
         <h3 className="">Shipping & Location:</h3>
         <div className="flex flex-wrap items-center justify-between  gap-[10px]">
-          <div className="selector">
+          {/* <div className="selector">
             <label>Shipping From</label>
             <Text_input
-              value={formData.location}
+              value={formData.shipping_from}
               id="link"
               placeholder="Canada..."
-              onChange={(e) => handleInputChange("location", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("shipping_from", e.target.value)
+              }
             />
-          </div>
+          </div> */}
           <div className="selector">
             <label>Car Status</label>
             <Text_selector
               options={CarStatusOptions}
               placeholder="In Stock, In Transit, Arrived"
-              value={formData.status}
-              onChange={(value) => handleInputChange("status", value)}
+              value={formData.car_status}
+              onChange={(value) =>
+                handleInputChange("car_status", Number(value))
+              }
+            />
+          </div>
+          <div className="selector">
+            <label>Exterior Color:</label>
+            <Text_selector
+              options={ExteriorColor}
+              placeholder="white..."
+              value={formData.ex_color}
+              onChange={(value) => handleInputChange("ex_color", String(value))}
+              error={errors.ex_color}
+            />
+          </div>
+          <div className="selector">
+            <label>Interior Color: </label>
+            <Text_selector
+              options={InteriorColor}
+              placeholder="white..."
+              value={formData.in_color}
+              onChange={(value) => handleInputChange("in_color", String(value))}
+              error={errors.in_color}
             />
           </div>
           <div className="selector">
             <label>Location of Car (If shipped)</label>
-            <Text_selector
-              options={carLocations}
-              placeholder="2018"
-              value={formData.shippedlocations}
-              onChange={(value) => handleInputChange("shippedlocations", value)}
+            <DainamicSelector
+              Api_URL="customer/countries"
+              placeholder="Canada"
+              value={formData.shipping_from}
+              onChange={(value) => handleInputChange("shipping_from", value)}
             />
           </div>
         </div>
-        <Chooser
+        {/* <Chooser
           question="Location of Car (If not shipped)"
           option1="On the way"
           value1="On the way"
@@ -320,32 +404,14 @@ export default function Salles({ close }: SallesProps) {
           value2="In transit"
           value={formData.not_shippedlocations}
           onChange={(value) => handleInputChange("not_shippedlocations", value)}
-        />
+        /> */}
       </div>
-      <div className="carInfo flwx fles-col items-center justify-start gap-[10px]">
+      {/* <div className="carInfo flwx fles-col items-center justify-start gap-[10px]">
         <h3 className="">Additional Features:</h3>
         <div className="flex flex-wrap items-center justify-between  gap-[10px]">
           <div className="selector">
-            <label>Carfax </label>
-            <Text_selector
-              options={CarfaxOptions}
-              placeholder="Available or Not Available"
-              value={formData.Carfax}
-              onChange={(value) => handleInputChange("Carfax", value)}
-            />
-          </div>
-          <div className="selector">
-            <label>Car Status</label>
-            <Text_selector
-              options={CarStatusOptions}
-              placeholder="In Stock, In Transit, Arrived"
-              value={formData.status}
-              onChange={(value) => handleInputChange("status", value)}
-            />
-          </div>
-          <div className="selector">
             <label>Car Images</label>
-            <input
+             <input
               type="file"
               id="car-images"
               accept="image/*"
@@ -353,7 +419,7 @@ export default function Salles({ close }: SallesProps) {
               multiple
               onChange={handleFileChange}
               className="block w-full text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-            />
+            /> }
             <div className="grid grid-cols-2 gap-4">
               {previewUrls.map((url, index) => (
                 <div key={index} className="relative group">
@@ -362,19 +428,18 @@ export default function Salles({ close }: SallesProps) {
                     alt={`Preview ${index + 1}`}
                     className="w-full h-32 object-cover rounded-md"
                   />
-                  {/* زر الإزالة */}
-                  <button
+                   <button
                     onClick={() => handleRemoveImage(index)}
                     className="absolute top-2 right-2 z-50 text-red-500  rounded-full border border-red-500 p-2 "
                   >
                     <FaMinus />
-                  </button>
+                  </button> 
                 </div>
               ))}
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="flex flex-wrap actions w-full gap-[10px] mt-4 py-4 items-center justify-between">
         <button

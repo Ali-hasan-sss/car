@@ -1,8 +1,8 @@
 "use client";
 import "./dashboard.css";
-import Footer from "./footer";
-import Sidebar from "./siedbar";
-import Topbar from "./topbar";
+import Footer from "../../../components/DashboardComponernt/footer";
+import Sidebar from "../../../components/DashboardComponernt/siedbar";
+import Topbar from "../../../components/DashboardComponernt/topbar";
 
 const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
