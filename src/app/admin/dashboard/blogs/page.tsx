@@ -88,10 +88,22 @@ export default function Blogs() {
       setIsEditing(true);
       setEditingBlog(blog);
       setFormData({
-        title: blog.title ?? { en: "", ar: "" },
-        body: blog.body ?? { en: "", ar: "" },
-        description: blog.description ?? { en: "", ar: "" },
-        image: blog.image ? blog.image.split("/").pop() ?? "" : "", // استخراج اسم الصورة الرئيسية فقط
+        title:
+          typeof blog.title === "object" && blog.title !== null
+            ? blog.title
+            : { en: blog.title ?? "", ar: blog.title ?? "" },
+
+        body:
+          typeof blog.body === "object" && blog.body !== null
+            ? blog.body
+            : { en: blog.body ?? "", ar: blog.body ?? "" },
+
+        description:
+          typeof blog.description === "object" && blog.description !== null
+            ? blog.description
+            : { en: blog.description ?? "", ar: blog.description ?? "" },
+
+        image: blog.image ? blog.image.split("/").pop() ?? "" : "",
         images:
           blog.images?.map((img: string) => img.split("/").pop() ?? "") || [],
       });

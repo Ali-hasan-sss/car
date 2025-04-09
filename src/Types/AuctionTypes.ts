@@ -98,12 +98,36 @@ export interface AuctionsFormInputs {
   shipping_from: string;
   id?: number; // لإجراء التعديل نحتاج الـ id
 }
+//واجهة المبيعات
+interface ImageData {
+  id: number;
+  image: string;
+}
+
 export interface CarSale {
   id: number;
-  manufacturer: number | null;
-  user_id: number;
-  category_id: number | null;
-  cmodel_id: number | null;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    contact: {
+      mobile: string;
+      address1: string;
+      city: string;
+    };
+  };
+  category: {
+    id: number;
+    title: string;
+    manufacturer: {
+      id: number;
+      title: string;
+    };
+  };
+  cmodel: {
+    id: number;
+    title: string;
+  };
   year: string;
   mileage: number;
   drive_system: number;
@@ -118,9 +142,11 @@ export interface CarSale {
   status: number;
   location_of_car?: string | null;
   car_fax?: string | null;
+  images: ImageData[];
   created_at: string;
   updated_at: string;
 }
+
 export interface SallesFormInputs {
   manufacturer: number | null;
   cmodel_id: number | null;
@@ -137,4 +163,10 @@ export interface SallesFormInputs {
   ex_color: string;
   in_color: string;
   id?: number;
+  status?: number;
+  images: string[];
+  not_shippedlocations: string;
+  shipping_status: number;
+  carfax: number | null;
+  location_port: string;
 }

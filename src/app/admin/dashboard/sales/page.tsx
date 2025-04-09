@@ -8,28 +8,28 @@ import ToolBar from "@/components/DashboardComponernt/toolbar";
 import Search_input from "@/components/inputs/search_input";
 import { useEffect, useState } from "react";
 import GeneralTable, { Column } from "@/components/table";
-//import Grid_View from "@/components/table/gridView";
+import Grid_View from "@/components/table/gridView";
 
 import { useAppDispatch } from "@/store/Reducers/hooks";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import DeleteMessage from "@/components/messags/deleteMessage";
 import CustomPagination from "@/components/pagination/extrnalPagenation";
-import { SallesFormInputs } from "@/Types/AuctionTypes";
+import { CarSale, SallesFormInputs } from "@/Types/AuctionTypes";
 import {
   deleteCarSaleLocal,
   fetchCarSales,
   updateCarSale,
 } from "@/store/slice/carSalesSlice";
-
-//import GeneralTable from "@/components/table";
+import { Box, Modal } from "@mui/material";
+import Salles from "@/app/customer/dashboard/ordersForms/salles";
 
 export default function Sales() {
   const { t } = useLanguage();
   const [openFilter, setOpenFilter] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [deleteId] = useState(0);
+  const [deleteId, setDeleteId] = useState(0);
   const [initForm, setInitForm] = useState<SallesFormInputs | null>(null);
   const [showing, setShowing] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
@@ -113,14 +113,11 @@ export default function Sales() {
     dispatch(fetchCarSales({ API: apiUrl }));
   }, [dispatch, currentPage, showing]);
 
-  // const handleDelete = (id: number) => {
-  //   setOpenDeleteModal(true);
-  //   setDeleteId(id);
-  // };
   const handleAcceptReject = async (
     id: number,
     type: "accept" | "reject" | "finish"
   ) => {
+    console.log(`the id : ${id} the type: ${type}`);
     setSelectedRequest({ id, type });
     const status = type === "accept" ? 2 : type === "reject" ? 0 : 3; // تحديد القيمة بناءً على نوع الإجراء
     try {
@@ -142,30 +139,43 @@ export default function Sales() {
     }
   };
 
-  // const handleEdit = (order: CarSale) => {
-  //   const mapOrderToFormInputs = (order: CarSale): SallesFormInputs => {
-  //     return {
-  //       manufacturer: order.manufacturer || null,
-  //       cmodel_id: order.cmodel_id || null,
-  //       category_id: order.category_id || null, // نفس الشيء مع category
-  //       mileage: order.mileage || 0,
-  //       year: order.year.toString() || "", // تحويل السنة إلى نص
-  //       transmission_type: order.transmission_type || 1, // نفس الشيء مع transmission_type
-  //       drive_system: order.drive_system || 1, // نفس الشيء مع drive_system
-  //       fuel_type: order.fuel_type || 1, // نفس الشيء مع fuel_type
-  //       cylinders: order.cylinders || 4, // نفس الشيء مع cylinders
-  //       price: order.price.toString() || "", // تحويل القيمة إلى نص
-  //       shipping_from: order.shipping_from || null, // نفس الشيء مع shipping_option
-  //       car_status: order.car_status || 1, // تحويل الحالة إلى نص
-  //       ex_color: order.ex_color || "", // اللون الخارجي
-  //       in_color: order.in_color || "", // اللون الداخلي
-  //       id: order.id,
-  //     };
-  //   };
-  //   const formData = mapOrderToFormInputs(order);
-  //   setInitForm(formData);
-  //   setOpenModal(true);
-  // };
+  const handleEdit = (order: CarSale) => {
+    const mapOrderToFormInputs = (order: CarSale): SallesFormInputs => {
+      return {
+        manufacturer: order.category?.manufacturer?.id ?? null,
+        cmodel_id: order.cmodel?.id ?? null,
+        category_id: order.category?.id ?? null,
+        mileage: order.mileage ?? 0,
+        year: order.year?.toString() ?? "",
+        drive_system: order.drive_system ?? 1,
+        transmission_type: order.transmission_type ?? 1,
+        cylinders: order.cylinders ?? 4,
+        fuel_type: order.fuel_type ?? 1,
+        price: order.price?.toString() ?? "",
+        shipping_from: order.shipping_from ?? null,
+        car_status: typeof order.status === "number" ? order.status : 0,
+        ex_color: order.ex_color ?? "",
+        in_color: order.in_color ?? "",
+        id: order.id,
+        images: order.images?.map((img) => img.image) ?? [],
+        not_shippedlocations: "",
+        shipping_status: 0,
+        carfax: null, // إذا كنت تحتاجها من order.car_fax، حولها لرقم أو غيّر النوع في الفورم
+        location_port: "",
+      };
+    };
+
+    const formData = mapOrderToFormInputs(order);
+    setInitForm(formData);
+    console.log(initForm);
+    setOpenModal(true);
+  };
+
+  const handleDelete = (id: number) => {
+    console.log("تم النقر على حذف، رقم الطلب:", id);
+    setOpenDeleteModal(true);
+    setDeleteId(id);
+  };
   if (error) return <div>{error}</div>;
   return (
     <div className="flex flex-col items-center w-full  gap-[5px]">
@@ -212,18 +222,21 @@ export default function Sales() {
           searchTerm={searchTerm}
         />
       ) : (
-        // <Grid_View
-        //   loading={loading}
-        //   data={carSales}
-        //   sortBy={sortby}
-        //   showing={showing}
-        //   onTotalCountChange={setTotalCount}
-        //   searchTerm={searchTerm}
-        //   onDelete={(id) => handleDelete(id)}
-        //   onEdit={(order) => handleEdit(order)}
-        //   onChangeStatus={handleAcceptReject}
-        // />
-        <></>
+        <Grid_View
+          loading={loading}
+          data={carSales}
+          sortBy={sortby}
+          showing={showing}
+          onTotalCountChange={setTotalCount}
+          searchTerm={searchTerm}
+          onDelete={(id) => handleDelete(id)}
+          onEdit={(order) => {
+            if ("images" in order) {
+              handleEdit(order);
+            }
+          }}
+          onChangeStatus={handleAcceptReject}
+        />
       )}
       <CustomPagination
         totalPages={totalPages}
@@ -238,6 +251,36 @@ export default function Sales() {
           handleClose={() => setOpenDeleteModal(false)}
           onDeleteSuccess={() => dispatch(deleteCarSaleLocal(deleteId))}
         />
+      )}
+      {openModal && (
+        <Modal open={openModal} onClose={closeModal}>
+          <Box
+            sx={{
+              position: "fixed",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "80%", // 80% من عرض الشاشة (يبقى 10% من الجوانب)
+              maxWidth: "1000px", // الحد الأقصى لعرض المودال
+              height: "80%", // 80% من ارتفاع الشاشة (يبقى 10% من الأعلى والأسفل)
+              maxHeight: "90vh", // ضمان عدم تجاوز الشاشة
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 3,
+              borderRadius: "8px",
+              overflowY: "auto", // السماح بالتمرير عند زيادة المحتوى
+              outline: "none",
+            }}
+          >
+            <Salles
+              onSubmit={(data) => {
+                console.log(data);
+              }}
+              initialData={initForm}
+              close={() => setOpenModal(false)}
+            />
+          </Box>
+        </Modal>
       )}
     </div>
   );

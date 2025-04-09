@@ -18,36 +18,44 @@ export default function Chooser({
   onChange,
 }: ChooserProps) {
   const handleOptionChange = (selectedValue: string) => {
-    // استدعاء الدالة onChange وتمرير القيمة المختارة
-    onChange(selectedValue);
+    // إذا كان الخيار المضغوط هو نفسه الحالي، قم بإلغاء التحديد
+    if (value === selectedValue) {
+      onChange(""); // إزالة التحديد
+    } else {
+      onChange(selectedValue); // تحديد الخيار
+    }
   };
 
   return (
     <div className="flex flex-col gap-1 items-start">
       <label className="font-bold text-text_titles text-xl">{question}</label>
+
       <div className="flex items-center gap-[5px]">
         <input
           type="radio"
-          id="1"
+          id="option1"
           value={value1}
-          checked={value === value1} // تحديد إذا كان الخيار محددًا
-          onChange={() => handleOptionChange(value1)} // إرسال قيمة الخيار الأول عند التغيير
+          checked={value === value1}
+          onClick={() => handleOptionChange(value1)} // استخدم onClick بدلاً من onChange
+          readOnly // منع التغيير التلقائي من المتصفح
           className="custom-radio cursor-pointer"
         />
-        <label className="text-text_des" htmlFor="1">
+        <label className="text-text_des cursor-pointer" htmlFor="option1">
           {option1}
         </label>
       </div>
-      <div className="flex items-center gap-[10px]">
+
+      <div className="flex items-center gap-[5px]">
         <input
           type="radio"
-          id="2"
+          id="option2"
           value={value2}
-          checked={value === value2} // تحديد إذا كان الخيار محددًا
-          onChange={() => handleOptionChange(value2)} // إرسال قيمة الخيار الثاني عند التغيير
+          checked={value === value2}
+          onClick={() => handleOptionChange(value2)}
+          readOnly
           className="custom-radio cursor-pointer"
         />
-        <label className="text-text_des" htmlFor="2">
+        <label className="text-text_des cursor-pointer" htmlFor="option2">
           {option2}
         </label>
       </div>

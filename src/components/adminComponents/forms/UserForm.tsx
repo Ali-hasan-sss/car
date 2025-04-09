@@ -1,11 +1,12 @@
+import { languageOption } from "@/app/customer/dashboard/ordersForms/data";
 import DainamicSelector from "@/components/inputs/selectors/DainamicSelector";
+import TextSelector from "@/components/inputs/selectors/text_selector";
 import LoadingBTN from "@/components/loading/loadingBTN";
 import UploadFile from "@/components/uploders/Uploader/UploadFile";
 import { Box, TextField } from "@mui/material";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-
-interface UserFormProps {
+export interface UserFormProps {
   initialData: {
     email: string;
     type: number;
@@ -30,7 +31,6 @@ interface UserFormProps {
   loading: boolean;
   skip: boolean;
 }
-
 const UserForm: React.FC<UserFormProps> = ({
   initialData,
   onSubmit,
@@ -70,7 +70,9 @@ const UserForm: React.FC<UserFormProps> = ({
   };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateForm) {
+
+    if (validateForm()) {
+      console.log(formData);
       onSubmit(formData);
     }
   };
@@ -117,37 +119,38 @@ const UserForm: React.FC<UserFormProps> = ({
                   label="رقم الجوال"
                   name="mobile"
                   fullWidth
-                  margin="normal"
+                  margin="none"
                   value={formData.mobile}
                   onChange={handleChange}
                   error={!!errors.mobile}
                   helperText={errors.mobile}
-                />
-                {/* Country Selector */}
-                <DainamicSelector
-                  value={formData.country_id}
-                  onChange={(value) =>
-                    setFormData({ ...formData, country_id: value })
-                  }
-                  Api_URL="customer/countries"
                 />
                 {/* Address 1 */}
                 <TextField
                   label="العنوان 1"
                   name="address1"
                   fullWidth
-                  margin="normal"
+                  margin="none"
                   value={formData.address1}
                   onChange={handleChange}
                   error={!!errors.address1}
                   helperText={errors.address1}
+                />
+                {/* Country Selector */}
+                <DainamicSelector
+                  placeholder="Country"
+                  value={formData.country_id}
+                  onChange={(value) =>
+                    setFormData({ ...formData, country_id: value })
+                  }
+                  Api_URL="customer/countries"
                 />
                 {/* City */}
                 <TextField
                   label="المدينة"
                   name="city"
                   fullWidth
-                  margin="normal"
+                  margin="none"
                   value={formData.city}
                   onChange={handleChange}
                   error={!!errors.city}
@@ -159,38 +162,36 @@ const UserForm: React.FC<UserFormProps> = ({
                   label="رقم جوال اخر (اختياري)"
                   name="other_mobile"
                   fullWidth
-                  margin="normal"
+                  margin="none"
                   value={formData.other_mobile}
                   onChange={handleChange}
                   error={!!errors.other_mobile}
                   helperText={errors.other_mobile}
-                />
-                {/* Language */}
-                <TextField
-                  label="اللغة"
-                  name="language"
-                  fullWidth
-                  margin="normal"
-                  value={formData.language}
-                  onChange={handleChange}
-                  error={!!errors.language}
-                  helperText={errors.language}
                 />
                 {/* Address 2 */}
                 <TextField
                   label="العنوان 2 (اختياري)"
                   name="address2"
                   fullWidth
-                  margin="normal"
+                  margin="none"
                   value={formData.address2}
                   onChange={handleChange}
+                />
+                {/* Language */}
+                <TextSelector
+                  placeholder="Language"
+                  options={languageOption}
+                  onChange={(value) => {
+                    setFormData({ ...formData, language: String(value) });
+                  }}
+                  value={formData.language}
                 />
                 {/* Zip Code */}
                 <TextField
                   label="الرمز البريدي (اختياري)"
                   name="zip_code"
                   fullWidth
-                  margin="normal"
+                  margin="none"
                   value={formData.zip_code}
                   onChange={handleChange}
                 />

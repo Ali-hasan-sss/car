@@ -49,6 +49,12 @@ export default function Actions() {
   console.log(selectedRequest);
   const columns: Column[] = [
     {
+      id: "user.name",
+      label: " اسم صاحب الطلب",
+      languageDisplay: "en",
+      includeInForm: true,
+    },
+    {
       id: "category.manufacturer.title",
       label: "الشركة الصانعة",
       languageDisplay: "en",
@@ -221,7 +227,11 @@ export default function Actions() {
           onTotalCountChange={setTotalCount}
           searchTerm={searchTerm}
           onDelete={(id) => handleDelete(id)}
-          onEdit={(order) => handleEdit(order)}
+          onEdit={(order) => {
+            if ("auction_link" in order) {
+              handleEdit(order); // ✅ TypeScript يعرف إنه Auction
+            }
+          }}
           onChangeStatus={handleAcceptReject}
         />
       )}

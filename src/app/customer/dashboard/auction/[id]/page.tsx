@@ -20,7 +20,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 export default function AuctionDetails() {
-  const { id: paramId } = useParams();
+  const params = useParams();
+  const paramId = params?.id as string;
   const id = Number(paramId);
   const apiUrl = "customer/car-auctions";
   const dispatch = useAppDispatch();

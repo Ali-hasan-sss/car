@@ -8,8 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLogout } from "@/store/slice/authSlice";
 import { RootState } from "@/store/store";
 import ActionComfirm from "../messags/actionComfirm";
-
-export default function Avatar() {
+interface AvatarProps {
+  width: string;
+}
+export default function Avatar({ width }: AvatarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { t, isArabic } = useLanguage();
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -101,7 +103,7 @@ export default function Avatar() {
         onClick={toggleDropdown}
       >
         <img
-          className="w-8 h-8 me-2 rounded-full"
+          className={`w-${width} h-${width} me-2 rounded-full`}
           src="/images/avatar.png"
           alt="user photo"
         />

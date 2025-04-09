@@ -16,7 +16,8 @@ import { Button, Dialog } from "@mui/material";
 import UserForm from "@/components/adminComponents/forms/UserForm";
 
 export default function User() {
-  const { id: paramId } = useParams();
+  const params = useParams();
+  const paramId = params?.id as string;
   const id = Number(paramId);
   const router = useRouter();
   const [userData, setUserData] = useState<UserData | null>(null);

@@ -11,7 +11,7 @@ export default function AdminNavbar() {
         <Logo />
         <div className="flex items-center gap-[40px]">
           <LanguageSwitcher />
-          <Avatar />
+          <Avatar width="8" />
         </div>
       </div>
     </div>

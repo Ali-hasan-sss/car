@@ -39,7 +39,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await axiosInstance.post("admin/uploadFile", formData);
+      const response = await axiosInstance.post("uploadFile", formData);
       const uploadedFileUrl = response.data?.data?.file;
       const uploadedFileName = response.data?.data?.fileName;
 
@@ -53,7 +53,10 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
           ...prev,
           { url: uploadedFileUrl, name: uploadedFileName },
         ];
-        onImagesUpload(updatedImages.map((img) => img.name)); // ✅ يتم استدعاء onImagesUpload مباشرة هنا
+        // ✅ تأخير التحديث لمنع setState أثناء render
+        setTimeout(() => {
+          onImagesUpload(updatedImages.map((img) => img.name));
+        }, 0);
         return updatedImages;
       });
     } catch (error) {
@@ -79,7 +82,9 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   const removeImage = (index: number) => {
     setImages((prev) => {
       const updatedImages = prev.filter((_, i) => i !== index);
-      onImagesUpload(updatedImages.map((img) => img.name)); // ✅ يتم التحديث هنا أيضًا
+      setTimeout(() => {
+        onImagesUpload(updatedImages.map((img) => img.name));
+      }, 0);
       return updatedImages;
     });
   };

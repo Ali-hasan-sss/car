@@ -112,6 +112,7 @@ export const translations: Record<Language, { [key: string]: string }> = {
     Terms: "Terms",
     Conditions: "Conditions",
     //toasts message
+    shipping_quastion: "Has the car been shipped by us?",
     Comfirm_dellete: "Are you sure you want to delete the selected item?",
     Confirm_logout: "Are you sure you want to logout?",
     Item_deleted_successfully: "Item_deleted_successfully ✅",
@@ -242,6 +243,7 @@ export const translations: Record<Language, { [key: string]: string }> = {
     Choose_Icon: "اختر ايقونة",
     Enter_The_Link: "ادخل الرابط",
     //toasts message
+    shipping_quastion: "هل تم شحن السيارة بواسطتنا؟ ",
     Comfirm_dellete: "هل انت متاكد من حذف العنصر؟",
     Confirm_logout: "هل انت متاكد من تسجيل الخروج؟",
     Item_deleted_successfully: "تم حذف العنصر بنجاح ✅",

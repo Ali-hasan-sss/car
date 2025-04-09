@@ -53,7 +53,24 @@ export interface User {
   idDetail?: IdDetail | null;
   created_at?: string;
 }
-
+export type initialData = {
+  email: string;
+  type: number;
+  name: string;
+  user_id: string;
+  mobile: string;
+  other_mobile: string;
+  country_id: number | null;
+  language: string;
+  address1: string;
+  address2: string;
+  city: string;
+  zip_code: string;
+  id_number: string;
+  id_file: string;
+  tax_info: string;
+  cr_certificate: string;
+};
 export interface UpdatedProfile {
   firstName: string;
   lastName: string;
@@ -96,11 +113,11 @@ export interface ServiceBlogFormProps {
 
 export interface Blog {
   id: number;
-  title: { en: string; ar: string };
-  body: { en: string; ar: string };
+  title: string | { en: string; ar: string };
+  description: string | { en: string; ar: string };
+  body: string | { en: string; ar: string };
   image: string;
   images?: string[];
-  description: { en: string; ar: string };
   ondelete?: () => void;
   onedit?: () => void;
 }

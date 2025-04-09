@@ -13,7 +13,7 @@ export default function Navbutton() {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   return isLoggedIn ? (
-    <Avatar />
+    <Avatar width="16" />
   ) : (
     <div className="flex w-[209px] h-[57px] p-[5px] gap-[8px] items-center">
       <Link

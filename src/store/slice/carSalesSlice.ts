@@ -3,7 +3,7 @@ import axiosInstance from "@/utils/axiosInstance";
 import axios from "axios";
 import { toast } from "sonner";
 import { RootState } from "../store";
-import { CarSale } from "@/Types/AuctionTypes";
+import { CarSale, SallesFormInputs } from "@/Types/AuctionTypes";
 
 // الحالة الابتدائية
 interface CarSalesState {
@@ -68,7 +68,7 @@ export const fetchCarSaleById = createAsyncThunk<
 // ✅ إضافة طلب بيع
 export const addCarSale = createAsyncThunk<
   CarSale,
-  { apiUrl: string; carSaleData: Partial<CarSale> },
+  { apiUrl: string; carSaleData: Partial<SallesFormInputs> },
   { rejectValue: string }
 >("carSales/addCarSale", async ({ apiUrl, carSaleData }, thunkAPI) => {
   try {
@@ -84,7 +84,7 @@ export const addCarSale = createAsyncThunk<
 // ✅ تعديل طلب بيع
 export const updateCarSale = createAsyncThunk<
   CarSale,
-  { apiUrl: string; id: number; updatedData: Partial<CarSale> },
+  { apiUrl: string; id: number; updatedData: Partial<SallesFormInputs> },
   { rejectValue: string }
 >("carSales/updateCarSale", async ({ apiUrl, id, updatedData }, thunkAPI) => {
   try {

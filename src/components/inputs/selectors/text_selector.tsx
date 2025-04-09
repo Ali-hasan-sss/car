@@ -10,7 +10,7 @@ import {
 
 interface SelectorInputProps {
   options: { value: string | number; label: string }[];
-  value: string | number;
+  value: string | number | null;
   placeholder: string;
   error?: string;
   label?: string;
@@ -32,13 +32,16 @@ const TextSelector: React.FC<SelectorInputProps> = ({
       {label && <InputLabel>{label}</InputLabel>}
       <Select
         placeholder={placeholder}
-        value={value}
+        value={value || ""}
         onChange={(event) => {
           const selectedValue = event.target.value;
           const option = options.find(
             (o) => o.value.toString() === selectedValue
           );
-          onChange(option ? option.value : selectedValue);
+          const newValue = option ? option.value : selectedValue;
+          if (newValue !== null && newValue !== undefined) {
+            onChange(newValue as string | number);
+          }
         }}
         displayEmpty
         renderValue={(selected) => {
@@ -51,7 +54,9 @@ const TextSelector: React.FC<SelectorInputProps> = ({
           }
           return (
             <span style={{ color: "#111827" /* Tailwind's gray-900 */ }}>
-              {t(options.find((o) => o.value === selected)?.label || "")}
+              {t(
+                options?.find((o) => o.value === selected)?.label || placeholder
+              )}
             </span>
           );
         }}
@@ -65,7 +70,7 @@ const TextSelector: React.FC<SelectorInputProps> = ({
         }}
       >
         {/* Render options */}
-        {options.map((option, index) => (
+        {options?.map((option, index) => (
           <MenuItem key={index} value={option.value.toString()}>
             {t(option.label)}
           </MenuItem>

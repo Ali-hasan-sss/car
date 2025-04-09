@@ -1,16 +1,14 @@
 import { useLanguage } from "../../context/LanguageContext";
-import { useState } from "react";
 
 interface chooseTypeProps {
   cklick: (x: string) => void;
   error?: string;
+  selectedType: string;
 }
 
-const Step1: React.FC<chooseTypeProps> = ({ cklick, error }) => {
+const Step1: React.FC<chooseTypeProps> = ({ cklick, error, selectedType }) => {
   const { t } = useLanguage();
-  const [selected, setSelected] = useState<string>("");
   const handleClick = (type: string) => {
-    setSelected(type);
     cklick(type);
   };
 
@@ -20,7 +18,7 @@ const Step1: React.FC<chooseTypeProps> = ({ cklick, error }) => {
         <div
           onClick={() => handleClick("1")}
           className={`input-box ${
-            selected === "1" ? "active" : ""
+            selectedType === "1" ? "active" : ""
           } w-[100px] h-[60px] flex items-center justify-center p-[8px]`}
         >
           {t("private")}
@@ -28,7 +26,7 @@ const Step1: React.FC<chooseTypeProps> = ({ cklick, error }) => {
         <div
           onClick={() => handleClick("2")}
           className={`input-box ${
-            selected === "2" ? "active" : ""
+            selectedType === "2" ? "active" : ""
           } w-[100px] h-[60px] flex items-center justify-center p-[8px]`}
         >
           {t("company")}

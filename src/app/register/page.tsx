@@ -218,7 +218,11 @@ const Signup: React.FC = () => {
             {/* Form Inputs */}
             <form className="flex flex-col w-full items-center justify-center gap-[10px]">
               {step === 1 ? (
-                <Step1 cklick={handleTypeSelect} error={errors.type} />
+                <Step1
+                  cklick={handleTypeSelect}
+                  error={errors.type}
+                  selectedType={formData.type}
+                />
               ) : step === 2 && accountType === "1" ? (
                 <Personal_step1
                   formData={formData}
@@ -257,7 +261,7 @@ const Signup: React.FC = () => {
                 ) : (
                   <button
                     onClick={handleFinalSubmit}
-                    className="w-full h-[40px] buttom"
+                    className="w-full flex items-center justify-center bg-primary1 submit"
                   >
                     {loading ? <LoadingBTN /> : t("Signup")}
                   </button>

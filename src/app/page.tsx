@@ -11,6 +11,7 @@ import HowItWorks from "@/components/HowItWorks";
 import Reviwe from "@/components/reviwe/index";
 import Store from "@/components/store";
 import Success from "@/components/SuccessNO";
+import TrackingMap from "@/components/traking";
 import { useEffect } from "react";
 
 export default function Home() {
@@ -28,6 +29,7 @@ export default function Home() {
       <Reviwe />
       <Gallery />
       <Contact />
+      <TrackingMap />
       <CTA
         title="See Our Car Shipping Services in Action!"
         des="Book a personalized demo to explore how we simplify car imports and

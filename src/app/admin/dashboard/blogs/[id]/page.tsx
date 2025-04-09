@@ -33,8 +33,9 @@ export default function Blog() {
   const [loading, setLoading] = useState(false);
   const [loadingPage, setLoadingPage] = useState(false);
   const { t } = useLanguage();
-  const { id: paramId } = useParams();
-  const id = Number(paramId);
+  const params = useParams();
+  const paramId = params?.id;
+  const id = Number(Array.isArray(paramId) ? paramId[0] : paramId);
 
   const onFormChange = useCallback(
     (updatedData: ServiceBlogFormProps["formData"]) => {
@@ -70,10 +71,19 @@ export default function Blog() {
   const openModal = () => {
     if (!blog) return;
     setFormData({
-      title: blog.title ?? { en: "", ar: "" },
-      body: blog.body ?? { en: "", ar: "" },
-      description: blog.description ?? { en: "", ar: "" },
-      image: blog.image ? blog.image.split("/").pop() ?? "" : "", // استخراج اسم الصورة الرئيسية فقط
+      title:
+        typeof blog.title === "string"
+          ? { en: "", ar: blog.title }
+          : blog.title ?? { en: "", ar: "" },
+      body:
+        typeof blog.body === "string"
+          ? { en: "", ar: blog.body }
+          : blog.body ?? { en: "", ar: "" },
+      description:
+        typeof blog.description === "string"
+          ? { en: "", ar: blog.description }
+          : blog.description ?? { en: "", ar: "" },
+      image: blog.image ? blog.image.split("/").pop() ?? "" : "",
       images:
         blog.images?.map((img: string) => img.split("/").pop() ?? "") || [],
     });
@@ -135,11 +145,7 @@ export default function Blog() {
         <div className="flex flex-col py-[40px] w-full items-center justify-center">
           <div className="w-[500px] overflow-hidden h-[300px] flex items-center justify-center">
             {blog?.image ? (
-              <img
-                src={blog.image}
-                alt={blog.title.en}
-                className="w-full object-cover"
-              />
+              <img src={blog.image} className="w-full object-cover" />
             ) : (
               <p>لا توجد صورة</p>
             )}
@@ -154,14 +160,23 @@ export default function Blog() {
                   <label className="text-text_dis">المقالة بالعربي</label>
                   <div className="w-full flex flex-col gap-2 border rounded p-2 bg-secondary1">
                     <h1 className="text-text_title font-bold text-xl">
-                      {blog.title.ar || "لا يوجد عنوان"}
+                      {typeof blog.title === "object" && "ar" in blog.title
+                        ? blog.title.ar
+                        : blog.title || "لا يوجد عنوان"}
                     </h1>
                     <hr />
                     <h2 className="text-text_des text-lg">
-                      {blog.description.ar || "لا يوجد وصف"}
+                      {typeof blog.description === "object" &&
+                      "ar" in blog.description
+                        ? blog.description.ar
+                        : blog.description || "لا يوجد وصف"}
                     </h2>
                     <hr />
-                    <p className="text-lg">{blog.body.ar || "لا يوجد محتوى"}</p>
+                    <p className="text-lg">
+                      {typeof blog.body === "object" && "ar" in blog.body
+                        ? blog.body.ar
+                        : blog.body || "لا يوجد محتوى"}
+                    </p>
                   </div>
                 </div>
 
@@ -169,14 +184,23 @@ export default function Blog() {
                   <label className="text-text_dis">المقالة بالإنجليزية</label>
                   <div className="w-full flex flex-col gap-2 border rounded p-2 bg-secondary1">
                     <h1 className="text-text_title font-bold text-xl">
-                      {blog.title.en || "No Title"}
+                      {typeof blog.title === "object" && "en" in blog.title
+                        ? blog.title.en
+                        : blog.title || "No Title"}
                     </h1>
                     <hr />
                     <h2 className="text-text_des text-lg">
-                      {blog.description.en || "No Description"}
+                      {typeof blog.description === "object" &&
+                      "en" in blog.description
+                        ? blog.description.en
+                        : blog.description || "No Description"}
                     </h2>
                     <hr />
-                    <p className="text-lg">{blog.body.en || "No Content"}</p>
+                    <p className="text-lg">
+                      {typeof blog.body === "object" && "en" in blog.body
+                        ? blog.body.en
+                        : blog.body || "No Content"}
+                    </p>
                   </div>
                 </div>
               </>

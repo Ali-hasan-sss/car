@@ -35,7 +35,9 @@ export default function Manufacturer() {
   const [activeCategoryId, setActiveCategoryId] = useState<number | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [editData, setEditData] = useState<Record<string, any> | null>(null);
-  const { id: paramId } = useParams();
+  const params = useParams();
+  const paramId = params?.id as string; // أو params?.id?.toString() حسب حاجتك
+
   const [category_id, setcategory_id] = useState(0);
   const dispatch = useAppDispatch();
 

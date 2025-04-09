@@ -8,7 +8,7 @@ export default function Topbar() {
       <div className="flex items-center justify-center gap-4">
         <LanguageSwitcher />
         <FaBell className="text-gray-400 text-2xl cursor-pointer" />
-        <Avatar />
+        <Avatar width="8" />
       </div>
     </div>
   );

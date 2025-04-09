@@ -14,7 +14,10 @@ import { useAppDispatch } from "@/store/Reducers/hooks";
 import CustomPagination from "@/components/pagination/extrnalPagenation";
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
-import { fetchCarSales } from "@/store/slice/carSalesSlice";
+import { deleteCarSaleLocal, fetchCarSales } from "@/store/slice/carSalesSlice";
+import Grid_View from "@/components/table/gridView";
+import { CarSale, SallesFormInputs } from "@/Types/AuctionTypes";
+import DeleteMessage from "@/components/messags/deleteMessage";
 //import GeneralTable from "@/components/table";
 
 export default function SallesPage() {
@@ -26,6 +29,9 @@ export default function SallesPage() {
     setOpenModal(false);
   };
   const [sortby, setSortby] = useState("date");
+  const [deleteId, setDeleteId] = useState(0);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [initForm, setInitForm] = useState<SallesFormInputs | null>(null);
   const [showing, setShowing] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -62,6 +68,12 @@ export default function SallesPage() {
       includeInForm: true,
     },
     {
+      id: "mileage",
+      label: "المسافة المقطوعة",
+      languageDisplay: "en",
+      includeInForm: true,
+    },
+    {
       id: "created_at",
       label: "تاريخ انشاء الطلب",
       languageDisplay: "en",
@@ -74,6 +86,7 @@ export default function SallesPage() {
       includeInForm: false,
     },
   ];
+  const [view, setView] = useState("table");
   const dispatch = useAppDispatch();
   const { carSales, loading, totalPages } = useSelector(
     (state: RootState) => state.carSales
@@ -83,6 +96,45 @@ export default function SallesPage() {
     const apiUrl = `customer/car-sales?page_size=${showing}&page=${currentPage}`;
     dispatch(fetchCarSales({ API: apiUrl }));
   }, [dispatch, showing]);
+
+  const handleEdit = (order: CarSale) => {
+    const mapOrderToFormInputs = (order: CarSale): SallesFormInputs => {
+      return {
+        manufacturer: order.category?.manufacturer?.id ?? null,
+        cmodel_id: order.cmodel?.id ?? null,
+        category_id: order.category?.id ?? null,
+        mileage: order.mileage ?? 0,
+        year: order.year?.toString() ?? "",
+        drive_system: order.drive_system ?? 1,
+        transmission_type: order.transmission_type ?? 1,
+        cylinders: order.cylinders ?? 4,
+        fuel_type: order.fuel_type ?? 1,
+        price: order.price?.toString() ?? "",
+        shipping_from: order.shipping_from ?? null,
+        car_status: typeof order.status === "number" ? order.status : 0,
+        ex_color: order.ex_color ?? "",
+        in_color: order.in_color ?? "",
+        id: order.id,
+        images: order.images?.map((img) => img.image) ?? [],
+        not_shippedlocations: "",
+        shipping_status: 0,
+        carfax: null, // إذا كنت تحتاجها من order.car_fax، حولها لرقم أو غيّر النوع في الفورم
+        location_port: "",
+      };
+    };
+
+    const formData = mapOrderToFormInputs(order);
+    setInitForm(formData);
+    console.log(initForm);
+    setOpenModal(true);
+  };
+
+  const handleDelete = (id: number) => {
+    console.log("تم النقر على حذف، رقم الطلب:", id);
+    setOpenDeleteModal(true);
+    setDeleteId(id);
+  };
+
   return (
     <div className="flex flex-col items-center w-full  gap-[5px]">
       <TableHeader
@@ -91,7 +143,10 @@ export default function SallesPage() {
           filter: true,
           export: true,
           add: true,
-          addNewActiom: () => setOpenModal(true),
+          addNewActiom: () => {
+            setOpenModal(true);
+            setInitForm(null);
+          },
           filterActiom: handleTogleFilter,
         }}
       />
@@ -109,32 +164,60 @@ export default function SallesPage() {
         </>
       )}
       <ToolBar
+        view={view}
+        setView={setView}
         showing={showing}
         sortby={sortby}
         onShowingChange={setShowing}
         onSortByChange={setSortby}
         totalItems={totalCount}
       />
-      <GeneralTable
-        loading={loading}
-        columns={columns}
-        initialData={carSales}
-        apiUrl={apiUrl}
-        actions={{
-          edit: true,
-          delete: true,
-          view: true,
-        }}
-        onTotalCountChange={setTotalCount}
-        sortBy={sortby}
-        showing={showing}
-        searchTerm={searchTerm}
-      />
+      {view === "table" ? (
+        <GeneralTable
+          loading={loading}
+          columns={columns}
+          initialData={carSales}
+          apiUrl={apiUrl}
+          actions={{
+            edit: true,
+            delete: true,
+            view: true,
+          }}
+          onTotalCountChange={setTotalCount}
+          sortBy={sortby}
+          showing={showing}
+          searchTerm={searchTerm}
+        />
+      ) : (
+        <Grid_View
+          loading={loading}
+          data={carSales}
+          sortBy={sortby}
+          showing={showing}
+          onTotalCountChange={setTotalCount}
+          searchTerm={searchTerm}
+          onEdit={(order) => {
+            if ("images" in order) {
+              handleEdit(order);
+            }
+          }}
+          onDelete={(id) => handleDelete(id)}
+        />
+      )}
       <CustomPagination
         totalPages={totalPages}
         currentPage={currentPage}
         onPageChange={setCurrentPage}
       />
+      {openDeleteModal && (
+        <DeleteMessage
+          API={apiUrl}
+          open={openDeleteModal}
+          id={deleteId}
+          handleClose={() => setOpenDeleteModal(false)}
+          onDeleteSuccess={() => dispatch(deleteCarSaleLocal(deleteId))}
+        />
+      )}
       {openModal && (
         <Modal open={openModal} onClose={closeModal}>
           <Box
@@ -159,6 +242,7 @@ export default function SallesPage() {
               onSubmit={(data) => {
                 console.log(data);
               }}
+              initialData={initForm}
               close={() => setOpenModal(false)}
             />
           </Box>

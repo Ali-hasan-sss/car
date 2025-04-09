@@ -182,7 +182,11 @@ export default function Actions() {
           onTotalCountChange={setTotalCount}
           searchTerm={searchTerm}
           onDelete={(id) => handleDelete(id)}
-          onEdit={(order) => handleEdit(order)}
+          onEdit={(order) => {
+            if ("auction_link" in order) {
+              handleEdit(order); // ✅ TypeScript يعرف إنه Auction
+            }
+          }}
         />
       )}
       <CustomPagination

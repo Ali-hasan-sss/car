@@ -16,6 +16,10 @@ export const NumberOfCylinders = [
   { value: 10, label: "10" },
   { value: 12, label: "12" },
 ];
+export const languageOption = [
+  { value: "en", label: "English" },
+  { value: "ar", label: "Arabice" },
+];
 // export const budgetoptions = [
 //   { value: "0", label: "0" },
 //   { value: "500", label: "500" },
@@ -102,8 +106,17 @@ export const CarStatusOptions = [
   { value: 4, label: "Accidented" },
   { value: 5, label: "Disabled" },
 ];
+export const shippingStatusOptions = [
+  { value: 1, label: "In Stock" },
+  { value: 2, label: "In Transit" },
+  { value: 3, label: "Arrived" },
+];
 
 export const CarfaxOptions = [
-  { value: "available", label: "Available" },
-  { value: "not available", label: "Not available" },
+  { value: 1, label: "Available" },
+  { value: 2, label: "Not available" },
+];
+export const location_port = [
+  { value: "Sohar", label: "Sohar" },
+  { value: "Duqm", label: "Duqm" },
 ];

@@ -54,10 +54,6 @@ const OrderCard: React.FC<OrderCardProps> = ({
   const timeAgo = getTimeAgo(order.created_at);
   const createdDate = new Date(created_at);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const handleView = (id: number) => {
-    router.push(`${pathname}/${id}`);
-    handleMenuClose();
-  };
   const [accept, setAccept] = useState<number | null>(null);
   const [reject, setReject] = useState<number | null>(null);
   const [finish, setFinish] = useState<number | null>(null);
@@ -75,6 +71,12 @@ const OrderCard: React.FC<OrderCardProps> = ({
     setAnchorEl(null);
     setSelectedRow(null);
   };
+
+  const handleView = (id: number) => {
+    router.push(`${pathname}/${id}`);
+    handleMenuClose();
+  };
+
   const handleAccept = (id: number) => {
     setAccept(id);
     console.log(accept);

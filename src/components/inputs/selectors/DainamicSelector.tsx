@@ -91,7 +91,7 @@ const DainamicSelector: React.FC<{
               {...params}
               placeholder={placeholder || "اختر العنصر"}
               fullWidth
-              margin="normal"
+              margin="none"
               error={!!error}
               helperText={error}
               slotProps={{
