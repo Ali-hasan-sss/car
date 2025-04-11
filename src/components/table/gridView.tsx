@@ -150,6 +150,7 @@ export default function Grid_View({
             // نعرض كارد الطلب أو كارد السيارة حسب نوع البيانات
             isCarSale(item) ? (
               <CarCard
+                isloagedin
                 key={index}
                 car={item as CarSale}
                 onDelete={(id) =>

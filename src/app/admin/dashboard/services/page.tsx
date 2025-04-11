@@ -73,7 +73,7 @@ export default function Services() {
       };
       fetchServices();
     }
-  }, [dispatch, lastUpdated, services.length]);
+  }, [dispatch]);
   const onFormChange = useCallback(
     (updatedData: ServiceBlogFormProps["formData"]) => {
       setFormData((prev) => {
@@ -231,7 +231,7 @@ export default function Services() {
         </div>
       </div>
       <ComfirmMessage
-        API={`/admin/servicess`}
+        API={`/admin/services`}
         open={isDelete}
         handleClose={() => setIsDelete(false)}
         id={itemDeleted}

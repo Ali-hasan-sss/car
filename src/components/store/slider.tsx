@@ -2,15 +2,54 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-
 import Card from "./card";
-import { carData } from "./data";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
+import axiosInstance from "@/utils/axiosInstance";
+import { useRouter } from "next/navigation";
+import Loader from "../loading/loadingPage";
+
+interface CarResponse {
+  id: number;
+  user: {
+    contact: {
+      city: string;
+    };
+  };
+  category: {
+    title: string;
+    manufacturer: {
+      title: string;
+    };
+  };
+  cmodel: {
+    title: string;
+  };
+  price: number;
+  images: {
+    image: string;
+  }[];
+}
 
 export default function Slider_card() {
   const prevRef = useRef<HTMLDivElement | null>(null);
   const nextRef = useRef<HTMLDivElement | null>(null);
-
+  const [cars, setCars] = useState<CarResponse[]>([]);
+  const [loadingPage, setLoadingPage] = useState(false);
+  const Router = useRouter();
+  useEffect(() => {
+    const fetchServices = async () => {
+      setLoadingPage(true);
+      try {
+        const response = await axiosInstance.get("/car-sales-all");
+        setCars(response.data.data);
+      } catch (error) {
+        console.error("فشل جلب الخدمات", error);
+      } finally {
+        setLoadingPage(false);
+      }
+    };
+    fetchServices();
+  }, []);
   useEffect(() => {
     // تحديث swiper عند تهيئة المراجع
     const updateSwiperNavigation = () => {
@@ -25,7 +64,9 @@ export default function Slider_card() {
 
     updateSwiperNavigation();
   }, [prevRef, nextRef]);
-
+  const goToStore = () => {
+    Router.push("/car-store");
+  };
   return (
     <div className="slider-container">
       <Swiper
@@ -59,16 +100,20 @@ export default function Slider_card() {
           padding: "10px",
         }}
       >
-        {carData.map((car, index) => (
-          <SwiperSlide key={index}>
-            <Card {...car} />
-          </SwiperSlide>
-        ))}
+        {loadingPage ? (
+          <Loader />
+        ) : (
+          cars.map((car, index) => (
+            <SwiperSlide key={index}>
+              <Card car={car} />
+            </SwiperSlide>
+          ))
+        )}
       </Swiper>
 
       <div className="slider-controls flex justify-between items-center mt-2">
         <div className="flex item-center justify-center gap-1">
-          {carData.map((_, index) => (
+          {cars.map((_, index) => (
             <div
               key={index}
               className="dot flex item-center justify-center gap-1"
@@ -86,7 +131,9 @@ export default function Slider_card() {
             </div>
           ))}
         </div>
-        <button className="btn-view-more">View More</button>
+        <button onClick={goToStore} className="btn-view-more">
+          View More
+        </button>
         <div className="slider-navigation flex items-center gap-2">
           <div className="arrow-button flex item-center justify-center gap-1 ">
             <div

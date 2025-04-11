@@ -7,7 +7,7 @@ import DeleteMessage from "../messags/deleteMessage";
 import DynamicForm from "../adminComponents/forms/DynamicForm";
 import AnimatedModal from "../modal/AnimatedModal";
 import { usePathname, useRouter } from "next/navigation";
-import { IconButton, Menu, MenuItem } from "@mui/material";
+import { Box, IconButton, Menu, MenuItem, Modal } from "@mui/material";
 import {
   Check,
   CheckCircle,
@@ -55,6 +55,8 @@ interface GeneralTableProps {
   initialData?: any[];
   apiForForm?: string;
   actions?: ActionConfig;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  customEditForm?: (data: any, close: () => void) => React.ReactNode;
   onChangeStatus?: (id: number, type: "accept" | "reject" | "finish") => void;
   formColumns?: Column[];
 }
@@ -73,6 +75,7 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
   onTotalCountChange,
   sortBy,
   searchTerm,
+  customEditForm,
   formColumns,
   onChangeStatus,
   loading: externalLoading,
@@ -517,22 +520,46 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
             )}
           </tbody>
         </table>
-
-        <AnimatedModal
-          open={openForm}
-          handleClose={() => setOpenForm(false)}
-          className="w-[400px]"
-        >
-          <DynamicForm
-            key={editData?.id || "new"}
-            open={openForm}
-            onClose={() => setOpenForm(false)}
-            apiUrl={apiForForm ? apiForForm : apiUrl}
-            fields={formColumns ? formColumns : formFields}
-            initialData={editData}
-          />
-        </AnimatedModal>
-
+        {editData &&
+          openForm &&
+          (customEditForm ? (
+            <Modal open={openForm} onClose={() => setOpenForm(false)}>
+              <Box
+                sx={{
+                  position: "fixed",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: "80%", // 80% من عرض الشاشة (يبقى 10% من الجوانب)
+                  maxWidth: "1000px", // الحد الأقصى لعرض المودال
+                  height: "80%", // 80% من ارتفاع الشاشة (يبقى 10% من الأعلى والأسفل)
+                  maxHeight: "90vh", // ضمان عدم تجاوز الشاشة
+                  bgcolor: "background.paper",
+                  boxShadow: 24,
+                  p: 3,
+                  borderRadius: "8px",
+                  overflowY: "auto", // السماح بالتمرير عند زيادة المحتوى
+                  outline: "none",
+                }}
+              >
+                {customEditForm(editData, () => setOpenForm(false))}
+              </Box>
+            </Modal>
+          ) : (
+            <AnimatedModal
+              open={openForm}
+              handleClose={() => setOpenForm(false)}
+            >
+              <DynamicForm
+                key={editData?.id || "new"}
+                open={openForm}
+                onClose={() => setOpenForm(false)}
+                apiUrl={apiForForm ? apiForForm : apiUrl}
+                fields={formColumns ? formColumns : formFields}
+                initialData={editData}
+              />
+            </AnimatedModal>
+          ))}
         <style jsx>{`
           @keyframes loadingBar {
             0% {

@@ -1,6 +1,5 @@
 "use client";
 
-import CarDeals from "@/components/CarDeals";
 import Contact from "@/components/contact";
 import CTA from "@/components/CTA";
 import Footer from "@/components/footer";
@@ -23,7 +22,6 @@ export default function Home() {
       <Navbar />
       <Hero />
       <Store />
-      <CarDeals />
       <HowItWorks />
       <Success />
       <Reviwe />

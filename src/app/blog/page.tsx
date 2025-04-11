@@ -1,42 +1,43 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "@/components/header/navbar";
 import Footer from "@/components/footer";
 import CoverImage from "@/components/Hero_general/cover_image";
 import BlogCard from "@/components/cards/blogCard";
 import WellCome from "@/components/Hello_section/wellcome";
-const blogs = [
-  {
-    id: 1,
-    title: "أهمية الصيانة الدورية للسيارات",
-    image: "images/gallery1.png",
-    body: "تلعب الصيانة الدورية دورًا أساسيًا في الحفاظ على أداء السيارة وسلامتها. فهي تساعد في اكتشاف الأعطال مبكرًا قبل أن تتفاقم، مما يقلل تكاليف الإصلاح ويحسن من عمر المحرك وأجزاء السيارة الأخرى. تشمل الصيانة الدورية تغيير الزيت، فحص المكابح، وتفقد ضغط الإطارات، مما يضمن قيادة أكثر أمانًا وكفاءة في استهلاك الوقود. كما أن الاهتمام بنظافة السيارة وصيانتها يعكس انطباعًا جيدًا عن مالكها. لذا، ينصح أصحاب السيارات بجدولة فحوصات منتظمة لضمان تجربة قيادة سلسة وآمنة على الطرق.",
-    description: "فحوصات منتظمة لضمان تجربة قيادة سلسة",
-  },
-  {
-    id: 2,
-    title: "أهمية الصيانة الدورية للسيارات",
-    image: "images/gallery2.png",
-    body: "تلعب الصيانة الدورية دورًا أساسيًا في الحفاظ على أداء السيارة وسلامتها. فهي تساعد في اكتشاف الأعطال مبكرًا قبل أن تتفاقم، مما يقلل تكاليف الإصلاح ويحسن من عمر المحرك وأجزاء السيارة الأخرى. تشمل الصيانة الدورية تغيير الزيت، فحص المكابح، وتفقد ضغط الإطارات، مما يضمن قيادة أكثر أمانًا وكفاءة في استهلاك الوقود. كما أن الاهتمام بنظافة السيارة وصيانتها يعكس انطباعًا جيدًا عن مالكها. لذا، ينصح أصحاب السيارات بجدولة فحوصات منتظمة لضمان تجربة قيادة سلسة وآمنة على الطرق.",
-    description: "فحوصات منتظمة لضمان تجربة قيادة سلسة",
-  },
-  {
-    id: 3,
-    title: "أهمية الصيانة الدورية للسيارات",
-    image: "images/slider1.jpg",
-    body: "تلعب الصيانة الدورية دورًا أساسيًا في الحفاظ على أداء السيارة وسلامتها. فهي تساعد في اكتشاف الأعطال مبكرًا قبل أن تتفاقم، مما يقلل تكاليف الإصلاح ويحسن من عمر المحرك وأجزاء السيارة الأخرى. تشمل الصيانة الدورية تغيير الزيت، فحص المكابح، وتفقد ضغط الإطارات، مما يضمن قيادة أكثر أمانًا وكفاءة في استهلاك الوقود. كما أن الاهتمام بنظافة السيارة وصيانتها يعكس انطباعًا جيدًا عن مالكها. لذا، ينصح أصحاب السيارات بجدولة فحوصات منتظمة لضمان تجربة قيادة سلسة وآمنة على الطرق.",
-    description: "فحوصات منتظمة لضمان تجربة قيادة سلسة",
-  },
-  {
-    id: 3,
-    title: "أهمية الصيانة الدورية للسيارات",
-    image: "images/slider2.jpeg",
-    body: "تلعب الصيانة الدورية دورًا أساسيًا في الحفاظ على أداء السيارة وسلامتها. فهي تساعد في اكتشاف الأعطال مبكرًا قبل أن تتفاقم، مما يقلل تكاليف الإصلاح ويحسن من عمر المحرك وأجزاء السيارة الأخرى. تشمل الصيانة الدورية تغيير الزيت، فحص المكابح، وتفقد ضغط الإطارات، مما يضمن قيادة أكثر أمانًا وكفاءة في استهلاك الوقود. كما أن الاهتمام بنظافة السيارة وصيانتها يعكس انطباعًا جيدًا عن مالكها. لذا، ينصح أصحاب السيارات بجدولة فحوصات منتظمة لضمان تجربة قيادة سلسة وآمنة على الطرق.",
-    description: "فحوصات منتظمة لضمان تجربة قيادة سلسة",
-  },
-];
+import axiosInstance from "@/utils/axiosInstance";
+import { useLanguage } from "@/context/LanguageContext";
+import Loader from "@/components/loading/loadingPage";
+interface Blog {
+  id: number;
+  title: string;
+  description: string;
+  body: string;
+  slug: string;
+  image: string;
+  images: string[];
+  created_at: string;
+  updated_at: string;
+}
 const BlogPage: React.FC = () => {
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [loadingPage, setLoadingPage] = useState(false);
+  const isArabic = useLanguage();
+  useEffect(() => {
+    const fetchServices = async () => {
+      setLoadingPage(true);
+      try {
+        const response = await axiosInstance.get("/customer/blogs");
+        setBlogs(response.data.data);
+      } catch (error) {
+        console.error("فشل جلب الخدمات", error);
+      } finally {
+        setLoadingPage(false);
+      }
+    };
+    fetchServices();
+  }, [isArabic]);
   return (
     <div>
       <Navbar />
@@ -48,18 +49,22 @@ const BlogPage: React.FC = () => {
             titleDes=""
             information="WellCome to Soufan Global blogs"
           />
-          <div className="px-[10px] md:px-[50px] py-[50px] flex flex-wrap gap-20 w-full  justify-center ">
-            {blogs.map((blog, index) => (
-              <BlogCard
-                key={index}
-                id={blog.id}
-                image={blog.image}
-                title={blog.title}
-                body={blog.body}
-                description={blog.description}
-              />
-            ))}
-          </div>
+          {loadingPage ? (
+            <Loader />
+          ) : (
+            <div className="px-[10px] md:px-[50px] py-[50px] flex flex-wrap gap-20 w-full  justify-center ">
+              {blogs.map((blog, index) => (
+                <BlogCard
+                  key={index}
+                  id={blog.id}
+                  image={blog.image}
+                  title={blog.title}
+                  body={blog.body}
+                  description={blog.description}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
       <Footer />

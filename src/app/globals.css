@@ -34,6 +34,42 @@ body {
   font-weight: 700;
   line-height: 50px;
 }
+.enimat_title {
+  font-size: 40px;
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+  color: black;
+}
+
+/* تغطية النص من المنتصف */
+.enimat_title::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 0%;
+  background-color: white; /* نفس خلفية الصفحة */
+  z-index: 1;
+  animation: hideReveal 6s infinite alternate;
+  transform: translateX(-50%);
+}
+
+@keyframes hideReveal {
+  0% {
+    width: 100%;
+  }
+  40% {
+    width: 0%;
+  }
+  60% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
 .secondarytitle {
   font-size: 30px;
   font-weight: 700;

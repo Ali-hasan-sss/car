@@ -1,22 +1,34 @@
-interface Car {
-  brandLogo: string;
-  brandName: string;
-  carImage: string;
-  carModel: string;
-  lotNumber: string;
-  currentBid: string;
-  location: string;
+interface CarResponse {
+  id: number;
+  user: {
+    contact: {
+      city: string;
+    };
+  };
+  category: {
+    title: string;
+    manufacturer: {
+      title: string;
+    };
+  };
+  cmodel: {
+    title: string;
+  };
+  price: number;
+  images: {
+    image: string;
+  }[];
 }
 
-export default function Card({
-  brandLogo,
-  brandName,
-  carImage,
-  carModel,
-  lotNumber,
-  currentBid,
-  location,
-}: Car) {
+export default function Card({ car }: { car: CarResponse }) {
+  const brandName = car.category.manufacturer.title;
+  const carImage = `https://test.smarty.design/assets/img/common/${car.images[0]?.image}`;
+  const carModel = car.cmodel.title;
+  const category = car.category.title;
+  const lotNumber = car.id.toString();
+  const currentBid = car.price.toString();
+  const location = car.user.contact.city;
+
   return (
     <div
       className="car-card bg-white shadow-md rounded-lg border py-1 overflow-hidden"
@@ -25,27 +37,14 @@ export default function Card({
         height: "300px",
       }}
     >
-      {/* الشريط العلوي */}
       <div
         className="header-bar flex justify-between items-center px-4"
-        style={{
-          height: "20px",
-        }}
+        style={{ height: "20px" }}
       >
-        {/* اسم البراند مع اللوغو */}
         <div className="flex items-center gap-2">
-          <img
-            src={brandLogo}
-            alt="Brand Logo"
-            style={{
-              height: "10px",
-              width: "auto",
-            }}
-          />
           <span className="text-sm font-semibold">{brandName}</span>
         </div>
 
-        {/* أيقونة القلب */}
         <div>
           <img
             src="/images/heart.png"
@@ -59,7 +58,6 @@ export default function Card({
         </div>
       </div>
 
-      {/* صورة السيارة */}
       <div className="car-image flex justify-center items-center mt-2">
         <img
           src={carImage}
@@ -67,17 +65,17 @@ export default function Card({
           style={{
             width: "200px",
             height: "125px",
-            objectFit: "contain",
-            borderRadius: "5px",
+            objectFit: "cover",
           }}
         />
       </div>
 
-      {/* الوصف */}
       <div className="description text-sm px-4 py-2">
         <div className="info-row flex justify-between">
           <span className="font-semibold text-gray-700">Car Model:</span>
-          <span className="text-gray-500">{carModel}</span>
+          <span className="text-gray-500">
+            {brandName} - {category} - {carModel}
+          </span>
         </div>
         <div className="info-row flex justify-between mt-1">
           <span className="font-semibold text-gray-700">Lot No:</span>
@@ -93,7 +91,6 @@ export default function Card({
         </div>
       </div>
 
-      {/* الزر */}
       <div className="flex justify-center items-center mt-3">
         <button
           className="view-details-btn px-4 py-2 transition"

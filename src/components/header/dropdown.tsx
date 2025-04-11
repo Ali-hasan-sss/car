@@ -50,7 +50,8 @@ export default function Dropdown() {
     { id: 3, label: t("About_us"), path: "/about" },
     { id: 4, label: t("Information"), path: "/Information" },
     { id: 5, label: t("bloge"), path: "/blog" },
-    { id: 6, label: t("Contact_Us"), path: "/contact" },
+    { id: 6, label: t("Car Store"), path: "/car-store" },
+    { id: 7, label: t("Contact_Us"), path: "/contact" },
   ];
 
   return (

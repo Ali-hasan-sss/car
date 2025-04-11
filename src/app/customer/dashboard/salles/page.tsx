@@ -187,6 +187,15 @@ export default function SallesPage() {
           sortBy={sortby}
           showing={showing}
           searchTerm={searchTerm}
+          customEditForm={(data, close) => (
+            <Salles
+              onSubmit={(data) => {
+                console.log(data);
+              }}
+              initialData={data}
+              close={() => close}
+            />
+          )}
         />
       ) : (
         <Grid_View

@@ -18,6 +18,7 @@ import { base_url } from "@/utils/domain";
 
 interface CarCardProps {
   car: CarSale;
+  isloagedin: boolean;
   onEdit: (order: CarSale) => void;
   onDelete: (id: number) => void;
   onChangeStatus?: (id: number, type: "accept" | "reject" | "finish") => void;
@@ -25,6 +26,7 @@ interface CarCardProps {
 
 const CarCard: React.FC<CarCardProps> = ({
   car,
+  isloagedin,
   onDelete,
   onEdit,
   onChangeStatus,
@@ -133,54 +135,56 @@ const CarCard: React.FC<CarCardProps> = ({
               <EllipsisVertical className="text-gray-600 text-lg" />
             </IconButton>
 
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl) && selectedRow === car.id}
-              onClose={handleMenuClose}
-              PaperProps={{
-                style: { minWidth: "150px" }, // تعيين عرض القائمة
-              }}
-            >
-              <MenuItem onClick={() => handleView(car.id)}>
-                <Eye className="text-blue-500 mr-2" /> عرض التفاصيل
-              </MenuItem>
-
-              <MenuItem onClick={() => onEdit(car)}>
-                <Edit className="text-yellow-500 mr-2" /> تعديل
-              </MenuItem>
-
-              <MenuItem onClick={() => onDelete(car.id)}>
-                <Trash className="text-red-500 mr-2" /> حذف
-              </MenuItem>
-
-              {userRole === "ADMIN" && (
-                <MenuItem
-                  onClick={() => {
-                    handleAccept(car.id);
-                  }}
-                >
-                  <CheckCircle className="text-green-500 mr-2" /> قبول
+            {isloagedin && (
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl) && selectedRow === car.id}
+                onClose={handleMenuClose}
+                PaperProps={{
+                  style: { minWidth: "150px" }, // تعيين عرض القائمة
+                }}
+              >
+                <MenuItem onClick={() => handleView(car.id)}>
+                  <Eye className="text-blue-500 mr-2" /> عرض التفاصيل
                 </MenuItem>
-              )}
-              {userRole === "ADMIN" && (
-                <MenuItem
-                  onClick={() => {
-                    handleReject(car.id);
-                  }}
-                >
-                  <XCircle className="text-red-500 mr-2" /> رفض
+
+                <MenuItem onClick={() => onEdit(car)}>
+                  <Edit className="text-yellow-500 mr-2" /> تعديل
                 </MenuItem>
-              )}
-              {userRole === "ADMIN" && (
-                <MenuItem
-                  onClick={() => {
-                    handleFinish(car.id);
-                  }}
-                >
-                  <Check className="text-green-500 mr-2" /> تعيين ك منجز
+
+                <MenuItem onClick={() => onDelete(car.id)}>
+                  <Trash className="text-red-500 mr-2" /> حذف
                 </MenuItem>
-              )}
-            </Menu>
+
+                {userRole === "ADMIN" && (
+                  <MenuItem
+                    onClick={() => {
+                      handleAccept(car.id);
+                    }}
+                  >
+                    <CheckCircle className="text-green-500 mr-2" /> قبول
+                  </MenuItem>
+                )}
+                {userRole === "ADMIN" && (
+                  <MenuItem
+                    onClick={() => {
+                      handleReject(car.id);
+                    }}
+                  >
+                    <XCircle className="text-red-500 mr-2" /> رفض
+                  </MenuItem>
+                )}
+                {userRole === "ADMIN" && (
+                  <MenuItem
+                    onClick={() => {
+                      handleFinish(car.id);
+                    }}
+                  >
+                    <Check className="text-green-500 mr-2" /> تعيين ك منجز
+                  </MenuItem>
+                )}
+              </Menu>
+            )}
           </div>
         </div>
         <p className="text-gray-700">Price: ${car.price || "N/A"}</p>

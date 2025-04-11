@@ -21,7 +21,7 @@ export default function Card({ car_image, auction_date, model }: Cardeals) {
           style={{
             width: "200px",
             height: "125px",
-            objectFit: "contain",
+            objectFit: "cover",
             borderRadius: "5px",
           }}
         />
