@@ -7,37 +7,43 @@ export default function HowItWorks() {
     {
       imgSrc: "/images/contract1.png",
       alt: "step1",
-      title: { ar: "Step 1: Request a Quote", en: "grgrg" },
+      title: { ar: "Step 1: Request a Quote", en: "Step 1: Request a Quote" },
       description: {
         ar: "Fill out our online form with details about your car and shipping needs",
-        en: "grgg",
+        en: "Fill out our online form with details about your car and shipping needs",
       },
     },
     {
       imgSrc: "/images/contract2.png",
       alt: "step2",
-      title: { ar: "Step 2: Get a Personalized Plan", en: "sddfe" },
+      title: {
+        ar: "Step 2: Get a Personalized Plan",
+        en: "Step 2: Get a Personalized Plan",
+      },
       description: {
         ar: "Receive a customized plan, including costs and shipping timelines.",
-        en: "fgdrg",
+        en: "Receive a customized plan, including costs and shipping timelines.",
       },
     },
     {
       imgSrc: "/images/contract3.png",
       alt: "step3",
-      title: { ar: "Step 3: Arrange Shipping", en: "dasfsdv" },
+      title: { ar: "Step 3: Arrange Shipping", en: "Step 3: Arrange Shipping" },
       description: {
         ar: "Confirm your booking, and our team handles the rest.",
-        en: "fgdfgdg",
+        en: "Confirm your booking, and our team handles the rest.",
       },
     },
     {
       imgSrc: "/images/contract4.png",
       alt: "step4",
-      title: { ar: "Step 4: Track Your Shipment", en: "dfdfef" },
+      title: {
+        ar: "Step 4: Track Your Shipment",
+        en: "Step 4: Track Your Shipment",
+      },
       description: {
         ar: "Monitor your car’s journey with real-time tracking updates.",
-        en: "dghdgh",
+        en: "Monitor your car’s journey with real-time tracking updates.",
       },
     },
   ];

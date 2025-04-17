@@ -10,6 +10,7 @@ export default {
     extend: {
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],
+        Roboto: ["Roboto", "sans-serif"],
       },
       colors: {
         background: "var(--background)",

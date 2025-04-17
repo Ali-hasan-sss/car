@@ -35,7 +35,7 @@ export default function Card({ car }: { car: CarResponse }) {
   return (
     <div
       className="car-card bg-white shadow-md rounded-lg border py-1 overflow-hidden relative"
-      style={{ width: "200px", height: "300px" }}
+      style={{ width: "200px", height: "330px" }}
     >
       {/* الشريط العلوي */}
       <div
@@ -70,7 +70,7 @@ export default function Card({ car }: { car: CarResponse }) {
       {/* وصف السيارة أو الشحنة */}
       <div
         className="description text-sm px-4 py-2"
-        style={{ height: "110px", overflow: "hidden" }}
+        style={{ overflow: "hidden" }}
       >
         <>
           <div className="info-row flex justify-between">
@@ -95,7 +95,7 @@ export default function Card({ car }: { car: CarResponse }) {
       </div>
 
       {/* زر التفاصيل */}
-      <div className="absolute bottom-2 left-0 right-0 flex justify-center">
+      <div className="flex justify-center">
         <button
           className="view-details-btn px-4 py-2 transition"
           style={{ fontSize: "14px" }}
