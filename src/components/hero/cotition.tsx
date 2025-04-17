@@ -7,7 +7,7 @@ export default function Cotation() {
   const items = [
     { src: "/images/sedan.png", alt: "sedan", label: "Car" },
     { src: "/images/pickup-truck.png", alt: "pickup-truck", label: "Pickup" },
-    { src: "/images/van.png", alt: "van", label: "Van" },
+    { src: "/images/van.png", alt: "SUV", label: "SUV" },
     { src: "/images/bus.png", alt: "bus", label: "Min bus" },
   ];
   const [car, setCar] = useState("");
