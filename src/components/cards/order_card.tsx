@@ -1,3 +1,4 @@
+import { RootState } from "@/store/store";
 import { Auction } from "@/Types/AuctionTypes";
 import {
   getFuelText,
@@ -18,11 +19,13 @@ import {
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
 interface OrderCardProps {
   order: Auction;
   onDelete: (id: number) => void;
-  onEdit: (order: Auction) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onEdit: (order: any) => void;
   onChangeStatus?: (id: number, type: "accept" | "reject" | "finish") => void;
 }
 
@@ -58,6 +61,7 @@ const OrderCard: React.FC<OrderCardProps> = ({
   const [reject, setReject] = useState<number | null>(null);
   const [finish, setFinish] = useState<number | null>(null);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
+  const userRole = useSelector((state: RootState) => state.auth.user?.userRole);
 
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -127,36 +131,44 @@ const OrderCard: React.FC<OrderCardProps> = ({
               <Eye className="text-blue-500 mr-2" /> عرض التفاصيل
             </MenuItem>
 
-            <MenuItem onClick={() => onEdit(order)}>
-              <Edit className="text-yellow-500 mr-2" /> تعديل
-            </MenuItem>
+            {order.status === 1 && (
+              <MenuItem onClick={() => onEdit(order)}>
+                <Edit className="text-yellow-500 mr-2" /> تعديل
+              </MenuItem>
+            )}
 
             <MenuItem onClick={() => onDelete(id)}>
               <Trash className="text-red-500 mr-2" /> حذف
             </MenuItem>
 
-            <MenuItem
-              onClick={() => {
-                handleAccept(order.id);
-              }}
-            >
-              <CheckCircle className="text-green-500 mr-2" /> قبول
-            </MenuItem>
+            {userRole === "ADMIN" && (
+              <MenuItem
+                onClick={() => {
+                  handleAccept(order.id);
+                }}
+              >
+                <CheckCircle className="text-green-500 mr-2" /> قبول
+              </MenuItem>
+            )}
 
-            <MenuItem
-              onClick={() => {
-                handleReject(order.id);
-              }}
-            >
-              <XCircle className="text-red-500 mr-2" /> رفض
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                handleFinish(order.id);
-              }}
-            >
-              <Check className="text-green-500 mr-2" /> تعيين ك منجز
-            </MenuItem>
+            {userRole === "ADMIN" && (
+              <MenuItem
+                onClick={() => {
+                  handleReject(order.id);
+                }}
+              >
+                <XCircle className="text-red-500 mr-2" /> رفض
+              </MenuItem>
+            )}
+            {userRole === "ADMIN" && (
+              <MenuItem
+                onClick={() => {
+                  handleFinish(order.id);
+                }}
+              >
+                <Check className="text-green-500 mr-2" /> تعيين ك منجز
+              </MenuItem>
+            )}
           </Menu>
         </div>
       </div>

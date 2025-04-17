@@ -61,7 +61,6 @@ const TextSelector: React.FC<SelectorInputProps> = ({
           );
         }}
         sx={{
-          backgroundColor: "white",
           height: 35,
           "& .MuiSelect-select": {
             paddingY: "8px",

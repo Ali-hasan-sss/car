@@ -4,32 +4,33 @@
 import { useState } from "react";
 
 interface CheckboxProps {
-  label: string; // نص التسمية
-  initialValue?: boolean; // القيمة الأولية (اختياري)
-  onChange?: (value: boolean) => void; // دالة لمعالجة التغيير
+  label: string;
+  checkedValue: string | number; // القيمة عند التشييك
+  uncheckedValue: string | number; // القيمة عند عدم التشييك
+  initialValue?: boolean;
+  onChange?: (value: string | number) => void;
 }
 
 export default function Checkbox({
   label,
+  checkedValue,
+  uncheckedValue,
   initialValue = false,
   onChange,
 }: CheckboxProps) {
   const [checked, setChecked] = useState<boolean>(initialValue);
 
-  // تعديل الحالة عند تغيير الـ checkbox
   const handleCheckboxChange = () => {
-    const newValue = !checked;
-    setChecked(newValue);
+    const newChecked = !checked;
+    setChecked(newChecked);
 
-    // إرسال القيمة الجديدة إلى الوالد إذا كانت الدالة موجودة
     if (onChange) {
-      onChange(newValue);
+      onChange(newChecked ? checkedValue : uncheckedValue);
     }
   };
 
   return (
     <div className="flex items-center space-x-2">
-      {/* عرض الـ checkbox */}
       <input
         type="checkbox"
         checked={checked}

@@ -161,7 +161,7 @@ const Login: React.FC = () => {
                 </button>
                 <p className="dont_have">
                   {t("Dont_have_an_account")}
-                  <a className="text-blue-500 mx-1" href="/signup">
+                  <a className="text-blue-500 mx-1" href="/register">
                     {t("Signup")}
                   </a>
                 </p>

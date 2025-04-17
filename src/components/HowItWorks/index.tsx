@@ -1,6 +1,8 @@
-import InfoCard from "../cards/info_card";
+import { useRouter } from "next/navigation";
+import InfoCard_cust from "../cards/info_cardcust";
 
 export default function HowItWorks() {
+  const router = useRouter();
   const steps = [
     {
       imgSrc: "/images/contract1.png",
@@ -50,7 +52,7 @@ export default function HowItWorks() {
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             {steps.map((step, index) => (
-              <InfoCard
+              <InfoCard_cust
                 width="200"
                 height="200"
                 key={index}
@@ -64,7 +66,10 @@ export default function HowItWorks() {
             <img src="/images/Vector.png" alt="victor" className="h-[50px]" />
           </div>
           <div className="px-3 mt-5 flex  items-center justify-center">
-            <button className="start-btn py-[10px] px-[24px] ">
+            <button
+              className="button_outline py-[10px] px-[24px] "
+              onClick={() => router.push("/register")}
+            >
               Start Now
             </button>
           </div>

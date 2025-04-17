@@ -3,8 +3,9 @@ interface CTAProps {
   title: string;
   des: string;
   btnText: string;
+  onClick?: () => void;
 }
-export default function CTA({ title, des, btnText }: CTAProps) {
+export default function CTA({ title, des, btnText, onClick }: CTAProps) {
   return (
     <div className="w-full py-[50px] md:py-[112px] px-[10px] md:px-[64px] bg-secondary1 ">
       <div
@@ -23,7 +24,10 @@ export default function CTA({ title, des, btnText }: CTAProps) {
           </p>
         </div>
         <div className="md:w-1/3  flex items-center justify-center">
-          <button className="btn-cta"> {btnText}</button>
+          <button onClick={onClick} className="btn-cta">
+            {" "}
+            {btnText}
+          </button>
         </div>
       </div>
     </div>

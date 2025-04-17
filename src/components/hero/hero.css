@@ -31,3 +31,11 @@
 .swiper-pagination-bullet-active {
   background: black;
 }
+.box:hover,
+.activ {
+  background: #f3eeee;
+  border: 1px solid #008080;
+}
+.error {
+  border: 1px solid #dc0c0c;
+}

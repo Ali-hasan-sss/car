@@ -449,7 +449,24 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
                             </MenuItem>
                           )}
                           {actions.edit && (
-                            <MenuItem onClick={() => handleEdit(row)}>
+                            <MenuItem
+                              onClick={() => {
+                                const simplifiedRow = {
+                                  ...row,
+                                  manufacturer:
+                                    row.category?.manufacturer?.id || null,
+                                  category_id: row.category?.id || null,
+                                  cmodel_id: row.cmodel?.id || null,
+                                  images:
+                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                    row.images?.map((img: any) => img.image) ||
+                                    [],
+                                };
+
+                                console.log("init:", simplifiedRow); // أو JSON.stringify للسلاسل
+                                handleEdit(simplifiedRow);
+                              }}
+                            >
                               <Edit className="text-yellow-500 mr-2" /> تعديل
                             </MenuItem>
                           )}

@@ -5,8 +5,8 @@ import Navbar from "@/components/header/navbar";
 import Footer from "@/components/footer";
 import CoverImage from "@/components/Hero_general/cover_image";
 import WellCome from "@/components/Hello_section/wellcome";
-import InfoCard from "@/components/cards/info_card";
 import Btn_outlin from "@/components/buttons/btn/outline_btn";
+import InfoCard_cust from "@/components/cards/info_cardcust";
 
 const ServicesPage: React.FC = () => {
   const worksItem = [
@@ -127,7 +127,7 @@ const ServicesPage: React.FC = () => {
         <h1 className="title">How it works</h1>
         <div className="flex flex-wrap items-center justify-center gap-[20px] ">
           {worksItem.map((item, index) => (
-            <InfoCard
+            <InfoCard_cust
               key={index}
               height="300"
               width="300"
@@ -149,7 +149,7 @@ const ServicesPage: React.FC = () => {
         <h1 className="title">Why Trust Us?</h1>
         <div className="flex flex-wrap items-center justify-center gap-[20px] ">
           {trustItems.map((item, index) => (
-            <InfoCard
+            <InfoCard_cust
               key={index}
               height="300"
               width="250"

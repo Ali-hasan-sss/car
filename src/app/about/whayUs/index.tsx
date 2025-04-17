@@ -1,4 +1,4 @@
-import InfoCard from "@/components/cards/info_card";
+import InfoCard_cust from "@/components/cards/info_cardcust";
 
 export default function Whay_us() {
   const cards = [
@@ -40,7 +40,7 @@ export default function Whay_us() {
       <h2 className="title text-text_title text-center">Why Chose Us ?</h2>
       <div className="flex flex-wrap gap-[50px] items-center justify-center">
         {cards.map((card, index) => (
-          <InfoCard
+          <InfoCard_cust
             key={index}
             image={card.image}
             title={card.title}

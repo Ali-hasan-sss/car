@@ -96,8 +96,8 @@ export default function SallesPage() {
     const apiUrl = `customer/car-sales?page_size=${showing}&page=${currentPage}`;
     dispatch(fetchCarSales({ API: apiUrl }));
   }, [dispatch, showing]);
-
-  const handleEdit = (order: CarSale) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleEdit = (order: any) => {
     const mapOrderToFormInputs = (order: CarSale): SallesFormInputs => {
       return {
         manufacturer: order.category?.manufacturer?.id ?? null,
@@ -118,14 +118,14 @@ export default function SallesPage() {
         images: order.images?.map((img) => img.image) ?? [],
         not_shippedlocations: "",
         shipping_status: 0,
-        carfax: null, // إذا كنت تحتاجها من order.car_fax، حولها لرقم أو غيّر النوع في الفورم
+        carfax: null,
         location_port: "",
       };
     };
 
     const formData = mapOrderToFormInputs(order);
     setInitForm(formData);
-    console.log(initForm);
+    //console.log(initForm);
     setOpenModal(true);
   };
 
@@ -190,7 +190,7 @@ export default function SallesPage() {
           customEditForm={(data, close) => (
             <Salles
               onSubmit={(data) => {
-                console.log(data);
+                console.log("data:", data);
               }}
               initialData={data}
               close={() => close}

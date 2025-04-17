@@ -9,6 +9,7 @@ import { useLanguage } from "../../context/LanguageContext";
 
 import axiosInstance from "@/utils/axiosInstance";
 import Loader from "@/components/loading/loadingPage";
+import { useRouter } from "next/navigation";
 
 interface Service {
   id: number;
@@ -26,6 +27,7 @@ const ServicesPage: React.FC = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [loadingPage, setLoadingPage] = useState(false);
   const isArabic = useLanguage();
+  const router = useRouter();
   useEffect(() => {
     const fetchServices = async () => {
       setLoadingPage(true);
@@ -121,6 +123,7 @@ const ServicesPage: React.FC = () => {
         title={t("servises_CTA_Title")}
         des={t("servises_CTA_Body")}
         btnText={t("Contact_Us")}
+        onClick={() => router.push("/contact")}
       />
 
       {/* Footer */}

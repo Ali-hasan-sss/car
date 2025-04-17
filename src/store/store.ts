@@ -12,6 +12,7 @@ import adminManufacturerSlice from "./slice/adminManufacturerSlice";
 import auctionSlice from "./slice/AuctionsSlice";
 import carSalesReducer from "./slice/carSalesSlice";
 import userReducer from "./slice/userSlice";
+import carShippingReducer from "./slice/ShippingSlice";
 const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -26,6 +27,7 @@ const store = configureStore({
     adminManufacturer: adminManufacturerSlice,
     auctions: auctionSlice,
     carSales: carSalesReducer,
+    carShippings: carShippingReducer,
     users: userReducer,
   },
 });

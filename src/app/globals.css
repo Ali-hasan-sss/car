@@ -3,6 +3,12 @@
 @tailwind utilities;
 @import "nprogress/nprogress.css";
 
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/Poppins/Poppins-Light.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+}
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -22,12 +28,13 @@ html[dir="ltr"] {
   width: 100%;
 }
 
-body {
+body,
+input,
+button {
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-  overflow: auto !important;
-  padding-right: 0 !important;
+  font-family: "Poppins", sans-serif;
 }
+
 /*--------------buttons-------------*/
 .title {
   font-size: 40px;

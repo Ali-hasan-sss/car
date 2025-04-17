@@ -6,49 +6,46 @@ import QuickFilter from "@/components/DashboardComponernt/filters/quickFillter";
 import TableHeader from "@/components/DashboardComponernt/titleBar/tableHeader";
 import ToolBar from "@/components/DashboardComponernt/toolbar";
 import Search_input from "@/components/inputs/search_input";
+import { Modal, Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import GeneralTable, { Column } from "@/components/table";
 import Grid_View from "@/components/table/gridView";
-
 import { useAppDispatch } from "@/store/Reducers/hooks";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import DeleteMessage from "@/components/messags/deleteMessage";
 import CustomPagination from "@/components/pagination/extrnalPagenation";
-import { CarSale, SallesFormInputs } from "@/Types/AuctionTypes";
 import {
-  deleteCarSaleLocal,
-  fetchCarSales,
-  updateCarSale,
-} from "@/store/slice/carSalesSlice";
-import { Box, Modal } from "@mui/material";
-import Salles from "@/app/customer/dashboard/ordersForms/salles";
+  deleteCarShipping,
+  fetchCarShippings,
+} from "@/store/slice/ShippingSlice";
+import { CarShipping, ShippingFormInputs } from "@/Types/AuctionTypes";
+import DeleteMessage from "@/components/messags/deleteMessage";
+import ShippingForm from "@/app/customer/dashboard/ordersForms/shipping";
 
-export default function Sales() {
+export default function Shipping() {
   const { t } = useLanguage();
   const [openFilter, setOpenFilter] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [deleteId, setDeleteId] = useState(0);
-  const [initForm, setInitForm] = useState<SallesFormInputs | null>(null);
+  const [initForm, setInitForm] = useState<ShippingFormInputs | null>(null);
   const [showing, setShowing] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
   const [sortby, setSortby] = useState("date");
+  const [deleteId, setDeleteId] = useState(0);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
   const closeModal = () => {
     setOpenModal(false);
   };
-  const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const handleTogleFilter = () => setOpenFilter(!openFilter);
-  const [selectedRequest, setSelectedRequest] = useState<{
-    id: number;
-    type: "accept" | "reject" | "finish";
-  } | null>(null);
-  console.log(openModal);
-  console.log(closeModal);
-  console.log(initForm);
-  console.log(selectedRequest);
   const columns: Column[] = [
+    {
+      id: "user.name",
+      label: "اسم مقدم الطلب",
+      languageDisplay: "en",
+      includeInForm: true,
+    },
     {
       id: "category.manufacturer.title",
       label: "الشركة الصانعة",
@@ -74,8 +71,8 @@ export default function Sales() {
       includeInForm: true,
     },
     {
-      id: "country.title",
-      label: "بلد الشحن",
+      id: "shipping_from",
+      label: "مرفا الشحن",
       languageDisplay: "en",
       includeInForm: true,
     },
@@ -92,91 +89,70 @@ export default function Sales() {
       includeInForm: false,
     },
   ];
-  const apiUrl = `admin/car-sales`;
+  const apiUrl = "admin/car-shippings";
   const [view, setView] = useState("table");
   const dispatch = useAppDispatch();
-  const { carSales, error, loading, totalPages } = useSelector(
-    (state: RootState) => state.carSales
-  );
-  console.log(totalPages);
+
   const [actions] = useState({
     edit: true,
     add: true,
     delete: true,
     view: true,
-    accept: true,
-    reject: true,
-    finish: true,
   });
+  const { carShippings, loading, totalPages } = useSelector(
+    (state: RootState) => state.carShippings
+  );
   useEffect(() => {
-    const apiUrl = `admin/car-sales?page_size=${showing}&page=${currentPage}`;
-    dispatch(fetchCarSales({ API: apiUrl }));
-  }, [dispatch, currentPage, showing]);
-
-  const handleAcceptReject = async (
-    id: number,
-    type: "accept" | "reject" | "finish"
-  ) => {
-    console.log(`the id : ${id} the type: ${type}`);
-    setSelectedRequest({ id, type });
-    const status = type === "accept" ? 2 : type === "reject" ? 0 : 3; // تحديد القيمة بناءً على نوع الإجراء
-    try {
-      //await axiosInstance.put(`${apiUrl}/${id}`, { status });
-      dispatch(
-        updateCarSale({
-          apiUrl: apiUrl,
-          id: id,
-          updatedData: { status },
-        })
-      );
-      console.log(
-        `تم ${
-          type === "accept" ? "قبول" : type === "reject" ? "رفض" : "اكمال"
-        } الطلب رقم ${id}`
-      );
-    } catch (error) {
-      console.error("حدث خطأ أثناء تحديث الطلب:", error);
-    }
-  };
+    const apiUrl = `admin/car-shippings?page_size=${showing}&page=${currentPage}`;
+    dispatch(fetchCarShippings({ API: apiUrl }));
+  }, [dispatch, showing]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (order: any) => {
-    const mapOrderToFormInputs = (order: CarSale): SallesFormInputs => {
+    const mapOrderToFormInputs = (order: CarShipping): ShippingFormInputs => {
       return {
+        id: order.id ?? null,
         manufacturer: order.category?.manufacturer?.id ?? null,
+        is_pickup: 0, // مبدئياً القيمة الافتراضية
+        is_consolidate: 0,
+        final_port: "",
+        in_transit: 0,
+        vin: order.vin ?? "",
         cmodel_id: order.cmodel?.id ?? null,
         category_id: order.category?.id ?? null,
-        mileage: order.mileage ?? 0,
         year: order.year?.toString() ?? "",
-        drive_system: order.drive_system ?? 1,
-        transmission_type: order.transmission_type ?? 1,
-        cylinders: order.cylinders ?? 4,
-        fuel_type: order.fuel_type ?? 1,
+        mileage: order.mileage?.toString() ?? "",
+        drive_system: order.drive_system ?? null,
+        transmission_type: order.transmission_type ?? null,
+        cylinders: order.cylinders ?? null,
+        fuel_type: order.fuel_type ?? null,
         price: order.price?.toString() ?? "",
-        shipping_from: order.shipping_from ?? null,
-        car_status: typeof order.status === "number" ? order.status : 0,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        images: order.images?.map((img: any) => img.image) ?? [],
         ex_color: order.ex_color ?? "",
         in_color: order.in_color ?? "",
-        id: order.id,
-        images: order.images?.map((img) => img.image) ?? [],
-        not_shippedlocations: "",
-        shipping_status: 0,
-        carfax: null, // إذا كنت تحتاجها من order.car_fax، حولها لرقم أو غيّر النوع في الفورم
-        location_port: "",
+        shipping_from: order.shipping_from?.toString() ?? "",
+        car_status: typeof order.status === "number" ? order.status : null,
+        location_of_car: order.location_of_car ?? null,
+        car_fax: order.car_fax ?? null,
+        commodity_type: "",
+        bill_pdf: "",
+        title_pdf: "",
+        consignee: "",
+        apply_consignee: null,
+        use_type: 0,
       };
     };
 
     const formData = mapOrderToFormInputs(order);
     setInitForm(formData);
-    console.log(initForm);
+    // console.log(formData);
     setOpenModal(true);
   };
-
   const handleDelete = (id: number) => {
     console.log("تم النقر على حذف، رقم الطلب:", id);
     setOpenDeleteModal(true);
     setDeleteId(id);
   };
-  if (error) return <div>{error}</div>;
   return (
     <div className="flex flex-col items-center w-full  gap-[5px]">
       <TableHeader
@@ -185,10 +161,7 @@ export default function Sales() {
           filter: true,
           export: true,
           add: true,
-          addNewActiom: () => {
-            setOpenModal(true);
-            setInitForm(null);
-          },
+          addNewActiom: () => setOpenModal(true),
           filterActiom: handleTogleFilter,
         }}
       />
@@ -212,30 +185,37 @@ export default function Sales() {
         <GeneralTable
           loading={loading}
           columns={columns}
+          initialData={carShippings}
           apiUrl={apiUrl}
           actions={actions}
-          initialData={carSales}
           onTotalCountChange={setTotalCount}
-          onChangeStatus={handleAcceptReject}
           sortBy={sortby}
           showing={showing}
           searchTerm={searchTerm}
+          customEditForm={(data, close) => (
+            <ShippingForm
+              onSubmit={(data) => {
+                console.log("data:", data);
+              }}
+              initialData={data}
+              close={() => close}
+            />
+          )}
         />
       ) : (
         <Grid_View
           loading={loading}
-          data={carSales}
+          data={carShippings}
           sortBy={sortby}
           showing={showing}
           onTotalCountChange={setTotalCount}
           searchTerm={searchTerm}
-          onDelete={(id) => handleDelete(id)}
           onEdit={(order) => {
-            if ("images" in order) {
+            if ("is_pickup" in order) {
               handleEdit(order);
             }
           }}
-          onChangeStatus={handleAcceptReject}
+          onDelete={(id) => handleDelete(id)}
         />
       )}
       <CustomPagination
@@ -249,7 +229,9 @@ export default function Sales() {
           open={openDeleteModal}
           id={deleteId}
           handleClose={() => setOpenDeleteModal(false)}
-          onDeleteSuccess={() => dispatch(deleteCarSaleLocal(deleteId))}
+          onDeleteSuccess={() =>
+            dispatch(deleteCarShipping({ id: deleteId, apiUrl: apiUrl }))
+          }
         />
       )}
       {openModal && (
@@ -272,12 +254,10 @@ export default function Sales() {
               outline: "none",
             }}
           >
-            <Salles
-              onSubmit={(data) => {
-                console.log(data);
-              }}
-              initialData={initForm}
+            <ShippingForm
               close={() => setOpenModal(false)}
+              onSubmit={(data) => console.log(`added data: ${data}`)}
+              initialData={initForm}
             />
           </Box>
         </Modal>

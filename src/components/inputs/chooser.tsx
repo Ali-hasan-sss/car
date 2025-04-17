@@ -1,11 +1,11 @@
 interface ChooserProps {
   question: string;
-  value: string; // القيمة الحالية المختارة
-  value1: string; // قيمة الخيار الأول
-  value2: string; // قيمة الخيار الثاني
-  option1: string; // نص الخيار الأول
-  option2: string; // نص الخيار الثاني
-  onChange: (selectedValue: string) => void; // دالة لإرسال القيمة المختارة إلى المكون الأب
+  value: string | number | ""; // القيمة الحالية المختارة (تقبل فراغ أيضًا)
+  value1: string | number;
+  value2: string | number;
+  option1: string;
+  option2: string;
+  onChange: (selectedValue: string | number | "") => void; // دعم القيمة الفارغة
 }
 
 export default function Chooser({
@@ -17,12 +17,12 @@ export default function Chooser({
   option2,
   onChange,
 }: ChooserProps) {
-  const handleOptionChange = (selectedValue: string) => {
-    // إذا كان الخيار المضغوط هو نفسه الحالي، قم بإلغاء التحديد
+  const handleOptionChange = (selectedValue: string | number) => {
+    // إذا تم اختيار نفس القيمة مرة أخرى، قم بإلغاء التحديد
     if (value === selectedValue) {
-      onChange(""); // إزالة التحديد
+      onChange(""); // إرجاع القيمة إلى الوضع الافتراضي (فارغة)
     } else {
-      onChange(selectedValue); // تحديد الخيار
+      onChange(selectedValue);
     }
   };
 
@@ -34,10 +34,10 @@ export default function Chooser({
         <input
           type="radio"
           id="option1"
-          value={value1}
+          value={value1.toString()} // تأكد من أنه سترينغ حتى لا يحدث تحذير
           checked={value === value1}
-          onClick={() => handleOptionChange(value1)} // استخدم onClick بدلاً من onChange
-          readOnly // منع التغيير التلقائي من المتصفح
+          onClick={() => handleOptionChange(value1)}
+          readOnly
           className="custom-radio cursor-pointer"
         />
         <label className="text-text_des cursor-pointer" htmlFor="option1">
@@ -49,7 +49,7 @@ export default function Chooser({
         <input
           type="radio"
           id="option2"
-          value={value2}
+          value={value2.toString()}
           checked={value === value2}
           onClick={() => handleOptionChange(value2)}
           readOnly

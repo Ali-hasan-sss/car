@@ -275,7 +275,7 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
             <label>Mileage:</label>
             <Text_selector
               options={mileageOptions}
-              placeholder="Sedan, SUV, Truck"
+              placeholder="50000 KM"
               value={formData.mileage}
               onChange={(value) => handleInputChange("mileage", Number(value))}
               error={errors.mileage}
@@ -432,7 +432,7 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
             value2="In transit"
             value={formData.not_shippedlocations}
             onChange={(value) =>
-              handleInputChange("not_shippedlocations", value)
+              handleInputChange("not_shippedlocations", String(value))
             }
           />
         </div>

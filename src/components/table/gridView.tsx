@@ -2,24 +2,24 @@ import axiosInstance from "@/utils/axiosInstance";
 import { useEffect, useState } from "react";
 import OrderCard from "../cards/order_card";
 import Loader from "../loading/loadingPage";
-import { Auction, CarSale } from "@/Types/AuctionTypes"; // تأكد من أن الأنواع تشمل كلاً من الطلبات والسيارات
+import { Auction, CarSale, CarShipping } from "@/Types/AuctionTypes"; // تأكد من أن الأنواع تشمل كلاً من الطلبات والسيارات
 import CarCard from "../cards/carCard";
 
 interface Grid_ViewProps {
   API?: string;
-  data?: (Auction | CarSale)[]; // البيانات يمكن أن تكون من نوع Order أو CarSale
+  data?: (Auction | CarSale | CarShipping)[]; // البيانات يمكن أن تكون من نوع Order أو CarSale
   sortBy: string;
   searchTerm?: string;
   showing: number;
   onTotalCountChange: (count: number) => void;
   loading?: boolean;
   onDelete?: (id: number) => void;
-  onEdit?: (item: Auction | CarSale) => void;
+  onEdit?: (item: Auction | CarSale | CarShipping) => void;
   onChangeStatus?: (id: number, type: "accept" | "reject" | "finish") => void;
 }
 
 // دالة لفحص ما إذا كان العنصر من نوع CarSale
-const isCarSale = (item: Auction | CarSale): item is CarSale => {
+const isCarSale = (item: Auction | CarSale | CarShipping): item is CarSale => {
   return (item as CarSale).images !== undefined;
 };
 
@@ -40,9 +40,11 @@ export default function Grid_View({
   onTotalCountChange,
   loading: externalLoading, // <-- إعادة التسمية لتمييزه عن الداخلي
 }: Grid_ViewProps) {
-  const [fullData, setFullData] = useState<(Auction | CarSale)[] | null>(null);
+  const [fullData, setFullData] = useState<
+    (Auction | CarSale | CarShipping)[] | null
+  >(null);
   const [displayedData, setDisplayedData] = useState<
-    (Auction | CarSale)[] | null
+    (Auction | CarSale | CarShipping)[] | null
   >(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [internalLoading, setInternalLoading] = useState(false);
@@ -75,9 +77,9 @@ export default function Grid_View({
   }, [API, data]);
 
   const sortData = (
-    data: (Auction | CarSale)[] | undefined,
+    data: (Auction | CarSale | CarShipping)[] | undefined,
     sortBy: string
-  ): (Auction | CarSale)[] => {
+  ): (Auction | CarSale | CarShipping)[] => {
     if (!Array.isArray(data) || data.length === 0) return [];
 
     const sorted = [...data];

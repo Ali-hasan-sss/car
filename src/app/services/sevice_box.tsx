@@ -1,3 +1,5 @@
+import { ChevronDown, ChevronUp } from "lucide-react";
+
 interface servic_boxProps {
   image: string;
   title: string;
@@ -27,11 +29,7 @@ export default function Servic_box({
           }`}
         >
           {isActive ? "Hide Details" : "Show Details"}
-          {isActive ? (
-            <img src="images/arrowUp.png" alt="icon" />
-          ) : (
-            <img src="images/arrowDowen.png" alt="arrowdowen" />
-          )}
+          {isActive ? <ChevronUp /> : <ChevronDown />}
         </button>
       </div>
     </>
