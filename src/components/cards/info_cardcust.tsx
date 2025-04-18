@@ -49,7 +49,7 @@ export default function InfoCard_cust({
         )}
         <img
           src={imageSrc}
-          className="w-[75px]"
+          className="w-[65px]"
           alt="service"
           onLoad={handleImageLoad}
           onError={handleImageError}
@@ -57,13 +57,13 @@ export default function InfoCard_cust({
       </div>
 
       <div className="flex w-full items-start justify-between">
-        <h2 className="text-text_title text-2xl font-bold text-center">
+        <h2 className="text-text_title text-xl font-bold text-center">
           {isArabic ? title.ar : title.en}
         </h2>
       </div>
-      <p className="text-text_des text-xl">{isArabic ? des.ar : des.en}</p>
+      <p className="text-text_des text-lg">{isArabic ? des.ar : des.en}</p>
       {body && (
-        <p className="text-text_des text-xl">{isArabic ? body.ar : body.en}</p>
+        <p className="text-text_des text-lg">{isArabic ? body.ar : body.en}</p>
       )}
     </div>
   );

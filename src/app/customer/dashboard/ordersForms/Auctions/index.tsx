@@ -352,11 +352,11 @@ export default function Auctions({
         </div>
       </div>
       <div className="flex flex-wrap actions w-full gap-[10px] mt-4 py-4 items-center justify-between">
-        <button className=" w-[150px] py-3 button_bordered" onClick={close}>
+        <button className="py-1 px-2 button_bordered" onClick={close}>
           Cancel
         </button>
         <button
-          className=" w-[150px] py-3 flex items-center justify-center button_outline"
+          className="py-1 px-2 flex items-center justify-center button_outline"
           onClick={handleSubmit}
         >
           {loading ? <LoadingBTN /> : "Send Car Order"}

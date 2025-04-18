@@ -2,13 +2,27 @@ import Avatar from "@/components/avatar/avatar";
 import LanguageSwitcher from "@/components/buttons/btn-switch/LanguageSwitcher";
 import { FaBell } from "react-icons/fa";
 import Logo from "../header/top-bar/logo";
-
-export default function Topbar() {
+interface TopBarProps {
+  isExpand: boolean;
+}
+export default function Topbar({ isExpand }: TopBarProps) {
   return (
-    <div className="flex items-center justify-between md:justify-end gap-[16px]">
+    <div
+      className={`flex items-center justify-between gap-[16px] ${
+        !isExpand ? "" : ""
+      }`}
+    >
+      {!isExpand ? (
+        <div className="hidden md:block">
+          <Logo width="100" />
+        </div>
+      ) : (
+        <div className="hidden md:block"></div>
+      )}
       <div className="md:hidden">
-        <Logo />
+        <Logo width="100" />
       </div>
+
       <div className="flex items-center justify-center gap-4">
         <LanguageSwitcher />
         <FaBell className="text-gray-400 text-2xl cursor-pointer" />

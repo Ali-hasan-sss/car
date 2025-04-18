@@ -2,14 +2,12 @@
 import "./dashboard.css";
 import { useState } from "react";
 import { Modal, Box } from "@mui/material";
-// import Auctions from "./ordersForms/Auctions";
-// import Shipping from "./shipping/page";
-// import Salles from "./ordersForms/salles";
+
 import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [serviceKey, setServiceKey] = useState("");
+
   const router = useRouter();
   const services = [
     {
@@ -32,11 +30,6 @@ const Dashboard = () => {
     },
   ];
 
-  // const handleTabChange = (key: string) => {
-  //   setServiceKey(key);
-  //   setIsModalOpen(true);
-  // };
-
   return (
     <div className="flex flex-col items-center justify-center gap-[60px]">
       <div className="w-full flex flex-col items-start gap-[10px]">
@@ -52,7 +45,6 @@ const Dashboard = () => {
         {services.map((service) => (
           <div
             onClick={() => {
-              // handleTabChange(service.key);
               router.push(service.link);
             }}
             key={service.key}
@@ -86,19 +78,7 @@ const Dashboard = () => {
             overflowY: "auto", // السماح بالتمرير عند زيادة المحتوى
             outline: "none",
           }}
-        >
-          {/* {serviceKey === "Auctions" && (
-            <Auctions
-              initialData={}
-              onSubmit={}
-              close={() => setIsModalOpen(false)}
-            />
-          )}
-          {serviceKey === "Shipping" && <Shipping />}
-          {serviceKey === "Sell" && (
-            <Salles close={() => setIsModalOpen(false)} />
-          )} */}
-        </Box>
+        ></Box>
       </Modal>
     </div>
   );

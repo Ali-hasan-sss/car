@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import LanguageSwitcher from "../buttons/btn-switch/LanguageSwitcher";
+import Search from "./top-bar/Search-form";
 
 export default function Dropdown() {
   const [expanded, setExpanded] = useState(false);
@@ -55,11 +56,11 @@ export default function Dropdown() {
   ];
 
   return (
-    <div className="relative md:hidden" ref={dropdownRef}>
+    <div className="relative md:hidden p-1" ref={dropdownRef}>
       <div
         tabIndex={0}
         role="button"
-        className="btn-ghost"
+        className="btn-ghost mb-2"
         onClick={() => setExpanded(!expanded)}
       >
         <svg
@@ -81,7 +82,7 @@ export default function Dropdown() {
         <ul
           ref={menuRef}
           tabIndex={0}
-          className={`bg-secondary1 absolute border p-4 z-[50] rounded shadow w-[200px] top-full`}
+          className={`bg-secondary1 absolute border p-4 z-[50] rounded shadow w-[250px] top-full`}
           style={{
             left: "0", // أو right: "0" حسب اللغة أو الاتجاه
           }}
@@ -96,6 +97,9 @@ export default function Dropdown() {
               <Link href={item.path}>{item.label}</Link>
             </li>
           ))}
+          <li className="mt-2 w-full">
+            <Search width="full" />
+          </li>
           <li className="mt-2">
             <LanguageSwitcher />
           </li>

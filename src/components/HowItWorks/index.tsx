@@ -49,18 +49,18 @@ export default function HowItWorks() {
   ];
 
   return (
-    <div className="w-full px-[10px] md:px-[64px] py-[10px] md:py-[50px] bg-white">
+    <div className="w-full px-[10px] md:px-[64px] py-[50px] bg-white">
       <div className="w-full">
         <div className="flex flex-col item-center justify-center gap-[20px]">
           <h1 className="stor-title text-center">How it works</h1>
           <p className="stor-des text-center mt-5">
             A simple and transparent process for stress-free car shipping
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-4">
+          <div className="flex flex-wrap mt-4 items-center justify-center gap-5">
             {steps.map((step, index) => (
               <InfoCard_cust
                 width="200"
-                height="200"
+                height="250"
                 key={index}
                 image={step.imgSrc}
                 title={step.title}

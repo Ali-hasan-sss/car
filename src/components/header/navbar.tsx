@@ -4,7 +4,7 @@ import "./header.css";
 export default function Navbar() {
   return (
     <div className=" py-[12px] h-[125px] bg-secondary1">
-      <div className="max-w-screen-xl  flex flex-col items-center px-4">
+      <div className="max-w-screen-xl  flex flex-col items-center">
         <div className="top-bar w-full">
           <Topbar />
         </div>

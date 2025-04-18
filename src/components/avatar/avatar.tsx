@@ -73,6 +73,13 @@ export default function Avatar({ width }: AvatarProps) {
       userRole === "ADMIN" ? "/admin/dashboard" : "/customer/dashboard"
     );
   };
+  const goToProfile = () => {
+    router.push(
+      userRole === "ADMIN"
+        ? "/admin/dashboard/sitings"
+        : "/customer/dashboard/profile"
+    );
+  };
 
   const menuItems = [
     {
@@ -107,7 +114,7 @@ export default function Avatar({ width }: AvatarProps) {
           src="/images/avatar.png"
           alt="user photo"
         />
-        {userData?.first_name} {userData?.last_name}
+        {userData?.first_name}
         <svg
           className="w-2.5 h-2.5 ms-3"
           aria-hidden="true"
@@ -132,7 +139,10 @@ export default function Avatar({ width }: AvatarProps) {
             isArabic ? "left-0" : "right-0"
           }`}
         >
-          <div className="px-4 py-3 text-sm text-gray-900 ">
+          <div
+            className="px-4 py-3 text-sm text-gray-900 rounded hover:bg-secondary1 cursor-pointer"
+            onClick={goToProfile}
+          >
             <div className="font-medium text-center">
               {userData?.first_name} {userData?.last_name}
             </div>

@@ -1,10 +1,14 @@
 import { useLanguage } from "../../../context/LanguageContext";
-
-const Search: React.FC = () => {
+interface Searchprops {
+  width?: string;
+}
+export default function Truck({ width }: Searchprops) {
   const { t } = useLanguage();
 
   return (
-    <div className="track relative w-2/5 bg-white h-[40px] flex items-center justify-between">
+    <div
+      className={`track relative   w-${width} bg-white h-[40px] flex items-center justify-between`}
+    >
       {/* Input field */}
       <input
         type="text"
@@ -17,6 +21,4 @@ const Search: React.FC = () => {
       </button>
     </div>
   );
-};
-
-export default Search;
+}

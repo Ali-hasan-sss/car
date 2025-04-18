@@ -1,10 +1,12 @@
 import Link from "next/link";
-
-export default function Logo() {
+interface logoprops {
+  width?: string;
+}
+export default function Logo({ width }: logoprops) {
   return (
-    <div className="logo w-[140px] h-[72px] p-[10px] flex items-center justify-center ">
+    <div className={`logo px-[5px]  flex items-center justify-center `}>
       <Link href="/">
-        <img src="/images/logo.png" alt="" />
+        <img src="/images/logo.png" width={width} alt="" />
       </Link>
     </div>
   );

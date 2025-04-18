@@ -83,7 +83,7 @@ export default function Actions() {
   const [view, setView] = useState("table");
   const dispatch = useAppDispatch();
   const apiUrl = "customer/car-auctions";
-  const { auctions, loading, error, totalPages } = useSelector(
+  const { auctions, loading, totalPages } = useSelector(
     (state: RootState) => state.auctions
   );
 
@@ -129,7 +129,6 @@ export default function Actions() {
     setInitForm(formData);
     setOpenModal(true);
   };
-  if (error) return <div>{error}</div>;
   return (
     <div className="flex flex-col items-center w-full  gap-[5px]">
       <TableHeader

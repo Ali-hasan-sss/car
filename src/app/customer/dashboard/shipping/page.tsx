@@ -150,7 +150,7 @@ export default function Shipping() {
   return (
     <div className="flex flex-col items-center w-full  gap-[5px]">
       <TableHeader
-        title={t("Auctions")}
+        title={t("Shipping")}
         action={{
           filter: true,
           export: true,

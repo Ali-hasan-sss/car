@@ -15,16 +15,16 @@ export default function Navbutton() {
   return isLoggedIn ? (
     <Avatar width="16" />
   ) : (
-    <div className="flex w-[209px] h-[57px] p-[5px] gap-[8px] items-center">
+    <div className="flex p-[5px] gap-[8px] items-center">
       <Link
         href="/login"
-        className="button_outline  w-[89px] h-[40px]  py-[10px] px-[14px] flex items-center justify-center"
+        className="button_outline py-1 md:py-3 px-2 md:px-4 text-sm flex items-center justify-center"
       >
         {t("Sign_in")}
       </Link>
       <Link
         href="/register"
-        className="button_bordered w-[89px] h-[40px] py-[10px] px-[14px] flex items-center justify-center"
+        className="button_bordered py-1 md:py-3 px-2 md:px-4 text-sm flex items-center justify-center"
       >
         {t("Register")}
       </Link>

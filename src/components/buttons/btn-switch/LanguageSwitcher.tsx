@@ -48,10 +48,10 @@ export default function LanguageSwitcher() {
       <button
         ref={buttonRef} // ✅ إضافة مرجع للزر لمنع إغلاقه عند النقر عليه
         onClick={toggleDropdown}
-        className="flex gap-1 items-center text-gray-500 justify-center rounded-full focus:outline-none"
+        className="flex text-[14px] gap-1 items-center text-gray-500 justify-center rounded-full focus:outline-none"
         aria-label="Change language"
       >
-        <FaGlobe className="text-xl mx-1" />
+        <FaGlobe className="text-[14px] mx-1" />
         {language === "en" ? "English" : "العربية"}
         <ChevronDown className="w-5 h-5 text-gray-500" />
       </button>

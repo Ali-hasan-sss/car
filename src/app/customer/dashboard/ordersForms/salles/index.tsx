@@ -485,16 +485,16 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
 
       <div className="flex flex-wrap actions w-full gap-[10px] mt-4 py-4 items-center justify-between">
         <button
-          className="button_bordered w-[200px] py-3 border-primary1 text-primary1 hover:bg-primary1 hover:text-light"
+          className="button_bordered py-1 px-2 border-primary1 text-primary1 hover:bg-primary1 hover:text-light"
           onClick={close}
         >
           Cancel
         </button>
         <button
-          className="button_outline w-[200px] py-3 bg-primary1 hover:bg-transparent hover:border-primary1 hover:text-black text-light"
+          className="button_outline py-1 px-2 bg-primary1 hover:bg-transparent hover:border-primary1 hover:text-black text-light"
           onClick={handleSubmit}
         >
-          {loading ? <LoadingBTN /> : "Save Car Details"}
+          {loading ? <LoadingBTN /> : "Send Offer "}
         </button>
       </div>
     </div>

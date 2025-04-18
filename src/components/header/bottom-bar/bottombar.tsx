@@ -39,7 +39,7 @@ export default function Bottombar() {
         {navItems.map((item) => (
           <li key={item.id}>
             <Link
-              className={`nav-item text-lg p-[10px] gap-[10px] ${
+              className={`nav-item p-[10px] gap-[10px] ${
                 pathname === item.path ? "active" : ""
               }`}
               href={item.path}
@@ -48,7 +48,7 @@ export default function Bottombar() {
             </Link>
           </li>
         ))}
-        <li className="mt-1 text-lg gap-[10px]">
+        <li className=" text-lg gap-[10px]">
           <LanguageSwitcher />
         </li>
       </ul>

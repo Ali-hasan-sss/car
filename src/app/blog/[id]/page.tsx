@@ -32,7 +32,7 @@ export default function Blog() {
     const fetchBlog = async () => {
       try {
         setLoadingPage(true);
-        const response = await axiosInstance.get(`/customer/blogs/${id}`);
+        const response = await axiosInstance.get(`/customer/bloge/${id}`);
         setBlog(response.data.data);
       } catch (error) {
         console.error("فشل جلب المقال", error);

@@ -68,11 +68,11 @@ export const statusMap: Record<
   number | "null",
   { label: string; color: string }
 > = {
-  0: { label: "مرفوض", color: "bg-red-500 text-white" },
-  1: { label: "قيد الانتظار", color: "bg-yellow-400 text-black" },
-  2: { label: "قيد التنفيذ", color: "bg-blue-500 text-white" },
-  3: { label: "منجز", color: "bg-green-500 text-white" },
-  null: { label: "غير محدد", color: "bg-gray-400 text-white" },
+  0: { label: "مرفوض", color: "bg-red-500" },
+  1: { label: "قيد الانتظار", color: "bg-yellow-400" },
+  2: { label: "قيد التنفيذ", color: "bg-blue-500" },
+  3: { label: "منجز", color: "bg-green-500" },
+  null: { label: "غير محدد", color: "bg-gray-400" },
 };
 
 //  تحديد حالة الطلب

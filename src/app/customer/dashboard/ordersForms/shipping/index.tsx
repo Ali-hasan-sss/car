@@ -194,11 +194,11 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
   };
 
   return (
-    <div className="flex flex-col gap-[20px] p-[10px]">
+    <div className="flex flex-col gap-[20px] px-1 py-[10px]">
       {/* العنوان */}
       <div className="flex items-center justify-start gap-1">
         <img src="/images/information.png" alt="info" className="w-[20px]" />
-        <h2 className="text-text_title text-2xl font-bold">
+        <h2 className="text-text_title text-xl font-bold">
           General Information
         </h2>
       </div>
@@ -518,13 +518,13 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
       />
       <div className="flex flex-wrap actions w-full gap-[10px] mt-4 py-4 items-center justify-between">
         <button
-          className="button_bordered w-[200px] py-3 border-primary1 text-primary1 hover:bg-primary1 hover:text-light"
+          className="button_bordered py-1 px-2 border-primary1 text-primary1 hover:bg-primary1 hover:text-light"
           onClick={close}
         >
           Cancel
         </button>
         <button
-          className="button_outline w-[200px] py-3 bg-primary1 hover:bg-transparent hover:border-primary1 hover:text-black text-light"
+          className="button_outline py-1 px-2 bg-primary1 hover:bg-transparent hover:border-primary1 hover:text-black text-light"
           onClick={handleSubmit}
         >
           {/* {loading ? <LoadingBTN /> : "Save Car Details"} */}Save Car

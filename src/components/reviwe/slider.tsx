@@ -17,8 +17,8 @@ export default function Slider_card() {
         breakpoints={{
           1200: { slidesPerView: 4, spaceBetween: 3 }, // شاشات كبيرة جدًا
           1024: { slidesPerView: 3, spaceBetween: 3 }, // شاشات كبيرة
-          768: { slidesPerView: 3, spaceBetween: 2 }, // شاشات متوسطة
-          400: { slidesPerView: 2, spaceBetween: 2 }, // شاشات صغيرة
+          768: { slidesPerView: 2, spaceBetween: 2 }, // شاشات متوسطة
+          400: { slidesPerView: 1, spaceBetween: 2 }, // شاشات صغيرة
           0: { slidesPerView: 1, spaceBetween: 1 }, // شاشات صغيرة جدًا
         }}
         navigation={{
@@ -41,8 +41,8 @@ export default function Slider_card() {
           padding: "10px", // البادينغ داخل السلايدر
         }}
       >
-        {reviwes.map((reviwe, index) => (
-          <SwiperSlide key={index}>
+        {reviwes.map((reviwe) => (
+          <SwiperSlide key={reviwe.id}>
             <Card {...reviwe} />
           </SwiperSlide>
         ))}

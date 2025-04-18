@@ -204,7 +204,7 @@ const OrderCard: React.FC<OrderCardProps> = ({
           </div>
         </div>
 
-        <div className="flex flex-col space-y-4 text-gray-700 text-lg sm:col-span-1 lg:col-span-1">
+        <div className="flex flex-col px-3 space-y-4 text-gray-700 text-lg sm:col-span-1 lg:col-span-1">
           {/* User Info */}
           <div className="space-y-2">
             <p>
@@ -239,7 +239,7 @@ const OrderCard: React.FC<OrderCardProps> = ({
             <p className="flex items-center gap-2">
               <span className="font-semibold text-lg">Status:</span>
               <span
-                className={`text-white text-xs font-medium me-2 px-2.5 py-0.5 rounded-full ${statusInfo.color}`}
+                className={`text-white text-xs font-medium me-2 px-2.5 py-0.5 rounded-full ${statusInfo.color} `}
               >
                 {statusInfo.label}
               </span>

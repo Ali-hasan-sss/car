@@ -2,11 +2,11 @@ export default function Tabs() {
   const tabs = ["All", "Used cars", "New cars"];
 
   return (
-    <div className="w-full mt-4 gap-[10px] item-center flex flex-wrap h-[30px]">
+    <div className="w-full mt-2 gap-[10px] item-center flex flex-wrap">
       {tabs.map((tab, index) => (
         <div
           key={index}
-          className={`button flex item-center justify-center h-[30px] ${
+          className={`button flex item-center justify-center  ${
             index === 0 ? "active-tab" : ""
           }`}
         >

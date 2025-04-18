@@ -15,8 +15,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import ButtomNavBar from "./buttomNav";
-
-export default function Sidebar() {
+interface SidebarProps {
+  setisExpand: (val: boolean) => void;
+}
+export default function Sidebar({ setisExpand }: SidebarProps) {
   const { t, isArabic } = useLanguage();
   const [isExpand, setIsExpand] = useState(false);
   const pathname = usePathname();
@@ -136,6 +138,7 @@ export default function Sidebar() {
             <button
               onClick={() => {
                 setIsExpand(!isExpand);
+                setisExpand(isExpand);
               }}
               className={`w-[25px] rounded-full hover:bg-primary1 hover:text-white p-1 flex items-center justify-center ${
                 isExpand ? "m-2" : ""
@@ -151,6 +154,7 @@ export default function Sidebar() {
             <button
               onClick={() => {
                 setIsExpand(!isExpand);
+                setisExpand(isExpand);
               }}
               className={`w-[25px] rounded-full hover:bg-primary1 hover:text-white p-1 flex items-center justify-center  ${
                 isExpand ? "m-2" : ""

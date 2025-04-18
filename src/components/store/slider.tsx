@@ -111,7 +111,7 @@ export default function Slider_card() {
         )}
       </Swiper>
 
-      <div className="slider-controls flex justify-between items-center mt-2">
+      <div className="slider-controls flex justify-between items-center mt-1">
         <div className="flex item-center justify-center gap-1">
           {cars.map((_, index) => (
             <div

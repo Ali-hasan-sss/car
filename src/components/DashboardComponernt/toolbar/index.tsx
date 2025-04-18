@@ -58,9 +58,9 @@ export default function ToolBar({
         </div>
         <div className="w-[2px] h-[20px] bg-gray-300"></div>
         <div className="flex items-center gap-1">
-          <label className="text-lg">{t("Showing")}:</label>
+          <label className="text-sm">{t("Showing")}:</label>
           <select
-            className="bg-secondary1 outline-none text-lg text-text_title"
+            className="bg-secondary1 outline-none text-sm text-text_title"
             value={showing}
             onChange={(e) =>
               onShowingChange && onShowingChange(Number(e.target.value))
@@ -79,9 +79,9 @@ export default function ToolBar({
         <div className="w-[2px] h-[20px] bg-gray-300"></div>
         {sortby && (
           <div className="flex items-center gap-1">
-            <label className="text-lg">{t("Sort_by")}:</label>
+            <label className="text-sm">{t("Sort_by")}:</label>
             <select
-              className="bg-secondary1 outline-none text-lg text-text_title"
+              className="bg-secondary1 outline-none text-sm text-text_title"
               value={sortby}
               onChange={(e) => onSortByChange && onSortByChange(e.target.value)}
             >
@@ -100,7 +100,7 @@ export default function ToolBar({
         {view && <div className="w-[2px] h-[20px] bg-gray-300"></div>}
         {view && (
           <div className="flex items-center gap-1">
-            <label className="text-lg">{t("View_as")} :</label>
+            <label className="text-sm">{t("View_as")} :</label>
             <div className="flex items-center p-1 gap-1">
               <button
                 onClick={() => handleViewChange("table")}

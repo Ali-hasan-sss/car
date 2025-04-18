@@ -66,7 +66,7 @@ export default function BlogCard({
             </div>
           ) : (
             <Link
-              href={`bloge/${id}`}
+              href={`blog/${id}`}
               className="text-blue-500 text-sm underline mt-2"
             >
               عرض المقال

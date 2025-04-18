@@ -2,7 +2,7 @@ import Slider_image from "./slider";
 
 export default function Gallery() {
   return (
-    <div className="w-full px-[10px] md:px-[64px] py-[10px] md:py-[50px] bg-secondary1 ">
+    <div className="w-full px-[10px] md:px-[64px] py-[50px] bg-secondary1 ">
       <div className="w-full ">
         <div className="title ">
           <h1 className="text-center">Explore Our Gallery</h1>
