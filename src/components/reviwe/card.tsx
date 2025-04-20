@@ -41,12 +41,12 @@ export default function Card({ rate, des, user }: Review) {
 
       {/* الوصف */}
       <div
-        className="description text-sm px-4 py-2 flex-1 overflow-y-auto"
+        className="description  px-4 py-2 flex-1 overflow-y-auto"
         style={{
           maxHeight: "150px",
         }}
       >
-        <p className="text-gray-500">{des}</p>
+        <p className="text-gray-500 text-xs">{des}</p>
       </div>
 
       {/* المستخدم */}
@@ -55,8 +55,10 @@ export default function Card({ rate, des, user }: Review) {
           <img src={user.avatar} alt="Avatar" />
         </div>
         <div className="text-sm">
-          <p className="font-semibold text-gray-700">Name: {user.name}</p>
-          <p className="text-gray-500">company: {user.company}</p>
+          <p className="font-semibold text-xs text-gray-700">
+            Name: {user.name}
+          </p>
+          <p className="text-gray-500 text-xs">company: {user.company}</p>
         </div>
       </div>
     </div>

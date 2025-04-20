@@ -24,6 +24,7 @@ interface CarResponse {
   cmodel: {
     title: string;
   };
+  year: number;
   price: number;
   images: {
     image: string;
@@ -78,7 +79,7 @@ export default function Slider_card() {
           1024: { slidesPerView: 4, spaceBetween: 3 },
           768: { slidesPerView: 3, spaceBetween: 2 },
           400: { slidesPerView: 2, spaceBetween: 2 },
-          0: { slidesPerView: 1, spaceBetween: 1 },
+          0: { slidesPerView: 1.5, spaceBetween: 2 },
         }}
         navigation={{
           prevEl: prevRef.current, // الربط باستخدام refs
@@ -131,7 +132,7 @@ export default function Slider_card() {
             </div>
           ))}
         </div>
-        <button onClick={goToStore} className="btn-view-more">
+        <button onClick={goToStore} className="button_outline px-4 py-1 mt-3">
           View More
         </button>
         <div className="slider-navigation flex items-center gap-2">

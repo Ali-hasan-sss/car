@@ -60,7 +60,7 @@ export default function LanguageSwitcher() {
       {isDropdownOpen && (
         <div
           ref={dropdownRef} // ✅ مرجع للقائمة
-          className="absolute right-0 z-50 mt-4 w-32 bg-secondary1 border rounded shadow-md"
+          className="absolute right-0 z-50 mt-4 w-30 bg-secondary1 border rounded shadow-md"
         >
           {availableLanguages.map((lang) => (
             <button
@@ -70,7 +70,7 @@ export default function LanguageSwitcher() {
                 setIsDropdownOpen(false);
               }}
               disabled={language === lang.code}
-              className={`w-full px-4 py-2 rounded text-left ${
+              className={`w-full px-4 py-2 text-xs rounded text-left ${
                 language === lang.code
                   ? "text-gray-400 cursor-not-allowed"
                   : "hover:bg-primary1"

@@ -6,7 +6,7 @@ export default function Tabs() {
       {tabs.map((tab, index) => (
         <div
           key={index}
-          className={`button flex item-center justify-center  ${
+          className={`button text-xs px-3 py-1 flex item-center justify-center  ${
             index === 0 ? "active-tab" : ""
           }`}
         >

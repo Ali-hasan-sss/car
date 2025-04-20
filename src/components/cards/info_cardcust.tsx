@@ -55,16 +55,21 @@ export default function InfoCard_cust({
           onError={handleImageError}
         />
       </div>
-
-      <div className="flex w-full items-start justify-between">
-        <h2 className="text-text_title text-xl font-bold text-center">
-          {isArabic ? title.ar : title.en}
-        </h2>
+      <div className="flex flex-col gap-1">
+        <div className=" w-full">
+          <h2 className="text-text_title text-center text-lg font-bold text-center">
+            {isArabic ? title.ar : title.en}
+          </h2>
+        </div>
+        <p className="text-text_des text-center text-[12px]">
+          {isArabic ? des.ar : des.en}
+        </p>
+        {body && (
+          <p className="text-text_des text-center text-[12px]">
+            {isArabic ? body.ar : body.en}
+          </p>
+        )}
       </div>
-      <p className="text-text_des text-lg">{isArabic ? des.ar : des.en}</p>
-      {body && (
-        <p className="text-text_des text-lg">{isArabic ? body.ar : body.en}</p>
-      )}
     </div>
   );
 }

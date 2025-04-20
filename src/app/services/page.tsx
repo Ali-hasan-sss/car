@@ -59,9 +59,9 @@ const ServicesPage: React.FC = () => {
           {/* Description */}
           <div className="flex flex-col items-center justify-center px-[50px] gap-[50px]">
             <div>
-              <p className="text-xl text-text_des">
+              <p className="text-lg text-text_des">
                 At{" "}
-                <span className="text-2xl font-bold text-text_title">
+                <span className="text-xl font-bold text-text_title">
                   Soufan Global
                 </span>
                 , we take pride in offering a comprehensive range of services

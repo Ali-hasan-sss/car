@@ -7,7 +7,7 @@ export default function Topbar() {
     <>
       <div className="hidden w-full md:flex items-center justify-between w-full h-[72px] px-[50px]">
         <Logo />
-        <Search width="2/5" />
+        <Search width="1/3" />
         <Navbutton />
       </div>
       <div className="flex md:hidden items-center justify-between w-full h-[72px]">

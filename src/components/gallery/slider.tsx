@@ -59,7 +59,7 @@ export default function Slider_image() {
       </Swiper>
 
       {/* عناصر التحكم أسفل السلايدر */}
-      <div className="slider-controls flex justify-between items-center mt-2">
+      <div className="slider-controls flex justify-between items-center mt-6">
         {/* النقاط تشير إلى عدد العناصر */}
         <div className="flex item-center justify-center gap-1">
           {images.map((_, index) => (
@@ -80,7 +80,7 @@ export default function Slider_image() {
             </div>
           ))}
         </div>
-        <button className="btn-view-more">View More</button>
+        <button className="button_outline px-4 py-1">View More</button>
         <div className="slider-navigation flex items-center gap-2">
           <div className="arrow-button flex item-center justify-center gap-1 ">
             <div

@@ -39,16 +39,18 @@ export default function Cotation() {
   return (
     <div className="fillter w-full ">
       <div className="text">
-        <h1 className="fillter-title">{t("hero_title")}</h1>
-        <p className="fillter-des">{t("hero_des")}</p>
+        <h1 className="text-4xl font-bold">{t("hero_title")}</h1>
+        <p className="text-sm my-3 text-gray-500">{t("hero_des")}</p>
         <div className="fillter p-[10px] sm:p-[0px] gap-[20px]">
-          <p className="text-primary1">What are you shipping?</p>
+          <p className="text-primary1 text-sm font-montserrat">
+            What are you shipping?
+          </p>
           {/* cars category */}
-          <div className="flex flex-wrap mt-2 items-start justify-start gap-4">
+          <div className="flex flex-wrap mt-2 items-start justify-start gap-2">
             {items.map((item, index) => (
               <div
                 key={index}
-                className={`article box cursor-pointer gap-[18px] flex items-center justify-center w-[150px] h-[50px] py-[8px] px-[12px] bg-white border rounded ${
+                className={`article box cursor-pointer text-xs font-montserrat  gap-[18px] flex items-center justify-center w-[150px] h-[50px] py-[8px] px-[12px] bg-white border rounded ${
                   car === item.label ? "activ" : ""
                 } ${errors.car ? "error" : ""}`}
                 onClick={() => setCar(item.label)}
@@ -62,12 +64,14 @@ export default function Cotation() {
           </div>
         </div>
         {/**port information  */}
-        <div className="fillter p-[10px] sm:p-[0px] gap-[20px]">
-          <p className="text-primary1 mt-4">Select your address</p>
+        <div className="fillter p-[10px] sm:p-[0px] gap-4">
+          <p className="text-primary1 mt-4 font-montserrat text-sm">
+            Select your address
+          </p>
 
-          <div className="flex w-full mt-2 flex-wrap items-start justify-start gap-4">
+          <div className="flex w-full mt-2 flex-wrap items-start justify-start gap-3">
             {/* Select your address */}
-            <div className=" bg-white w-1/3 ">
+            <div className=" bg-white  w-1/2 md:w-1/3 ">
               <TextSelector
                 options={[
                   { value: "masquat", label: "Masquat" },
@@ -81,7 +85,7 @@ export default function Cotation() {
                 error={errors.address}
               />
             </div>
-            <div className=" bg-white w-1/3 ">
+            <div className=" bg-white   w-1/2 md:w-1/3">
               <TextSelector
                 options={[{ value: "torinto", label: "Torinto" }]}
                 value={shippingPort}
@@ -96,7 +100,9 @@ export default function Cotation() {
         </div>
         {/**email address */}
         <div className="fillter p-[10px] sm:p-[0px] gap-[20px]">
-          <p className="text-primary1 mt-4">Enter Your Email Address </p>
+          <p className="text-primary1 text-sm mt-3 font-montserrat">
+            Enter Your Email Address{" "}
+          </p>
           <div
             className={`flex  h-[56px] bg-white px-[12px] py-[8px] gap-[18px] border rounded items-start justify-start gap-4 ${
               errors.email ? "border-red-500" : ""
@@ -110,7 +116,7 @@ export default function Cotation() {
                 <input
                   type="email"
                   placeholder="mail@example.com"
-                  className=" bg-white focus:outline-none text-xl mb-1 w-full"
+                  className=" bg-white focus:outline-none mb-1 font-montserrat text-sm w-full"
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
@@ -126,7 +132,7 @@ export default function Cotation() {
         {/**action */}
         <div className="action w-full h-80px flex item-center justify-center py-[16px]">
           <button
-            className="button_bordered rounded py-[12px] px-[24px] text-blue-200 "
+            className="button_bordered rounded py-3 px-5 font-bold text-sm text-blue-200 "
             onClick={handleSubmit}
           >
             Get Instant Quote up

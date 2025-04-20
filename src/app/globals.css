@@ -3,12 +3,6 @@
 @tailwind utilities;
 @import "nprogress/nprogress.css";
 
-@font-face {
-  font-family: "Poppins";
-  src: url("/fonts/Roboto/Roboto-VariableFont_wdth,wght.ttf") format("truetype");
-  font-weight: 100;
-  font-style: normal;
-}
 :root {
   --background: #ffffff;
   --foreground: #171717;

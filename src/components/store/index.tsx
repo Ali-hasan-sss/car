@@ -3,11 +3,11 @@ import "./store.css";
 import Tabs from "./tabs";
 export default function Store() {
   return (
-    <div className="w-full px-[10px] md:px-[64px] py-[10px] md:py-[50px] bg-white ">
+    <div className="w-full px-[10px] py-[20px] md:px-[64px] md:py-[50px] bg-white ">
       <div className="w-full ">
-        <div className="title ">
-          <h1 className="stor-title">Popular Vehicles</h1>
-          <p className="stor-des">
+        <div className=" flex flex-col py-2 gap-2">
+          <h1 className="font-bold text-3xl">Popular Vehicles</h1>
+          <p className="text-gray-500 text-sm font-normal">
             Comprehensive services to import and ship cars from Canada to Oman
           </p>
         </div>

@@ -12,57 +12,61 @@ const ServicesPage: React.FC = () => {
   const worksItem = [
     {
       image: "images/hummer.png",
-      title: { ar: "Car Auctions", en: "gfgfg" },
+      title: { ar: "مزادات السيارات", en: "Car Auctions" },
       des: {
-        ar: "Register on our platform to access a wide range of vehicles. Place your bids on the cars of your choice. Complete the purchase and receive assistance with delivery.",
-        en: "dsg",
+        ar: "سجّل في منصتنا للوصول إلى مجموعة واسعة من السيارات، وابدأ بالمزايدة على السيارة التي ترغب بها، وأكمل عملية الشراء مع دعم كامل لعملية التسليم.",
+        en: "Register on our platform to access a wide range of vehicles. Place your bids on the cars of your choice. Complete the purchase and receive assistance with delivery.",
       },
     },
     {
       image: "images/carSipping.png",
-      title: { ar: "Car Auctions", en: "hvhg" },
+      title: { ar: "شحن السيارات", en: "Car Shipping" },
       des: {
-        ar: "Provide us with the details of the vehicle and destination. Choose from our flexible shipping options. Track your shipment and receive the vehicle at the agreed time and location.",
-        en: "sdgs",
+        ar: "زوّدنا بتفاصيل السيارة والوجهة المطلوبة، واختر من خيارات الشحن المتاحة، وتتبع الشحنة حتى استلام السيارة في الوقت والمكان المحددين.",
+        en: "Provide us with the details of the vehicle and destination. Choose from our flexible shipping options. Track your shipment and receive the vehicle at the agreed time and location.",
       },
     },
     {
       image: "images/carSelling.png",
-      title: { ar: "Car Auctions", en: "dgdf" },
+      title: { ar: "بيع السيارات", en: "Car Selling" },
       des: {
-        ar: "Register on our platform to access a wide range of vehicles. Place your bids on the cars of your choice. Complete the purchase and receive assistance with delivery.",
-        en: "dvsdss",
+        ar: "سجّل في منصتنا للوصول إلى مجموعة واسعة من المشترين، اعرض سيارتك بسهولة، واستفد من دعمنا لإتمام عملية البيع بنجاح.",
+        en: "Register on our platform to access a wide range of buyers. List your car easily and get support to complete the sale successfully.",
       },
     },
   ];
+
   const trustItems = [
     {
       image: "images/glass.png",
-      title: { ar: "Transparency", en: "Transparency" },
+      title: { ar: "الشفافية", en: "Transparency" },
       des: {
-        ar: "Clear processes and no hidden fees.",
+        ar: "إجراءات واضحة دون أي رسوم خفية.",
         en: "Clear processes and no hidden fees.",
       },
     },
     {
       image: "images/true.png",
-      title: { ar: "Professionalism", en: "Professionalism" },
-      des: { ar: "A team of experts dedicated to serving you.", en: "dcdf" },
+      title: { ar: "الاحترافية", en: "Professionalism" },
+      des: {
+        ar: "فريق من الخبراء المكرّسين لخدمتك.",
+        en: "A team of experts dedicated to serving you.",
+      },
     },
     {
       image: "images/Group.png",
-      title: { ar: "Security", en: "dfg" },
+      title: { ar: "الأمان", en: "Security" },
       des: {
-        ar: "Full insurance coverage for car shipments and transactions.",
-        en: "dfdf",
+        ar: "تغطية تأمينية شاملة لشحنات ومعاملات السيارات.",
+        en: "Full insurance coverage for car shipments and transactions.",
       },
     },
     {
       image: "images/headphons.png",
-      title: { ar: "Customer Support", en: "dfdf" },
+      title: { ar: "دعم العملاء", en: "Customer Support" },
       des: {
-        ar: "24/7 assistance to address all your inquiries.",
-        en: "sffefeg",
+        ar: "مساعدة متوفرة على مدار الساعة للإجابة على جميع استفساراتك.",
+        en: "24/7 assistance to address all your inquiries.",
       },
     },
   ];
@@ -87,9 +91,9 @@ const ServicesPage: React.FC = () => {
           <div className="flex  flex-col items-start justify-center px-[50px] gap-[50px]">
             <div className="  flex flex-col items-start gap-4 ">
               <div className="header ">
-                <h3 className="title">Who We Are</h3>
+                <h3 className="text-3xl font-bold">Who We Are</h3>
               </div>
-              <p className="text-xl text-text_des">
+              <p className="text-lg text-text_des">
                 At Soufan Global, we are passionate about cars and committed to
                 delivering exceptional services. With years of expertise in the
                 automotive industry, we aim to simplify every aspect of buying,
@@ -100,30 +104,32 @@ const ServicesPage: React.FC = () => {
             </div>
             <div className="  flex flex-col items-start gap-4 ">
               <div className="header ">
-                <h3 className="title">What We Do</h3>
+                <h3 className="text-3xl font-bold">What We Do</h3>
               </div>
-              <p className="text-xl text-text_des">
+              <p className="text-lg text-text_des">
                 We provide a variety of services, including :{" "}
               </p>
               <p className="text-xl text-text_des">
                 {" "}
-                Car Auctions : A reliable platform where you can bid on and win
-                your dream car.
+                <span className="text-black font-bold"> Car Auctions : </span>A
+                reliable platform where you can bid on and win your dream car.
               </p>
               <p className="text-xl text-text_des">
-                Vehicle Shipping : Safe and timely delivery of vehicles across
-                borders or within the country.
+                <span className="text-black font-bold">Vehicle Shipping :</span>{" "}
+                Safe and timely delivery of vehicles across borders or within
+                the country.
               </p>
               <p className="text-xl text-text_des">
                 {" "}
-                Car Sales : Helping you sell your vehicle efficiently and at the
-                best possible price
+                <span className="text-black font-bold"> Car Sales :</span>{" "}
+                Helping you sell your vehicle efficiently and at the best
+                possible price
               </p>
             </div>
           </div>
         </div>
       </div>
-      <div className="flex flex-col items-center justify-center gap-[50px] bg-secondary1 py-[50px]">
+      <div className="flex flex-col items-center justify-center gap-1 bg-secondary1 py-10">
         <h1 className="title">How it works</h1>
         <div className="flex flex-wrap items-center justify-center gap-[20px] ">
           {worksItem.map((item, index) => (
@@ -145,8 +151,8 @@ const ServicesPage: React.FC = () => {
           label="Start Now"
         />
       </div>
-      <div className="flex flex-col items-center justify-center gap-[50px] bg-white py-[50px]">
-        <h1 className="title">Why Trust Us?</h1>
+      <div className="flex flex-col items-center justify-center gap-1 bg-white py-10">
+        <h1 className="text-3xl font-bold">Why Trust Us?</h1>
         <div className="flex flex-wrap items-center justify-center gap-[20px] ">
           {trustItems.map((item, index) => (
             <InfoCard_cust

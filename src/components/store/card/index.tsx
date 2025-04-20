@@ -21,12 +21,13 @@ interface CarResponse {
   images: {
     image: string;
   }[];
+  year: number;
 }
 
 export default function Card({ car }: { car: CarResponse }) {
   const brandName = car.category.manufacturer.title;
   const carImage = `https://${base_url}/assets/img/common/${car.images[0]?.image}`;
-  const carModel = car.cmodel.title;
+  const year = car.year;
   const category = car.category.title;
   const lotNumber = car.id.toString();
   const currentBid = car.price.toString();
@@ -34,13 +35,13 @@ export default function Card({ car }: { car: CarResponse }) {
   const router = useRouter();
   return (
     <div
-      className="car-card bg-white shadow-md rounded-lg border py-1 overflow-hidden relative"
-      style={{ width: "200px", height: "330px" }}
+      className="car-card bg-white rounded border py-1 overflow-hidden relative"
+      style={{ width: "200px", height: "310px" }}
     >
       {/* الشريط العلوي */}
       <div
-        className="header-bar flex justify-between items-center px-4"
-        style={{ height: "20px" }}
+        className="header-bar flex justify-between items-center py-1 mt-1 px-4"
+        style={{ height: "12px" }}
       >
         <span className="text-sm font-semibold">{brandName}</span>
         <img
@@ -69,36 +70,36 @@ export default function Card({ car }: { car: CarResponse }) {
 
       {/* وصف السيارة أو الشحنة */}
       <div
-        className="description text-sm px-4 py-2"
+        className="description flex flex-col justify-end gap-1 font-montserrat text-[9px] px-1 py-3 font-montserrat "
         style={{ overflow: "hidden" }}
       >
         <>
-          <div className="info-row flex justify-between">
-            <span className="font-semibold text-gray-700">Car Model:</span>
-            <span className="text-gray-500 truncate w-[100px] text-right block">
-              {brandName} - {category} - {carModel}
+          <div className="info-row flex mt-1 gap-2">
+            <span className="font-bold truncate text-gray-700">Car Model:</span>
+            <span className="text-gray-500 truncate flex-1 block">
+              {brandName} - {category} - {year}
             </span>
           </div>
-          <div className="info-row flex justify-between mt-1">
-            <span className="font-semibold text-gray-700">Lot No:</span>
-            <span className="text-gray-500">{lotNumber}</span>
+          <div className="info-row flex mt-1 gap-2">
+            <span className="font-bold text-gray-700">Lot No:</span>
+            <span className="text-gray-500 flex-1 gap-2">{lotNumber}</span>
           </div>
-          <div className="info-row flex justify-between mt-1">
-            <span className="font-semibold text-gray-700">Current Bid:</span>
-            <span className="text-red-500">{currentBid} RO</span>
+          <div className="info-row flex mt-1 gap-2">
+            <span className="font-bold text-gray-700">Current Bid:</span>
+            <span className="text-red-500 flex-1 gap-2">{currentBid} RO</span>
           </div>
-          <div className="info-row flex justify-between mt-1">
-            <span className="font-semibold text-gray-700">Location:</span>
-            <span className="text-gray-500">{location}</span>
+          <div className="info-row flex mt-1 gap-2">
+            <span className="font-bold text-gray-700">Location:</span>
+            <span className="text-gray-500 flex-1">{location}</span>
           </div>
         </>
       </div>
 
       {/* زر التفاصيل */}
-      <div className="flex justify-center">
+      <div className="flex px-1">
         <button
-          className="view-details-btn px-4 py-2 transition"
-          style={{ fontSize: "14px" }}
+          className="button_outline px-3  py-1 mt-2 transition"
+          style={{ fontSize: "14px", borderRadius: "20px" }}
           onClick={() => {
             localStorage.setItem("selectedCar", JSON.stringify(car));
             router.push(`/car-store/${car.id}`);

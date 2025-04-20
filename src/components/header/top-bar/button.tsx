@@ -18,13 +18,13 @@ export default function Navbutton() {
     <div className="flex p-[5px] gap-[8px] items-center">
       <Link
         href="/login"
-        className="button_outline py-1 md:py-3 px-2 md:px-4 text-sm flex items-center justify-center"
+        className="button_outline py-1 md:py-3 px-2 md:px-4 text-xs font-bold flex items-center justify-center"
       >
         {t("Sign_in")}
       </Link>
       <Link
         href="/register"
-        className="button_bordered py-1 md:py-3 px-2 md:px-4 text-sm flex items-center justify-center"
+        className="button_bordered py-1 md:py-3 px-2 md:px-4 text-xs font-bold flex items-center justify-center"
       >
         {t("Register")}
       </Link>

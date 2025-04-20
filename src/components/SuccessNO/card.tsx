@@ -7,10 +7,10 @@ interface success {
 export default function Card({ successImage, count, des }: success) {
   return (
     <div
-      className="success-card bg-white shadow-md rounded-lg border overflow-hidden "
+      className="success-card bg-secondary1 shadow rounded-lg border py-6 overflow-hidden flex flex-col items-center justify-between "
       style={{
         width: "300px",
-        height: "200px",
+        height: "250px",
       }}
     >
       <div className=" py-3 flex justify-center items-center ">
@@ -26,7 +26,8 @@ export default function Card({ successImage, count, des }: success) {
       </div>
 
       {/* الوصف */}
-      <div className="count px-4 py-1 mb-3">
+
+      <div className="count px-4 py-1 mt-3">
         <div className=" flex justify-center item-center">
           <span className="font-semibold text-xl text-primary1">{count}</span>
         </div>

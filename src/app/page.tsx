@@ -24,8 +24,8 @@ export default function Home() {
       <Store />
       <HowItWorks />
       <Success />
-      <Reviwe />
       <Gallery />
+      <Reviwe />
       <CTA
         title="See Our Car Shipping Services in Action!"
         des="Book a personalized demo to explore how we simplify car imports and

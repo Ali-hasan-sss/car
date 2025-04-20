@@ -5,8 +5,10 @@ export default function Reviwe() {
     <div className="w-full px-[10px] md:px-[64px] py-[10px] md:py-[50px] bg-white ">
       <div className="w-full ">
         <div className="title ">
-          <h1 className="stor-title text-center">What Our Customers Say</h1>
-          <p className="stor-des text-center">
+          <h1 className="text-3xl font-bold text-center">
+            What Our Customers Say
+          </h1>
+          <p className="text-sm text-gray-500 text-center mt-4">
             Trusted by thousands of happy customers worldwide.{" "}
           </p>
         </div>

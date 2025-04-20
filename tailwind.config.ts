@@ -9,8 +9,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        poppins: ["Poppins", "sans-serif"],
-        Roboto: ["Roboto", "sans-serif"],
+        poppins: ["var(--font-poppins)"],
+        roboto: ["var(--font-roboto)"],
+        montserrat: ["var(--font-montserrat)"],
       },
       colors: {
         background: "var(--background)",

@@ -39,7 +39,7 @@ export default function Bottombar() {
         {navItems.map((item) => (
           <li key={item.id}>
             <Link
-              className={`nav-item p-[10px] gap-[10px] ${
+              className={`nav-item text-xs p-[10px] gap-2 ${
                 pathname === item.path ? "active" : ""
               }`}
               href={item.path}

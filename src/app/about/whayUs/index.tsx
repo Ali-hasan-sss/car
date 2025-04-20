@@ -4,41 +4,44 @@ export default function Whay_us() {
   const cards = [
     {
       image: "images/experience.png",
-      title: { ar: "Experience & Expertise", en: "dd" },
+      title: { ar: "الخبرة والاحترافية", en: "Experience & Expertise" },
       des: {
-        ar: "With a team of seasoned professionals, we bring years of expertise to every service we offer.",
-        en: "f",
+        ar: "نمتلك فريقاً من المحترفين ذوي الخبرة الطويلة لنقدم لك أفضل الخدمات بأعلى جودة.",
+        en: "With a team of seasoned professionals, we bring years of expertise to every service we offer.",
       },
     },
     {
       image: "images/customer-rate.png",
-      title: { ar: "Experience & Expertise", en: "dd" },
+      title: { ar: "رضا العملاء", en: "Customer Satisfaction" },
       des: {
-        ar: "With a team of seasoned professionals, we bring years of expertise to every service we offer.",
-        en: "f",
+        ar: "نحرص دائماً على تقديم تجربة مرضية لعملائنا، مما يجعلنا الخيار الأول للكثيرين.",
+        en: "We are committed to delivering a satisfying experience, making us the top choice for many customers.",
       },
     },
     {
       image: "images/technology.png",
-      title: { ar: "Experience & Expertise", en: "dd" },
+      title: { ar: "التكنولوجيا الحديثة", en: "Advanced Technology" },
       des: {
-        ar: "With a team of seasoned professionals, we bring years of expertise to every service we offer.",
-        en: "f",
+        ar: "نستخدم أحدث التقنيات لضمان سرعة ودقة خدماتنا وتلبية توقعاتك.",
+        en: "We leverage cutting-edge technology to ensure fast, accurate, and efficient services.",
       },
     },
     {
       image: "images/location.png",
-      title: { ar: "Experience & Expertise", en: "dd" },
+      title: { ar: "خدمات في مواقع متعددة", en: "Multiple Locations" },
       des: {
-        ar: "With a team of seasoned professionals, we bring years of expertise to every service we offer.",
-        en: "f",
+        ar: "نقدم خدماتنا في مواقع متعددة لتكون أقرب إليك وأسهل في الوصول.",
+        en: "We provide services in multiple locations, making it easier and more convenient for you.",
       },
     },
   ];
+
   return (
-    <div className="py-[40px] px-[10px] md:px-[50px] flex flex-col items-center justify-center gap-[40px] bg-white">
-      <h2 className="title text-text_title text-center">Why Chose Us ?</h2>
-      <div className="flex flex-wrap gap-[50px] items-center justify-center">
+    <div className="py-[40px] px-[10px] md:px-[50px] flex flex-col items-center justify-center gap-4 bg-white">
+      <h2 className="text-3xl font-bold text-text_title text-center">
+        Why Chose Us ?
+      </h2>
+      <div className="flex flex-wrap items-center justify-center gap-16">
         {cards.map((card, index) => (
           <InfoCard_cust
             key={index}

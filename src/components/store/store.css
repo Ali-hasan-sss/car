@@ -1,52 +1,16 @@
-.stor-title {
-  font-size: 30px;
-  font-weight: 700;
-  line-height: 50px;
-}
-.stor-des {
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 27px;
-  color: #555555;
-  margin-top: 10px;
-}
 .button {
   border-radius: 25px;
   font-weight: 500;
-  padding: 4px;
   background-color: #ffffff;
   border: 1px solid #cccccc;
   color: #797474;
   cursor: pointer;
-  min-width: 80px;
+  min-width: 40px;
 }
 .button:hover,
 .active-tab {
   background-color: #008080;
   color: #ffffff;
-}
-.view-details-btn {
-  background-color: #008080;
-  border-radius: 25px;
-  border: 1px solid transparent;
-  color: #ffffff;
-}
-.view-details-btn:hover {
-  background-color: transparent;
-  border: 1px solid #008080;
-  color: #000000;
-}
-.btn-view-more {
-  background-color: #008080;
-  border: 1px solid transparent;
-  color: #ffffff;
-  padding: 5px 20px;
-  border-radius: 3px;
-}
-.btn-view-more:hover {
-  background-color: transparent;
-  border: 1px solid #008080;
-  color: #000000;
 }
 .arrow-btn {
   width: 40px;
