@@ -14,7 +14,9 @@ export default function Cotation() {
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
   const [shippingPort, setShippingPort] = useState("");
-  const message = `يريد المستخدم صاحب الايميل ${email} الاستفسار عن شحن سيارة ${car} من ${shippingPort} الى ${address}`;
+  const RLM = "\u200F"; // Right-To-Left Mark
+
+  const message = `المستخدم ذو البريد الإلكتروني ${RLM}(${email})${RLM} يطلب الحصول على عرض سعر لشحن سيارة من فئة ${RLM}"${car}"${RLM} من ${RLM}"${shippingPort}"${RLM} إلى ${RLM}"${address}"${RLM}.`;
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const validateForm = (): boolean => {
@@ -43,7 +45,7 @@ export default function Cotation() {
         <p className="text-sm my-3 text-gray-500">{t("hero_des")}</p>
         <div className="fillter p-[10px] sm:p-[0px] gap-[20px]">
           <p className="text-primary1 text-sm font-montserrat">
-            What are you shipping?
+            {t("What_shipping")}
           </p>
           {/* cars category */}
           <div className="flex flex-wrap mt-2 items-start justify-start gap-2">
@@ -66,7 +68,7 @@ export default function Cotation() {
         {/**port information  */}
         <div className="fillter p-[10px] sm:p-[0px] gap-4">
           <p className="text-primary1 mt-4 font-montserrat text-sm">
-            Select your address
+            {t("Select_address")}
           </p>
 
           <div className="flex w-full mt-2 flex-wrap items-start justify-start gap-3">
@@ -101,7 +103,7 @@ export default function Cotation() {
         {/**email address */}
         <div className="fillter p-[10px] sm:p-[0px] gap-[20px]">
           <p className="text-primary1 text-sm mt-3 font-montserrat">
-            Enter Your Email Address{" "}
+            {t("Enter_Email")}
           </p>
           <div
             className={`flex  h-[56px] bg-white px-[12px] py-[8px] gap-[18px] border rounded items-start justify-start gap-4 ${
@@ -135,7 +137,7 @@ export default function Cotation() {
             className="button_bordered rounded py-3 px-5 font-bold text-sm text-blue-200 "
             onClick={handleSubmit}
           >
-            Get Instant Quote up
+            {t("Get_Quote")}
           </button>
         </div>
       </div>

@@ -12,10 +12,10 @@ export default function Slider_card() {
   return (
     <div className="slider-container">
       <Swiper
-        spaceBetween={2} // المسافة بين البطاقات
-        slidesPerView={4} // عدد البطاقات الافتراضي
+        spaceBetween={20} // المسافة بين البطاقات
+        slidesPerView={3} // عدد البطاقات الافتراضي
         breakpoints={{
-          1200: { slidesPerView: 4, spaceBetween: 3 }, // شاشات كبيرة جدًا
+          1200: { slidesPerView: 3, spaceBetween: 3 }, // شاشات كبيرة جدًا
           1024: { slidesPerView: 3, spaceBetween: 3 }, // شاشات كبيرة
           768: { slidesPerView: 2, spaceBetween: 2 }, // شاشات متوسطة
           400: { slidesPerView: 1, spaceBetween: 2 }, // شاشات صغيرة
@@ -49,7 +49,7 @@ export default function Slider_card() {
       </Swiper>
 
       {/* عناصر التحكم أسفل السلايدر */}
-      <div className="slider-controls flex justify-between items-center mt-2">
+      <div className="slider-controls flex justify-between items-center ">
         {/* النقاط تشير إلى عدد العناصر */}
         <div className="flex item-center justify-center gap-1">
           {reviwes.map((_, index) => (

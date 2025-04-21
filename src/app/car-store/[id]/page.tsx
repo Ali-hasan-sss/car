@@ -5,8 +5,11 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Navbar from "@/components/header/navbar";
 import Footer from "@/components/footer";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Car() {
+  const { isArabic } = useLanguage();
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [carData, setCarData] = useState<any>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -26,7 +29,6 @@ export default function Car() {
   const displayedImages = showAllImages ? images : images.slice(0, 4);
 
   const isOdd = displayedImages.length % 2 !== 0;
-
   return (
     <>
       <Navbar />
@@ -79,7 +81,8 @@ export default function Car() {
                   onClick={() => setShowAllImages(true)}
                   className="text-blue-600 hover:underline"
                 >
-                  عرض كل الصور ({images.length})
+                  {isArabic ? "عرض كل الصور" : "Show All Images"} (
+                  {images.length})
                 </button>
               </div>
             )}
@@ -89,40 +92,69 @@ export default function Car() {
           <div className="w-full md:w-1/2">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-lg bg-white p-6 rounded shadow">
               <p>
-                <strong>السعر:</strong> {carData.price} $
+                <strong>{isArabic ? "السعر" : "Price"}:</strong> {carData.price}{" "}
+                $
               </p>
               <p>
-                <strong>الموديل:</strong> {carData.cmodel?.title}
+                <strong>{isArabic ? "الموديل" : "Model"}:</strong>{" "}
+                {carData.cmodel?.title}
               </p>
               <p>
-                <strong>سنة الصنع:</strong> {carData.year}
+                <strong>{isArabic ? "سنة الصنع" : "Year"}:</strong>{" "}
+                {carData.year}
               </p>
               <p>
-                <strong>عدد الأسطوانات:</strong> {carData.cylinders}
+                <strong>{isArabic ? "عدد الأسطوانات" : "Cylinders"}:</strong>{" "}
+                {carData.cylinders}
               </p>
               <p>
-                <strong>اللون الخارجي:</strong> {carData.ex_color}
+                <strong>
+                  {isArabic ? "اللون الخارجي" : "Exterior Color"}:
+                </strong>{" "}
+                {carData.ex_color}
               </p>
               <p>
-                <strong>اللون الداخلي:</strong> {carData.in_color}
+                <strong>
+                  {isArabic ? "اللون الداخلي" : "Interior Color"}:
+                </strong>{" "}
+                {carData.in_color}
               </p>
               <p>
-                <strong>المسافة المقطوعة:</strong> {carData.mileage} كم
+                <strong>{isArabic ? "المسافة المقطوعة" : "Mileage"}:</strong>{" "}
+                {carData.mileage} كم
               </p>
               <p>
-                <strong>نوع الوقود:</strong>{" "}
-                {carData.fuel_type === 1 ? "بنزين" : "ديزل"}
+                <strong>{isArabic ? "نوع الوقود" : "Fuel Type"}:</strong>{" "}
+                {carData.fuel_type === 1
+                  ? isArabic
+                    ? "بنزين"
+                    : "Petrol"
+                  : isArabic
+                  ? "ديزل"
+                  : "Diesel"}
               </p>
               <p>
-                <strong>نظام القيادة:</strong>{" "}
-                {carData.drive_system === 1 ? "أمامي" : "خلفي"}
+                <strong>{isArabic ? "نظام القيادة" : "Drive System"}:</strong>{" "}
+                {carData.drive_system === 1
+                  ? isArabic
+                    ? "أمامي"
+                    : "Front"
+                  : isArabic
+                  ? "خلفي"
+                  : "Rear"}
               </p>
               <p>
-                <strong>ناقل الحركة:</strong>{" "}
-                {carData.transmission_type === 1 ? "أوتوماتيك" : "عادي"}
+                <strong>{isArabic ? "ناقل الحركة" : "Transmission"}:</strong>{" "}
+                {carData.transmission_type === 1
+                  ? isArabic
+                    ? "أوتوماتيك"
+                    : "Automatic"
+                  : isArabic
+                  ? "عادي"
+                  : "Manual"}
               </p>
               <p>
-                <strong>تمت الإضافة:</strong>{" "}
+                <strong>{isArabic ? "تمت الإضافة" : "Added On"}:</strong>{" "}
                 {new Date(carData.created_at).toLocaleDateString()}
               </p>
             </div>
@@ -156,6 +188,7 @@ export default function Car() {
             document.body
           )}
       </div>
+
       <Footer />
     </>
   );

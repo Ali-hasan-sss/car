@@ -9,6 +9,7 @@ import HowItWorks from "@/components/HowItWorks";
 import Reviwe from "@/components/reviwe/index";
 import Store from "@/components/store";
 import Success from "@/components/SuccessNO";
+import { useLanguage } from "@/context/LanguageContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -17,6 +18,7 @@ export default function Home() {
   useEffect(() => {
     document.title = "SOUFAN GLOBAL";
   }, []);
+  const { isArabic } = useLanguage();
   return (
     <div>
       <Navbar />
@@ -27,12 +29,20 @@ export default function Home() {
       <Gallery />
       <Reviwe />
       <CTA
-        title="See Our Car Shipping Services in Action!"
-        des="Book a personalized demo to explore how we simplify car imports and
-            shipping. Experience our seamless process firsthand!"
-        btnText="Book Your Demo Now"
+        title={
+          isArabic
+            ? "شاهد خدمات شحن السيارات لدينا على أرض الواقع!"
+            : "See Our Car Shipping Services in Action!"
+        }
+        des={
+          isArabic
+            ? "احجز عرضًا توضيحيًا مخصصًا لاستكشاف كيف نبسّط استيراد وشحن السيارات. جرّب سهولة العملية بنفسك!"
+            : "Book a personalized demo to explore how we simplify car imports and shipping. Experience our seamless process firsthand!"
+        }
+        btnText={isArabic ? "احجز عرضك الآن" : "Book Your Demo Now"}
         onClick={() => router.push("/register")}
       />
+
       <Footer />
     </div>
   );

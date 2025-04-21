@@ -61,11 +61,11 @@ export default function InfoCard_cust({
             {isArabic ? title.ar : title.en}
           </h2>
         </div>
-        <p className="text-text_des text-center text-[12px]">
+        <p className="text-text_des text-center text-[14px]">
           {isArabic ? des.ar : des.en}
         </p>
         {body && (
-          <p className="text-text_des text-center text-[12px]">
+          <p className="text-text_des text-center text-[14px]">
             {isArabic ? body.ar : body.en}
           </p>
         )}

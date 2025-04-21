@@ -1,4 +1,5 @@
 import InfoCard_cust from "@/components/cards/info_cardcust";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Whay_us() {
   const cards = [
@@ -35,11 +36,11 @@ export default function Whay_us() {
       },
     },
   ];
-
+  const { isArabic } = useLanguage();
   return (
-    <div className="py-[40px] px-[10px] md:px-[50px] flex flex-col items-center justify-center gap-4 bg-white">
+    <div className="py-[40px] px-[10px] md:px-[50px] flex flex-col items-center justify-center gap-1 bg-white">
       <h2 className="text-3xl font-bold text-text_title text-center">
-        Why Chose Us ?
+        {isArabic ? "لماذا نحن؟" : " Why Chose Us ?"}
       </h2>
       <div className="flex flex-wrap items-center justify-center gap-16">
         {cards.map((card, index) => (

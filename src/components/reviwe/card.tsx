@@ -9,7 +9,7 @@ export default function Card({ rate, des, user }: Review) {
     <div
       className="bg-white shadow-md rounded-lg border overflow-hidden flex flex-col"
       style={{
-        width: "350px",
+        width: "400px",
         height: "200px",
       }}
     >
@@ -46,7 +46,7 @@ export default function Card({ rate, des, user }: Review) {
           maxHeight: "150px",
         }}
       >
-        <p className="text-gray-500 text-xs">{des}</p>
+        <p className="text-gray-500 text-sm">{des}</p>
       </div>
 
       {/* المستخدم */}
@@ -55,7 +55,7 @@ export default function Card({ rate, des, user }: Review) {
           <img src={user.avatar} alt="Avatar" />
         </div>
         <div className="text-sm">
-          <p className="font-semibold text-xs text-gray-700">
+          <p className="font-semibold text-sm text-gray-700">
             Name: {user.name}
           </p>
           <p className="text-gray-500 text-xs">company: {user.company}</p>

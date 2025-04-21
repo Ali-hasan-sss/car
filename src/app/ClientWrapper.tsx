@@ -23,9 +23,9 @@ const ClientWrapper: React.FC<ClientWrapperProps> = ({ children }) => {
         height={4}
         showOnShallow={true}
       />
-      <AuthProvider>
-        <LanguageProvider>{children}</LanguageProvider>
-      </AuthProvider>
+      <LanguageProvider>
+        <AuthProvider>{children}</AuthProvider>
+      </LanguageProvider>
     </Provider>
   );
 };

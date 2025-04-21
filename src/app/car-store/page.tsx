@@ -5,6 +5,7 @@ import CarCard from "@/components/cards/carCard";
 import Navbar from "@/components/header/navbar";
 import Footer from "@/components/footer";
 import Loader from "@/components/loading/loadingPage";
+import { useLanguage } from "@/context/LanguageContext";
 const RegisterPage = () => {
   const [cars, setCars] = useState<[]>([]);
   const [loadingPage, setLoadingPage] = useState(false);
@@ -22,11 +23,14 @@ const RegisterPage = () => {
     };
     fetchServices();
   }, []);
+  const { isArabic } = useLanguage();
   return (
     <div>
       <Navbar />
       <div className="flex items-center justify-center w-full">
-        <h1 className=" p-4 enimat_title">Cars Store</h1>
+        <h1 className=" p-4 enimat_title">
+          {isArabic ? "معرض السيارات" : "Cars Store"}
+        </h1>
       </div>
       {loadingPage ? (
         <Loader />

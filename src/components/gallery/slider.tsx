@@ -4,11 +4,12 @@ import "swiper/css/pagination";
 import { useRef } from "react";
 import { images } from "./data";
 import Image from "next/image";
+import { useLanguage } from "@/context/LanguageContext";
 // المكون الرئيسي
 export default function Slider_image() {
   const prevRef = useRef<HTMLDivElement | null>(null);
   const nextRef = useRef<HTMLDivElement | null>(null);
-
+  const { t } = useLanguage();
   return (
     <div className="slider-container">
       <Swiper
@@ -80,7 +81,7 @@ export default function Slider_image() {
             </div>
           ))}
         </div>
-        <button className="button_outline px-4 py-1">View More</button>
+        <button className="button_outline px-4 py-1">{t("View_More")}</button>
         <div className="slider-navigation flex items-center gap-2">
           <div className="arrow-button flex item-center justify-center gap-1 ">
             <div

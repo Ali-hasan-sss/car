@@ -24,7 +24,7 @@ export default function Bottombar() {
     },
     {
       id: 6,
-      label: t("Cars Store"),
+      label: t("Cars_Store"),
       path: "/car-store",
     },
     {

@@ -1,4 +1,5 @@
 import InfoCard_cust from "@/components/cards/info_cardcust";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Our_services() {
   const cards = [
@@ -27,11 +28,11 @@ export default function Our_services() {
       },
     },
   ];
-
+  const { isArabic } = useLanguage();
   return (
     <div className="py-[40px] px-[10px] md:px-[50px] flex flex-col items-center justify-center gap-4 bg-secondary1">
       <h2 className=" text-text_title text-3xl font-bold text-center">
-        Our Core Services
+        {isArabic ? "خدماتنا الأساسية" : " Our Core Services"}
       </h2>
       <div className="flex flex-wrap items-center justify-center">
         {cards.map((card, index) => (

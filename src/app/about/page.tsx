@@ -14,7 +14,7 @@ import Our_services from "./section2";
 import { useLanguage } from "../../context/LanguageContext";
 
 export default function About() {
-  const { t } = useLanguage();
+  const { t, isArabic } = useLanguage();
   useEffect(() => {
     document.title = "SOUFAN GLOBAL | About Us";
   }, []);
@@ -23,12 +23,19 @@ export default function About() {
       <Navbar />
       <CoverImage label={t("About_Us")} />
       <WellCome
-        title="Welcome"
-        titleDes="to Soufan Global your trusted partner"
-        information="
-        in the automotive industry. We specialize in providing comprehensive solutions for car auctions, vehicle shipping, and car sales, ensuring a seamless experience for our customers.
-        With years of experience and a passion for innovation, we’ve established ourselves as a reliable and efficient service provider, helping individuals and businesses achieve their automotive goals with ease and confidence."
+        title={isArabic ? "مرحباً بك" : "Welcome"}
+        titleDes={
+          isArabic
+            ? "في Soufan Global شريكك الموثوق"
+            : "to Soufan Global your trusted partner"
+        }
+        information={
+          isArabic
+            ? "في قطاع السيارات. نحن متخصصون في تقديم حلول شاملة للمزادات، وشحن المركبات، وبيع السيارات، لضمان تجربة سلسة ومريحة لعملائنا. بفضل سنوات من الخبرة وشغفنا بالابتكار، رسّخنا مكانتنا كمزود خدمات موثوق وفعّال، نساعد الأفراد والشركات على تحقيق أهدافهم في عالم السيارات بكل سهولة وثقة."
+            : "in the automotive industry. We specialize in providing comprehensive solutions for car auctions, vehicle shipping, and car sales, ensuring a seamless experience for our customers. With years of experience and a passion for innovation, we’ve established ourselves as a reliable and efficient service provider, helping individuals and businesses achieve their automotive goals with ease and confidence."
+        }
       />
+
       <About_section1 />
       <Our_services />
       <Whay_us />

@@ -1,3 +1,4 @@
+import { useLanguage } from "../../../context/LanguageContext";
 import { base_url } from "@/utils/domain";
 import { useRouter } from "next/navigation";
 
@@ -33,6 +34,7 @@ export default function Card({ car }: { car: CarResponse }) {
   const currentBid = car.price.toString();
   const location = car.user.contact.city;
   const router = useRouter();
+  const { t } = useLanguage();
   return (
     <div
       className="car-card bg-white rounded border py-1 overflow-hidden relative"
@@ -70,26 +72,30 @@ export default function Card({ car }: { car: CarResponse }) {
 
       {/* وصف السيارة أو الشحنة */}
       <div
-        className="description flex flex-col justify-end gap-1 font-montserrat text-[9px] px-1 py-3 font-montserrat "
+        className="description flex flex-col justify-end gap-1 font-montserrat text-[10px] px-1 py-3 font-montserrat "
         style={{ overflow: "hidden" }}
       >
         <>
           <div className="info-row flex mt-1 gap-2">
-            <span className="font-bold truncate text-gray-700">Car Model:</span>
+            <span className="font-bold truncate text-gray-700">
+              {t("Car_Model")} :
+            </span>
             <span className="text-gray-500 truncate flex-1 block">
               {brandName} - {category} - {year}
             </span>
           </div>
           <div className="info-row flex mt-1 gap-2">
-            <span className="font-bold text-gray-700">Lot No:</span>
+            <span className="font-bold text-gray-700">{t("Lot_No")} :</span>
             <span className="text-gray-500 flex-1 gap-2">{lotNumber}</span>
           </div>
           <div className="info-row flex mt-1 gap-2">
-            <span className="font-bold text-gray-700">Current Bid:</span>
+            <span className="font-bold text-gray-700">
+              {t("Current_Bid")} :
+            </span>
             <span className="text-red-500 flex-1 gap-2">{currentBid} RO</span>
           </div>
           <div className="info-row flex mt-1 gap-2">
-            <span className="font-bold text-gray-700">Location:</span>
+            <span className="font-bold text-gray-700">{t("Location")} :</span>
             <span className="text-gray-500 flex-1">{location}</span>
           </div>
         </>
@@ -105,7 +111,7 @@ export default function Card({ car }: { car: CarResponse }) {
             router.push(`/car-store/${car.id}`);
           }}
         >
-          View Details
+          {t("details")}
         </button>
       </div>
     </div>

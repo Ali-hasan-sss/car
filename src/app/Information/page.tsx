@@ -7,6 +7,8 @@ import CoverImage from "@/components/Hero_general/cover_image";
 import WellCome from "@/components/Hello_section/wellcome";
 import Btn_outlin from "@/components/buttons/btn/outline_btn";
 import InfoCard_cust from "@/components/cards/info_cardcust";
+import { useLanguage } from "@/context/LanguageContext";
+import { useRouter } from "next/navigation";
 
 const ServicesPage: React.FC = () => {
   const worksItem = [
@@ -70,67 +72,86 @@ const ServicesPage: React.FC = () => {
       },
     },
   ];
+  const { isArabic, t } = useLanguage();
+  const router = useRouter();
 
   return (
     <div>
       <Navbar />
       <div className="">
         <div className="flex bg-secondary1 flex-col items-center justify-center pb-[50px] ">
-          <CoverImage label="Our Information" />{" "}
+          <CoverImage label={isArabic ? "" : "Our Information"} />
           <WellCome
-            title="Welcome"
-            titleDes="to Soufan Global your trusted partner"
-            information="for all your automotive needs. We specialize in providing a seamless
-          experience for customers looking to buy, sell, or ship vehicles
-          locally and internationally. Below, you’ll find essential information
-          about how our services work and what you can expect when working with
-          us."
+            title={isArabic ? "مرحبا" : "Welcome"}
+            titleDes={
+              isArabic
+                ? "في سوفان جلوبال، شريكك الموثوق"
+                : "to Soufan Global your trusted partner"
+            }
+            information={
+              isArabic
+                ? "لكل ما يتعلق باحتياجاتك في عالم السيارات. نحن متخصصون في تقديم تجربة سلسة للعملاء الراغبين في شراء أو بيع أو شحن المركبات محليًا ودوليًا. في الأسفل ستجد معلومات أساسية حول كيفية عمل خدماتنا وما يمكنك توقعه عند التعامل معنا."
+                : "for all your automotive needs. We specialize in providing a seamless experience for customers looking to buy, sell, or ship vehicles locally and internationally. Below, you’ll find essential information about how our services work and what you can expect when working with us."
+            }
           />
         </div>
         <div className="flex mt-[20px] bg-white flex-col items-start justify-center pb-[50px] gap-[50px]">
           <div className="flex  flex-col items-start justify-center px-[50px] gap-[50px]">
             <div className="  flex flex-col items-start gap-4 ">
               <div className="header ">
-                <h3 className="text-3xl font-bold">Who We Are</h3>
+                <h3 className="text-3xl font-bold">
+                  {isArabic ? "من نحن" : "Who We Are"}
+                </h3>
               </div>
               <p className="text-lg text-text_des">
-                At Soufan Global, we are passionate about cars and committed to
-                delivering exceptional services. With years of expertise in the
-                automotive industry, we aim to simplify every aspect of buying,
-                selling, and shipping vehicles. Our professional team ensures
-                that every step of the process is smooth, secure, and tailored
-                to your needs.
+                {isArabic
+                  ? "في سوفان جلوبال، نحن شغوفون بالسيارات وملتزمون بتقديم خدمات استثنائية. بخبرات تمتد لسنوات في صناعة السيارات، نهدف إلى تبسيط كل جوانب شراء وبيع وشحن المركبات. يضمن فريقنا المحترف أن تكون كل خطوة في العملية سلسة وآمنة ومصممة لتلبية احتياجاتك."
+                  : "At Soufan Global, we are passionate about cars and committed to delivering exceptional services. With years of expertise in the automotive industry, we aim to simplify every aspect of buying, selling, and shipping vehicles. Our professional team ensures that every step of the process is smooth, secure, and tailored to your needs."}
               </p>
             </div>
-            <div className="  flex flex-col items-start gap-4 ">
+            <div className="flex flex-col items-start gap-4 ">
               <div className="header ">
-                <h3 className="text-3xl font-bold">What We Do</h3>
+                <h3 className="text-3xl font-bold">
+                  {isArabic ? "ماذا نقدم" : "What We Do"}
+                </h3>
               </div>
               <p className="text-lg text-text_des">
-                We provide a variety of services, including :{" "}
+                {isArabic
+                  ? "نحن نقدم مجموعة متنوعة من الخدمات، بما في ذلك :"
+                  : "We provide a variety of services, including :"}
               </p>
               <p className="text-xl text-text_des">
-                {" "}
-                <span className="text-black font-bold"> Car Auctions : </span>A
-                reliable platform where you can bid on and win your dream car.
+                <span className="text-black font-bold">
+                  {isArabic ? "مزادات السيارات :" : " Car Auctions : "}
+                </span>
+                {isArabic
+                  ? "منصة موثوقة تتيح لك المزايدة على سيارتك الحلم والفوز بها."
+                  : "A reliable platform where you can bid on and win your dream car."}
               </p>
               <p className="text-xl text-text_des">
-                <span className="text-black font-bold">Vehicle Shipping :</span>{" "}
-                Safe and timely delivery of vehicles across borders or within
-                the country.
+                <span className="text-black font-bold">
+                  {isArabic ? "شحن المركبات :" : "Vehicle Shipping :"}
+                </span>{" "}
+                {isArabic
+                  ? "توصيل آمن وفي الوقت المحدد للمركبات عبر الحدود أو داخل الدولة."
+                  : "Safe and timely delivery of vehicles across borders or within the country."}
               </p>
               <p className="text-xl text-text_des">
-                {" "}
-                <span className="text-black font-bold"> Car Sales :</span>{" "}
-                Helping you sell your vehicle efficiently and at the best
-                possible price
+                <span className="text-black font-bold">
+                  {isArabic ? "بيع السيارات :" : " Car Sales :"}
+                </span>{" "}
+                {isArabic
+                  ? "مساعدتك في بيع سيارتك بكفاءة وبأفضل سعر ممكن."
+                  : "Helping you sell your vehicle efficiently and at the best possible price"}
               </p>
             </div>
           </div>
         </div>
       </div>
       <div className="flex flex-col items-center justify-center gap-1 bg-secondary1 py-10">
-        <h1 className="title">How it works</h1>
+        <h1 className="title">
+          {isArabic ? "كيف تعمل المنصة" : "How it works"}
+        </h1>
         <div className="flex flex-wrap items-center justify-center gap-[20px] ">
           {worksItem.map((item, index) => (
             <InfoCard_cust
@@ -143,16 +164,17 @@ const ServicesPage: React.FC = () => {
             />
           ))}
         </div>
-        <img src="/images/Vector.png" alt="victor" className="w-2/3 py-1" />
         <Btn_outlin
           onClick={() => {
-            console.log("start");
+            router.push("/login");
           }}
-          label="Start Now"
+          label={t("Start_Now")}
         />
       </div>
       <div className="flex flex-col items-center justify-center gap-1 bg-white py-10">
-        <h1 className="text-3xl font-bold">Why Trust Us?</h1>
+        <h1 className="text-3xl font-bold">
+          {isArabic ? "لماذا تثق بنا؟" : "Why Trust Us?"}
+        </h1>
         <div className="flex flex-wrap items-center justify-center gap-[20px] ">
           {trustItems.map((item, index) => (
             <InfoCard_cust

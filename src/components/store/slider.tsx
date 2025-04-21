@@ -7,6 +7,7 @@ import { useRef, useEffect, useState } from "react";
 import axiosInstance from "@/utils/axiosInstance";
 import { useRouter } from "next/navigation";
 import Loader from "../loading/loadingPage";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface CarResponse {
   id: number;
@@ -37,6 +38,7 @@ export default function Slider_card() {
   const [cars, setCars] = useState<CarResponse[]>([]);
   const [loadingPage, setLoadingPage] = useState(false);
   const Router = useRouter();
+  const { t } = useLanguage();
   useEffect(() => {
     const fetchServices = async () => {
       setLoadingPage(true);
@@ -133,7 +135,7 @@ export default function Slider_card() {
           ))}
         </div>
         <button onClick={goToStore} className="button_outline px-4 py-1 mt-3">
-          View More
+          {t("View_More")}
         </button>
         <div className="slider-navigation flex items-center gap-2">
           <div className="arrow-button flex item-center justify-center gap-1 ">

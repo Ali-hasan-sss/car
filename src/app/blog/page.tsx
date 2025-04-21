@@ -42,12 +42,16 @@ const BlogPage: React.FC = () => {
     <div>
       <Navbar />
       <div className="">
-        <div className="flex bg-secondary1 flex-col items-center justify-center ">
+        <div className="flex bg-secondary1 flex-col w-full items-start ">
           <CoverImage label="Blogs" />
           <WellCome
-            title="Soufan Global blogs"
+            title={isArabic ? "المقالات" : "Soufan Global blogs"}
             titleDes=""
-            information="WellCome to Soufan Global blogs"
+            information={
+              isArabic
+                ? "آخر أخبار السيارات ومزاداتها"
+                : "Latest Car News and Auctions"
+            }
           />
           {loadingPage ? (
             <Loader />

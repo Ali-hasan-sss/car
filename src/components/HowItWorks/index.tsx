@@ -1,8 +1,11 @@
 import { useRouter } from "next/navigation";
 import InfoCard_cust from "../cards/info_cardcust";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function HowItWorks() {
   const router = useRouter();
+  const { isArabic, t } = useLanguage();
+
   const steps = [
     {
       imgSrc: "/images/contract1.png",
@@ -44,15 +47,19 @@ export default function HowItWorks() {
       },
     },
   ];
-
   return (
     <div className="w-full px-[10px] md:px-[64px] py-4 md:py-[50px] bg-secondary1">
       <div className="w-full">
-        <div className="flex flex-col item-center justify-center gap-6">
-          <h1 className="font-bold text-3xl text-center">How it works</h1>
+        <div className="flex flex-col item-center justify-center gap-1">
+          <h1 className="font-bold text-3xl text-center">
+            {isArabic ? "كيف تعمل المنصة" : "How it works"}
+          </h1>
           <p className="text-gray-500 font-normal text-lg text-center ">
-            A simple and transparent process for stress-free car shipping
+            {isArabic
+              ? "عملية بسيطة وشفافة لشحن السيارات دون عناء"
+              : "A simple and transparent process for stress-free car shipping"}
           </p>
+
           <div className="flex flex-wrap mt-4 items-center justify-center lg:justify-between gap-2">
             {steps.map((step, index) => (
               <InfoCard_cust
@@ -73,7 +80,7 @@ export default function HowItWorks() {
               className="button_outline py-1 px-4 "
               onClick={() => router.push("/register")}
             >
-              Start Now
+              {t("Start_Now")}
             </button>
           </div>
         </div>

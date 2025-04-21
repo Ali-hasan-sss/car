@@ -24,9 +24,9 @@ interface Service {
 }
 
 const ServicesPage: React.FC = () => {
+  const { t, isArabic } = useLanguage();
   const [services, setServices] = useState<Service[]>([]);
   const [loadingPage, setLoadingPage] = useState(false);
-  const isArabic = useLanguage();
   const router = useRouter();
   useEffect(() => {
     const fetchServices = async () => {
@@ -44,7 +44,6 @@ const ServicesPage: React.FC = () => {
   }, [isArabic]);
 
   const [selectedService, setSelectedService] = useState<string | null>(null);
-  const { t } = useLanguage();
   return (
     <div>
       {/* Navbar */}
@@ -60,20 +59,19 @@ const ServicesPage: React.FC = () => {
           <div className="flex flex-col items-center justify-center px-[50px] gap-[50px]">
             <div>
               <p className="text-lg text-text_des">
-                At{" "}
+                {isArabic ? "في" : "At"}
                 <span className="text-xl font-bold text-text_title">
                   Soufan Global
                 </span>
-                , we take pride in offering a comprehensive range of services
-                tailored to the automotive industry. Whether you’re looking to
-                bid on unique cars, ship vehicles safely and efficiently, or
-                sell your car at the best price, we’ve got you covered.
+                ,{" "}
+                {isArabic
+                  ? "، نفخر بتقديم مجموعة شاملة من الخدمات المصممة خصيصًا لقطاع السيارات. سواء كنت ترغب في المزايدة على سيارات مميزة، أو شحن مركبتك بأمان وكفاءة، أو بيع سيارتك بأفضل سعر، فنحن هنا لخدمتك."
+                  : "we take pride in offering a comprehensive range of services tailored to the automotive industry. Whether you’re looking to bid on unique cars, ship vehicles safely and efficiently, or sell your car at the best price, we’ve got you covered."}
               </p>
               <p className="text-xl text-text_des ">
-                With years of experience and a dedicated team, we strive to
-                deliver top-notch services backed by cutting-edge technology and
-                global standards, ensuring our customers enjoy a seamless and
-                satisfying experience.
+                {isArabic
+                  ? "بفضل سنوات من الخبرة وفريق متخصص، نسعى لتقديم خدمات عالية الجودة مدعومة بأحدث التقنيات والمعايير العالمية، لضمان تجربة سلسة ومرضية لعملائنا."
+                  : "With years of experience and a dedicated team, we strive to deliver top-notch services backed by cutting-edge technology and global standards, ensuring our customers enjoy a seamless and satisfying experience."}
               </p>
             </div>
 

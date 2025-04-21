@@ -1,10 +1,13 @@
+import { useLanguage } from "@/context/LanguageContext";
+
 interface success {
   successImage: string;
   count: number;
-  des: string;
+  des: { en: string; ar: string };
 }
 
 export default function Card({ successImage, count, des }: success) {
+  const { isArabic } = useLanguage();
   return (
     <div
       className="success-card bg-secondary1 shadow rounded-lg border py-6 overflow-hidden flex flex-col items-center justify-between "
@@ -34,7 +37,9 @@ export default function Card({ successImage, count, des }: success) {
       </div>
       <div className="des text-lg px-4 mt-3">
         <div className=" flex justify-center item-center">
-          <span className="font-md text-center text-gray-500">{des}</span>
+          <span className="font-md text-center text-gray-500">
+            {isArabic ? des.ar : des.en}
+          </span>
         </div>
       </div>
     </div>

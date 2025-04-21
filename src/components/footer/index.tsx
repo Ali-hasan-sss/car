@@ -4,6 +4,7 @@ import Link from "next/link";
 import "./style.css";
 import { usePathname } from "next/navigation";
 import Sucial_icon from "../sucial_Midia/sucial_icon";
+import { useLanguage } from "@/context/LanguageContext";
 export default function Footer() {
   const navItems = [
     { id: 1, title_en: "Home", title_ar: "الرئيسية", path: "/" },
@@ -22,10 +23,25 @@ export default function Footer() {
       path: "/contact",
     },
   ];
-  const navItemsCol2 = [{ id: 1, label: "FAQ", path: "/faq" }];
+  const navItemsCol2 = [
+    {
+      id: 1,
+      title_en: "Blogs",
+      title_ar: "المقالات",
+      path: "/Blogs",
+    },
+    {
+      id: 2,
+      title_en: "Car Store",
+      title_ar: "معرض السيارات",
+      path: "/Car-Store",
+    },
+    { id: 3, title_en: "FAQ", title_ar: "الأسئلة الشائعة", path: "/faq" },
+  ];
   const pathname = usePathname();
+  const { isArabic, t } = useLanguage();
   return (
-    <div className="footer flex flex-col gap-[80px] py-[20px] md:py-[30px] px-[10px] md:px-[85px]">
+    <div className="footer flex flex-col gap-5 py-4 px-[10px] md:px-[85px]">
       <div className="block md:flex justify-between">
         <div className="w-full flex flex-col gap-[30px] md:w-2/3 ">
           <div className="logo p-1">
@@ -37,7 +53,7 @@ export default function Footer() {
             </h2>
           </div>
           <p style={{ color: "#FFD700", fontWeight: "500", fontSize: "18px" }}>
-            Your Trusted Partner in Car Imports and Shipping
+            {isArabic ? "" : "Your Trusted Partner in Car Imports and Shipping"}
           </p>
           <div className="content flex flex-col gap-[20px]">
             <div className="address flex flex-col gap-[5px]">
@@ -48,7 +64,7 @@ export default function Footer() {
                   color: "#FFFFFF",
                 }}
               >
-                Address:
+                {t("Address")}:
               </p>
               <p
                 style={{
@@ -68,7 +84,7 @@ export default function Footer() {
                   color: "#FFFFFF",
                 }}
               >
-                Contact:
+                {t("contact")}:
               </p>
               <p
                 style={{
@@ -94,7 +110,7 @@ export default function Footer() {
         </div>
         <div className="w-full md:w-1/3 flex   gap-[15px]">
           <div className="flex flex-col mt-3">
-            <p className="footer_nav mx-4">Quick Links</p>
+            <p className="footer_nav mx-4">{t("Quick_Links")}</p>
             <div className="flex">
               <ul>
                 {navItems.map((item) => (
@@ -105,7 +121,7 @@ export default function Footer() {
                       }`}
                       href={item.path}
                     >
-                      {item.title_en}{" "}
+                      {isArabic ? item.title_ar : item.title_en}{" "}
                     </Link>
                   </li>
                 ))}
@@ -114,12 +130,12 @@ export default function Footer() {
                 {navItemsCol2.map((item) => (
                   <li key={item.id} className="py-2">
                     <Link
-                      className={`footer_nav text-lg p-[10px] gap-[10px] ${
+                      className={`footer_nav text-lg p-2 gap-1 ${
                         pathname === item.path ? "active" : ""
                       }`}
                       href={item.path}
                     >
-                      {item.label}
+                      {isArabic ? item.title_ar : item.title_en}
                     </Link>
                   </li>
                 ))}
@@ -128,9 +144,9 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="credits flex flex-col gap-[24px] ">
+      <div className="credits flex flex-col gap-1 ">
         <img src="/images/Divider.png" alt="" />
-        <div className="block md:sflex items-center justify-between">
+        <div className="block md:flex items-center justify-between">
           <p
             className="text-white "
             style={{ fontSize: "14px", fontWeight: "400" }}
@@ -143,9 +159,6 @@ export default function Footer() {
             </a>
             <a href="" className="footer_link">
               Terms of Service
-            </a>
-            <a href="" className="footer_link">
-              Cookies Settings
             </a>
           </div>
         </div>

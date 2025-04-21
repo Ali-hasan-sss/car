@@ -1,6 +1,8 @@
 import InfoCard_cust from "@/components/cards/info_cardcust";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function OurValues() {
+  const { isArabic } = useLanguage();
   const cards = [
     {
       image: "images/glass.png",
@@ -39,7 +41,7 @@ export default function OurValues() {
   return (
     <div className="py-[40px] px-[10px] md:px-[50px] flex flex-col items-center justify-center gap-10 bg-secondary1">
       <h2 className="text-3xl font-bold text-text_title text-center">
-        Our Values
+        {isArabic ? "قيمنا" : "Our Values"}
       </h2>
       <div className="flex flex-wrap gap-16 items-center justify-center">
         {cards.map((card, index) => (

@@ -15,6 +15,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { base_url } from "@/utils/domain";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface CarCardProps {
   car: CarSale;
@@ -39,7 +40,7 @@ const CarCard: React.FC<CarCardProps> = ({
   const router = useRouter();
   const pathname = usePathname();
   const userRole = useSelector((state: RootState) => state.auth.user?.userRole);
-
+  const { isArabic } = useLanguage();
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLButtonElement>,
     id: number
@@ -95,12 +96,12 @@ const CarCard: React.FC<CarCardProps> = ({
               src={`https://${base_url}/assets/img/common/${
                 hoveredImage || defaultImage
               }`}
-              alt="Car Preview"
+              alt="معاينة السيارة"
               className="w-full max-h-[200px] object-contain" // استخدام object-contain هنا
             />
           ) : (
             <div className="w-full h-[200px] bg-gray-300 flex items-center justify-center text-white">
-              No Image Available
+              {isArabic ? "لا يتوفر صور" : "No Image Available"}
             </div>
           )}
         </div>
@@ -118,7 +119,7 @@ const CarCard: React.FC<CarCardProps> = ({
             ))
           ) : (
             <div className="w-full h-12 bg-gray-300 flex items-center justify-center text-white">
-              No Thumbnails
+              {isArabic ? "لا توجد صور مصغرة" : "No Thumbnails"}
             </div>
           )}
         </div>
@@ -144,16 +145,19 @@ const CarCard: React.FC<CarCardProps> = ({
               }}
             >
               <MenuItem onClick={() => handleView(car.id)}>
-                <Eye className="text-blue-500 mr-2" /> عرض التفاصيل
+                <Eye className="text-blue-500 mr-2" />{" "}
+                {isArabic ? "عرض التفاصيل" : "View Details"}
               </MenuItem>
               {userRole === "USER" && (
                 <MenuItem onClick={() => onEdit(car)}>
-                  <Edit className="text-yellow-500 mr-2" /> تعديل
+                  <Edit className="text-yellow-500 mr-2" />{" "}
+                  {isArabic ? "تعديل" : "Edit"}
                 </MenuItem>
               )}
               {userRole === "USER" && (
                 <MenuItem onClick={() => onDelete(car.id)}>
-                  <Trash className="text-red-500 mr-2" /> حذف
+                  <Trash className="text-red-500 mr-2" />{" "}
+                  {isArabic ? "حذف" : "Delete"}
                 </MenuItem>
               )}
               {userRole === "ADMIN" && (
@@ -162,7 +166,8 @@ const CarCard: React.FC<CarCardProps> = ({
                     handleAccept(car.id);
                   }}
                 >
-                  <CheckCircle className="text-green-500 mr-2" /> قبول
+                  <CheckCircle className="text-green-500 mr-2" />{" "}
+                  {isArabic ? "قبول" : "Accept"}
                 </MenuItem>
               )}
               {userRole === "ADMIN" && (
@@ -171,7 +176,8 @@ const CarCard: React.FC<CarCardProps> = ({
                     handleReject(car.id);
                   }}
                 >
-                  <XCircle className="text-red-500 mr-2" /> رفض
+                  <XCircle className="text-red-500 mr-2" />{" "}
+                  {isArabic ? "رفض" : "Reject"}
                 </MenuItem>
               )}
               {userRole === "ADMIN" && (
@@ -180,15 +186,22 @@ const CarCard: React.FC<CarCardProps> = ({
                     handleFinish(car.id);
                   }}
                 >
-                  <Check className="text-green-500 mr-2" /> تعيين ك منجز
+                  <Check className="text-green-500 mr-2" />{" "}
+                  {isArabic ? "تعيين ك منجز" : "Mark as Finished"}
                 </MenuItem>
               )}
             </Menu>
           </div>
         </div>
-        <p className="text-gray-700">Price: ${car.price || "N/A"}</p>
-        <p className="text-gray-500">Mileage: {car.mileage || "N/A"} km</p>
-        <p className="text-gray-500">Color: {car.ex_color || "N/A"}</p>
+        <p className="text-gray-700">
+          {isArabic ? "السعر" : "Price"}: ${car.price || "N/A"}
+        </p>
+        <p className="text-gray-500">
+          {isArabic ? "المسافة المقطوعة" : "Mileage"}: {car.mileage || "N/A"} km
+        </p>
+        <p className="text-gray-500">
+          {isArabic ? "اللون" : "Color"}: {car.ex_color || "N/A"}
+        </p>
       </div>
     </div>
   );

@@ -74,14 +74,34 @@ export const translations: Record<Language, { [key: string]: string }> = {
     hero_title: "Simplify Your Car Import Journey!",
     hero_des:
       "Comprehensive services to import and ship cars from Canada to Oman",
+    What_shipping: "What are you shipping?",
+    Select_address: "Select your address",
+    Enter_Email: "Enter Your Email Address",
+    Get_Quote: "Get Instant Quote up",
+    //store
+    Cars_Store: "Cars Store",
+    store_title: "Car Showroom",
+    store_des:
+      "Shop your perfect car from our platform with ease and confidence",
+    Car_Model: "Car Model",
+    Lot_No: "Listing No.",
+    Current_Bid: "Price",
+    Location: "Location",
+    details: "View Details",
+    View_More: "View More",
+    Start_Now: "Start Now",
+
     //global
     Showing: "Showing",
+    Quick_Links: "Quick Links",
     of: "of",
     Sort_by: "Sort by",
     date: "date",
     status: "status",
     model: "model",
     View_as: "View as",
+    Address: "Address",
+    contact: "Contact",
     //actions
     Save: "Save",
     Change: "Change",
@@ -181,11 +201,11 @@ export const translations: Record<Language, { [key: string]: string }> = {
     private: "شخصي",
     private_des: "(للشراء الشخصي)",
     Company_name: "اسم الشركة",
-
     Privacy_Policy_des:
       "“بانشائك للحساب انت توافق على شروط الاستخدام وسياسة الخصوصية”",
     //global
     Showing: "عرض العناصر",
+    Quick_Links: "روابط سريعة",
     of: "من",
     Sort_by: "ترتيب حسب",
     date: "التاريخ",
@@ -212,8 +232,26 @@ export const translations: Record<Language, { [key: string]: string }> = {
     Add_New_Blog: "اضافة مقالة جديدة",
     Edit_Blog: "تعديل المقالة",
     Edit_Service: "تعديل الخدمة",
-    hero_title: "عنوان",
-    hero_des: "وصف",
+    hero_title: "بسّط رحلة استيراد سيارتك!",
+    hero_des: "خدمات شاملة لاستيراد وشحن السيارات من كندا إلى سلطنة عُمان",
+    What_shipping: "ماذا تريد ان تشحن؟",
+    Select_address: "اختر عنوانك",
+    Enter_Email: "أدخل عنوان بريدك الإلكتروني",
+    Get_Quote: "احصل على عرض سعر فوري",
+    Address: "العنوان",
+    contact: "التواصل",
+    //store
+    Cars_Store: "معرض السيارات",
+    store_title: "معرض السيارات",
+    store_des: "تسوّق سيارتك المثالية من منصتنا بكل سهولة وثقة",
+    Car_Model: "طراز السيارة",
+    Lot_No: "رقم العرض",
+    Current_Bid: "السعر",
+    Location: "الموقع",
+    details: "عرض التفاصيل",
+    View_More: "عرض المزيد",
+    Start_Now: "ابدأ الان",
+
     //actions
     Save: "حفظ",
     Change: "تغيير",
