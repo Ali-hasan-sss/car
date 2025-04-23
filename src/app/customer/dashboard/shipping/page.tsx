@@ -93,7 +93,7 @@ export default function Shipping() {
     delete: true,
     view: true,
   });
-  const { carShippings, loading, totalPages } = useSelector(
+  const { carShippings, loading, actionLoadingIds, totalPages } = useSelector(
     (state: RootState) => state.carShippings
   );
   useEffect(() => {
@@ -178,6 +178,7 @@ export default function Shipping() {
       {view === "table" ? (
         <GeneralTable
           loading={loading}
+          actionLoading={actionLoadingIds}
           columns={columns}
           initialData={carShippings}
           apiUrl={apiUrl}
@@ -199,6 +200,7 @@ export default function Shipping() {
       ) : (
         <Grid_View
           loading={loading}
+          actionLoading={actionLoadingIds}
           data={carShippings}
           sortBy={sortby}
           showing={showing}

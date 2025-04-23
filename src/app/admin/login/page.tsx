@@ -1,6 +1,6 @@
 "use client";
 import "../../login/login.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/utils/axiosInstance";
@@ -18,7 +18,9 @@ const AdminLogin: React.FC = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { t } = useLanguage();
-
+  useEffect(() => {
+    document.title = "SOUFAN GLOBAL | Admin login";
+  }, []);
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);

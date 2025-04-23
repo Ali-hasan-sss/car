@@ -43,7 +43,9 @@ const Login: React.FC = () => {
 
   const [errors, setErrors] = useState<Partial<LoginFormInputs>>({});
   const { t } = useLanguage();
-
+  useEffect(() => {
+    document.title = "SOUFAN GLOBAL | login";
+  }, []);
   const validateForm = (): boolean => {
     const newErrors: Partial<LoginFormInputs> = {};
     if (!formData.email) {

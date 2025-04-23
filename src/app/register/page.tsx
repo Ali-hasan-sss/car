@@ -51,7 +51,9 @@ const Signup: React.FC = () => {
       router.push("/customer/dashboard"); // إعادة توجيه المستخدم إلى لوحة التحكم
     }
   }, [isLoggedIn, router]);
-
+  useEffect(() => {
+    document.title = "SOUFAN GLOBAL | Signup";
+  }, []);
   const handleBack = () => {
     if (step === 1) {
       router.push("/");

@@ -74,6 +74,7 @@ const Users: React.FC = () => {
         totalItems={totalCount}
       />
       <GeneralTable
+        actionLoading={[0]}
         columns={columns}
         apiUrl={apiUrl}
         actions={actions}

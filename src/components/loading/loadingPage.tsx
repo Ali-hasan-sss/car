@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 const Loader = () => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className=" flex items-center justify-center min-h-10 w-full z-50">
       <div className="flex space-x-2">
         {["#008080", "#008080", "#008080", "#008080"].map((color, index) => (
           <motion.div

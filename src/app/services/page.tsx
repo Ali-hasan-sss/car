@@ -29,6 +29,9 @@ const ServicesPage: React.FC = () => {
   const [loadingPage, setLoadingPage] = useState(false);
   const router = useRouter();
   useEffect(() => {
+    document.title = "SOUFAN GLOBAL | Services";
+  }, []);
+  useEffect(() => {
     const fetchServices = async () => {
       setLoadingPage(true);
       try {

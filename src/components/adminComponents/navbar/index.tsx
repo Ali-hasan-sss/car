@@ -7,7 +7,7 @@ import LanguageSwitcher from "@/components/buttons/btn-switch/LanguageSwitcher";
 export default function AdminNavbar() {
   return (
     <div className="w-full bg-secondary1 shadow-sm z-50  ">
-      <div className="px-[10px] md:px-[50px] flex items-center  justify-between">
+      <div className="px-[10px] md:px-[50px] py-5 flex items-center  justify-between">
         <Logo />
         <div className="flex items-center gap-[40px]">
           <LanguageSwitcher />

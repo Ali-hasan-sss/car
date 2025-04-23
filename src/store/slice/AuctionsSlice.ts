@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axiosInstance from "@/utils/axiosInstance";
 import axios from "axios";
-import { toast } from "sonner";
 import { RootState } from "../store"; // تأكد من صحة المسار
 import { Auction } from "@/Types/AuctionTypes";
 
@@ -9,6 +8,7 @@ import { Auction } from "@/Types/AuctionTypes";
 interface AuctionsState {
   auctions: Auction[];
   loading: boolean;
+  actionLoadingIds: number[];
   error: string | null;
   auction: Auction | null;
   totalPages: number;
@@ -18,6 +18,7 @@ interface AuctionsState {
 const initialState: AuctionsState = {
   auctions: [],
   loading: false,
+  actionLoadingIds: [],
   error: null,
   auction: null,
   totalPages: 0,
@@ -73,10 +74,8 @@ export const addAuction = createAsyncThunk<
 >("auctions/addAuction", async ({ apiUrl, auctionData }, thunkAPI) => {
   try {
     const response = await axiosInstance.post(apiUrl, auctionData);
-    toast.success("تم إضافة المزاد بنجاح");
     return response.data.data as Auction;
   } catch (error) {
-    toast.error("حدث خطأ أثناء الإضافة");
     return thunkAPI.rejectWithValue(getErrorMessage(error));
   }
 });
@@ -90,10 +89,8 @@ export const updateAuction = createAsyncThunk<
   try {
     const fullUrl = `${apiUrl}/${id}`;
     const response = await axiosInstance.put(fullUrl, updatedData);
-    toast.success("تم تعديل المزاد بنجاح");
     return response.data.data as Auction;
   } catch (error) {
-    toast.error("حدث خطأ أثناء التعديل");
     return thunkAPI.rejectWithValue(getErrorMessage(error));
   }
 });
@@ -111,6 +108,17 @@ export const deleteAuction = createAsyncThunk<
     return thunkAPI.rejectWithValue(getErrorMessage(error));
   }
 });
+const addLoadingId = (state: AuctionsState, id: number) => {
+  if (!state.actionLoadingIds.includes(id)) {
+    state.actionLoadingIds.push(id);
+  }
+};
+
+const removeLoadingId = (state: AuctionsState, id: number) => {
+  state.actionLoadingIds = state.actionLoadingIds.filter(
+    (loadingId) => loadingId !== id
+  );
+};
 
 const auctionSlice = createSlice({
   name: "auctions",
@@ -129,6 +137,7 @@ const auctionSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // fetchAuctions
       .addCase(fetchAuctions.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -143,6 +152,8 @@ const auctionSlice = createSlice({
         state.loading = false;
         state.error = action.payload || "فشل في جلب المزادات";
       })
+
+      // fetchAuctionById
       .addCase(fetchAuctionById.fulfilled, (state, action) => {
         state.loading = false;
         state.auction = action.payload;
@@ -153,12 +164,13 @@ const auctionSlice = createSlice({
           state.auctions.push(action.payload);
         }
       })
-      .addCase(addAuction.fulfilled, (state, action) => {
-        state.loading = false;
-        state.auctions.unshift(action.payload);
+
+      // addAuction
+      .addCase(updateAuction.pending, (state, action) => {
+        addLoadingId(state, action.meta.arg.id);
       })
       .addCase(updateAuction.fulfilled, (state, action) => {
-        state.loading = false;
+        removeLoadingId(state, action.meta.arg.id);
         const index = state.auctions.findIndex(
           (a) => a.id === action.payload.id
         );
@@ -166,9 +178,22 @@ const auctionSlice = createSlice({
           state.auctions[index] = action.payload;
         }
       })
+      .addCase(updateAuction.rejected, (state, action) => {
+        removeLoadingId(state, action.meta.arg.id);
+        state.error = action.payload || "فشل في تعديل المزاد";
+      })
+
+      // deleteAuction
+      .addCase(deleteAuction.pending, (state, action) => {
+        addLoadingId(state, action.meta.arg.id); // ✅ أضف الـ id الجاري حذفه
+      })
       .addCase(deleteAuction.fulfilled, (state, action) => {
-        state.loading = false;
+        removeLoadingId(state, action.meta.arg.id); // ✅ أزله من التحميل
         state.auctions = state.auctions.filter((a) => a.id !== action.payload);
+      })
+      .addCase(deleteAuction.rejected, (state, action) => {
+        removeLoadingId(state, action.meta.arg.id); // ✅ أزله من التحميل حتى لو فشل
+        state.error = action.payload || "فشل في حذف المزاد";
       });
   },
 });

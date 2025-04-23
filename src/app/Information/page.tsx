@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "@/components/header/navbar";
 import Footer from "@/components/footer";
 import CoverImage from "@/components/Hero_general/cover_image";
@@ -11,6 +11,9 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useRouter } from "next/navigation";
 
 const ServicesPage: React.FC = () => {
+  useEffect(() => {
+    document.title = "SOUFAN GLOBAL | Info";
+  }, []);
   const worksItem = [
     {
       image: "images/hummer.png",

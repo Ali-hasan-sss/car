@@ -218,8 +218,7 @@ export default function Services() {
                 body={service.body}
                 des={service.description}
                 image={service.image}
-                width="250"
-                height="300"
+                width="300"
                 ondelete={() => handleDelete(service.id)}
                 onedit={() => {
                   openModal(service);

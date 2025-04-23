@@ -3,8 +3,12 @@
 import Footer from "@/components/footer";
 import Navbar from "@/components/header/navbar";
 import CoverImage from "@/components/Hero_general/cover_image";
+import { useEffect } from "react";
 
 export default function Faq() {
+  useEffect(() => {
+    document.title = "SOUFAN GLOBAL | FAQ";
+  }, []);
   const Faqs = [
     {
       Q: "How do I participate in the car auction?",

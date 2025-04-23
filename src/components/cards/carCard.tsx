@@ -128,9 +128,16 @@ const CarCard: React.FC<CarCardProps> = ({
       {/* تفاصيل السيارة */}
       <div className="car-details p-4">
         <div className="flex w-full items-center justify-between">
-          <h2 className="text-xl font-semibold">
-            {`${car.category.manufacturer.title} - ${car.category.title}|${car.cmodel.title}  ${car.year}`}
-          </h2>
+          <div className="flex items-center gap-4 justify-between">
+            <h2 className="text-xl font-semibold">
+              {`${car.category.manufacturer.title} - ${car.category.title}|  ${car.year}`}
+            </h2>
+            <span
+              className={`text-white w-4 h-4 rounded-full ${
+                car.status === 2 ? "bg-green-400" : "bg-red-500"
+              } py-1 px-2`}
+            ></span>
+          </div>
           <div className="flex items-center">
             <IconButton onClick={(event) => handleMenuOpen(event, car.id)}>
               <EllipsisVertical className="text-gray-600 text-lg" />

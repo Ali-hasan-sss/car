@@ -95,9 +95,8 @@ export default function Sales() {
   const apiUrl = `admin/car-sales`;
   const [view, setView] = useState("table");
   const dispatch = useAppDispatch();
-  const { carSales, error, loading, totalPages } = useSelector(
-    (state: RootState) => state.carSales
-  );
+  const { carSales, error, loading, actionLoadingIds, totalPages } =
+    useSelector((state: RootState) => state.carSales);
   console.log(totalPages);
   const [actions] = useState({
     edit: true,
@@ -211,6 +210,7 @@ export default function Sales() {
       {view === "table" ? (
         <GeneralTable
           loading={loading}
+          actionLoading={actionLoadingIds}
           columns={columns}
           apiUrl={apiUrl}
           actions={actions}
@@ -220,10 +220,20 @@ export default function Sales() {
           sortBy={sortby}
           showing={showing}
           searchTerm={searchTerm}
+          customEditForm={(data, close) => (
+            <Salles
+              onSubmit={(data) => {
+                console.log("data:", data);
+              }}
+              initialData={data}
+              close={() => close}
+            />
+          )}
         />
       ) : (
         <Grid_View
           loading={loading}
+          actionLoading={actionLoadingIds}
           data={carSales}
           sortBy={sortby}
           showing={showing}

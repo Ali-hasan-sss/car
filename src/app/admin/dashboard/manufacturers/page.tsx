@@ -38,6 +38,7 @@ const CarTypes: React.FC = () => {
         title="انواع السيارات"
         AddButtonLabel="اضافة نوع جديد"
         columns={columns}
+        actionLoading={[0]}
         apiUrl={apiUrl}
         actions={actions}
         onTotalCountChange={setTotalCount}

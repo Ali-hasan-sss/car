@@ -70,7 +70,8 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
       }
     }
   }, [initialData, manufacturers]);
-  const [formData, setFormData] = useState<ShippingFormInputs>({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [formData, setFormData] = useState<any>({
     manufacturer: null,
     is_pickup: 1, // استلام الشحنة
     is_consolidate: 1, // توحيد الشحنة

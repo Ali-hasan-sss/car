@@ -10,6 +10,9 @@ const RegisterPage = () => {
   const [cars, setCars] = useState<[]>([]);
   const [loadingPage, setLoadingPage] = useState(false);
   useEffect(() => {
+    document.title = "SOUFAN GLOBAL | Car Store";
+  }, []);
+  useEffect(() => {
     const fetchServices = async () => {
       setLoadingPage(true);
       try {

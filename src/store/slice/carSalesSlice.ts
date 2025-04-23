@@ -9,6 +9,7 @@ import { CarSale, SallesFormInputs } from "@/Types/AuctionTypes";
 interface CarSalesState {
   carSales: CarSale[];
   loading: boolean;
+  actionLoadingIds: number[];
   error: string | null;
   carSale: CarSale | null;
   totalPages: number;
@@ -18,6 +19,7 @@ interface CarSalesState {
 const initialState: CarSalesState = {
   carSales: [],
   loading: false,
+  actionLoadingIds: [],
   error: null,
   carSale: null,
   totalPages: 0,
@@ -111,6 +113,17 @@ export const deleteCarSale = createAsyncThunk<
     return thunkAPI.rejectWithValue(getErrorMessage(error));
   }
 });
+const addLoadingId = (state: CarSalesState, id: number) => {
+  if (!state.actionLoadingIds.includes(id)) {
+    state.actionLoadingIds.push(id);
+  }
+};
+
+const removeLoadingId = (state: CarSalesState, id: number) => {
+  state.actionLoadingIds = state.actionLoadingIds.filter(
+    (loadingId) => loadingId !== id
+  );
+};
 
 const carSalesSlice = createSlice({
   name: "carSales",
@@ -129,6 +142,7 @@ const carSalesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // fetchCarSales
       .addCase(fetchCarSales.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -143,16 +157,31 @@ const carSalesSlice = createSlice({
         state.loading = false;
         state.error = action.payload || "فشل في جلب طلبات البيع";
       })
+
+      // fetchCarSaleById
       .addCase(fetchCarSaleById.fulfilled, (state, action) => {
         state.loading = false;
         state.carSale = action.payload;
+        const index = state.carSales.findIndex(
+          (c) => c.id === action.payload.id
+        );
+        if (index === -1) {
+          state.carSales.push(action.payload);
+        }
       })
+
+      // addCarSale
       .addCase(addCarSale.fulfilled, (state, action) => {
         state.loading = false;
         state.carSales.unshift(action.payload);
       })
+
+      // updateCarSale
+      .addCase(updateCarSale.pending, (state, action) => {
+        addLoadingId(state, action.meta.arg.id); // ✅ إضافة العنصر الجاري تعديله
+      })
       .addCase(updateCarSale.fulfilled, (state, action) => {
-        state.loading = false;
+        removeLoadingId(state, action.meta.arg.id); // ✅ إزالة اللودر
         const index = state.carSales.findIndex(
           (c) => c.id === action.payload.id
         );
@@ -160,9 +189,22 @@ const carSalesSlice = createSlice({
           state.carSales[index] = action.payload;
         }
       })
+      .addCase(updateCarSale.rejected, (state, action) => {
+        removeLoadingId(state, action.meta.arg.id); // ✅ إزالة اللودر حتى لو فشل
+        state.error = action.payload || "فشل في تعديل طلب البيع";
+      })
+
+      // deleteCarSale
+      .addCase(deleteCarSale.pending, (state, action) => {
+        addLoadingId(state, action.meta.arg.id); // ✅ أضف الـ id الجاري حذفه
+      })
       .addCase(deleteCarSale.fulfilled, (state, action) => {
-        state.loading = false;
+        removeLoadingId(state, action.meta.arg.id); // ✅ أزله من التحميل
         state.carSales = state.carSales.filter((c) => c.id !== action.payload);
+      })
+      .addCase(deleteCarSale.rejected, (state, action) => {
+        removeLoadingId(state, action.meta.arg.id); // ✅ أزله من التحميل حتى لو فشل
+        state.error = action.payload || "فشل في حذف طلب البيع";
       });
   },
 });

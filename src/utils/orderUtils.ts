@@ -57,6 +57,13 @@ export const getFuelText = (fuel_type: number) => {
     ? "Hybrid"
     : "Electric";
 };
+export const getDriveSystemText = (fuel_type: number) => {
+  return fuel_type === 1
+    ? "دفع امامي"
+    : fuel_type === 2
+    ? "دفع خلفي"
+    : "دفع رباعي";
+};
 
 // 🛠️ تحويل خيار الشحن إلى نص
 export const getShippingText = (shipping_option: number) => {
@@ -69,7 +76,7 @@ export const statusMap: Record<
   { label: string; color: string }
 > = {
   0: { label: "مرفوض", color: "bg-red-500" },
-  1: { label: "قيد الانتظار", color: "bg-yellow-400" },
+  1: { label: "قيد الانتظار", color: "bg-yellow-200" },
   2: { label: "قيد التنفيذ", color: "bg-blue-500" },
   3: { label: "منجز", color: "bg-green-500" },
   null: { label: "غير محدد", color: "bg-gray-400" },

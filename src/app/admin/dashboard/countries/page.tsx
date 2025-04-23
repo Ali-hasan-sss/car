@@ -31,6 +31,7 @@ const CountryList = () => {
         title="انواع السيارات"
         AddButtonLabel="اضافة بلد جديد"
         columns={columns}
+        actionLoading={[]}
         apiUrl={apiUrl}
         actions={actions}
         onTotalCountChange={setTotalCount}

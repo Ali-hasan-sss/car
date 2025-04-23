@@ -4,12 +4,15 @@ import Footer from "../../../components/DashboardComponernt/footer";
 import Sidebar from "../../../components/DashboardComponernt/siedbar";
 import Topbar from "../../../components/DashboardComponernt/topbar";
 import AuthGuard from "@/app/admin/AuthGuard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [isExpand, setIsExpand] = useState(false);
+  const [isExpand, setIsExpand] = useState(true);
+  useEffect(() => {
+    document.title = "SOUFAN GLOBAL | dashboard ";
+  }, []);
   return (
     <div className="flex ">
       <AuthGuard>

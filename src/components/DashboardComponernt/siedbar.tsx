@@ -66,7 +66,7 @@ export default function Sidebar({ setisExpand }: SidebarProps) {
       tooltip: t("Shipping"), // التعديل هنا
     },
     {
-      label: t("Salles"),
+      label: t("Sales"),
       icon: (
         <Store
           className={`text-primary1 rounded-lg text-2xl side_icon ${
@@ -77,10 +77,10 @@ export default function Sidebar({ setisExpand }: SidebarProps) {
         />
       ),
       path: "/customer/dashboard/salles",
-      tooltip: t("Salles"), // التعديل هنا
+      tooltip: t("Sales"), // التعديل هنا
     },
     {
-      label: t("Notifications"),
+      label: t("Notfications"),
       icon: (
         <BellRing
           className={`text-primary1 rounded-lg text-2xl side_icon ${

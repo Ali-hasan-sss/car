@@ -61,7 +61,7 @@ export default function Sucial_icon() {
     { name: "reddit", icon: <FaReddit className="text-orange-500 text-2xl" /> },
     { name: "twitch", icon: <FaTwitch className="text-purple-600 text-2xl" /> },
     { name: "email", icon: <FaEnvelope className="text-gray-600 text-2xl" /> },
-    { name: "x", icon: <FaXTwitter className="text-black text-2xl" /> },
+    { name: "x", icon: <FaXTwitter className="text-white text-2xl" /> },
     { name: "website", icon: <Globe className="text-gray-600 text-2xl" /> },
   ];
   useEffect(() => {

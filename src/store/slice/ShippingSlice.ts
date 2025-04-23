@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axiosInstance from "@/utils/axiosInstance";
 import axios from "axios";
-import { toast } from "sonner";
 import { RootState } from "../store";
 import { CarShipping, ShippingFormInputs } from "@/Types/AuctionTypes";
 
 interface CarShippingState {
   carShippings: CarShipping[];
   loading: boolean;
+  actionLoadingIds: number[];
   error: string | null;
   carShipping: CarShipping | null;
   totalPages: number;
@@ -17,6 +17,7 @@ interface CarShippingState {
 const initialState: CarShippingState = {
   carShippings: [],
   loading: false,
+  actionLoadingIds: [],
   error: null,
   carShipping: null,
   totalPages: 0,
@@ -73,10 +74,8 @@ export const addCarShipping = createAsyncThunk<
   async ({ apiUrl, carShippingData }, thunkAPI) => {
     try {
       const response = await axiosInstance.post(apiUrl, carShippingData);
-      toast.success("تمت إضافة طلب الشحن بنجاح");
       return response.data.data as CarShipping;
     } catch (error) {
-      toast.error("حدث خطأ أثناء الإضافة");
       return thunkAPI.rejectWithValue(getErrorMessage(error));
     }
   }
@@ -85,17 +84,15 @@ export const addCarShipping = createAsyncThunk<
 // ✅ تعديل شحن سيارة
 export const updateCarShipping = createAsyncThunk<
   CarShipping,
-  { apiUrl: string; id: number; updatedData: Partial<ShippingFormInputs> },
+  { apiUrl: string; id: number; updatedData: Partial<CarShipping> },
   { rejectValue: string }
 >(
   "carShippings/updateCarShipping",
   async ({ apiUrl, id, updatedData }, thunkAPI) => {
     try {
       const response = await axiosInstance.put(`${apiUrl}/${id}`, updatedData);
-      toast.success("تم تعديل طلب الشحن بنجاح");
       return response.data.data as CarShipping;
     } catch (error) {
-      toast.error("حدث خطأ أثناء التعديل");
       return thunkAPI.rejectWithValue(getErrorMessage(error));
     }
   }
@@ -114,7 +111,17 @@ export const deleteCarShipping = createAsyncThunk<
     return thunkAPI.rejectWithValue(getErrorMessage(error));
   }
 });
+const addLoadingId = (state: CarShippingState, id: number) => {
+  if (!state.actionLoadingIds.includes(id)) {
+    state.actionLoadingIds.push(id);
+  }
+};
 
+const removeLoadingId = (state: CarShippingState, id: number) => {
+  state.actionLoadingIds = state.actionLoadingIds.filter(
+    (loadingId) => loadingId !== id
+  );
+};
 const carShippingsSlice = createSlice({
   name: "carShippings",
   initialState,
@@ -134,6 +141,7 @@ const carShippingsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // 📦 جلب الشحنات
       .addCase(fetchCarShippings.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -148,16 +156,19 @@ const carShippingsSlice = createSlice({
         state.loading = false;
         state.error = action.payload || "فشل في جلب شحنات السيارات";
       })
+
+      // 📦 جلب شحنة واحدة
       .addCase(fetchCarShippingById.fulfilled, (state, action) => {
         state.loading = false;
         state.carShipping = action.payload;
       })
-      .addCase(addCarShipping.fulfilled, (state, action) => {
-        state.loading = false;
-        state.carShippings.unshift(action.payload);
+
+      // ✏️ تعديل
+      .addCase(updateCarShipping.pending, (state, action) => {
+        addLoadingId(state, action.meta.arg.id);
       })
       .addCase(updateCarShipping.fulfilled, (state, action) => {
-        state.loading = false;
+        removeLoadingId(state, action.meta.arg.id);
         const index = state.carShippings.findIndex(
           (c) => c.id === action.payload.id
         );
@@ -165,11 +176,37 @@ const carShippingsSlice = createSlice({
           state.carShippings[index] = action.payload;
         }
       })
-      .addCase(deleteCarShipping.fulfilled, (state, action) => {
+      .addCase(updateCarShipping.rejected, (state, action) => {
+        removeLoadingId(state, action.meta.arg.id);
+        state.error = action.payload || "فشل في تعديل الشحنة";
+      })
+
+      // ➕ إضافة
+      .addCase(addCarShipping.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addCarShipping.fulfilled, (state, action) => {
         state.loading = false;
+        state.carShippings.unshift(action.payload);
+      })
+      .addCase(addCarShipping.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "فشل في إضافة الشحنة";
+      })
+
+      // ❌ حذف
+      .addCase(deleteCarShipping.pending, (state, action) => {
+        addLoadingId(state, action.meta.arg.id);
+      })
+      .addCase(deleteCarShipping.fulfilled, (state, action) => {
+        removeLoadingId(state, action.payload);
         state.carShippings = state.carShippings.filter(
           (c) => c.id !== action.payload
         );
+      })
+      .addCase(deleteCarShipping.rejected, (state, action) => {
+        removeLoadingId(state, action.meta.arg.id);
+        state.error = action.payload || "فشل في حذف الشحنة";
       });
   },
 });

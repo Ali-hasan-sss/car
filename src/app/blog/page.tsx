@@ -25,6 +25,9 @@ const BlogPage: React.FC = () => {
   const [loadingPage, setLoadingPage] = useState(false);
   const isArabic = useLanguage();
   useEffect(() => {
+    document.title = "SOUFAN GLOBAL | Blogs";
+  }, []);
+  useEffect(() => {
     const fetchServices = async () => {
       setLoadingPage(true);
       try {

@@ -1,3 +1,4 @@
+import { useLanguage } from "@/context/LanguageContext";
 import { RootState } from "@/store/store";
 import { Auction } from "@/Types/AuctionTypes";
 import {
@@ -20,6 +21,7 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { PulseLoader } from "react-spinners";
 
 interface OrderCardProps {
   order: Auction;
@@ -27,14 +29,17 @@ interface OrderCardProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onEdit: (order: any) => void;
   onChangeStatus?: (id: number, type: "accept" | "reject" | "finish") => void;
+  actionLoading: boolean;
 }
 
 const OrderCard: React.FC<OrderCardProps> = ({
   order,
   onDelete,
   onEdit,
+  actionLoading,
   onChangeStatus,
 }) => {
+  const { t } = useLanguage();
   const {
     id,
     category,
@@ -106,75 +111,80 @@ const OrderCard: React.FC<OrderCardProps> = ({
     <div className="bg-white shadow-lg rounded-xl border border-gray-200 w-full mx-auto mb-4">
       {/* Card Header */}
       <div
-        className={`flex items-center justify-between px-1 rounded-t-xl w-full  ${statusInfo.color}`}
+        className={`flex items-center justify-between px-1 rounded-t-xl w-full !bg-opacity-100 ${statusInfo.color} `}
       >
         {" "}
         <h2
-          className={`text-2xl font-bold rounded-t-xl text-gray-800  w-full p-2  col-span-full`}
+          className={`text-xl font-bold rounded-t-xl text-gray-800  w-full p-2  col-span-full`}
         >
           {category?.manufacturer.title} {category?.title} - {year}
         </h2>
-        <div className="flex items-center">
-          <IconButton onClick={(event) => handleMenuOpen(event, order.id)}>
-            <EllipsisVertical className="text-gray-600 text-lg" />
-          </IconButton>
+        {actionLoading ? (
+          <PulseLoader size={6} color="#ffffff" />
+        ) : (
+          <div className="flex items-center">
+            <IconButton onClick={(event) => handleMenuOpen(event, order.id)}>
+              <EllipsisVertical className="text-gray-600 text-lg" />
+            </IconButton>
 
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl) && selectedRow === order.id}
-            onClose={handleMenuClose}
-            PaperProps={{
-              style: { minWidth: "150px" }, // تعيين عرض القائمة
-            }}
-          >
-            <MenuItem onClick={() => handleView(order.id)}>
-              <Eye className="text-blue-500 mr-2" /> عرض التفاصيل
-            </MenuItem>
-
-            {order.status === 1 && (
-              <MenuItem onClick={() => onEdit(order)}>
-                <Edit className="text-yellow-500 mr-2" /> تعديل
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl) && selectedRow === order.id}
+              onClose={handleMenuClose}
+              PaperProps={{
+                style: { minWidth: "150px" }, // تعيين عرض القائمة
+              }}
+            >
+              <MenuItem onClick={() => handleView(order.id)}>
+                <Eye className="text-blue-500 mr-2" />
+                {t("details")}
               </MenuItem>
-            )}
 
-            <MenuItem onClick={() => onDelete(id)}>
-              <Trash className="text-red-500 mr-2" /> حذف
-            </MenuItem>
+              {order.status === 1 && (
+                <MenuItem onClick={() => onEdit(order)}>
+                  <Edit className="text-yellow-500 mr-2" /> {t("Edit")}
+                </MenuItem>
+              )}
 
-            {userRole === "ADMIN" && (
-              <MenuItem
-                onClick={() => {
-                  handleAccept(order.id);
-                }}
-              >
-                <CheckCircle className="text-green-500 mr-2" /> قبول
+              <MenuItem onClick={() => onDelete(id)}>
+                <Trash className="text-red-500 mr-2" /> {t("Delete")}
               </MenuItem>
-            )}
 
-            {userRole === "ADMIN" && (
-              <MenuItem
-                onClick={() => {
-                  handleReject(order.id);
-                }}
-              >
-                <XCircle className="text-red-500 mr-2" /> رفض
-              </MenuItem>
-            )}
-            {userRole === "ADMIN" && (
-              <MenuItem
-                onClick={() => {
-                  handleFinish(order.id);
-                }}
-              >
-                <Check className="text-green-500 mr-2" /> تعيين ك منجز
-              </MenuItem>
-            )}
-          </Menu>
-        </div>
+              {userRole === "ADMIN" && (
+                <MenuItem
+                  onClick={() => {
+                    handleAccept(order.id);
+                  }}
+                >
+                  <CheckCircle className="text-green-500 mr-2" /> {t("Accept")}
+                </MenuItem>
+              )}
+
+              {userRole === "ADMIN" && (
+                <MenuItem
+                  onClick={() => {
+                    handleReject(order.id);
+                  }}
+                >
+                  <XCircle className="text-red-500 mr-2" /> {t("Reject")}
+                </MenuItem>
+              )}
+              {userRole === "ADMIN" && (
+                <MenuItem
+                  onClick={() => {
+                    handleFinish(order.id);
+                  }}
+                >
+                  <Check className="text-green-500 mr-2" /> {t("complete")}
+                </MenuItem>
+              )}
+            </Menu>
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div className="flex flex-col space-y-4 px-3 py-1 text-gray-700 text-lg sm:col-span-1 lg:col-span-1">
+        <div className="flex flex-col space-y-4 px-3 py-1 text-gray-700 text-sm sm:col-span-1 lg:col-span-1">
           {/* Car Info */}
           <div className="space-y-2">
             <p>
@@ -204,7 +214,7 @@ const OrderCard: React.FC<OrderCardProps> = ({
           </div>
         </div>
 
-        <div className="flex flex-col px-3 space-y-4 text-gray-700 text-lg sm:col-span-1 lg:col-span-1">
+        <div className="flex flex-col px-3 space-y-4 text-gray-700 text-sm sm:col-span-1 lg:col-span-1">
           {/* User Info */}
           <div className="space-y-2">
             <p>

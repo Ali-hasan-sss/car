@@ -83,7 +83,7 @@ export default function Actions() {
   const [view, setView] = useState("table");
   const dispatch = useAppDispatch();
   const apiUrl = "customer/car-auctions";
-  const { auctions, loading, totalPages } = useSelector(
+  const { auctions, loading, actionLoadingIds, totalPages } = useSelector(
     (state: RootState) => state.auctions
   );
 
@@ -163,6 +163,7 @@ export default function Actions() {
       {view === "table" ? (
         <GeneralTable
           loading={loading}
+          actionLoading={actionLoadingIds}
           columns={columns}
           apiUrl={apiUrl}
           actions={actions}
@@ -175,6 +176,7 @@ export default function Actions() {
       ) : (
         <Grid_View
           loading={loading}
+          actionLoading={actionLoadingIds}
           data={auctions}
           sortBy={sortby}
           showing={showing}

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Switch } from "@mui/material";
 import { Blog } from "@/Types/adminTypes";
 import Link from "next/link";
+import { Edit, Eye, Trash } from "lucide-react";
 
 export default function BlogCard({
   id,
@@ -100,19 +101,19 @@ export default function BlogCard({
             onClick={ondelete}
             className="flex items-center justify-center w-[30px] h-[30px] bg-red-100 p-1 rounded-full"
           >
-            <img src="/images/redtrash.png" width={14} alt="trash" />
+            <Trash />
           </button>
           <Link
             href={`/admin/dashboard/blogs/${id}`}
             className="flex items-center justify-center w-[30px] h-[30px] bg-blue-100 p-1 rounded-full"
           >
-            <img src="/images/eye.png" width={14} alt="eye" />
+            <Eye />
           </Link>
           <button
             onClick={onedit}
             className="flex items-center justify-center w-[30px] h-[30px] bg-yellow-100 p-1 rounded-full"
           >
-            <img src="/images/edit.png" width={14} alt="edit" />
+            <Edit />
           </button>
         </div>
       )}

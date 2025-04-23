@@ -17,10 +17,12 @@ import CustomPagination from "@/components/pagination/extrnalPagenation";
 import {
   deleteCarShipping,
   fetchCarShippings,
+  updateCarShipping,
 } from "@/store/slice/ShippingSlice";
 import { CarShipping, ShippingFormInputs } from "@/Types/AuctionTypes";
 import DeleteMessage from "@/components/messags/deleteMessage";
 import ShippingForm from "@/app/customer/dashboard/ordersForms/shipping";
+import { toast } from "sonner";
 
 export default function Shipping() {
   const { t } = useLanguage();
@@ -33,7 +35,10 @@ export default function Shipping() {
   const [deleteId, setDeleteId] = useState(0);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [selectedRequest, setSelectedRequest] = useState<{
+    id: number;
+    type: "accept" | "reject" | "finish";
+  } | null>(null);
   const closeModal = () => {
     setOpenModal(false);
   };
@@ -98,8 +103,11 @@ export default function Shipping() {
     add: true,
     delete: true,
     view: true,
+    finish: true,
+    reject: true,
+    accept: true,
   });
-  const { carShippings, loading, totalPages } = useSelector(
+  const { carShippings, loading, totalPages, actionLoadingIds } = useSelector(
     (state: RootState) => state.carShippings
   );
   useEffect(() => {
@@ -142,7 +150,7 @@ export default function Shipping() {
         use_type: 0,
       };
     };
-
+    console.log(selectedRequest);
     const formData = mapOrderToFormInputs(order);
     setInitForm(formData);
     // console.log(formData);
@@ -153,10 +161,36 @@ export default function Shipping() {
     setOpenDeleteModal(true);
     setDeleteId(id);
   };
+  const handleAcceptReject = async (
+    id: number,
+    type: "accept" | "reject" | "finish"
+  ) => {
+    setSelectedRequest({ id, type });
+    const status = type === "accept" ? 2 : type === "reject" ? 0 : 3; // تحديد القيمة بناءً على نوع الإجراء
+    try {
+      //await axiosInstance.put(`${apiUrl}/${id}`, { status });
+      await dispatch(
+        updateCarShipping({
+          apiUrl: apiUrl,
+          id: id,
+          updatedData: { status },
+        })
+      );
+      toast.success(
+        `تم ${
+          type === "accept" ? "قبول" : type === "reject" ? "رفض" : "اكمال"
+        } الطلب رقم ${id}`
+      );
+    } catch (error) {
+      console.error("حدث خطأ أثناء تحديث الطلب:", error);
+      toast.error("حدث خطأ ما");
+    } finally {
+    }
+  };
   return (
     <div className="flex flex-col items-center w-full  gap-[5px]">
       <TableHeader
-        title={t("Auctions")}
+        title={t("Shipping")}
         action={{
           filter: true,
           export: true,
@@ -184,6 +218,7 @@ export default function Shipping() {
       {view === "table" ? (
         <GeneralTable
           loading={loading}
+          actionLoading={actionLoadingIds}
           columns={columns}
           initialData={carShippings}
           apiUrl={apiUrl}
@@ -192,6 +227,7 @@ export default function Shipping() {
           sortBy={sortby}
           showing={showing}
           searchTerm={searchTerm}
+          onChangeStatus={handleAcceptReject}
           customEditForm={(data, close) => (
             <ShippingForm
               onSubmit={(data) => {
@@ -205,6 +241,7 @@ export default function Shipping() {
       ) : (
         <Grid_View
           loading={loading}
+          actionLoading={actionLoadingIds}
           data={carShippings}
           sortBy={sortby}
           showing={showing}
@@ -216,6 +253,7 @@ export default function Shipping() {
             }
           }}
           onDelete={(id) => handleDelete(id)}
+          onChangeStatus={handleAcceptReject}
         />
       )}
       <CustomPagination

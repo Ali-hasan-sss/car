@@ -88,7 +88,7 @@ export default function SallesPage() {
   ];
   const [view, setView] = useState("table");
   const dispatch = useAppDispatch();
-  const { carSales, loading, totalPages } = useSelector(
+  const { carSales, loading, actionLoadingIds, totalPages } = useSelector(
     (state: RootState) => state.carSales
   );
   const apiUrl = "customer/car-sales";
@@ -175,6 +175,7 @@ export default function SallesPage() {
       {view === "table" ? (
         <GeneralTable
           loading={loading}
+          actionLoading={actionLoadingIds}
           columns={columns}
           initialData={carSales}
           apiUrl={apiUrl}
@@ -200,6 +201,7 @@ export default function SallesPage() {
       ) : (
         <Grid_View
           loading={loading}
+          actionLoading={actionLoadingIds}
           data={carSales}
           sortBy={sortby}
           showing={showing}

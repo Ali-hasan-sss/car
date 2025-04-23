@@ -21,6 +21,9 @@ import {
   fetchAuctions,
   updateAuction,
 } from "@/store/slice/AuctionsSlice";
+import Auctions from "@/app/customer/dashboard/ordersForms/Auctions";
+import { Box, Modal } from "@mui/material";
+import { toast } from "sonner";
 //import GeneralTable from "@/components/table";
 
 export default function Actions() {
@@ -33,19 +36,14 @@ export default function Actions() {
   const [showing, setShowing] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
   const [sortby, setSortby] = useState("date");
-  const closeModal = () => {
-    setOpenModal(false);
-  };
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [view, setView] = useState("table");
   const handleTogleFilter = () => setOpenFilter(!openFilter);
   const [selectedRequest, setSelectedRequest] = useState<{
     id: number;
     type: "accept" | "reject" | "finish";
   } | null>(null);
-  console.log(openModal);
-  console.log(closeModal);
-  console.log(initForm);
   console.log(selectedRequest);
   const columns: Column[] = [
     {
@@ -98,12 +96,10 @@ export default function Actions() {
     },
   ];
   const apiUrl = `admin/car-auctions`;
-  const [view, setView] = useState("table");
   const dispatch = useAppDispatch();
-  const { auctions, loading, error, totalPages } = useSelector(
-    (state: RootState) => state.auctions
-  );
-  console.log(totalPages);
+  const { auctions, error, loading, actionLoadingIds, totalPages } =
+    useSelector((state: RootState) => state.auctions);
+  //console.log(totalPages);
   const [actions] = useState({
     edit: true,
     add: true,
@@ -117,7 +113,9 @@ export default function Actions() {
     const apiUrl = `admin/car-auctions?page_size=${showing}&page=${currentPage}`;
     dispatch(fetchAuctions({ API: apiUrl }));
   }, [dispatch, currentPage, showing]);
-
+  const closeModal = () => {
+    setOpenModal(false);
+  };
   const handleDelete = (id: number) => {
     setOpenDeleteModal(true);
     setDeleteId(id);
@@ -130,20 +128,22 @@ export default function Actions() {
     const status = type === "accept" ? 2 : type === "reject" ? 0 : 3; // تحديد القيمة بناءً على نوع الإجراء
     try {
       //await axiosInstance.put(`${apiUrl}/${id}`, { status });
-      dispatch(
+      await dispatch(
         updateAuction({
           apiUrl: apiUrl,
           id: id,
           updatedData: { status },
         })
       );
-      console.log(
+      toast.success(
         `تم ${
           type === "accept" ? "قبول" : type === "reject" ? "رفض" : "اكمال"
         } الطلب رقم ${id}`
       );
     } catch (error) {
       console.error("حدث خطأ أثناء تحديث الطلب:", error);
+      toast.error("حدث خطأ ما");
+    } finally {
     }
   };
 
@@ -208,6 +208,7 @@ export default function Actions() {
       {view === "table" ? (
         <GeneralTable
           loading={loading}
+          actionLoading={actionLoadingIds}
           columns={columns}
           apiUrl={apiUrl}
           actions={actions}
@@ -217,10 +218,20 @@ export default function Actions() {
           sortBy={sortby}
           showing={showing}
           searchTerm={searchTerm}
+          customEditForm={(data, close) => (
+            <Auctions
+              onSubmit={(data) => {
+                console.log("data:", data);
+              }}
+              initialData={data}
+              close={() => close}
+            />
+          )}
         />
       ) : (
         <Grid_View
           loading={loading}
+          actionLoading={actionLoadingIds}
           data={auctions}
           sortBy={sortby}
           showing={showing}
@@ -240,6 +251,37 @@ export default function Actions() {
         currentPage={currentPage}
         onPageChange={setCurrentPage}
       />
+      {openModal && (
+        <Modal open={openModal} onClose={closeModal}>
+          <Box
+            sx={{
+              position: "fixed",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "80%", // 80% من عرض الشاشة (يبقى 10% من الجوانب)
+              maxWidth: "1000px", // الحد الأقصى لعرض المودال
+              height: "80%", // 80% من ارتفاع الشاشة (يبقى 10% من الأعلى والأسفل)
+              maxHeight: "90vh", // ضمان عدم تجاوز الشاشة
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 3,
+              padding: 0,
+              borderRadius: "8px",
+              overflowY: "auto", // السماح بالتمرير عند زيادة المحتوى
+              outline: "none",
+            }}
+          >
+            <Auctions
+              close={() => setOpenModal(false)}
+              onSubmit={(data) => {
+                console.log(data);
+              }}
+              initialData={initForm}
+            />
+          </Box>
+        </Modal>
+      )}
       {openDeleteModal && (
         <DeleteMessage
           API={apiUrl}

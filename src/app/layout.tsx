@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "SOUFAN GLOBAL",
     description: "Import cars from Canada to Oman",
-    images: ["/path-to-your-og-image.jpg"], // يمكن أن تكون مصفوفة
+    images: ["/path-to-your-og-image.jpg"],
     url: "https://www.soufanglobal.com",
   },
   twitter: {
@@ -64,6 +64,9 @@ export default function RootLayout({
       lang="en"
       className={`${poppins.variable} ${roboto.variable}  ${montserrat.variable}`}
     >
+      <head>
+        <link rel="icon" href="/favicon.png" type="image/png" />
+      </head>
       <body>
         <ClientWrapper>
           <Toaster richColors position="top-center" />

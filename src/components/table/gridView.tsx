@@ -13,6 +13,7 @@ interface Grid_ViewProps {
   showing: number;
   onTotalCountChange: (count: number) => void;
   loading?: boolean;
+  actionLoading: number[];
   onDelete?: (id: number) => void;
   onEdit?: (item: Auction | CarSale | CarShipping) => void;
   onChangeStatus?: (id: number, type: "accept" | "reject" | "finish") => void;
@@ -38,7 +39,8 @@ export default function Grid_View({
   onEdit,
   onChangeStatus,
   onTotalCountChange,
-  loading: externalLoading, // <-- إعادة التسمية لتمييزه عن الداخلي
+  loading: externalLoading,
+  actionLoading,
 }: Grid_ViewProps) {
   const [fullData, setFullData] = useState<
     (Auction | CarSale | CarShipping)[] | null
@@ -165,6 +167,7 @@ export default function Grid_View({
               />
             ) : (
               <OrderCard
+                actionLoading={actionLoading.includes(item.id)}
                 key={index}
                 order={item as Auction}
                 onDelete={(id) =>

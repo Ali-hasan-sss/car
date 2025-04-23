@@ -5,9 +5,12 @@ import ContactForm from "@/components/forms/contact_form";
 import Navbar from "@/components/header/navbar";
 import CoverImage from "@/components/Hero_general/cover_image";
 import Follow_us from "@/components/sucial_Midia/follow_us";
-import React from "react";
+import React, { useEffect } from "react";
 
 const ContactPage: React.FC = () => {
+  useEffect(() => {
+    document.title = "SOUFAN GLOBAL | Contact";
+  }, []);
   return (
     <div>
       <Navbar />

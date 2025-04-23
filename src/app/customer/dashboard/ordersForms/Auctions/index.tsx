@@ -18,13 +18,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { fetchManufacturers } from "@/store/slice/manufacturerSlice";
 import Budget_selector from "@/components/inputs/selectors/budget_selector";
-import {
-  addAuction,
-  selectAuctionsLoading,
-  updateAuction,
-} from "@/store/slice/AuctionsSlice";
+import { addAuction, updateAuction } from "@/store/slice/AuctionsSlice";
 import { AuctionsFormInputs } from "@/Types/AuctionTypes";
 import LoadingBTN from "@/components/loading/loadingBTN";
+import { toast } from "sonner";
 
 interface AuctionsProps {
   close: () => void;
@@ -69,7 +66,7 @@ export default function Auctions({
   const { manufacturers, status } = useSelector(
     (state: RootState) => state.manufacturer
   );
-  const loading = useSelector(selectAuctionsLoading);
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const validateForm = () => {
@@ -151,6 +148,7 @@ export default function Auctions({
 
   const handleSubmit = async () => {
     try {
+      setLoading(true);
       if (initialData?.id) {
         // ✅ تعديل
         if (validateForm()) {
@@ -161,6 +159,7 @@ export default function Auctions({
               updatedData: formData,
             })
           );
+          toast.success("تم تعديل المزاد بنجاح");
         } else return;
       } else {
         // ✅ إضافة
@@ -171,6 +170,7 @@ export default function Auctions({
               auctionData: formData,
             })
           );
+          toast.success("تمت اضافة المزاد بنجاح");
         } else return;
       }
       // ✅ تحديث الحالة في المكون الأب
@@ -178,6 +178,9 @@ export default function Auctions({
       close();
     } catch (error) {
       console.error(error);
+      toast.error("حدث خطا ما");
+    } finally {
+      setLoading(false);
     }
   };
   const [manufacturerLoading, setManufacturerLoading] = useState(false);
@@ -196,9 +199,9 @@ export default function Auctions({
   }, [status]);
 
   return (
-    <div className="flex w-full flex-col gap-[16px] px-[15px]">
+    <div className="w-full items-center justify-center flex py-4 px-1 md:px-5 flex-col gap-4 ">
       <div className="heading_form flex item-center justify-center">
-        <h2 className="title">Select a Car for Auction</h2>
+        <h2 className="text-3xl">Select a Car for Auction</h2>
       </div>
       <Text_input
         value={formData.auction_link}
@@ -207,7 +210,7 @@ export default function Auctions({
         label="Please Enter Car Auction Link"
         onChange={(e) => handleInputChange("auction_link", e.target.value)}
       />
-      <div className="flex items-center justify-between">
+      <div className="flex w-full items-center justify-between">
         <div className="w-1/2 flex items-center justify-start">
           <hr className="w-full text-gray-400" />
         </div>
@@ -218,8 +221,8 @@ export default function Auctions({
           <hr className="w-full text-gray-400" />
         </div>
       </div>
-      <div className="flex flex-wrap items-center justify-between  gap-[10px]">
-        <div className="selector">
+      <div className="flex w-full flex-wrap items-center justify-between  gap-[10px]">
+        <div className="selector w-[250px]">
           <label>Car Manufacturer:</label>
           <DainamicSelector
             placeholder="BMW , Audi , kia ..."
@@ -230,7 +233,7 @@ export default function Auctions({
             dataLoading={manufacturerLoading}
           />
         </div>
-        <div className="selector">
+        <div className="selector w-[250px]">
           <label>Car Model:</label>
           <DainamicSelector
             placeholder="choes Manufacturer first"
@@ -240,7 +243,7 @@ export default function Auctions({
             error={errors.category_id}
           />
         </div>
-        <div className="selector">
+        <div className="selector w-[250px]">
           <label>Year of Manufacture:</label>
           <Text_selector
             options={yearOfMade}
@@ -251,8 +254,8 @@ export default function Auctions({
           />
         </div>
       </div>
-      <div className="flex flex-wrap items-center justify-between gap-[10px]">
-        <div className="selector">
+      <div className="flex w-full flex-wrap items-center justify-between gap-[10px]">
+        <div className="selector w-[250px]">
           <label>Transmission Type:</label>
           <Text_selector
             options={TransmissionTypeOptions}
@@ -262,7 +265,7 @@ export default function Auctions({
             error={errors.transmission_type}
           />
         </div>
-        <div className="selector">
+        <div className="selector w-[250px]">
           <label> Drive System:</label>
           <Text_selector
             options={driveSystemOPtions}
@@ -272,7 +275,7 @@ export default function Auctions({
             error={errors.drive_system}
           />
         </div>
-        <div className="selector">
+        <div className="selector w-[250px]">
           <label> Fuel Type:</label>
           <Text_selector
             options={fuelTypeOptions}
@@ -283,8 +286,8 @@ export default function Auctions({
           />
         </div>
       </div>
-      <div className="flex flex-wrap items-center justify-between gap-[10px]">
-        <div className="selector">
+      <div className="flex w-full flex-wrap items-center justify-between gap-[10px]">
+        <div className="selector w-[250px]">
           <label>Number of Cylinders:</label>
           <Text_selector
             options={NumberOfCylinders}
@@ -294,7 +297,7 @@ export default function Auctions({
             error={errors.cylinders}
           />
         </div>
-        <div className="selector">
+        <div className="selector w-[250px]">
           <label>Budget Range (From - To):</label>
           <Budget_selector
             from_budget={formData.from_budget}
@@ -306,7 +309,7 @@ export default function Auctions({
             error={errors.budget}
           />
         </div>
-        <div className="selector">
+        <div className="selector w-[250px]">
           <label>Shipping Option: </label>
           <Text_selector
             options={ShippingOption}
@@ -317,8 +320,8 @@ export default function Auctions({
           />
         </div>
       </div>
-      <div className="flex flex-wrap items-center justify-between gap-[10px]">
-        <div className="selector">
+      <div className="flex w-full flex-wrap items-center justify-between gap-[10px]">
+        <div className="selector w-[250px]">
           <label>Exterior Color:</label>
           <Text_selector
             options={ExteriorColor}
@@ -328,7 +331,7 @@ export default function Auctions({
             error={errors.ex_color}
           />
         </div>
-        <div className="selector">
+        <div className="selector w-[250px]">
           <label>Interior Color: </label>
           <Text_selector
             options={InteriorColor}
@@ -338,7 +341,7 @@ export default function Auctions({
             error={errors.in_color}
           />
         </div>
-        <div className="selector">
+        <div className="selector w-[250px]">
           <label>Shipping Destination Country:</label>
           <DainamicSelector
             placeholder="Canada"
@@ -351,13 +354,14 @@ export default function Auctions({
           />
         </div>
       </div>
-      <div className="flex flex-wrap actions w-full gap-[10px] mt-4 py-4 items-center justify-between">
+      <div className="flex w-full flex-wrap actions w-full gap-[10px] mt-4 py-4 items-center justify-between">
         <button className="py-1 px-2 button_bordered" onClick={close}>
           Cancel
         </button>
         <button
           className="py-1 px-2 flex items-center justify-center button_outline"
           onClick={handleSubmit}
+          disabled={loading}
         >
           {loading ? <LoadingBTN /> : "Send Car Order"}
         </button>

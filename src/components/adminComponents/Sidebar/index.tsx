@@ -1,15 +1,16 @@
 import { useLanguage } from "../../../context/LanguageContext";
 import {
   BellRing,
+  Box,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
   ChevronUp,
+  Container,
   HomeIcon,
-  ListChecks,
   Newspaper,
   Settings,
-  ShoppingCart,
+  Store,
   Users,
   Wrench,
 } from "lucide-react";
@@ -35,17 +36,22 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
 
   const menuItems = [
     {
-      icon: <HomeIcon className="text-3xl" />,
+      icon: <HomeIcon className={`text-3xl`} />,
       label: t("Home"),
       path: "/admin/dashboard",
     },
     {
-      icon: <ListChecks className="text-3xl" />,
-      label: t("Requests"),
+      icon: <Box className={`text-3xl`} />,
+      label: t("Auction"),
       path: "/admin/dashboard/auctions",
     },
     {
-      icon: <ShoppingCart className="text-3xl" />,
+      icon: <Container className={`text-3xl`} />,
+      label: t("Shipping"),
+      path: "/admin/dashboard/shipping",
+    },
+    {
+      icon: <Store className={` text-3xl `} />,
       label: t("Sales"),
       path: "/admin/dashboard/sales",
     },
@@ -66,7 +72,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
     },
     {
       icon: <BellRing className="text-3xl" />,
-      label: t("Notifications"),
+      label: t("Notfications"),
       path: "/admin/dashboard/notifications",
     },
     {
@@ -110,7 +116,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
     >
       {/* زر التحكم في فتح/إغلاق السايدبار */}
       <div
-        className={`flex items-center justify-center w-full p-2 ${
+        className={`flex  items-center justify-center w-full p-2 ${
           isExpanded ? "justify-end" : "justify-start"
         }`}
       >

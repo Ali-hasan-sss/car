@@ -17,6 +17,8 @@ import {
   Trash,
   XCircle,
 } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
+import { PulseLoader } from "react-spinners";
 
 export interface Column {
   id: string;
@@ -45,6 +47,7 @@ interface GeneralTableProps {
   columns: Column[];
   showing?: number;
   loading?: boolean;
+  actionLoading: number[];
   onTotalCountChange: (count: number) => void;
   sortBy?: string;
   searchTerm?: string;
@@ -79,6 +82,7 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
   formColumns,
   onChangeStatus,
   loading: externalLoading,
+  actionLoading,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [internalLoading, setInternalLoading] = useState(false);
@@ -102,7 +106,8 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
   const pathname = usePathname();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
-
+  const { t } = useLanguage();
+  //  const userRole = useSelector((state: RootState) => state.auth.user?.userRole);
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLButtonElement>,
     id: number
@@ -393,34 +398,30 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
                   key={index}
                   className={`${
                     index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                  } border-b text-[11px]`} // تصغير الخط هنا
+                  } border-b text-sm`}
                 >
                   {tableColumns.map((column) => {
                     const value = getNestedValue(row, column.id);
                     return (
-                      <td key={column.id} className="px-3 py-4 text-[10px]">
+                      <td key={column.id} className="px-3 py-4 ">
                         {" "}
                         {/* تقليل البادينغ */}
                         {column.id === "status" ? (
                           <div
-                            className={`px-2 py-[1px] w-[70px] rounded-full flex items-center justify-center text-[10px]  ${statusMap[value]?.color}`}
+                            className={`px-2 py-[1px] w-[70px] rounded-full flex items-center justify-center text-[12px]  ${statusMap[value]?.color}`}
                           >
                             {statusMap[value]?.label || "غير معروف"}
                           </div>
                         ) : column.id === "created_at" ? (
-                          <div className="text-[10px]">
-                            {formatDateTime(value)}
-                          </div>
+                          <div className="text-xs">{formatDateTime(value)}</div>
                         ) : column.id === "type" ? (
                           <div
-                            className={`px-2 py-[1px] w-[70px] rounded-full flex items-center justify-center text-[10px]  ${typeMap[value]?.color}`}
+                            className={`px-2 py-[1px] w-[70px] rounded-full flex items-center justify-center   ${typeMap[value]?.color}`}
                           >
                             {typeMap[value]?.label || "غير معروف"}
                           </div>
                         ) : (
-                          <div className="text-[10px]">
-                            {value ?? "غير متوفر"}
-                          </div>
+                          <div className="">{value ?? "غير متوفر"}</div>
                         )}
                       </td>
                     );
@@ -428,11 +429,15 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
                   {actions && (
                     <td className="px-2 py-1">
                       <div className="flex items-center">
-                        <IconButton
-                          onClick={(event) => handleMenuOpen(event, row.id)}
-                        >
-                          <EllipsisVertical className="text-gray-600 text-lg" />
-                        </IconButton>
+                        {actionLoading.includes(row.id) ? (
+                          <PulseLoader size={6} color="#008080" />
+                        ) : (
+                          <IconButton
+                            onClick={(event) => handleMenuOpen(event, row.id)}
+                          >
+                            <EllipsisVertical className="text-gray-600 text-lg" />
+                          </IconButton>
+                        )}
 
                         <Menu
                           anchorEl={anchorEl}
@@ -444,11 +449,11 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
                         >
                           {actions.view && (
                             <MenuItem onClick={() => handleView(row.id)}>
-                              <Eye className="text-blue-500 mr-2" /> عرض
-                              التفاصيل
+                              <Eye className="text-blue-500 mx-2" />
+                              {t("details")}
                             </MenuItem>
                           )}
-                          {actions.edit && (
+                          {actions.edit && row.status === 1 && (
                             <MenuItem
                               onClick={() => {
                                 const simplifiedRow = {
@@ -467,7 +472,8 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
                                 handleEdit(simplifiedRow);
                               }}
                             >
-                              <Edit className="text-yellow-500 mr-2" /> تعديل
+                              <Edit className="text-yellow-500 mx-2" />{" "}
+                              {t("Edit")}
                             </MenuItem>
                           )}
                           {actions.delete && (
@@ -478,7 +484,8 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
                                 handleMenuClose();
                               }}
                             >
-                              <Trash className="text-red-500 mr-2" /> حذف
+                              <Trash className="text-red-500 mx-2" />{" "}
+                              {t("Delete")}
                             </MenuItem>
                           )}
                           {actions.accept && (
@@ -487,8 +494,8 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
                                 handleAccept(row.id);
                               }}
                             >
-                              <CheckCircle className="text-green-500 mr-2" />{" "}
-                              قبول
+                              <CheckCircle className="text-green-500 mx-2" />{" "}
+                              {t("Accept")}
                             </MenuItem>
                           )}
                           {actions.reject && (
@@ -497,7 +504,8 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
                                 handleReject(row.id);
                               }}
                             >
-                              <XCircle className="text-red-500 mr-2" /> رفض
+                              <XCircle className="text-red-500 mx-2" />{" "}
+                              {t("Reject")}
                             </MenuItem>
                           )}
                           {actions.finish && (
@@ -506,8 +514,8 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
                                 handleFinish(row.id);
                               }}
                             >
-                              <Check className="text-green-500 mr-2" /> تعيين ك
-                              منجز
+                              <Check className="text-green-500 mx-2" />
+                              {t("complete")}
                             </MenuItem>
                           )}
                         </Menu>
