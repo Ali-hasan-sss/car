@@ -80,7 +80,7 @@ export default function Actions() {
       includeInForm: false,
     },
   ];
-  const [view, setView] = useState("table");
+  const [view, setView] = useState("menu");
   const dispatch = useAppDispatch();
   const apiUrl = "customer/car-auctions";
   const { auctions, loading, actionLoadingIds, totalPages } = useSelector(

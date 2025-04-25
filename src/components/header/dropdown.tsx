@@ -11,7 +11,7 @@ export default function Dropdown() {
   const pathname = usePathname();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLUListElement>(null);
-  const { t } = useLanguage();
+  const { t, isArabic } = useLanguage();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -44,6 +44,11 @@ export default function Dropdown() {
       }
     }
   }, [expanded]);
+
+  //close the dropdown when language is changed
+  useEffect(() => {
+    setExpanded(false);
+  }, [isArabic]);
 
   const navItems = [
     { id: 1, label: t("Home"), path: "/" },

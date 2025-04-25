@@ -52,7 +52,7 @@ export default function ToolBar({
     <div className="flex flex-col md:flex-row items-center w-full justify-end py-2 gap-4">
       <div className="flex items-center justify-between md:justify-end gap-4">
         <div className="flex gap-2">
-          <label className="text-lg">
+          <label className="text-sm">
             {t("Showing")} 1-{showing} {t("of")} {totalItems}
           </label>
         </div>

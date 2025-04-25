@@ -28,14 +28,12 @@ export default function Sidebar({ setisExpand }: SidebarProps) {
       icon: (
         <HomeIcon
           className={`text-primary1 rounded-lg text-2xl side_icon ${
-            pathname === "/customer/dashboard/orders"
-              ? "bg-primary1 text-white"
-              : ""
+            pathname === "/customer/dashboard" ? "bg-primary1 text-white" : ""
           }`}
         />
       ),
-      path: "/customer/dashboard/",
-      tooltip: t("Home"), // التعديل هنا
+      path: "/customer/dashboard",
+      tooltip: t("Home"),
     },
     {
       label: t("Auction"),
@@ -49,7 +47,7 @@ export default function Sidebar({ setisExpand }: SidebarProps) {
         />
       ),
       path: "/customer/dashboard/auction",
-      tooltip: t("Auction"), // التعديل هنا
+      tooltip: t("Auction"),
     },
     {
       label: t("Shipping"),
@@ -63,7 +61,7 @@ export default function Sidebar({ setisExpand }: SidebarProps) {
         />
       ),
       path: "/customer/dashboard/shipping",
-      tooltip: t("Shipping"), // التعديل هنا
+      tooltip: t("Shipping"),
     },
     {
       label: t("Sales"),
@@ -77,7 +75,7 @@ export default function Sidebar({ setisExpand }: SidebarProps) {
         />
       ),
       path: "/customer/dashboard/salles",
-      tooltip: t("Sales"), // التعديل هنا
+      tooltip: t("Sales"),
     },
     {
       label: t("Notfications"),
@@ -184,7 +182,9 @@ export default function Sidebar({ setisExpand }: SidebarProps) {
                   title={isExpand ? item.tooltip : ""}
                 >
                   {item.icon}
-                  {!isExpand && <p className="text-gray-400">{item.label}</p>}
+                  {!isExpand && (
+                    <p className="text-gray-400 text-sm">{item.label}</p>
+                  )}
                 </Link>
               </li>
             ))}
@@ -202,7 +202,9 @@ export default function Sidebar({ setisExpand }: SidebarProps) {
                   href={item.path}
                 >
                   {item.icon}
-                  {!isExpand && <p className="text-gray-400">{item.label}</p>}
+                  {!isExpand && (
+                    <p className="text-gray-400 text-sm">{item.label}</p>
+                  )}
                 </Link>
               </li>
             ))}

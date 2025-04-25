@@ -7,15 +7,19 @@ import {
   ChevronRight,
   ChevronUp,
   Container,
+  Factory,
+  Globe,
   HomeIcon,
+  ListChecks,
   Newspaper,
+  Phone,
   Settings,
   Store,
   Users,
   Wrench,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 interface SidebarProps {
@@ -25,6 +29,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
   const { t, isArabic } = useLanguage();
+  const router = useRouter();
   const pathName = usePathname();
 
   // تحكم بفتح وإغلاق القائمة المنسدلة
@@ -76,15 +81,17 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
       path: "/admin/dashboard/notifications",
     },
     {
-      icon: <Settings className="text-3xl" />,
+      icon: <ListChecks className="text-3xl" />,
       label: t("Systim_Category"),
       path: "#",
       subItems: [
         {
+          icon: <Factory className="text-xl" />,
           label: t("Manufacturers"),
           path: "/admin/dashboard/manufacturers",
         },
         {
+          icon: <Globe className="text-xl" />,
           label: t("Countries"),
           path: "/admin/dashboard/countries",
         },
@@ -96,10 +103,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
       path: "#",
       subItems: [
         {
+          icon: <Phone className="text-xl" />,
           label: t("Settings"),
           path: "/admin/dashboard/settings",
         },
         {
+          icon: <Users className="text-xl" />,
           label: t("Accounts"),
           path: "/admin/dashboard/settings/accounts",
         },
@@ -110,7 +119,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
   return (
     <div
       className={`bg-secondary1 border p-2 overflow-y-auto overflow-x-hidden text-text_title transition-all duration-300 ${
-        isExpanded ? "w-64" : "w-[70px]"
+        isExpanded ? "w-[200px]" : "w-[70px]"
       } flex flex-col`}
       style={{ borderRadius: "10px" }}
     >
@@ -167,18 +176,22 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
 
                   {/* عرض القائمة المنسدلة إذا كانت مفتوحة */}
                   {openDropdown === item.label && isExpanded && (
-                    <ul className=" border-l mt-2 border-gray-400 pl-3 space-y-2">
+                    <ul
+                      className={`${
+                        isArabic ? "border-r pr-3" : "border-l pl-3"
+                      }  mt-2 border-gray-400 pl-3 space-y-1`}
+                    >
                       {item.subItems.map((subItem, subIndex) => (
                         <li key={subIndex}>
                           <Link
                             href={subItem.path}
-                            className={`block p-2 rounded hover:bg-primary1 hover:text-white transition-all duration-300 ${
+                            className={`flex items-senter gap-2  py-1 px-3 rounded hover:bg-primary1 hover:text-white transition-all duration-300 ${
                               pathName === subItem.path
                                 ? "bg-primary1 text-white"
                                 : ""
                             }`}
                           >
-                            {subItem.label}
+                            {subItem.icon} {subItem.label}
                           </Link>
                         </li>
                       ))}
@@ -188,6 +201,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
               ) : (
                 <Link
                   href={item.path}
+                  onClick={(e) => {
+                    if (!isExpanded) {
+                      e.preventDefault();
+                      onToggle();
+                      setTimeout(() => {
+                        router.push(item.path);
+                      }, 300);
+                    }
+                  }}
                   className={`flex items-center gap-4 p-2 rounded hover:bg-primary1 transition-all duration-300 hover:text-white ${
                     !isExpanded ? "justify-center rounded-full" : ""
                   } ${pathName === item.path ? "bg-primary1 text-white" : ""}`}

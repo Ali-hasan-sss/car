@@ -6,7 +6,7 @@ export const TransmissionTypeOptions = [
 export const driveSystemOPtions = [
   { value: 1, label: "FWD" },
   { value: 2, label: "RWD" },
-  { value: 3, label: "4WD" },
+  { value: 3, label: "d4WD" },
 ];
 export const NumberOfCylinders = [
   { value: 3, label: "3" },
@@ -52,22 +52,42 @@ export const mileageOptions = [
 export const fuelTypeOptions = [
   { value: 1, label: "Petrol" },
   { value: 2, label: "Disel" },
-  { value: 3, label: "CNG (Gaz)" },
-  { value: 4, label: "Flex Fuel" },
+  { value: 3, label: "CNG" },
+  { value: 4, label: "Flex_Fuel" },
   { value: 5, label: "Hybrid" },
   { value: 6, label: "Electric" },
 ];
+
 export const ExteriorColor = [
   { value: "white", label: "white" },
-  { value: "red", label: "red" },
-  { value: "yellow", label: "yellow" },
   { value: "black", label: "black" },
+  { value: "silver", label: "silver" },
+  { value: "gray", label: "gray" },
+  { value: "red", label: "red" },
+  { value: "blue", label: "blue" },
+  { value: "green", label: "green" },
+  { value: "yellow", label: "yellow" },
+  { value: "orange", label: "orange" },
+  { value: "brown", label: "brown" },
+  { value: "beige", label: "beige" },
+  { value: "gold", label: "gold" },
+  { value: "maroon", label: "maroon" },
+  { value: "navy", label: "navy" },
+  { value: "purple", label: "purple" },
 ];
+
 export const InteriorColor = [
+  { value: "black", label: "black" },
+  { value: "gray", label: "gray" },
+  { value: "beige", label: "beige" },
+  { value: "brown", label: "brown" },
   { value: "white", label: "white" },
   { value: "red", label: "red" },
-  { value: "yellow", label: "yellow" },
-  { value: "black", label: "black" },
+  { value: "tan", label: "tan" },
+  { value: "cream", label: "cream" },
+  { value: "dark_blue", label: "dark_blue" },
+  { value: "burgundy", label: "burgundy" },
+  { value: "ivory", label: "ivory" },
 ];
 
 export const budgetOptions = {
@@ -107,14 +127,14 @@ export const CarStatusOptions = [
   { value: 5, label: "Disabled" },
 ];
 export const shippingStatusOptions = [
-  { value: 1, label: "In Stock" },
-  { value: 2, label: "In Transit" },
+  { value: 1, label: "In_Stock" },
+  { value: 2, label: "In_Transit" },
   { value: 3, label: "Arrived" },
 ];
 
 export const CarfaxOptions = [
   { value: 1, label: "Available" },
-  { value: 2, label: "Not available" },
+  { value: 2, label: "Not_available" },
 ];
 export const location_port = [
   { value: "Sohar", label: "Sohar" },

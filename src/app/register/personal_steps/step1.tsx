@@ -23,7 +23,7 @@ const Personal_step1: React.FC<Personal_step1> = ({
   return (
     <div className="w-full ">
       <div className="form_group w-full flex flex-col gap-[4px] items-start justify-start">
-        <label htmlFor="name">
+        <label htmlFor="name" className="text-xs">
           {t("Full_Name")}
           <span className="text-red-500">*</span>
         </label>
@@ -36,7 +36,7 @@ const Personal_step1: React.FC<Personal_step1> = ({
           className={`w-full ${errors.name ? "input_err" : "input"}`}
         />
         {errors.name && (
-          <span className="text-red-500 text-sm">{errors.name}</span>
+          <span className="text-red-500 text-xs">{errors.name}</span>
         )}
       </div>
       <EmailInput

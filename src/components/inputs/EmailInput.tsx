@@ -10,8 +10,8 @@ interface EmailInputProps {
 const EmailInput: React.FC<EmailInputProps> = ({ value, error, onChange }) => {
   const { t } = useLanguage();
   return (
-    <div className="form_group flex flex-col gap-[8px] items-start justify-start">
-      <label htmlFor="email">
+    <div className="form_group flex py-2 flex-col items-start justify-start">
+      <label htmlFor="email" className="text-sm">
         {t("Email")}
         <span className="text-red-500">*</span>
       </label>
@@ -24,7 +24,7 @@ const EmailInput: React.FC<EmailInputProps> = ({ value, error, onChange }) => {
         onChange={onChange}
         className={error ? "input_err" : "input"}
       />
-      {error && <span className="text-red-500 text-sm">{error}</span>}
+      {error && <span className="text-red-500 text-xs">{error}</span>}
     </div>
   );
 };

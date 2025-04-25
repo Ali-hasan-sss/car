@@ -19,6 +19,7 @@ const Personal_step2: React.FC<Personal_step2> = ({
   return (
     <div className="w-full">
       <PasswordInput
+        Forgot_password={false}
         value={formData.password}
         onChange={onInputChange}
         error={errors.password}

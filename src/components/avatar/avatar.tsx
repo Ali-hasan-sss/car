@@ -105,12 +105,12 @@ export default function Avatar({ width }: AvatarProps) {
       {/* زر فتح القائمة */}
       <button
         ref={buttonRef}
-        className="flex items-center text-lg font-bold text-text_title rounded-full focus:outline-none"
+        className="flex px-3 py-1 border items-center text-lg font-bold text-text_title rounded-full focus:outline-none"
         type="button"
         onClick={toggleDropdown}
       >
         <img
-          className={`w-${width} h-${width} me-2 rounded-full`}
+          className={`w-[${width}] h-[20px]  me-2`}
           src="/images/avatar.png"
           alt="user photo"
         />

@@ -19,7 +19,7 @@ export default function ActionComfirm({
 
   return (
     <AnimatedModal
-      style={{ width: "300px" }}
+      style={{ width: "300px", padding: "16px 20px" }}
       open={open}
       handleClose={handleClose}
     >
@@ -30,14 +30,14 @@ export default function ActionComfirm({
         <button
           type="button"
           onClick={handleClose}
-          className="button_close py-2 px-3"
+          className="button_bordered py-2 px-3"
         >
           {t("No")}
         </button>
         <button
           type="submit"
           onClick={onActionSuccess}
-          className="button_outline py-2 px-3"
+          className="button_close py-2 px-3"
         >
           {t("Yes")}
         </button>

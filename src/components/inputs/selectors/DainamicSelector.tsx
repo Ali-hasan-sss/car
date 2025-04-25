@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { TextField, Autocomplete, CircularProgress } from "@mui/material";
 import axiosInstance from "@/utils/axiosInstance";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface Category {
   id: number;
@@ -38,6 +39,7 @@ const DainamicSelector: React.FC<{
   error,
   dataLoading,
 }) => {
+  const { t } = useLanguage();
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -83,8 +85,8 @@ const DainamicSelector: React.FC<{
         onChange={(event, newValue) => handleSelectionChange(newValue)}
         className="w-full"
         loading={data ? dataLoading : loading}
-        loadingText="جاري التحميل..."
-        noOptionsText="لا توجد خيارات متاحة"
+        loadingText={t("loading")}
+        noOptionsText={t("no_options")}
         renderInput={(params) => (
           <div style={{ position: "relative", width: "100%" }}>
             <TextField

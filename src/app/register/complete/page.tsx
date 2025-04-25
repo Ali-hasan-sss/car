@@ -7,18 +7,18 @@ import { useRouter } from "next/navigation";
 import axiosInstance from "@/utils/axiosInstance";
 import Register_nav from "@/components/header/register_navbar";
 import Register_footer from "@/components/footer/Register_footer";
-
 import { useDispatch } from "react-redux";
 import { setUser } from "@/store/slice/authSlice";
 import { RootState } from "@/store/store";
 import UserForm from "@/components/adminComponents/forms/UserForm";
 import { initialData } from "@/Types/adminTypes";
 import { toast } from "sonner";
+import { useLanguage } from "@/context/LanguageContext";
 
 const Registration: React.FC = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-
+  const { t } = useLanguage();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const userData = useSelector((state: any) => state.auth.user);
   const is_full_data = useSelector(
@@ -49,7 +49,7 @@ const Registration: React.FC = () => {
 
   useEffect(() => {
     if (is_full_data) {
-      router.push("/customer/dashboard"); // إعادة توجيه المستخدم إلى لوحة التحكم
+      router.push("/customer/dashboard");
     }
   }, [router]);
 
@@ -58,12 +58,10 @@ const Registration: React.FC = () => {
       setLoading(true);
       const response = await axiosInstance.post("customer/profile", formData);
 
-      // تحقق من نجاح العملية
       if (response.status === 200 && response.data?.data) {
         const { id, name, type, email, is_full_data, contact, idDetail } =
           response.data.data;
 
-        // تقسيم الاسم
         const [first_name, last_name] = name.split(" ");
         const userData = {
           id,
@@ -78,16 +76,15 @@ const Registration: React.FC = () => {
         };
 
         dispatch(setUser(userData));
-        toast.success("تم اكمال البيانات بنجاح");
+        toast.success(t("completed_succss"));
         router.push("/customer/dashboard");
       } else {
         console.error("فشل في استجابة السيرفر:", response);
-        toast.error("حدث خطا اثناء اكمال البيانات الرجاء المحاولة لاحقا");
-        alert("لم تتم عملية التسجيل بنجاح، حاول مرة أخرى.");
+        toast.error(t("completed_error"));
       }
     } catch (error) {
       console.error("خطأ أثناء التسجيل:", error);
-      alert("حدث خطأ أثناء التسجيل. حاول مرة أخرى.");
+      toast.error(t("Error"));
     } finally {
       setLoading(false);
     }
@@ -100,7 +97,7 @@ const Registration: React.FC = () => {
       <UserForm
         initialData={generateInitialData(userData)}
         onSubmit={handleSubmit}
-        skip={true}
+        isNew={true}
         loading={loading}
       />
 

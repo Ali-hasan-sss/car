@@ -1,11 +1,11 @@
 interface ChooserProps {
   question: string;
-  value: string | number | ""; // القيمة الحالية المختارة (تقبل فراغ أيضًا)
+  value: string | number | "";
   value1: string | number;
   value2: string | number;
   option1: string;
   option2: string;
-  onChange: (selectedValue: string | number | "") => void; // دعم القيمة الفارغة
+  onChange: (selectedValue: string | number | "") => void;
 }
 
 export default function Chooser({
@@ -18,9 +18,8 @@ export default function Chooser({
   onChange,
 }: ChooserProps) {
   const handleOptionChange = (selectedValue: string | number) => {
-    // إذا تم اختيار نفس القيمة مرة أخرى، قم بإلغاء التحديد
     if (value === selectedValue) {
-      onChange(""); // إرجاع القيمة إلى الوضع الافتراضي (فارغة)
+      onChange("");
     } else {
       onChange(selectedValue);
     }
@@ -28,13 +27,13 @@ export default function Chooser({
 
   return (
     <div className="flex flex-col gap-1 items-start">
-      <label className="font-bold text-text_titles text-xl">{question}</label>
+      <label className=" text-text_titles text-xl">{question}</label>
 
       <div className="flex items-center gap-[5px]">
         <input
           type="radio"
           id="option1"
-          value={value1.toString()} // تأكد من أنه سترينغ حتى لا يحدث تحذير
+          value={value1.toString()}
           checked={value === value1}
           onClick={() => handleOptionChange(value1)}
           readOnly

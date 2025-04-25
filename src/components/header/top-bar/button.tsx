@@ -13,18 +13,18 @@ export default function Navbutton() {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   return isLoggedIn ? (
-    <Avatar width="16" />
+    <Avatar width="20" />
   ) : (
-    <div className="flex p-[5px] gap-[8px] items-center">
+    <div className="flex gap-[8px] items-center">
       <Link
         href="/login"
-        className="button_outline py-1 md:py-3 px-2 md:px-4 text-xs font-bold flex items-center justify-center"
+        className="button_outline py-2 md:py-3 px-2 md:px-4 text-xs font-bold flex items-center justify-center"
       >
-        {t("Sign_in")}
+        {t("Login")}
       </Link>
       <Link
         href="/register"
-        className="button_bordered py-1 md:py-3 px-2 md:px-4 text-xs font-bold flex items-center justify-center"
+        className="button_bordered py-2 md:py-3 px-2 md:px-4 text-xs font-bold flex items-center justify-center"
       >
         {t("Register")}
       </Link>

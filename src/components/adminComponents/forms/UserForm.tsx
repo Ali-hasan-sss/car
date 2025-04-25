@@ -3,6 +3,7 @@ import DainamicSelector from "@/components/inputs/selectors/DainamicSelector";
 import TextSelector from "@/components/inputs/selectors/text_selector";
 import LoadingBTN from "@/components/loading/loadingBTN";
 import UploadFile from "@/components/uploders/Uploader/UploadFile";
+import { useLanguage } from "@/context/LanguageContext";
 import { Box, TextField } from "@mui/material";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -29,32 +30,35 @@ export interface UserFormProps {
   onSubmit: (data: any) => void;
   handlClose?: () => void;
   loading: boolean;
-  skip: boolean;
+  isNew: boolean;
 }
 const UserForm: React.FC<UserFormProps> = ({
   initialData,
   onSubmit,
   handlClose,
   loading,
-  skip,
+  isNew,
 }) => {
   const [formData, setFormData] = useState(initialData);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [idselect, setIdSelect] = useState(true);
+  const { t } = useLanguage();
   const router = useRouter();
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
 
-    if (!formData.email.includes("@")) newErrors.email = "بريد غير صالح";
-    if (!formData.type) newErrors.type = "مطلوب";
-    if (!formData.name) newErrors.name = "مطلوب";
-    if (!formData.mobile) newErrors.mobile = "مطلوب";
-    if (!formData.country_id) newErrors.country_id = "مطلوب";
-    if (!formData.address1) newErrors.address1 = "مطلوب";
-    if (!formData.city) newErrors.city = "مطلوب";
-    if (!formData.language) newErrors.language = "مطلوب";
-    if (!formData.id_number) newErrors.id_number = "مطلوب";
-    if (!formData.id_file) newErrors.id_file = "مطلوب";
+    if (!formData.email.includes("@")) newErrors.email = " ";
+    if (!formData.type) newErrors.type = " ";
+    if (formData.type === 2 && !formData.cr_certificate)
+      newErrors.cr_certificate = " ";
+    if (!formData.name) newErrors.name = " ";
+    if (!formData.mobile) newErrors.mobile = " ";
+    if (!formData.country_id) newErrors.country_id = " ";
+    if (!formData.address1) newErrors.address1 = " ";
+    if (!formData.city) newErrors.city = " ";
+    if (!formData.language) newErrors.language = " ";
+    if (!formData.id_number) newErrors.id_number = " ";
+    if (!formData.id_file) newErrors.id_file = " ";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -78,99 +82,94 @@ const UserForm: React.FC<UserFormProps> = ({
   };
 
   return (
-    <Box className="py-10 px-[20px] md:px-[50px] bg-secondary1 flex items-center justify-center">
+    <Box className="py-10 px-[1px] md:px-[50px] bg-secondary1 flex items-center justify-center">
       <div className="flex  flex-col items-center justify-center  w-full gap-4">
         <div className="flex flex-col items-center justify-center   w-full gap-10">
           <div className="flex p-5 bg-white flex-col justify-center rounded-xl w-full md:w-3/4 gap-4">
-            <h2 className="text-text_title text-3xl font-bold">
-              Main Information
+            <h2 className="text-text_title text-xl font-bold">
+              {t("Main_Information")}
             </h2>
             {/* Name */}
             <TextField
-              label="الاسم"
+              label={t("Full_Name")}
               name="name"
               fullWidth
               margin="normal"
               value={formData.name}
               onChange={handleChange}
               error={!!errors.name}
-              helperText={errors.name}
             />
             {/* Email */}
             <TextField
-              label="البريد الإلكتروني"
+              label={t("Email")}
               name="email"
               fullWidth
               margin="normal"
               value={formData.email}
               onChange={handleChange}
               error={!!errors.email}
-              helperText={errors.email}
             />
           </div>
           <div className="flex p-5 bg-white flex-col justify-center rounded-xl w-full md:w-3/4 gap-4">
-            <h2 className="text-text_title text-3xl font-bold">
-              Contact Information
+            <h2 className="text-text_title text-xl font-bold">
+              {t("Contact_Information")}
             </h2>
             <div className="flex items-center justify-between gap-4 w-full">
               {/* Mobile */}
               <div className="flex flex-col items-center w-1/2 gap-4 justify-center">
                 <TextField
-                  label="رقم الجوال"
+                  label={t("Phone_Num")}
                   name="mobile"
                   fullWidth
                   margin="none"
                   value={formData.mobile}
                   onChange={handleChange}
                   error={!!errors.mobile}
-                  helperText={errors.mobile}
                 />
                 {/* Address 1 */}
                 <TextField
-                  label="العنوان 1"
+                  label={t("Address")}
                   name="address1"
                   fullWidth
                   margin="none"
                   value={formData.address1}
                   onChange={handleChange}
                   error={!!errors.address1}
-                  helperText={errors.address1}
                 />
                 {/* Country Selector */}
                 <DainamicSelector
-                  placeholder="Country"
+                  placeholder={t("Country")}
                   value={formData.country_id}
                   onChange={(value) =>
                     setFormData({ ...formData, country_id: value })
                   }
                   Api_URL="customer/countries"
+                  error={errors.country_id}
                 />
                 {/* City */}
                 <TextField
-                  label="المدينة"
+                  label={t("City")}
                   name="city"
                   fullWidth
                   margin="none"
                   value={formData.city}
                   onChange={handleChange}
                   error={!!errors.city}
-                  helperText={errors.city}
                 />
               </div>
               <div className="flex flex-col items-center w-1/2 gap-4 justify-center">
                 <TextField
-                  label="رقم جوال اخر (اختياري)"
+                  label={t("Another_mobile")}
                   name="other_mobile"
                   fullWidth
                   margin="none"
                   value={formData.other_mobile}
                   onChange={handleChange}
                   error={!!errors.other_mobile}
-                  helperText={errors.other_mobile}
                 />
                 {/* Address 2 */}
                 <TextField
-                  label="العنوان 2 (اختياري)"
+                  label={t("Another_Address")}
                   name="address2"
                   fullWidth
                   margin="none"
@@ -179,16 +178,17 @@ const UserForm: React.FC<UserFormProps> = ({
                 />
                 {/* Language */}
                 <TextSelector
-                  placeholder="Language"
+                  placeholder={t("language")}
                   options={languageOption}
                   onChange={(value) => {
                     setFormData({ ...formData, language: String(value) });
                   }}
                   value={formData.language}
+                  error={errors.language}
                 />
                 {/* Zip Code */}
                 <TextField
-                  label="الرمز البريدي (اختياري)"
+                  label={t("ZIP_Code")}
                   name="zip_code"
                   fullWidth
                   margin="none"
@@ -199,7 +199,9 @@ const UserForm: React.FC<UserFormProps> = ({
             </div>
           </div>
           <div className="flex p-5 bg-white flex-col justify-center rounded-xl w-full md:w-3/4 gap-4">
-            <h2 className="text-text_title text-3xl font-bold">ID Details </h2>
+            <h2 className="text-text_title text-xl font-bold">
+              {t("ID_Details")}{" "}
+            </h2>
             <div className="flex items-center gap-4 w-full">
               <button
                 className={` px-5 py-1 ${
@@ -207,7 +209,7 @@ const UserForm: React.FC<UserFormProps> = ({
                 }`}
                 onClick={() => setIdSelect(true)}
               >
-                id
+                {t("id")}
               </button>
               <button
                 className={` px-5 py-1 ${
@@ -215,51 +217,45 @@ const UserForm: React.FC<UserFormProps> = ({
                 }`}
                 onClick={() => setIdSelect(false)}
               >
-                Passport
+                {t("Passport")}
               </button>
             </div>
             <div className="flex items-center justify-between gap-4 w-full">
-              <div className="flex flex-col items-center w-1/2 gap-4 justify-center">
+              <div className="flex flex-col items-center w-full  md:w-1/2 gap-4 justify-center">
                 {/* ID Number */}
 
                 <TextField
-                  label={idselect ? "رقم الهوية" : "رقم جواز السفر  NO"}
+                  label={idselect ? t("id_NO") : t("Passport_NO")}
                   name="id_number"
                   fullWidth
                   margin="normal"
                   value={formData.id_number}
                   onChange={handleChange}
                   error={!!errors.id_number}
-                  helperText={errors.id_number}
                 />
 
                 {/* ID File */}
                 <UploadFile
-                  label={
-                    idselect
-                      ? "Upload or scan your id "
-                      : "Upload or scan your Passport "
-                  }
+                  label={idselect ? t("id_Scan") : t("Passport_Scan")}
                   onFileUpload={(file) => handleFileChange(file)}
                 />
                 {/* Tax Info (Optional for Type 2) */}
                 {formData.type === 2 && (
                   <>
                     <UploadFile
-                      label="السجل التجاري"
+                      label={t("CR")}
                       onFileUpload={(file) =>
                         setFormData({ ...formData, cr_certificate: file })
                       }
                     />
                     <TextField
-                      label="المعلومات الضريبية (اختياري)"
+                      label={t("Tax")}
                       name="tax_info"
                       fullWidth
                       margin="normal"
                       value={formData.tax_info}
                       onChange={handleChange}
                       error={!!errors.tax_info}
-                      helperText={errors.tax_info}
                     />
                   </>
                 )}
@@ -267,13 +263,13 @@ const UserForm: React.FC<UserFormProps> = ({
             </div>
             {/* Submit Button */}
             <div className="flex items-center justify-between mt-5 w-full">
-              {skip ? (
+              {isNew ? (
                 <button
                   className="button_bordered py-2 px-5"
                   onClick={handleSkip}
                   disabled={loading}
                 >
-                  تخطي
+                  {t("Skip")}
                 </button>
               ) : (
                 <button
@@ -281,7 +277,7 @@ const UserForm: React.FC<UserFormProps> = ({
                   onClick={handlClose}
                   disabled={loading}
                 >
-                  أغلاق
+                  {t("Close")}
                 </button>
               )}
               <button
@@ -290,7 +286,7 @@ const UserForm: React.FC<UserFormProps> = ({
                 onClick={handleSubmit}
                 disabled={loading}
               >
-                {loading ? <LoadingBTN /> : "إرسال"}
+                {loading ? <LoadingBTN /> : isNew ? t("Send") : t("Edit")}
               </button>
             </div>
           </div>

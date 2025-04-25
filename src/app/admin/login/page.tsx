@@ -86,6 +86,7 @@ const AdminLogin: React.FC = () => {
             error={error}
           />
           <PasswordInput
+            Forgot_password={false}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             error={error}

@@ -22,6 +22,7 @@ import { addAuction, updateAuction } from "@/store/slice/AuctionsSlice";
 import { AuctionsFormInputs } from "@/Types/AuctionTypes";
 import LoadingBTN from "@/components/loading/loadingBTN";
 import { toast } from "sonner";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface AuctionsProps {
   close: () => void;
@@ -34,6 +35,7 @@ export default function Auctions({
   initialData,
   onSubmit,
 }: AuctionsProps) {
+  const { t } = useLanguage();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [categories, setCategories] = useState<any[]>([]);
   // const [models, setModels] = useState<any[]>([]);
@@ -74,26 +76,18 @@ export default function Auctions({
 
     if (!formData.auction_link) {
       // إذا لم يكن هناك رابط، تحقق من جميع الحقول الأخرى
-      if (!formData.manufacturer)
-        newErrors.manufacturer = "يرجى اختيار الشركة المصنعة.";
-      if (!formData.category_id) newErrors.category_id = "يرجى اختيار الموديل.";
-      if (!formData.year) newErrors.year = "يرجى تحديد سنة الصنع.";
-      if (!formData.transmission_type)
-        newErrors.transmission_type = "يرجى تحديد نوع ناقل الحركة.";
-      if (!formData.drive_system)
-        newErrors.drive_system = "يرجى اختيار نظام الدفع.";
-      if (!formData.fuel_type) newErrors.fuel_type = "يرجى تحديد نوع الوقود.";
-      if (!formData.cylinders)
-        newErrors.cylinders = "يرجى تحديد عدد الأسطوانات.";
-      if (!formData.from_budget || !formData.to_budget)
-        newErrors.budget = "يرجى إدخال الميزانية.";
-      if (!formData.shipping_option)
-        newErrors.shipping_option = "يرجى اختيار خيار الشحن.";
-      if (!formData.ex_color)
-        newErrors.ex_color = "يرجى تحديد لون السيارة الخارجي.";
-      if (!formData.in_color)
-        newErrors.in_color = "يرجى تحديد لون السيارة الداخلي.";
-      if (!formData.country_id) newErrors.country_id = "يرجى تحديد بلد الوجهة.";
+      if (!formData.manufacturer) newErrors.manufacturer = " ";
+      if (!formData.category_id) newErrors.category_id = " ";
+      if (!formData.year) newErrors.year = " ";
+      if (!formData.transmission_type) newErrors.transmission_type = " ";
+      if (!formData.drive_system) newErrors.drive_system = " ";
+      if (!formData.fuel_type) newErrors.fuel_type = " ";
+      if (!formData.cylinders) newErrors.cylinders = " ";
+      if (!formData.from_budget || !formData.to_budget) newErrors.budget = " ";
+      if (!formData.shipping_option) newErrors.shipping_option = " ";
+      if (!formData.ex_color) newErrors.ex_color = " ";
+      if (!formData.in_color) newErrors.in_color = " ";
+      if (!formData.country_id) newErrors.country_id = " ";
     }
 
     setErrors(newErrors);
@@ -159,7 +153,7 @@ export default function Auctions({
               updatedData: formData,
             })
           );
-          toast.success("تم تعديل المزاد بنجاح");
+          toast.success(t("Edit_Auction"));
         } else return;
       } else {
         // ✅ إضافة
@@ -170,7 +164,7 @@ export default function Auctions({
               auctionData: formData,
             })
           );
-          toast.success("تمت اضافة المزاد بنجاح");
+          toast.success(t("Add_Auction"));
         } else return;
       }
       // ✅ تحديث الحالة في المكون الأب
@@ -178,7 +172,7 @@ export default function Auctions({
       close();
     } catch (error) {
       console.error(error);
-      toast.error("حدث خطا ما");
+      toast.error(t("Error"));
     } finally {
       setLoading(false);
     }
@@ -201,13 +195,13 @@ export default function Auctions({
   return (
     <div className="w-full items-center justify-center flex py-4 px-1 md:px-5 flex-col gap-4 ">
       <div className="heading_form flex item-center justify-center">
-        <h2 className="text-3xl">Select a Car for Auction</h2>
+        <h2 className="text-xl">{t("Select_Auction")}</h2>
       </div>
       <Text_input
         value={formData.auction_link}
         id="link"
         placeholder="https://www.copart.com/dashboard"
-        label="Please Enter Car Auction Link"
+        label={t("auction_link")}
         onChange={(e) => handleInputChange("auction_link", e.target.value)}
       />
       <div className="flex w-full items-center justify-between">
@@ -215,7 +209,9 @@ export default function Auctions({
           <hr className="w-full text-gray-400" />
         </div>
         <div className="w-[50px] flex items-center justify-center">
-          <p className="text-lg text-center w-[15px] text-gray-400">or</p>
+          <p className="text-lg text-center w-[15px] text-gray-400">
+            {t("or")}
+          </p>
         </div>
         <div className="w-1/2 flex items-center justify-end">
           <hr className="w-full text-gray-400" />
@@ -223,7 +219,7 @@ export default function Auctions({
       </div>
       <div className="flex w-full flex-wrap items-center justify-between  gap-[10px]">
         <div className="selector w-[250px]">
-          <label>Car Manufacturer:</label>
+          <label>{t("Car_Manufacturer")} :</label>
           <DainamicSelector
             placeholder="BMW , Audi , kia ..."
             data={manufacturers}
@@ -234,9 +230,9 @@ export default function Auctions({
           />
         </div>
         <div className="selector w-[250px]">
-          <label>Car Model:</label>
+          <label>{t("Car_Model")} :</label>
           <DainamicSelector
-            placeholder="choes Manufacturer first"
+            placeholder={t("choes_Manufacturer_first")}
             data={categories}
             value={formData.category_id}
             onChange={handleCategoryChange}
@@ -244,7 +240,7 @@ export default function Auctions({
           />
         </div>
         <div className="selector w-[250px]">
-          <label>Year of Manufacture:</label>
+          <label>{t("year")} :</label>
           <Text_selector
             options={yearOfMade}
             placeholder="2018"
@@ -256,30 +252,30 @@ export default function Auctions({
       </div>
       <div className="flex w-full flex-wrap items-center justify-between gap-[10px]">
         <div className="selector w-[250px]">
-          <label>Transmission Type:</label>
+          <label>{t("Transmission_Type")}:</label>
           <Text_selector
             options={TransmissionTypeOptions}
-            placeholder="Manual..."
+            placeholder={t("Manual")}
             value={formData.transmission_type}
             onChange={(value) => handleInputChange("transmission_type", value)}
             error={errors.transmission_type}
           />
         </div>
         <div className="selector w-[250px]">
-          <label> Drive System:</label>
+          <label> {t("Drive_System")} :</label>
           <Text_selector
             options={driveSystemOPtions}
-            placeholder="FWD..."
+            placeholder={t("FWD")}
             value={formData.drive_system}
             onChange={(value) => handleInputChange("drive_system", value)}
             error={errors.drive_system}
           />
         </div>
         <div className="selector w-[250px]">
-          <label> Fuel Type:</label>
+          <label> {t("Fuel_Type")} :</label>
           <Text_selector
             options={fuelTypeOptions}
-            placeholder="Petrole...."
+            placeholder={t("Petrole")}
             value={formData.fuel_type}
             onChange={(value) => handleInputChange("fuel_type", value)}
             error={errors.fuel_type}
@@ -288,7 +284,7 @@ export default function Auctions({
       </div>
       <div className="flex w-full flex-wrap items-center justify-between gap-[10px]">
         <div className="selector w-[250px]">
-          <label>Number of Cylinders:</label>
+          <label>{t("Number_of_Cylinders")}:</label>
           <Text_selector
             options={NumberOfCylinders}
             placeholder="4,6,8,12..."
@@ -298,22 +294,24 @@ export default function Auctions({
           />
         </div>
         <div className="selector w-[250px]">
-          <label>Budget Range (From - To):</label>
+          <label>
+            {t("Budget_Range")} ({t("From")} - {t("To")}):
+          </label>
           <Budget_selector
             from_budget={formData.from_budget}
             to_budget={formData.to_budget}
             options={budgetOptions}
-            placeholder={{ from: "From", to: "To" }}
+            placeholder={{ from: t("From"), to: t("To") }}
             onFromChange={(value) => handleInputChange("from_budget", value)}
             onToChange={(value) => handleInputChange("to_budget", value)}
             error={errors.budget}
           />
         </div>
         <div className="selector w-[250px]">
-          <label>Shipping Option: </label>
+          <label>{t("Shipping_Option")} : </label>
           <Text_selector
             options={ShippingOption}
-            placeholder="container..."
+            placeholder={t("container")}
             value={formData.shipping_option}
             onChange={(value) => handleInputChange("shipping_option", value)}
             error={errors.shipping_option}
@@ -322,27 +320,27 @@ export default function Auctions({
       </div>
       <div className="flex w-full flex-wrap items-center justify-between gap-[10px]">
         <div className="selector w-[250px]">
-          <label>Exterior Color:</label>
+          <label>{t("Exterior_Color")} :</label>
           <Text_selector
             options={ExteriorColor}
-            placeholder="white..."
+            placeholder={t("white")}
             value={formData.ex_color}
             onChange={(value) => handleInputChange("ex_color", value)}
             error={errors.ex_color}
           />
         </div>
         <div className="selector w-[250px]">
-          <label>Interior Color: </label>
+          <label>{t("Interior_Color")} : </label>
           <Text_selector
             options={InteriorColor}
-            placeholder="white..."
+            placeholder={t("white")}
             value={formData.in_color}
             onChange={(value) => handleInputChange("in_color", value)}
             error={errors.in_color}
           />
         </div>
         <div className="selector w-[250px]">
-          <label>Shipping Destination Country:</label>
+          <label>{t("Shipping_Country")} :</label>
           <DainamicSelector
             placeholder="Canada"
             value={formData.country_id}
@@ -356,14 +354,14 @@ export default function Auctions({
       </div>
       <div className="flex w-full flex-wrap actions w-full gap-[10px] mt-4 py-4 items-center justify-between">
         <button className="py-1 px-2 button_bordered" onClick={close}>
-          Cancel
+          {t("Cancel")}
         </button>
         <button
           className="py-1 px-2 flex items-center justify-center button_outline"
           onClick={handleSubmit}
           disabled={loading}
         >
-          {loading ? <LoadingBTN /> : "Send Car Order"}
+          {loading ? <LoadingBTN /> : t("Send_Car_Order")}
         </button>
       </div>
     </div>

@@ -19,7 +19,7 @@ const Step1: React.FC<chooseTypeProps> = ({ cklick, error, selectedType }) => {
           onClick={() => handleClick("1")}
           className={`input-box ${
             selectedType === "1" ? "active" : ""
-          } w-[100px] h-[60px] flex items-center justify-center p-[8px]`}
+          } w-[100px] text-sm h-[60px] flex items-center justify-center p-[8px]`}
         >
           {t("private")}
         </div>
@@ -27,21 +27,21 @@ const Step1: React.FC<chooseTypeProps> = ({ cklick, error, selectedType }) => {
           onClick={() => handleClick("2")}
           className={`input-box ${
             selectedType === "2" ? "active" : ""
-          } w-[100px] h-[60px] flex items-center justify-center p-[8px]`}
+          } w-[100px] text-sm h-[60px] flex items-center justify-center p-[8px]`}
         >
           {t("company")}
         </div>
       </div>
 
       <div className="label w-full mt-1 flex items-center justify-between gap-[20px]">
-        <label className="w-[100px] text-sm text-gray-400 text-center">
+        <label className="w-[100px] text-xs text-gray-400 text-center">
           {t("private_des")}
         </label>
-        <label className="w-[100px] text-sm text-gray-400 text-center">
+        <label className="w-[100px] text-xs text-gray-400 text-center">
           {t("company_des")}
         </label>
       </div>
-      {error && <span className="text-red-500 text-sm">{error}</span>}
+      {error && <span className="text-red-500 text-xs">{error}</span>}
     </div>
   );
 };

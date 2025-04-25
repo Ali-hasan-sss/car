@@ -12,8 +12,9 @@ import {
   FaBuilding,
   FaUser,
 } from "react-icons/fa";
-import { Button, Dialog } from "@mui/material";
+import { Dialog } from "@mui/material";
 import UserForm from "@/components/adminComponents/forms/UserForm";
+import Loader from "@/components/loading/loadingPage";
 
 export default function User() {
   const params = useParams();
@@ -146,126 +147,153 @@ export default function User() {
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto bg-white ">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
-        معلومات المستخدم
-      </h2>
+    <div className="p-6 w-full mx-auto bg-white rounded-lg shadow-lg">
+      <div className="relative w-full">
+        <img
+          src="/images/cover.png"
+          alt="cover"
+          className="h-48 w-full object-cover rounded-t-lg"
+        />
 
-      {userData ? (
-        <div className="bg-gray-100 p-6 rounded-lg shadow-md">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <p className="flex items-center gap-2 text-gray-700 ">
-              <FaUser className="text-blue-500" /> <strong>الاسم:</strong>{" "}
-              {userData.name}
-            </p>
-            <p className="flex items-center gap-2 text-gray-700 ">
-              <strong>البريد الإلكتروني:</strong> {userData.email}
-            </p>
-            {userData.contact?.mobile && (
-              <p className="flex items-center gap-2 text-gray-700">
-                <strong>رقم الجوال:</strong> {userData.contact.mobile}
-              </p>
-            )}
-            {userData.contact?.other_mobile && (
-              <p className="flex items-center gap-2 text-gray-700 ">
-                <strong>رقم جوال اخر:</strong> {userData.contact.other_mobile}
-              </p>
-            )}
-            <p className="flex items-center gap-2 text-gray-700 ">
-              {userData.type === 1 ? (
-                <>
-                  <FaUser className="text-green-500" />{" "}
-                  <strong>نوع الحساب:</strong> شخصي
-                </>
-              ) : (
-                <>
-                  <FaBuilding className="text-purple-500" />{" "}
-                  <strong>نوع الحساب:</strong> شركة
-                </>
-              )}
-            </p>
-
-            {userData.contact?.address1 && (
-              <p className="flex items-center gap-2 text-gray-700 ">
-                <strong>العنوان:</strong> {userData.contact.address1}
-              </p>
-            )}
-            {userData.contact?.city && (
-              <p className="flex items-center gap-2 text-gray-700 ">
-                <strong>المدينة:</strong> {userData.contact.city}
-              </p>
-            )}
-            {userData.idDetail?.tax_info && (
-              <p className="flex items-center gap-2 text-gray-700 ">
-                <strong>الرقم الضريبي:</strong> {userData.idDetail.tax_info}
-              </p>
-            )}
-
-            <p className="flex items-center gap-2 text-gray-700 ">
-              <strong>السجل التجاري:</strong>
-              {userData.idDetail?.cr_certificate ? (
-                <a
-                  href={userData.idDetail?.cr_certificate}
-                  className="text-blue-500 underline"
-                  target="_blank"
-                >
-                  عرض
-                </a>
-              ) : (
-                "غير متوفر"
-              )}
-            </p>
-          </div>
-
-          {userData.idDetail?.id_file && (
-            <div className="mt-4">
-              <p className="text-gray-700  font-semibold">صورة الهوية</p>
-              <img
-                src={userData.idDetail?.id_file}
-                alt="هوية المستخدم"
-                className="w-56 rounded-lg shadow-md mt-2"
-              />
-            </div>
-          )}
-
-          <div className="flex items-center gap-4 mt-4">
-            <strong className="text-gray-700">البيانات مستكملة؟</strong>
-            {userData.is_full_data ? (
-              <FaCheckCircle className="text-green-500 text-xl" />
-            ) : (
-              <FaTimesCircle className="text-red-500 text-xl" />
-            )}
-          </div>
-
-          {/* أزرار التعديل والحذف */}
-          <div className="flex justify-center gap-4 mt-6">
-            <Button
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
-              onClick={handleEdit}
-            >
-              <FaEdit />
-              تعديل
-            </Button>
-            <Button
-              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
-              onClick={handleDelete}
-            >
-              <FaTrash />
-              حذف
-            </Button>
-          </div>
-          <p className="flex items-center gap-2 text-gray-700 ">
-            <strong>تاريخ الإنشاء::</strong>
-            {createdDate?.toLocaleDateString("ar-EG", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </p>
+        <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-12 z-10">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+            alt="user image"
+            className="w-24 h-24 rounded-full border-4 border-white shadow-md object-cover"
+          />
         </div>
-      ) : (
-        <p className="text-center text-gray-500 ">جاري تحميل البيانات...</p>
-      )}
+      </div>
+
+      {/* محتوى المستخدم */}
+      <div className="mt-16">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
+          {userData?.name}
+        </h2>
+
+        {userData ? (
+          <div className="bg-gray-100 p-6 rounded-lg shadow-md">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <p className="flex items-center gap-2 text-gray-700 ">
+                <strong>الاسم:</strong> {userData.name}
+              </p>
+              <p className="flex items-center gap-2 text-gray-700 ">
+                <strong>البريد الإلكتروني:</strong> {userData.email}
+              </p>
+
+              <p className="flex items-center gap-2 text-gray-700">
+                <strong>رقم الجوال:</strong> {userData.contact?.mobile || "NA"}
+              </p>
+
+              <p className="flex items-center gap-2 text-gray-700 ">
+                <strong>رقم جوال اخر:</strong>{" "}
+                {userData.contact?.other_mobile || "NA"}
+              </p>
+
+              <p className="flex items-center gap-2 text-gray-700 ">
+                {userData.type === 1 ? (
+                  <>
+                    <strong>نوع الحساب:</strong> شخصي{" "}
+                    <FaUser className="text-green-500" />
+                  </>
+                ) : (
+                  <>
+                    <strong>نوع الحساب:</strong> شركة{" "}
+                    <FaBuilding className="text-purple-500" />
+                  </>
+                )}
+              </p>
+
+              <p className="flex items-center gap-2 text-gray-700 ">
+                <strong>العنوان:</strong> {userData.contact?.address1 || "NA"}
+              </p>
+
+              <p className="flex items-center gap-2 text-gray-700 ">
+                <strong>المدينة:</strong> {userData.contact?.city || "NA"}
+              </p>
+
+              {userData.type === 2 && (
+                <p className="flex items-center gap-2 text-gray-700 ">
+                  <strong>الرقم الضريبي:</strong>{" "}
+                  {userData.idDetail?.tax_info || "NA"}
+                </p>
+              )}
+
+              {userData.type === 2 && (
+                <p className="flex items-center gap-2 text-gray-700 ">
+                  <strong>السجل التجاري:</strong>
+                  {userData.idDetail?.cr_certificate ? (
+                    <a
+                      href={userData.idDetail?.cr_certificate}
+                      className="text-blue-500 underline"
+                      target="_blank"
+                    >
+                      عرض
+                    </a>
+                  ) : (
+                    "غير متوفر"
+                  )}
+                </p>
+              )}
+            </div>
+
+            {userData.idDetail?.id_file && (
+              <div className="mt-4">
+                <p className="text-gray-700  font-semibold">صورة الهوية</p>
+                <img
+                  src={userData.idDetail?.id_file}
+                  alt="هوية المستخدم"
+                  className="w-56 rounded-lg shadow-md mt-2"
+                />
+              </div>
+            )}
+
+            <div className="flex items-center gap-4 mt-4">
+              <strong className="text-gray-700">البيانات مستكملة؟</strong>
+              {userData.is_full_data ? (
+                <FaCheckCircle className="text-green-500 text-xl" />
+              ) : (
+                <div className="flex items-center gap-3">
+                  <FaTimesCircle className="text-red-500 text-xl" />
+                  <button
+                    className="text-blue-600 underline"
+                    onClick={() => setModalOpen(true)}
+                  >
+                    استكمال
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* أزرار التعديل والحذف */}
+            <div className="flex justify-between gap-4 mt-6">
+              <button
+                className="button_outline px-2 py-1 flex items-center gap-2"
+                onClick={handleEdit}
+              >
+                <FaEdit />
+                تعديل
+              </button>
+              <button
+                className="button_close py-1 px-2 flex items-center gap-2"
+                onClick={handleDelete}
+              >
+                <FaTrash />
+                حذف
+              </button>
+            </div>
+            <p className="flex text-xs items-center mt-6 gap-2 text-gray-400 ">
+              <strong>تاريخ الإنشاء:</strong>
+              {createdDate?.toLocaleDateString("ar-EG", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+          </div>
+        ) : (
+          <Loader />
+        )}
+      </div>
 
       {/* مودال الحذف */}
       <DeleteMessage
@@ -280,7 +308,7 @@ export default function User() {
           <UserForm
             onSubmit={handleSubmit}
             handlClose={() => setModalOpen(false)}
-            skip={false}
+            isNew={false}
             initialData={formData}
             loading={loading}
           />

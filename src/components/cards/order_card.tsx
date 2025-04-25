@@ -223,22 +223,24 @@ const OrderCard: React.FC<OrderCardProps> = ({
             <p>
               <span className="font-semibold">Email:</span> {user?.email}
             </p>
+
             <p>
               <span className="font-semibold">Mobile:</span>{" "}
-              {user?.contact.mobile}
+              {user?.contact?.mobile || "NA"}
             </p>
+
             <p>
               <span className="font-semibold">Address:</span>{" "}
-              {user?.contact.address1}, {user?.contact.city}
+              {user?.contact?.address1}, {user?.contact?.city}
             </p>
             <p>
               <span className="font-semibold">ZIP Code:</span>{" "}
-              {user?.contact.zip_code}
+              {user?.contact?.zip_code}
             </p>
             <p className="flex items-center gap-2">
               <span className="font-semibold">ID Image:</span>
               <a
-                href={user?.idDetail.id_file}
+                href={user?.idDetail?.id_file}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 hover:underline"

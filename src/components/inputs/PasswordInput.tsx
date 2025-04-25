@@ -4,6 +4,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 interface PasswordInputProps {
   value: string;
+  Forgot_password: boolean;
   error?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -11,6 +12,7 @@ interface PasswordInputProps {
 const PasswordInput: React.FC<PasswordInputProps> = ({
   value,
   error,
+  Forgot_password,
   onChange,
 }) => {
   const { t, isArabic } = useLanguage();
@@ -20,15 +22,17 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
     setShowPassword((prev) => !prev);
   };
   return (
-    <div className="form_group flex flex-col gap-[8px] items-start justify-start">
+    <div className="form_group flex flex-col py-2 items-start justify-start">
       <div className="flex items-center w-full justify-between">
-        <label htmlFor="password">
+        <label htmlFor="password" className="text-xs">
           {t("Password")}
           <span className="text-red-500">*</span>
         </label>
-        <a className="forget" href="#">
-          {t("Forgot_password")}
-        </a>
+        {Forgot_password && (
+          <a className="text-blue-500 underline text-sm" href="#">
+            {t("Forgot_password")}
+          </a>
+        )}
       </div>
       <div className="relative w-full">
         <input
@@ -54,7 +58,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
           )}
         </button>
       </div>
-      {error && <span className="text-red-500 text-sm">{error}</span>}
+      {error && <span className="text-red-500 text-xs">{error}</span>}
     </div>
   );
 };

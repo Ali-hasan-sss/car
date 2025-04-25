@@ -4,10 +4,11 @@ import { useState } from "react";
 import { Modal, Box } from "@mui/material";
 
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/context/LanguageContext";
 
 const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const { t, isArabic } = useLanguage();
   const router = useRouter();
   const services = [
     {
@@ -23,7 +24,7 @@ const Dashboard = () => {
       link: "/customer/dashboard/shipping",
     },
     {
-      title: "Sell Cars",
+      title: "Sales",
       des: "Sell and buy cars effortlessly",
       key: "Sell",
       link: "/customer/dashboard/salles",
@@ -34,11 +35,14 @@ const Dashboard = () => {
     <div className="flex flex-col items-center justify-center gap-[60px]">
       <div className="w-full flex flex-col items-start gap-[10px]">
         <h3 className="title text-gray-800">
-          Welcome to Your Car Services Dashboard
+          {isArabic
+            ? "مرحبا بك في لوحة تحكم خدمات السيارات !"
+            : "Welcome to Your Car Services Dashboard !"}
         </h3>
         <p className="heading_des text-gray-400">
-          Select a service below to get started: manage auctions, track
-          shipping, or buy and sell cars with ease.
+          {isArabic
+            ? "اختر خدمة من الخدمات أدناه للبدء: إدارة المزادات، تتبع الشحن، أو بيع وشراء السيارات بسهولة."
+            : "Select a service below to get started: manage auctions, track shipping  or buy and sell cars with ease."}
         </p>
       </div>
       <div className="services_boxs flex items-center justify-center py-[10px] gap-[20px] flex-wrap">
@@ -50,7 +54,7 @@ const Dashboard = () => {
             key={service.key}
             className="box flex flex-col items-center justify-center gap-[20px] py-[20px] px-[15px] cursor-pointer"
           >
-            <h4 className="title text-gray-800">{service.title}</h4>
+            <h4 className="title text-gray-800">{t(service.title)}</h4>
             <p className="heading_des text-gray-400">{service.des}</p>
           </div>
         ))}

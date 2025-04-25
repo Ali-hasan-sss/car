@@ -27,6 +27,7 @@ const Company_step2: React.FC<Company_step2> = ({
         onChange={onInputChange}
       />
       <PasswordInput
+        Forgot_password={false}
         value={formData.password}
         onChange={onInputChange}
         error={errors.password}

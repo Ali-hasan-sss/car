@@ -12,11 +12,7 @@ export default function Register_nav({ handleBack }: Register_navProps) {
   return (
     <div className="px-[10px] md:px-[50px] login_navbar px-[20px] flex items-center justify-between bg-white h-[60px]">
       <Link href={"/"}>
-        <img
-          src="/images/logo.png"
-          className="h-[40px] w-[147px] "
-          alt="logo"
-        />
+        <img src="/images/logo.png" className="h-auto w-[100px] " alt="logo" />
       </Link>
       <div className="flex items-center gap-10">
         {isArabic ? (

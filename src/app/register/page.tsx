@@ -16,6 +16,8 @@ import { setLogin } from "@/store/slice/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import LoadingBTN from "@/components/loading/loadingBTN";
+import { AxiosError } from "axios";
+import { toast } from "sonner";
 
 interface SignupFormInputs {
   name: string;
@@ -48,7 +50,7 @@ const Signup: React.FC = () => {
   //التحقق من تسجيل الدخول
   useEffect(() => {
     if (isLoggedIn && is_full_data) {
-      router.push("/customer/dashboard"); // إعادة توجيه المستخدم إلى لوحة التحكم
+      router.push("/customer/dashboard");
     }
   }, [isLoggedIn, router]);
   useEffect(() => {
@@ -65,7 +67,7 @@ const Signup: React.FC = () => {
   const validateStep1 = (): boolean => {
     const newErrors: Partial<SignupFormInputs> = {};
     if (!formData.type) {
-      newErrors.type = "Account type is required.";
+      newErrors.type = t("Error_Account_type");
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -75,21 +77,21 @@ const Signup: React.FC = () => {
     const newErrors: Partial<SignupFormInputs> = {};
     if (accountType === "1") {
       if (!formData.name) {
-        newErrors.name = "Name is required.";
+        newErrors.name = t("Error_Name");
       }
       if (!formData.email) {
-        newErrors.email = "Email is required.";
+        newErrors.email = t("Email_required");
       } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email)) {
-        newErrors.email = "Please enter a valid email address.";
+        newErrors.email = t("Error_valid_email");
       }
       setErrors(newErrors);
       return Object.keys(newErrors).length === 0;
     } else {
       if (!formData.name) {
-        newErrors.name = "Name is required.";
+        newErrors.name = t("Error_Name");
       }
       if (!formData.company) {
-        newErrors.company = "Company name is required.";
+        newErrors.company = t("Error_Company_Name");
       }
       setErrors(newErrors);
       return Object.keys(newErrors).length === 0;
@@ -99,22 +101,22 @@ const Signup: React.FC = () => {
     const newErrors: Partial<SignupFormInputs> = {};
     if (accountType === "1") {
       if (!formData.password) {
-        newErrors.password = "Password is required.";
+        newErrors.password = t("Password_required");
       } else if (formData.password.length < 8) {
-        newErrors.password = "Password must be at least 8 characters.";
+        newErrors.password = t("Password_len");
       }
       setErrors(newErrors);
       return Object.keys(newErrors).length === 0;
     } else {
       if (!formData.password) {
-        newErrors.password = "Password is required.";
+        newErrors.password = t("Password_required");
       } else if (formData.password.length < 8) {
-        newErrors.password = "Password must be at least 8 characters.";
+        newErrors.password = t("Password_len");
       }
       if (!formData.email) {
-        newErrors.email = "Email is required.";
+        newErrors.email = t("Email_required");
       } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email)) {
-        newErrors.email = "Please enter a valid email address.";
+        newErrors.email = t("Error_valid_email");
       }
       setErrors(newErrors);
       return Object.keys(newErrors).length === 0;
@@ -139,19 +141,16 @@ const Signup: React.FC = () => {
 
   const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+
     setErrors({});
 
     if (validateStep3()) {
+      setLoading(true);
       try {
-        console.log(formData);
-
-        // ✅ إرسال طلب التسجيل
         const registerResponse = await axiosInstance.post(
           "customer/register",
           formData
         );
-        //  console.log("Signup successful:", registerResponse.data);
         const { id, name, email, type, token } = registerResponse.data.data;
 
         const userDataTransformed = {
@@ -159,24 +158,46 @@ const Signup: React.FC = () => {
           email,
           first_name: name.split(" ")[0] || "",
           last_name: name.split(" ")[1] || "",
-          is_active: 1, // أو أي قيمة منطقية تناسب حالتك
+          is_active: 1,
           userRole: type === 1 ? "USER" : "COMPANY",
           type: type,
         };
-
-        // ✅ تخزين البيانات في Redux
+        toast.success("register_success");
         dispatch(setLogin({ token, user: userDataTransformed }));
-
-        // ✅ إعادة التوجيه بعد النجاح
         router.push("register/complete");
       } catch (error) {
-        console.error("Signup failed:", error);
-      } finally {
         setLoading(false);
+
+        const axiosError = error as AxiosError<{
+          message: string;
+          errors?: { email?: string[] };
+        }>;
+
+        if (axiosError.response?.status === 422) {
+          const emailExists = axiosError.response.data.errors?.email?.[0];
+
+          if (emailExists) {
+            const customMessage = t("Error_Email_taken");
+            if (accountType === "1") {
+              setStep(2);
+            } else {
+              setStep(3);
+            }
+            // عرض الرسالة تحت حقل الإيميل
+            setErrors((prev) => ({
+              ...prev,
+              email: customMessage,
+            }));
+          } else {
+            toast.error(t("register_Eroor"));
+          }
+        } else {
+          console.error("Signup failed:", axiosError);
+          toast.error(t("register_Eroor"));
+        }
       }
     }
   };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { id, value } = e.target;
     setFormData((prev) => ({
@@ -271,16 +292,16 @@ const Signup: React.FC = () => {
               </div>
 
               {/* Terms */}
-              <div className="terms-box w-full px-[20px] flex flex-col gap-[15px] items-center justify-center">
-                <div className="text w-full flex mt-3 items-center justify-start">
+              <div className="terms-box w-full text-sm px-[20px] flex flex-col gap-[15px] items-center justify-center">
+                <div className=" w-full flex mt-3 items-center justify-start">
                   <p className="text-gray-500 px-[5px]">
                     {t("Already_have_an_account")}
                   </p>
-                  <a href="/login" className="text-blue-500 ">
+                  <a href="/login" className="text-blue-700 underline ">
                     {t("Login")}
                   </a>
                 </div>
-                <div className="text w-full items-center justify-start">
+                <div className=" w-full items-center justify-start">
                   <a href="#" className="text-gray-900">
                     {t("Terms") + " " + "&" + " " + t("Conditions") + " " + ":"}
                   </a>

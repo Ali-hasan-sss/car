@@ -61,7 +61,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="ar"
       className={`${poppins.variable} ${roboto.variable}  ${montserrat.variable}`}
     >
       <head>

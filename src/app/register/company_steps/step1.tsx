@@ -21,8 +21,8 @@ const Company_step1: React.FC<Company_step1> = ({
   const { t } = useLanguage();
   return (
     <div className="w-full">
-      <div className="form_group w-full flex flex-col gap-[8px] items-start justify-start">
-        <label htmlFor="name">
+      <div className="form_group w-full flex flex-col  items-start justify-start">
+        <label htmlFor="name" className=" text-xs">
           {t("Full_Name")}
           <span className="text-red-500">*</span>
         </label>
@@ -35,11 +35,11 @@ const Company_step1: React.FC<Company_step1> = ({
           className={`w-full ${errors.name ? "input_err" : "input"}`}
         />
         {errors.name && (
-          <span className="text-red-500 text-sm">{errors.name}</span>
+          <span className="text-red-500 text-xs">{errors.name}</span>
         )}
       </div>
-      <div className="form_group w-full flex flex-col gap-[8px] items-start justify-start">
-        <label htmlFor="company">
+      <div className="form_group w-full mt-1 flex flex-col items-start justify-start">
+        <label htmlFor="company" className=" text-xs">
           {t("Company_name")}
           <span className="text-red-500">*</span>
         </label>
@@ -52,7 +52,7 @@ const Company_step1: React.FC<Company_step1> = ({
           className={`w-full ${errors.company ? "input_err" : "input"}`}
         />
         {errors.company && (
-          <span className="text-red-500 text-sm">{errors.company}</span>
+          <span className="text-red-500 text-xs">{errors.company}</span>
         )}
       </div>
     </div>

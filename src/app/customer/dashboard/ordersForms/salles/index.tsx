@@ -30,6 +30,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import ImageUploader from "@/components/uploders/Uploader/ImageUploader";
 import { AnimatePresence, motion } from "framer-motion";
 import LoadingBTN from "@/components/loading/loadingBTN";
+import { toast } from "sonner";
 
 interface SallesProps {
   close: () => void;
@@ -91,15 +92,14 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
         ...initialData,
         images: imageNames,
       });
-
-      // تحميل الكاتيجوري
+      //add catedory when select manifacturer
       const selectedManufacturer = manufacturers.find(
         (m) => m.id === initialData.manufacturer
       );
       if (selectedManufacturer?.categories) {
         setCategories(selectedManufacturer.categories);
 
-        // تحميل الموديلات بناءً على الكاتيجوري
+        //add models when select catigory
         const selectedCategory = selectedManufacturer.categories.find(
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (c: any) => c.id === initialData.category_id
@@ -178,21 +178,16 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
 
-    if (!formData.manufacturer)
-      newErrors.manufacturer = "يرجى اختيار الشركة المصنعة.";
-    if (!formData.category_id) newErrors.category_id = "يرجى اختيار الموديل.";
-    if (!formData.year) newErrors.year = "يرجى تحديد سنة الصنع.";
-    if (!formData.transmission_type)
-      newErrors.transmission_type = "يرجى تحديد نوع ناقل الحركة.";
-    if (!formData.drive_system)
-      newErrors.drive_system = "يرجى اختيار نظام الدفع.";
-    if (!formData.fuel_type) newErrors.fuel_type = "يرجى تحديد نوع الوقود.";
-    if (!formData.cylinders) newErrors.cylinders = "يرجى تحديد عدد الأسطوانات.";
-    if (!formData.price) newErrors.price = "يرجى إدخال سعر.";
-    if (!formData.ex_color)
-      newErrors.ex_color = "يرجى تحديد لون السيارة الخارجي.";
-    if (!formData.in_color)
-      newErrors.in_color = "يرجى تحديد لون السيارة الداخلي.";
+    if (!formData.manufacturer) newErrors.manufacturer = " ";
+    if (!formData.category_id) newErrors.category_id = " ";
+    if (!formData.year) newErrors.year = " ";
+    if (!formData.transmission_type) newErrors.transmission_type = " ";
+    if (!formData.drive_system) newErrors.drive_system = " ";
+    if (!formData.fuel_type) newErrors.fuel_type = " ";
+    if (!formData.cylinders) newErrors.cylinders = " ";
+    if (!formData.price) newErrors.price = " ";
+    if (!formData.ex_color) newErrors.ex_color = " ";
+    if (!formData.in_color) newErrors.in_color = " ";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -208,6 +203,7 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
               updatedData: formData,
             })
           );
+          toast.success(t("Edit_sales"));
         } else return;
       } else {
         // ✅ إضافة
@@ -215,6 +211,7 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
           await dispatch(
             addCarSale({ apiUrl: "customer/car-sales", carSaleData: formData })
           );
+          toast.error(t("Add_sales"));
         } else return;
       }
       // ✅ تحديث الحالة في المكون الأب
@@ -222,19 +219,20 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
       close();
     } catch (error) {
       console.error(error);
+      toast.error(t("Error"));
     }
   };
 
   return (
     <div className="flex flex-col gap-[16px] px-[15px]">
       <div className="heading_form flex item-center justify-center">
-        <h2 className="title">Car Sales</h2>
+        <h2 className="text-xl">{t("Car_Sales")}</h2>
       </div>
       <div className="carInfo flwx fles-col items-center justify-start gap-[15px]">
-        <h3 className="">Car Information:</h3>
+        <h3 className="text-xl">{t("Car_Information")} :</h3>
         <div className="flex flex-wrap items-center justify-between  gap-[15px]">
           <div className="selector">
-            <label>Car Manufacturer:</label>
+            <label>{t("Car_Manufacturer")} :</label>
             <DainamicSelector
               placeholder="BMW , Audi , kia ..."
               data={manufacturers}
@@ -245,24 +243,26 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
             />
           </div>
           <div className="selector">
-            <label>Car Model:</label>
+            <label>{t("Car_Model")} :</label>
             <DainamicSelector
               data={categories}
+              placeholder={t("choes_Manufacturer_first")}
               value={formData.category_id}
               onChange={handleCategoryChange}
               error={errors.category_id}
             />
           </div>
           <div className="selector">
-            <label>Category:</label>
+            <label>{t("Category")} :</label>
             <DainamicSelector
+              placeholder={t("choes_category_first")}
               data={models}
               value={formData.cmodel_id}
               onChange={handleModelChange}
             />
           </div>
           <div className="selector">
-            <label>Year of Manufacture:</label>
+            <label>{t("year")} :</label>
             <Text_selector
               options={yearOfMade}
               placeholder="2018"
@@ -272,7 +272,7 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
             />
           </div>
           <div className="selector">
-            <label>Mileage:</label>
+            <label>{t("Mileage")} :</label>
             <Text_selector
               options={mileageOptions}
               placeholder="50000 KM"
@@ -282,10 +282,10 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
             />
           </div>
           <div className="selector">
-            <label> Drive System:</label>
+            <label> {t("Drive_System")} :</label>
             <Text_selector
               options={driveSystemOPtions}
-              placeholder="auto..."
+              placeholder={t("auto")}
               value={formData.drive_system}
               onChange={(value) =>
                 handleInputChange("drive_system", Number(value))
@@ -297,13 +297,13 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
         <div className="flex flex-wrap items-center justify-between  gap-[10px]"></div>
       </div>
       <div className="carInfo flwx fles-col items-center justify-start gap-[10px]">
-        <h3 className="">Specifications:</h3>
+        <h3 className="text-xl">{t("Specifications")} :</h3>
         <div className="flex flex-wrap items-center justify-between  gap-[10px]">
           <div className="selector">
-            <label>Number of Cylinders:</label>
+            <label>{t("Number_of_Cylinders")} :</label>
             <Text_selector
               options={NumberOfCylinders}
-              placeholder="toyota corola"
+              placeholder="4 , 6 , 8 ..."
               value={formData.cylinders}
               onChange={(value) =>
                 handleInputChange("cylinders", Number(value))
@@ -312,10 +312,10 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
             />
           </div>
           <div className="selector">
-            <label>Transmission Type:</label>
+            <label>{t("Transmission_Type")} :</label>
             <Text_selector
               options={TransmissionTypeOptions}
-              placeholder="Manual..."
+              placeholder={t("Manual")}
               value={formData.transmission_type}
               onChange={(value) =>
                 handleInputChange("transmission_type", Number(value))
@@ -324,10 +324,10 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
             />
           </div>
           <div className="selector">
-            <label>Fuel Type</label>
+            <label>{t("Fuel_Type")} :</label>
             <Text_selector
               options={fuelTypeOptions}
-              placeholder="Petrol..."
+              placeholder={t("Petrol")}
               value={formData.fuel_type}
               onChange={(value) =>
                 handleInputChange("fuel_type", Number(value))
@@ -336,39 +336,39 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
             />
           </div>
           <div className="selector">
-            <label>Price</label>
+            <label>{t("Price")}</label>
             <Text_input
-              placeholder="Sedan, SUV, Truck"
+              placeholder="2500 RO"
               value={formData.price}
               onChange={(e) => handleInputChange("price", e.target.value)}
               error={errors.price}
             />
           </div>
           <div className="selector">
-            <label>Exterior Color:</label>
+            <label>{t("Exterior_Color")} :</label>
             <Text_selector
               options={ExteriorColor}
-              placeholder="white..."
+              placeholder={t("white")}
               value={formData.ex_color}
               onChange={(value) => handleInputChange("ex_color", String(value))}
               error={errors.ex_color}
             />
           </div>
           <div className="selector">
-            <label>Interior Color: </label>
+            <label>{t("Interior_Color")} :</label>
             <Text_selector
               options={InteriorColor}
-              placeholder="white..."
+              placeholder={t("white")}
               value={formData.in_color}
               onChange={(value) => handleInputChange("in_color", String(value))}
               error={errors.in_color}
             />
           </div>
           <div className="selector">
-            <label>Car Status</label>
+            <label>{t("Car_Status")} :</label>
             <Text_selector
               options={CarStatusOptions}
-              placeholder="In Stock, In Transit, Arrived"
+              placeholder={t("Used")}
               value={formData.car_status}
               onChange={(value) =>
                 handleInputChange("car_status", Number(value))
@@ -390,10 +390,10 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
 
       {shipping && (
         <div className="carInfo flwx fles-col items-center justify-start gap-[10px]">
-          <h3 className="">Shipping & Location:</h3>
+          <h3 className="text-xl">{t("Shipping_Location")} :</h3>
           <div className="flex flex-wrap items-center justify-between  gap-[10px]">
             <div className="selector">
-              <label>Shipping from</label>
+              <label>{t("Shipping_from")} :</label>
               <DainamicSelector
                 Api_URL="customer/countries?is_shown_auction=1"
                 placeholder="Canada"
@@ -402,18 +402,20 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
               />
             </div>
             <div className="selector">
-              <label>Shipping Status</label>
+              <label>{t("Shipping_Status")} :</label>
               <Text_selector
                 options={shippingStatusOptions}
-                placeholder="In Stock, In Transit, Arrived"
+                placeholder={t("In_Stock")}
                 value={formData.shipping_status}
                 onChange={(value) =>
                   handleInputChange("shipping_status", Number(value))
                 }
               />
             </div>
-            <div className="selector">
-              <label>Location of Car (If shipped)</label>
+            <div className="selector mb-10">
+              <label>
+                {t("Location_of_Car")} ({t("If_shipped")})
+              </label>
               <Text_selector
                 options={location_port}
                 placeholder="Duqm, Sohar"
@@ -425,10 +427,10 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
             </div>
           </div>
           <Chooser
-            question="Location of Car (If not shipped)"
-            option1="On the way"
+            question={t("Location_of_Car") + "(" + t("if_not_shipped") + ")"}
+            option1={t("On_the_way")}
             value1="On the way"
-            option2="In transit"
+            option2={t("In_transit")}
             value2="In transit"
             value={formData.not_shippedlocations}
             onChange={(value) =>
@@ -438,24 +440,26 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
         </div>
       )}
       <div className="carInfo flwx fles-col items-center justify-start gap-[10px]">
-        <h3 className="">Additional Features:</h3>
+        <h3 className="text-xl">{t("Additional_Features")} :</h3>
         <div className="flex flex-wrap items-center justify-between  gap-[10px]">
           <div className="py-[10px] w-full md:w-2/5">
-            <label className="mb-1 block font-semibold">Carfax</label>
+            <label className="mb-1 block font-semibold">{t("Carfax")} :</label>
             <Text_selector
               options={CarfaxOptions}
-              placeholder="Available or Not available"
+              placeholder={t("Available") + " or " + t("Not_available")}
               value={formData.carfax}
               onChange={(value) => handleInputChange("carfax", Number(value))}
             />
           </div>
           <div className="py-[10px] w-full md:w-2/5">
-            <label className="mb-1 block font-semibold">Car Images</label>
+            <label className="mb-1 block font-semibold">
+              {t("Car_Images")}
+            </label>
             <div
               className="w-full h-[40px] rounded-lg border flex items-center px-2 justify-between cursor-pointer hover:bg-secondary1 transition-all"
               onClick={() => setShowUploader((prev) => !prev)}
             >
-              <p>Upload multiple images</p>
+              <p>{t("Upload_multiple_images")}</p>
               <ImageUp className="text-text_des" />
             </div>
 
@@ -488,13 +492,13 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
           className="button_bordered py-1 px-2 border-primary1 text-primary1 hover:bg-primary1 hover:text-light"
           onClick={close}
         >
-          Cancel
+          {t("Cancel")}
         </button>
         <button
           className="button_outline py-1 px-2 bg-primary1 hover:bg-transparent hover:border-primary1 hover:text-black text-light"
           onClick={handleSubmit}
         >
-          {loading ? <LoadingBTN /> : "Send Offer "}
+          {loading ? <LoadingBTN /> : t("Send_Offer")}
         </button>
       </div>
     </div>
