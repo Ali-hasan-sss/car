@@ -39,45 +39,38 @@ export default function Actions() {
   const columns: Column[] = [
     {
       id: "category.manufacturer.title",
-      label: "الشركة الصانعة",
+      label: "brand",
       languageDisplay: "en",
-      includeInForm: true,
     },
     {
       id: "category.title",
-      label: "الموديل",
+      label: "Car_Model",
       languageDisplay: "en",
-      includeInForm: true,
     },
     {
       id: "year",
-      label: "سنة الصنع",
+      label: "Year",
       languageDisplay: "en",
-      includeInForm: true,
     },
     {
       id: "ex_color",
-      label: "اللون",
+      label: "Exterior_Color",
       languageDisplay: "en",
-      includeInForm: true,
+    },
+    {
+      id: "in_color",
+      label: "Interior_Color",
+      languageDisplay: "en",
     },
     {
       id: "country.title",
-      label: "بلد الشحن",
+      label: "Country",
       languageDisplay: "en",
-      includeInForm: true,
-    },
-    {
-      id: "created_at",
-      label: "تاريخ انشاء الطلب",
-      languageDisplay: "en",
-      includeInForm: false,
     },
     {
       id: "status",
-      label: "حالة الطلب",
+      label: "status",
       languageDisplay: "en",
-      includeInForm: false,
     },
   ];
   const [view, setView] = useState("menu");
@@ -171,6 +164,15 @@ export default function Actions() {
           onTotalCountChange={setTotalCount}
           sortBy={sortby}
           showing={showing}
+          customEditForm={(data, close) => (
+            <Auctions
+              onSubmit={(data) => {
+                console.log("data:", data);
+              }}
+              initialData={data}
+              close={() => close}
+            />
+          )}
           searchTerm={searchTerm}
         />
       ) : (

@@ -40,7 +40,11 @@ export const extractOrderDetails = (order: Auction) => {
 
 // 🛠️ تحويل نوع ناقل الحركة إلى نص
 export const getTransmissionText = (transmission_type: number) => {
-  return transmission_type === 1 ? "Automatic" : "Manual";
+  return transmission_type === 1
+    ? "auto"
+    : transmission_type === 2
+    ? "manual"
+    : "Tiptronic";
 };
 
 // 🛠️ تحويل نوع الوقود إلى نص
@@ -52,22 +56,18 @@ export const getFuelText = (fuel_type: number) => {
     : fuel_type === 3
     ? "CNG"
     : fuel_type === 4
-    ? "Flex fuel"
+    ? "Flex_Fuel"
     : fuel_type === 5
     ? "Hybrid"
     : "Electric";
 };
 export const getDriveSystemText = (fuel_type: number) => {
-  return fuel_type === 1
-    ? "دفع امامي"
-    : fuel_type === 2
-    ? "دفع خلفي"
-    : "دفع رباعي";
+  return fuel_type === 1 ? "FWD" : fuel_type === 2 ? "RWD" : "d4WD";
 };
 
 // 🛠️ تحويل خيار الشحن إلى نص
 export const getShippingText = (shipping_option: number) => {
-  return shipping_option === 1 ? "Container" : "Group";
+  return shipping_option === 1 ? "container" : "group";
 };
 
 // 🛠️ خريطة الحالات مع الألوان
@@ -75,11 +75,11 @@ export const statusMap: Record<
   number | "null",
   { label: string; color: string }
 > = {
-  0: { label: "مرفوض", color: "bg-red-500" },
-  1: { label: "قيد الانتظار", color: "bg-yellow-200" },
-  2: { label: "قيد التنفيذ", color: "bg-blue-500" },
-  3: { label: "منجز", color: "bg-green-500" },
-  null: { label: "غير محدد", color: "bg-gray-400" },
+  0: { label: "rejected", color: "bg-red-500" },
+  1: { label: "pending", color: "bg-yellow-200" },
+  2: { label: "in_progress", color: "bg-blue-500" },
+  3: { label: "completed", color: "bg-green-500" },
+  null: { label: "witing", color: "bg-gray-400" },
 };
 
 //  تحديد حالة الطلب

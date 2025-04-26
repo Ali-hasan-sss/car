@@ -23,6 +23,7 @@ import {
 } from "@/store/slice/carSalesSlice";
 import { Box, Modal } from "@mui/material";
 import Salles from "@/app/customer/dashboard/ordersForms/salles";
+import { toast } from "sonner";
 
 export default function Sales() {
   const { t } = useLanguage();
@@ -44,9 +45,9 @@ export default function Sales() {
     id: number;
     type: "accept" | "reject" | "finish";
   } | null>(null);
-  console.log(openModal);
-  console.log(closeModal);
-  console.log(initForm);
+  // console.log(openModal);
+  // console.log(closeModal);
+  // console.log(initForm);
   console.log(selectedRequest);
   const columns: Column[] = [
     {
@@ -97,7 +98,6 @@ export default function Sales() {
   const dispatch = useAppDispatch();
   const { carSales, error, loading, actionLoadingIds, totalPages } =
     useSelector((state: RootState) => state.carSales);
-  console.log(totalPages);
   const [actions] = useState({
     edit: true,
     add: true,
@@ -116,9 +116,9 @@ export default function Sales() {
     id: number,
     type: "accept" | "reject" | "finish"
   ) => {
-    console.log(`the id : ${id} the type: ${type}`);
+    // console.log(`the id : ${id} the type: ${type}`);
     setSelectedRequest({ id, type });
-    const status = type === "accept" ? 2 : type === "reject" ? 0 : 3; // تحديد القيمة بناءً على نوع الإجراء
+    const status = type === "accept" ? 2 : type === "reject" ? 0 : 3;
     try {
       //await axiosInstance.put(`${apiUrl}/${id}`, { status });
       dispatch(
@@ -128,7 +128,7 @@ export default function Sales() {
           updatedData: { status },
         })
       );
-      console.log(
+      toast.success(
         `تم ${
           type === "accept" ? "قبول" : type === "reject" ? "رفض" : "اكمال"
         } الطلب رقم ${id}`
@@ -166,12 +166,11 @@ export default function Sales() {
 
     const formData = mapOrderToFormInputs(order);
     setInitForm(formData);
-    console.log(initForm);
+    // console.log(initForm);
     setOpenModal(true);
   };
 
   const handleDelete = (id: number) => {
-    console.log("تم النقر على حذف، رقم الطلب:", id);
     setOpenDeleteModal(true);
     setDeleteId(id);
   };

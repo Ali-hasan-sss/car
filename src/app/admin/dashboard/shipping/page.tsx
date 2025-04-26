@@ -157,7 +157,6 @@ export default function Shipping() {
     setOpenModal(true);
   };
   const handleDelete = (id: number) => {
-    console.log("تم النقر على حذف، رقم الطلب:", id);
     setOpenDeleteModal(true);
     setDeleteId(id);
   };

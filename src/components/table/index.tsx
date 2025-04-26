@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { PulseLoader } from "react-spinners";
+import { statusMap } from "@/utils/orderUtils";
 
 export interface Column {
   id: string;
@@ -146,12 +147,7 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
 
     fetchData();
   }, [apiUrl, dispatch, initialData]);
-  const statusMap: Record<number, { label: string; color: string }> = {
-    0: { label: "مرفوض", color: "bg-red-500 text-white" },
-    1: { label: "قيد الانتظار", color: "bg-yellow-600 text-white" },
-    2: { label: "قيد التنفيذ", color: "bg-blue-600 text-white" },
-    3: { label: "منجز", color: "bg-green-600 text-white" },
-  };
+
   const typeMap: Record<number, { label: string; color: string }> = {
     1: { label: "شخصي", color: "bg-blue-500 text-white" },
     2: { label: "شركة", color: "bg-yellow-600 text-white" },
@@ -358,7 +354,7 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
               {tableColumns.map((column) => (
                 <th key={column.id} scope="col" className="px-6 py-3">
                   <div className="flex items-center text-center">
-                    {column.label}
+                    {t(column.label)}
                     <button
                       onClick={() => handleSort(column.id)}
                       className="ml-2"
@@ -374,7 +370,7 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
                   </div>
                 </th>
               ))}
-              {actions && <th className="px-6 py-3">Actions</th>}
+              {actions && <th className="px-6 py-3">{t("Actions")}</th>}
             </tr>
           </thead>
           <tbody>
@@ -398,7 +394,7 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
                   key={index}
                   className={`${
                     index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                  } border-b text-sm`}
+                  } border-b text-sm text-center`}
                 >
                   {tableColumns.map((column) => {
                     const value = getNestedValue(row, column.id);
@@ -408,9 +404,9 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
                         {/* تقليل البادينغ */}
                         {column.id === "status" ? (
                           <div
-                            className={`px-2 py-[1px] w-[70px] rounded-full flex items-center justify-center text-[12px]  ${statusMap[value]?.color}`}
+                            className={`px-2 py-[1px] w-[70px] rounded-full flex items-center justify-center text-black text-[10px]  ${statusMap[value]?.color}`}
                           >
-                            {statusMap[value]?.label || "غير معروف"}
+                            {t(statusMap[value]?.label) || "غير معروف"}
                           </div>
                         ) : column.id === "created_at" ? (
                           <div className="text-xs">{formatDateTime(value)}</div>
@@ -418,10 +414,10 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
                           <div
                             className={`px-2 py-[1px] w-[70px] rounded-full flex items-center justify-center   ${typeMap[value]?.color}`}
                           >
-                            {typeMap[value]?.label || "غير معروف"}
+                            {t(typeMap[value]?.label) || "غير معروف"}
                           </div>
                         ) : (
-                          <div className="">{value ?? "غير متوفر"}</div>
+                          <div className="">{t(value) ?? "غير متوفر"}</div>
                         )}
                       </td>
                     );

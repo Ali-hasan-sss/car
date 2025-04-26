@@ -151,7 +151,7 @@ export default function ShippingOrder() {
           <span
             className={`text-white text-xs font-medium me-2 px-2.5 py-0.5 rounded-full ${statusInfo.color} `}
           >
-            {statusInfo.label}
+            {t(statusInfo.label)}
           </span>
         </p>
       </div>

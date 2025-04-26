@@ -163,7 +163,7 @@ export default function Manufacturer() {
                   className="text-blue-600 hover:text-blue-800"
                   onClick={() => {
                     handleEditCategory(category);
-                    console.log(category);
+                    // console.log(category);
                   }}
                 >
                   <FiEdit />

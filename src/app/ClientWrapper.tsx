@@ -12,7 +12,7 @@ interface ClientWrapperProps {
 }
 
 const ClientWrapper: React.FC<ClientWrapperProps> = ({ children }) => {
-  console.log("NextNProgress Loaded");
+  //  console.log("NextNProgress Loaded");
 
   return (
     <Provider store={store}>

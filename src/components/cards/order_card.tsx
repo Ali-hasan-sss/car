@@ -188,28 +188,38 @@ const OrderCard: React.FC<OrderCardProps> = ({
           {/* Car Info */}
           <div className="space-y-2">
             <p>
-              <span className="font-semibold">Transmission:</span>{" "}
-              {transmissionText}
+              <span className="font-semibold text-sm">
+                {t("Transmission")} :
+              </span>{" "}
+              {t(transmissionText)}
             </p>
             <p>
-              <span className="font-semibold">Fuel Type:</span> {fuelText}
+              <span className="font-semibold text-sm">{t("Fuel_Type")} :</span>{" "}
+              {fuelText}
             </p>
             <p>
-              <span className="font-semibold">Cylinders:</span> {cylinders}
+              <span className="font-semibold text-sm">{t("Cylinders")} :</span>{" "}
+              {cylinders}
             </p>
             <p>
-              <span className="font-semibold">Colors:</span> Exterior:{" "}
-              {ex_color} / Interior: {in_color}
+              <span className="font-semibold text-sm">Colors:</span>{" "}
+              {t("Exterior")} : {ex_color} | {t("Interior")} : {in_color}
             </p>
             <p>
-              <span className="font-semibold">Country:</span> {country?.title}
+              <span className="font-semibold text-sm">{t("Country")} :</span>{" "}
+              {country?.title}
             </p>
             <p>
-              <span className="font-semibold">Budget Range:</span> $
-              {from_budget} - ${to_budget}
+              <span className="font-semibold text-sm">
+                {t("Budget_Range")} :
+              </span>
+              {from_budget} - {to_budget} RO
             </p>
             <p>
-              <span className="font-semibold">Shipping:</span> {shippingText}
+              <span className="font-semibold text-sm">
+                {t("Shipping_Option")} :
+              </span>{" "}
+              {shippingText}
             </p>
           </div>
         </div>
@@ -218,42 +228,41 @@ const OrderCard: React.FC<OrderCardProps> = ({
           {/* User Info */}
           <div className="space-y-2">
             <p>
-              <span className="font-semibold">Name:</span> {user?.name}
+              <span className="font-semibold text-sm">{t("Full_Name")} :</span>{" "}
+              {user?.name}
             </p>
             <p>
-              <span className="font-semibold">Email:</span> {user?.email}
+              <span className="font-semibold text-sm">{t("Email")}:</span>{" "}
+              {user?.email}
             </p>
 
             <p>
-              <span className="font-semibold">Mobile:</span>{" "}
+              <span className="font-semibold text-sm">{t("Phone_Num")}:</span>{" "}
               {user?.contact?.mobile || "NA"}
             </p>
 
             <p>
-              <span className="font-semibold">Address:</span>{" "}
-              {user?.contact?.address1}, {user?.contact?.city}
+              <span className="font-semibold text-sm">{t("Address")} :</span>{" "}
+              {t(user?.contact?.address1)}, {t(user?.contact?.city)}
             </p>
-            <p>
-              <span className="font-semibold">ZIP Code:</span>{" "}
-              {user?.contact?.zip_code}
-            </p>
+
             <p className="flex items-center gap-2">
-              <span className="font-semibold">ID Image:</span>
+              <span className="font-semibold text-sm">{t("ID_image")} :</span>
               <a
                 href={user?.idDetail?.id_file}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 hover:underline"
               >
-                View
+                {t("View")}
               </a>
             </p>
             <p className="flex items-center gap-2">
-              <span className="font-semibold text-lg">Status:</span>
+              <span className="font-semibold text-sm">{t("status")} :</span>
               <span
                 className={`text-white text-xs font-medium me-2 px-2.5 py-0.5 rounded-full ${statusInfo.color} `}
               >
-                {statusInfo.label}
+                {t(statusInfo.label)}
               </span>
             </p>
           </div>
@@ -263,7 +272,7 @@ const OrderCard: React.FC<OrderCardProps> = ({
       {/* Order created date */}
       <div className="mt-2 text-xs bg-gray-300 rounded-b-lg text-gray-500 px-6 py-2 text-center flex flex-col sm:flex-row justify-center items-center gap-2">
         <span>
-          تم إنشاء الطلب في:{" "}
+          {t("created_at")} :{" "}
           {createdDate.toLocaleDateString("ar-EG", {
             year: "numeric",
             month: "long",
@@ -276,7 +285,7 @@ const OrderCard: React.FC<OrderCardProps> = ({
           })}
         </span>
         <span className="bg-blue-400 text-white px-2 py-1 rounded-full text-xs">
-          منذ {timeAgo}
+          {t("time_ago")} : {timeAgo}
         </span>
       </div>
     </div>
