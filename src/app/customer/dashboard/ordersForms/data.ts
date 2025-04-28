@@ -16,6 +16,25 @@ export const NumberOfCylinders = [
   { value: 10, label: "10" },
   { value: 12, label: "12" },
 ];
+export const packageTypeOptions = [
+  { value: 1, label: "Spare_Part" },
+  { value: 2, label: "Tire" },
+  { value: 3, label: "Battery" },
+  { value: 4, label: "Engine" },
+  { value: 5, label: "Car_Body_Part" },
+  { value: 6, label: "Accessory" },
+  { value: 7, label: "Other" },
+];
+export const WeightUnitOptions = [
+  { value: 1, label: "Kg" },
+  { value: 2, label: "Ton" },
+];
+export const DimensionunitOptions = [
+  { value: 1, label: "CM" },
+  { value: 2, label: "M" },
+  { value: 3, label: "Foot" },
+  { value: 4, label: "Inch" },
+];
 export const languageOption = [
   { value: "en", label: "English" },
   { value: "ar", label: "Arabice" },

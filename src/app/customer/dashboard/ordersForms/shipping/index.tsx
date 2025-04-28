@@ -21,9 +21,14 @@ import { AppDispatch, RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import DainamicSelector from "@/components/inputs/selectors/DainamicSelector";
 import { fetchManufacturers } from "@/store/slice/manufacturerSlice";
-//import LoadingBTN from "@/components/loading/loadingBTN";
+import LoadingBTN from "@/components/loading/loadingBTN";
 import { addCarShipping, updateCarShipping } from "@/store/slice/ShippingSlice";
-import { ShippingFormInputs } from "@/Types/AuctionTypes";
+import { packages, ShippingFormInputs } from "@/Types/AuctionTypes";
+import Btn_borded from "@/components/buttons/btn/bordered_btn";
+import PackageForm from "./packageForm";
+import { Minus } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
+import { toast } from "sonner";
 
 interface ShippingProps {
   initialData?: ShippingFormInputs | null;
@@ -31,11 +36,24 @@ interface ShippingProps {
   onSubmit: (data: ShippingFormInputs) => void;
 }
 
-export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
+export default function ShippingForm({
+  initialData,
+  onSubmit,
+  close,
+}: ShippingProps) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [categories, setCategories] = useState<any[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [models, setModels] = useState<any[]>([]);
+  const [packageModal, setPackageModal] = useState(false);
+  const [Loading, setLoading] = useState(false);
+  const [editingPackageIndex, setEditingPackageIndex] = useState<number | null>(
+    null
+  );
+  const [editingPackageData, setEditingPackageData] = useState<packages | null>(
+    null
+  );
+  const { t } = useLanguage();
   const dispatch = useDispatch<AppDispatch>();
   const { manufacturers, status } = useSelector(
     (state: RootState) => state.manufacturer
@@ -70,8 +88,7 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
       }
     }
   }, [initialData, manufacturers]);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [formData, setFormData] = useState<any>({
+  const [formData, setFormData] = useState<ShippingFormInputs>({
     manufacturer: null,
     is_pickup: 1, // استلام الشحنة
     is_consolidate: 1, // توحيد الشحنة
@@ -100,7 +117,56 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
     consignee: "", // اسم المستلم
     apply_consignee: 0, // بيانات المستلم الرسمية
     use_type: 0, // نوع الاستخدام
+    package_shippings: [],
   });
+  const addPackage = (newPackage: packages) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setFormData((prevFormData: any) => ({
+      ...prevFormData,
+      package_shippings: [
+        ...(prevFormData.package_shippings || []),
+        newPackage,
+      ],
+    }));
+    setPackageModal(false);
+  };
+
+  const handleEditPackage = (packageData: packages, index: number) => {
+    setPackageModal(true);
+    setEditingPackageData(packageData);
+    setEditingPackageIndex(index);
+  };
+  const updatePackage = (updatedPackage: packages) => {
+    if (editingPackageIndex !== null) {
+      const processedUpdatedPackage = {
+        ...updatedPackage,
+        item_weight: updatedPackage.item_weight || 0,
+        package_type: updatedPackage.package_type || 1,
+      };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setFormData((prevFormData: any) => {
+        const newPackages = [...prevFormData.package_shippings];
+        newPackages[editingPackageIndex] = processedUpdatedPackage;
+        return {
+          ...prevFormData,
+          package_shippings: newPackages,
+        };
+      });
+      setEditingPackageIndex(null);
+      setEditingPackageData(null);
+    }
+  };
+
+  const removePackage = (index: number) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setFormData((prevFormData: any) => ({
+      ...prevFormData,
+      package_shippings: prevFormData.package_shippings.filter(
+        (_, i) => i !== index
+      ),
+    }));
+  };
+
   const handleManufacturerChange = (value: number | null) => {
     setFormData((prev) => ({
       ...prev,
@@ -164,6 +230,7 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
   // إرسال البيانات
   const handleSubmit = async () => {
     try {
+      setLoading(true);
       if (initialData?.id) {
         // ✅ تعديل
         if (validateForm()) {
@@ -174,6 +241,7 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
               updatedData: formData,
             })
           );
+          toast.success(t("edit_car_shipping"));
         } else return;
       } else {
         // ✅ إضافة
@@ -184,13 +252,16 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
               carShippingData: formData,
             })
           );
+          toast.success(t("add_car_shipping"));
         } else return;
       }
-      // ✅ تحديث الحالة في المكون الأب
       onSubmit(formData);
+      setLoading(false);
       close();
     } catch (error) {
       console.error(error);
+      setLoading(false);
+      toast.error(t("Error"));
     }
   };
 
@@ -200,19 +271,17 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
       <div className="flex items-center justify-start gap-1">
         <img src="/images/information.png" alt="info" className="w-[20px]" />
         <h2 className="text-text_title text-xl font-bold">
-          General Information
+          {t("General_Information")}
         </h2>
       </div>
 
       <div className="flex flex-col w-full items-start gap-4">
         <p className="text-text_title text-start font-bold text-xl">
-          General Delivery and Shipping Information
+          {t("General_des1")}
         </p>
-        <p className="text-text_des text-start text-xl">
-          Please select additional information for your order.
-        </p>
+        <p className="text-text_des text-start text-xl">{t("General_des2")}</p>
         <div className="selector">
-          <label>Commodity Type *</label>
+          <label>{t("Commodity_Type")} *</label>
           <Text_selector
             options={[{ value: "vehicle", label: "Vehicle" }]}
             placeholder="Vehicle"
@@ -225,10 +294,10 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
 
         {/* السؤال الأول: هل تحتاج إلى استلام الطلب؟ */}
         <Chooser
-          question="Do you require pickup for your order? *"
-          option1="Yes"
+          question={t("is_pickup_question") + "*"}
+          option1={t("Yes")}
           value1={1}
-          option2="No, I will arrange it myself"
+          option2={t("No") + "," + t("myself")}
           value2={0}
           value={formData.is_pickup} // القيمة الحالية
           onChange={(value) => handleInputChange("is_pickup", Number(value))} // تحديث الحالة
@@ -236,10 +305,10 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
 
         {/* السؤال الثاني: هل تريد توحيد الشحنة؟ */}
         <Chooser
-          question="Would you like to consolidate your shipment? *"
-          option1="Yes - shared container"
+          question={t("is_consolidate_q") + "*"}
+          option1={t("Yes") + ", " + t("shared")}
           value1={1}
-          option2="No - separate container"
+          option2={t("No") + ", " + t("separate")}
           value2={0}
           value={formData.is_consolidate} // القيمة الحالية
           onChange={(value) =>
@@ -251,10 +320,10 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
       {/* اختيار الموانئ */}
       <div className="flex flex-col w-full items-start gap-4">
         <p className="text-text_title text-start font-bold text-xl">
-          What is the final port of the order?
+          {t("final_port_q")}
         </p>
         <div className="selector">
-          <label>Final port *</label>
+          <label>{t("Final_port")} *</label>
           <Text_selector
             options={location_port}
             placeholder="Select"
@@ -263,7 +332,7 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
           />
         </div>
         <Checkbox
-          label="In transit to final destination"
+          label={t("in_transit_q")}
           checkedValue={1}
           uncheckedValue={0}
           onChange={(val) => handleInputChange("in_transit", Number(val))}
@@ -278,15 +347,15 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
             className="w-[20px]"
           />
           <h2 className="text-text_title text-2xl font-bold">
-            Commodity information
+            {t("Commodity_information")}
           </h2>
         </div>
         <p className="text-text_des text-start font-bold text-lg">
-          Please provide details about your commodities and their shipping{" "}
+          {t("Commodity_des")}
         </p>
-        <div className="flex flex-wrap items-center justify-between  gap-[15px]">
+        <div className="flex flex-wrap items-center justify-between  gap-3">
           <div className="selector">
-            <label>Car Manufacturer:</label>
+            <label>{t("Car_Manufacturer")} :</label>
             <DainamicSelector
               placeholder="BMW , Audi , kia ..."
               data={manufacturers}
@@ -297,7 +366,7 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
             />
           </div>
           <div className="selector">
-            <label>Car Model:</label>
+            <label>{t("Car_Model")} :</label>
             <DainamicSelector
               data={categories}
               value={formData.category_id}
@@ -306,7 +375,7 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
             />
           </div>
           <div className="selector">
-            <label>Category:</label>
+            <label>{t("Category")} :</label>
             <DainamicSelector
               data={models}
               value={formData.cmodel_id}
@@ -314,9 +383,9 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
             />
           </div>
         </div>
-        <div className="flex flex-wrap items-center justify-between  gap-[15px]">
+        <div className="flex flex-wrap items-center justify-between  gap-3">
           <div className="selector">
-            <label>Year of Manufacture:</label>
+            <label>{t("year")} :</label>
             <Text_selector
               options={yearOfMade}
               placeholder="2018"
@@ -326,10 +395,10 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
             />
           </div>
           <div className="selector">
-            <label> Drive System:</label>
+            <label> {t("Drive_System")} :</label>
             <Text_selector
               options={driveSystemOPtions}
-              placeholder="auto..."
+              placeholder={t("FWD")}
               value={formData.drive_system}
               onChange={(value) =>
                 handleInputChange("drive_system", Number(value))
@@ -338,7 +407,7 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
             />
           </div>
           <div className="selector">
-            <label>Number of Cylinders:</label>
+            <label>{t("Number_of_Cylinders")} :</label>
             <Text_selector
               options={NumberOfCylinders}
               placeholder="4,6,8..."
@@ -350,12 +419,12 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
             />
           </div>
         </div>
-        <div className="flex flex-wrap items-center justify-between  gap-[15px]">
+        <div className="flex flex-wrap items-center justify-between  gap-3">
           <div className="selector">
-            <label>Transmission Type:</label>
+            <label>{t("Transmission_Type")} :</label>
             <Text_selector
               options={TransmissionTypeOptions}
-              placeholder="Manual..."
+              placeholder={t("manual")}
               value={formData.transmission_type}
               onChange={(value) =>
                 handleInputChange("transmission_type", Number(value))
@@ -364,10 +433,10 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
             />
           </div>
           <div className="selector">
-            <label>Fuel Type</label>
+            <label>{t("Fuel_Type")} :</label>
             <Text_selector
               options={fuelTypeOptions}
-              placeholder="Petrol..."
+              placeholder={t("Petrol")}
               value={formData.fuel_type}
               onChange={(value) =>
                 handleInputChange("fuel_type", Number(value))
@@ -376,30 +445,32 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
             />
           </div>
           <div className="selector">
-            <label>Exterior Color:</label>
+            <label>{t("Exterior_Color")} :</label>
             <Text_selector
               options={ExteriorColor}
-              placeholder="white..."
+              placeholder={t("white")}
               value={formData.ex_color}
               onChange={(value) => handleInputChange("ex_color", String(value))}
               error={errors.ex_color}
             />
           </div>
+        </div>
+        <div className="flex flex-wrap items-center justify-between  gap-3">
           <div className="selector">
-            <label>Interior Color: </label>
+            <label>{t("Interior_Color")} :</label>
             <Text_selector
               options={InteriorColor}
-              placeholder="white..."
+              placeholder={t("white")}
               value={formData.in_color}
               onChange={(value) => handleInputChange("in_color", String(value))}
               error={errors.in_color}
             />
           </div>
           <div className="selector">
-            <label>Car Status</label>
+            <label>{t("Car_Status")} :</label>
             <Text_selector
               options={CarStatusOptions}
-              placeholder="New..,Used.."
+              placeholder={t("New")}
               value={formData.car_status}
               onChange={(value) =>
                 handleInputChange("car_status", Number(value))
@@ -408,7 +479,7 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
             />
           </div>
           <div className="selector">
-            <label>Mileage:</label>
+            <label>{t("Mileage")} :</label>
             <Text_selector
               options={mileageOptions}
               placeholder="50000 KM"
@@ -418,25 +489,7 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
             />
           </div>
         </div>
-        <div className="flex flex-wrap items-center justify-between  gap-[15px]">
-          <div className="selector">
-            <label>Price</label>
-            <Text_input
-              placeholder="2000 RO"
-              value={formData.price}
-              onChange={(e) => handleInputChange("price", e.target.value)}
-              //   error={errors.price}
-            />
-          </div>
-          <div className="selector">
-            <label>VIN NO</label>
-            <Text_input
-              placeholder="VIN..."
-              value={formData.vin}
-              onChange={(e) => handleInputChange("vin", e.target.value)}
-              //   error={errors.price}
-            />
-          </div>
+        <div className="flex flex-wrap items-center justify-between  gap-3">
           <div className="selector">
             <label>Location of car</label>
             <DainamicSelector
@@ -447,10 +500,10 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
             />
           </div>
           <div className="selector">
-            <label>Shipping from</label>
+            <label>{t("Shipping_from")} :</label>
             <Text_selector
               options={[{ value: "torento", label: "Torento" }]}
-              placeholder="Port Shipping"
+              placeholder={t("Port_Shipping")}
               value={formData.shipping_from}
               onChange={(value) =>
                 handleInputChange("shipping_from", String(value))
@@ -458,11 +511,33 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
               //  error={errors.mileage}
             />
           </div>
+        </div>
+        <div className="flex flex-wrap items-center justify-between  gap-3">
+          <div className="selector">
+            <label>{t("Price")} :</label>
+            <Text_input
+              placeholder="2000 RO"
+              value={formData.price}
+              onChange={(e) => handleInputChange("price", e.target.value)}
+              //   error={errors.price}
+            />
+          </div>
+          <div className="selector">
+            <label>{t("VIN_NO")}</label>
+            <Text_input
+              placeholder="UK02584...."
+              value={formData.vin}
+              onChange={(e) => handleInputChange("vin", e.target.value)}
+              //   error={errors.price}
+            />
+          </div>
           <div className="py-[10px] w-full md:w-2/5">
-            <label className="mb-1 block font-semibold">Carfax</label>
+            <label className="mb-1 block font-semibold">{t("Carfax")}</label>
             <Text_selector
               options={CarfaxOptions}
-              placeholder="Available or Not available"
+              placeholder={
+                t("Available") + " " + t("or") + " " + t("Not_available")
+              }
               value={formData.car_fax}
               onChange={(value) => handleInputChange("car_fax", Number(value))}
             />
@@ -475,22 +550,24 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
           onFileUpload={(fileName) =>
             setFormData((prev) => ({ ...prev, bill_pdf: fileName }))
           }
-          label="Upload bill of sale in .pdf format *"
+          label={t("Upload_bill") + "*"}
         />
       </div>
       <div className="flex  md:w-1/3 justify-start  items-center gap-4">
         <FileUploder
-          label="Upload original title in .pdf format"
+          label={t("Upload original")}
           onFileUpload={(fileName) =>
             setFormData((prev) => ({ ...prev, title_pdf: fileName }))
           }
         />
       </div>
       <div className="py-[10px] w-full md:w-2/5">
-        <label className="mb-1 block font-semibold">Carfax</label>
+        <label className="mb-1 block font-semibold">{t("consignee")} :</label>
         <Text_selector
           options={CarfaxOptions}
-          placeholder="Available or Not available"
+          placeholder={
+            t("Available") + " " + t("or") + " " + t("Not_available")
+          }
           value={formData.apply_consignee}
           onChange={(value) =>
             handleInputChange("apply_consignee", Number(value))
@@ -503,33 +580,77 @@ export default function ShippingForm({ initialData, onSubmit }: ShippingProps) {
             onFileUpload={(fileName) =>
               setFormData((prev) => ({ ...prev, consignee: fileName }))
             }
-            label="Upload consignee details id or passport file* "
+            label={t("Upload_consignee")}
           />
         </div>
       )}
       <p className="text-text_title text-start font-bold text-xl"></p>
       <Chooser
-        question="Please select end use type *"
-        option1="Personal use"
+        question={t("use_type_q") + "*"}
+        option1={t("use_type_option1")}
         value1={0}
-        option2="Resale/Wholesale/Business related use"
+        option2={t("use_type_option2")}
         value2={1}
         value={formData.use_type}
         onChange={(value) => handleInputChange("use_type", Number(value))}
       />
+      <div className="w-full md:flex items-center gap-2">
+        <div className="w-1/2 flex items-center">
+          <Btn_borded
+            iconAdd
+            onclick={() => {
+              setPackageModal(!packageModal);
+              setEditingPackageData(null);
+            }}
+            label={
+              formData.package_shippings.length > 0
+                ? t("add_another_package")
+                : t("add_package")
+            }
+          />
+        </div>
+        <div className="flex flex-wrap gap-2 w-full md:w-1/2">
+          {formData.package_shippings.map((pkg: packages, index: number) => (
+            <div
+              key={index}
+              className="flex gap-2 h-10 items-center justify-center rounded-full px-2 py-1 rounded bg-secondary1 "
+            >
+              <span
+                onClick={() => handleEditPackage(pkg, index)}
+                className="text-sm cursor-pointer"
+              >
+                {t("Package")} : {index + 1}
+              </span>
+
+              <Minus
+                className="text-red-400 bg-red-200 rounded-full text-lg  cursor-pointer"
+                onClick={() => removePackage(index)}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {packageModal && (
+        <PackageForm
+          onCancel={() => setPackageModal(false)}
+          onAddPackage={addPackage}
+          initialPackageData={editingPackageData}
+          onUpdatePackage={updatePackage}
+        />
+      )}
       <div className="flex flex-wrap actions w-full gap-[10px] mt-4 py-4 items-center justify-between">
         <button
           className="button_bordered py-1 px-2 border-primary1 text-primary1 hover:bg-primary1 hover:text-light"
           onClick={close}
         >
-          Cancel
+          {t("Cancel")}
         </button>
         <button
           className="button_outline py-1 px-2 bg-primary1 hover:bg-transparent hover:border-primary1 hover:text-black text-light"
           onClick={handleSubmit}
         >
-          {/* {loading ? <LoadingBTN /> : "Save Car Details"} */}Save Car
-          Details
+          {Loading ? <LoadingBTN /> : t("send_shipping_request")}
         </button>
       </div>
     </div>

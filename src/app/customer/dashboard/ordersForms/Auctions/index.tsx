@@ -93,11 +93,10 @@ export default function Auctions({
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  // ✅ تحميل البيانات في حالة التعديل
+
   useEffect(() => {
     if (initialData) {
       setFormData(initialData);
-      // تحميل الكاتيجوري والموديل بناءً على البيانات
       const selectedManufacturer = manufacturers.find(
         (m) => m.id === initialData.manufacturer
       );
@@ -167,7 +166,6 @@ export default function Auctions({
           toast.success(t("Add_Auction"));
         } else return;
       }
-      // ✅ تحديث الحالة في المكون الأب
       onSubmit(formData);
       close();
     } catch (error) {
@@ -252,7 +250,7 @@ export default function Auctions({
       </div>
       <div className="flex w-full flex-wrap items-center justify-between gap-[10px]">
         <div className="selector w-[250px]">
-          <label>{t("Transmission_Type")}:</label>
+          <label>{t("Transmission_Type")} :</label>
           <Text_selector
             options={TransmissionTypeOptions}
             placeholder={t("Manual")}

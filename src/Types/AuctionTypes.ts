@@ -218,15 +218,27 @@ export interface CarShipping {
   updated_at: string;
   vin: string;
   images: string[];
+  packages: packages[];
 }
-
+export interface packages {
+  package_type: number;
+  pieces: number;
+  description: string;
+  unit: number;
+  lenght: number;
+  width: number;
+  height: number;
+  Weight_unit: number;
+  item_weight: number;
+  item_value: number;
+}
 export interface ShippingFormInputs {
   id?: number | null;
   manufacturer: number | null;
-  is_pickup: number; //استلام الشحنة 0-1
-  is_consolidate: number; //توحيد الشحنة 0-1
+  is_pickup: number;
+  is_consolidate: number;
   final_port: string;
-  in_transit: number; //في الطريق
+  in_transit: number;
   vin: string;
   cmodel_id: number | null;
   category_id: number | null;
@@ -245,9 +257,10 @@ export interface ShippingFormInputs {
   location_of_car: number | null;
   car_fax: number | null;
   commodity_type: string;
-  bill_pdf: string; //فاتورة الشراء
-  title_pdf: string; //بيان ملكية
-  consignee: string; // اسم المستلم
-  apply_consignee: number | null; //بيانات المستلم الرسمية
-  use_type: number; //نوع الاستخدام
+  bill_pdf: string;
+  title_pdf: string;
+  consignee: string;
+  apply_consignee: number | null;
+  use_type: number;
+  package_shippings: packages[];
 }

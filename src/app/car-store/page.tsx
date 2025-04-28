@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axiosInstance from "@/utils/axiosInstance";
-import CarCard from "@/components/cards/carCard";
 import Navbar from "@/components/header/navbar";
 import Footer from "@/components/footer";
 import Loader from "@/components/loading/loadingPage";
 import { useLanguage } from "@/context/LanguageContext";
+import CarStoreCard from "@/components/cards/car_card";
 const RegisterPage = () => {
   const [cars, setCars] = useState<[]>([]);
   const [loadingPage, setLoadingPage] = useState(false);
@@ -38,14 +38,15 @@ const RegisterPage = () => {
       {loadingPage ? (
         <Loader />
       ) : (
-        <div className="px-[10px] md:px-[50px] py-[50px] flex flex-wrap gap-20 w-full  justify-center ">
+        <div className="px-[10px] md:px-[50px] py-[50px] flex flex-wrap gap-6 w-full ">
           {cars.map((car, index) => (
-            <CarCard
+            <CarStoreCard
               car={car}
               key={index}
               isloagedin={false}
-              onDelete={() => console.log("d")}
-              onEdit={() => console.log("d")}
+              onDelete={() => console.log("")}
+              onEdit={() => console.log("")}
+              onChangeStatus={() => console.log("")}
             />
           ))}
         </div>

@@ -1,5 +1,4 @@
-import { User } from "@/Types/adminTypes";
-import { Language } from "@/utils/languages";
+import { Language, User } from "@/Types/adminTypes";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 

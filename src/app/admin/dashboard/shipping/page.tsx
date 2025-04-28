@@ -148,6 +148,7 @@ export default function Shipping() {
         consignee: "",
         apply_consignee: null,
         use_type: 0,
+        package_shippings: [],
       };
     };
     console.log(selectedRequest);

@@ -46,6 +46,50 @@ export const getTransmissionText = (transmission_type: number) => {
     ? "manual"
     : "Tiptronic";
 };
+//تحويل القيم الى الوان
+export const getColorValue = (color: string) => {
+  switch (color.toLowerCase()) {
+    case "white":
+      return "bg-white";
+    case "black":
+      return "bg-black";
+    case "silver":
+    case "gray":
+      return "bg-gray-400"; // فضي رمادي فاتح
+    case "red":
+      return "bg-red-500";
+    case "blue":
+      return "bg-blue-500";
+    case "green":
+      return "bg-green-500";
+    case "yellow":
+      return "bg-yellow-400";
+    case "orange":
+      return "bg-orange-500";
+    case "brown":
+      return "bg-amber-800"; // أقرب لون بني
+    case "beige":
+    case "cream":
+      return "bg-yellow-100"; // قريب من البيج والكريمي
+    case "gold":
+      return "bg-yellow-500"; // ذهبي تقريباً
+    case "maroon":
+      return "bg-red-800"; // خمري
+    case "navy":
+    case "dark_blue":
+      return "bg-blue-900"; // كحلي غامق
+    case "purple":
+      return "bg-purple-500";
+    case "tan":
+      return "bg-amber-300"; // لون سكري
+    case "burgundy":
+      return "bg-rose-900"; // عنابي غامق
+    case "ivory":
+      return "bg-gray-100"; // قريب من العاجي
+    default:
+      return "bg-gray-500"; // لون افتراضي
+  }
+};
 
 // 🛠️ تحويل نوع الوقود إلى نص
 export const getFuelText = (fuel_type: number) => {

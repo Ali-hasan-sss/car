@@ -295,12 +295,12 @@ export default function SocialMediaSettings() {
             sx={{
               "& .MuiOutlinedInput-root": {
                 "&.Mui-focused fieldset": {
-                  borderColor: "#008080", // تغيير لون الإطار عند الفوكس
+                  borderColor: "#008080",
                 },
               },
               "& .MuiInputLabel-root": {
                 "&.Mui-focused": {
-                  color: "#008080", // تغيير لون التسمية عند الفوكس
+                  color: "#008080",
                 },
               },
             }}
@@ -325,12 +325,12 @@ export default function SocialMediaSettings() {
             sx={{
               "& .MuiOutlinedInput-root": {
                 "&.Mui-focused fieldset": {
-                  borderColor: "#008080", // تغيير لون الإطار عند الفوكس
+                  borderColor: "#008080",
                 },
               },
               "& .MuiInputLabel-root": {
                 "&.Mui-focused": {
-                  color: "#008080", // تغيير لون التسمية عند الفوكس
+                  color: "#008080",
                 },
               },
             }}

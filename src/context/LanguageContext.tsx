@@ -1,10 +1,11 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { translations, Language } from "@/utils/languages";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setLanguage } from "@/store/slice/authSlice";
+import { Language } from "@/Types/adminTypes";
+import { translations } from "@/translations";
 
 interface LanguageContextProps {
   language: Language;

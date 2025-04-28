@@ -10,7 +10,7 @@ export interface Admin {
   userRole?: string;
   password?: string;
 }
-
+export type Language = "en" | "ar";
 // واجهة لبيانات الاتصال
 export interface Contact {
   id: number;

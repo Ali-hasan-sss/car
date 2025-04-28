@@ -42,45 +42,34 @@ export default function Shipping() {
   const columns: Column[] = [
     {
       id: "category.manufacturer.title",
-      label: "الشركة الصانعة",
+      label: "brand",
       languageDisplay: "en",
-      includeInForm: true,
     },
     {
       id: "category.title",
-      label: "الموديل",
+      label: "Car_Model",
       languageDisplay: "en",
-      includeInForm: true,
     },
     {
       id: "year",
-      label: "سنة الصنع",
+      label: "year",
       languageDisplay: "en",
-      includeInForm: true,
     },
     {
       id: "ex_color",
-      label: "اللون",
+      label: "Exterior_Color",
       languageDisplay: "en",
-      includeInForm: true,
     },
     {
       id: "shipping_from",
-      label: "مرفا الشحن",
+      label: "shipping_from",
       languageDisplay: "en",
       includeInForm: true,
     },
     {
-      id: "created_at",
-      label: "تاريخ انشاء الطلب",
-      languageDisplay: "en",
-      includeInForm: false,
-    },
-    {
       id: "status",
-      label: "حالة الطلب",
+      label: "status",
       languageDisplay: "en",
-      includeInForm: false,
     },
   ];
   const apiUrl = "customer/car-shippings";
@@ -100,6 +89,7 @@ export default function Shipping() {
     const apiUrl = `customer/car-shippings?page_size=${showing}&page=${currentPage}`;
     dispatch(fetchCarShippings({ API: apiUrl }));
   }, [dispatch, showing]);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (order: any) => {
     const mapOrderToFormInputs = (order: CarShipping): ShippingFormInputs => {
@@ -134,12 +124,12 @@ export default function Shipping() {
         consignee: "",
         apply_consignee: null,
         use_type: 0,
+        package_shippings: order.packages ?? [],
       };
     };
 
     const formData = mapOrderToFormInputs(order);
     setInitForm(formData);
-    // console.log(formData);
     setOpenModal(true);
   };
   const handleDelete = (id: number) => {
@@ -207,9 +197,8 @@ export default function Shipping() {
           onTotalCountChange={setTotalCount}
           searchTerm={searchTerm}
           onEdit={(order) => {
-            if ("is_pickup" in order) {
-              handleEdit(order);
-            }
+            console.log("edit:", order);
+            handleEdit(order);
           }}
           onDelete={(id) => handleDelete(id)}
         />
@@ -251,7 +240,7 @@ export default function Shipping() {
             }}
           >
             <ShippingForm
-              close={() => setOpenModal(false)}
+              close={closeModal}
               onSubmit={(data) => console.log(`added data: ${data}`)}
               initialData={initForm}
             />

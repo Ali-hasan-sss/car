@@ -135,6 +135,7 @@ export default function ShippingOrder() {
         consignee: "", // غير موجود، تعيين افتراضي
         apply_consignee: null, // غير موجود، تعيين افتراضي
         use_type: 0, // غير موجود، تعيين افتراضي
+        package_shippings: order.package_shippings || [],
       };
     };
 

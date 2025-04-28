@@ -49,7 +49,7 @@ export default function Actions() {
     },
     {
       id: "year",
-      label: "Year",
+      label: "year",
       languageDisplay: "en",
     },
     {
@@ -86,12 +86,13 @@ export default function Actions() {
     delete: true,
     view: true,
   });
+
   useEffect(() => {
     const apiUrl = `customer/car-auctions?page_size=${showing}&page=${currentPage}`;
     dispatch(fetchAuctions({ API: apiUrl }));
   }, [dispatch, showing]);
+
   const handleDelete = (id: number) => {
-    console.log("تم النقر على حذف، رقم الطلب:", id);
     setOpenDeleteModal(true);
     setDeleteId(id);
   };

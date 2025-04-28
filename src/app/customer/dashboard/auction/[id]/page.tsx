@@ -25,6 +25,7 @@ import {
   CheckCircle,
   Edit,
   EllipsisVertical,
+  Printer,
   Trash,
   XCircle,
 } from "lucide-react";
@@ -134,6 +135,51 @@ export default function AuctionOrder() {
     setInitForm(formData);
     setOpenModal(true);
   };
+  const handlePrint = () => {
+    const content = document.getElementById("order-container");
+    if (!content) return;
+
+    const iframe = document.createElement("iframe");
+    iframe.style.position = "fixed";
+    iframe.style.right = "0";
+    iframe.style.bottom = "0";
+    iframe.style.width = "0";
+    iframe.style.height = "0";
+    iframe.style.border = "0";
+
+    document.body.appendChild(iframe);
+
+    const doc = iframe.contentWindow?.document;
+    if (!doc) return;
+
+    doc.open();
+    doc.write(`
+      <html>
+        <head>
+          <title>طباعة الطلب</title>
+          <style>
+            @media print {
+              body {
+                -webkit-print-color-adjust: exact;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          ${content.innerHTML}
+        </body>
+      </html>
+    `);
+    doc.close();
+
+    iframe.contentWindow?.focus();
+    iframe.contentWindow?.print();
+
+    setTimeout(() => {
+      document.body.removeChild(iframe);
+    }, 1000);
+  };
+
   const InfoItem = ({ label, value }: { label: string; value: string }) => (
     <div className="w-full text-xs text-center">
       <div className=" border py-1 px-3 text-gray-500 bg-secondary1 whitespace-nowrap overflow-hidden text-ellipsis">
@@ -146,7 +192,7 @@ export default function AuctionOrder() {
   );
 
   return (
-    <div className="p-4 bg-white w-full min-h-screen">
+    <div className="p-4 bg-white order-container w-full min-h-screen">
       {/* بيانات السيارة */}
       <div className="space-y-6 w-full">
         <div className="flex w-full justify-between items-center">
@@ -184,6 +230,9 @@ export default function AuctionOrder() {
 
                 <MenuItem onClick={() => handleDelete()}>
                   <Trash className="text-red-500 mx-2" /> {t("Delete")}
+                </MenuItem>
+                <MenuItem onClick={handlePrint}>
+                  <Printer className="text-gray-700 mx-2" /> {t("Print")}
                 </MenuItem>
 
                 {userRole === "ADMIN" && (

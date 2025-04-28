@@ -67,7 +67,7 @@ export const fetchCarShippingById = createAsyncThunk<
 // ✅ إضافة شحن سيارة
 export const addCarShipping = createAsyncThunk<
   CarShipping,
-  { apiUrl: string; carShippingData: Partial<ShippingFormInputs> },
+  { apiUrl: string; carShippingData: Partial<ShippingFormInputs> | FormData },
   { rejectValue: string }
 >(
   "carShippings/addCarShipping",
@@ -84,7 +84,11 @@ export const addCarShipping = createAsyncThunk<
 // ✅ تعديل شحن سيارة
 export const updateCarShipping = createAsyncThunk<
   CarShipping,
-  { apiUrl: string; id: number; updatedData: Partial<CarShipping> },
+  {
+    apiUrl: string;
+    id: number;
+    updatedData: Partial<ShippingFormInputs> | { status: number } | FormData;
+  },
   { rejectValue: string }
 >(
   "carShippings/updateCarShipping",
