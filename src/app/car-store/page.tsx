@@ -38,7 +38,7 @@ const RegisterPage = () => {
       {loadingPage ? (
         <Loader />
       ) : (
-        <div className="px-[10px] md:px-[50px] py-[50px] flex flex-wrap gap-6 w-full ">
+        <div className="px-[10px] md:px-[50px] py-[50px] justify-center flex flex-wrap gap-6 w-full ">
           {cars.map((car, index) => (
             <CarStoreCard
               car={car}

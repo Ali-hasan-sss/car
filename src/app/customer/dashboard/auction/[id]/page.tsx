@@ -1,5 +1,6 @@
 "use client";
 import Auctions from "@/app/customer/dashboard/ordersForms/Auctions";
+import InfoItem from "@/components/common/orderinfoItem";
 import SectionBox from "@/components/common/sectionbox";
 import Loader from "@/components/loading/loadingPage";
 import DeleteMessage from "@/components/messags/deleteMessage";
@@ -179,18 +180,6 @@ export default function AuctionOrder() {
       document.body.removeChild(iframe);
     }, 1000);
   };
-
-  const InfoItem = ({ label, value }: { label: string; value: string }) => (
-    <div className="w-full text-xs text-center">
-      <div className=" border py-1 px-3 text-gray-500 bg-secondary1 whitespace-nowrap overflow-hidden text-ellipsis">
-        {label}
-      </div>
-      <div className="border p-1 font-medium whitespace-nowrap overflow-hidden text-ellipsis">
-        {value || "-"}
-      </div>
-    </div>
-  );
-
   return (
     <div className="p-4 bg-white order-container w-full min-h-screen">
       {/* بيانات السيارة */}

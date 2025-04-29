@@ -28,7 +28,7 @@ interface CarCardProps {
   onChangeStatus?: (id: number, type: "accept" | "reject" | "finish") => void;
 }
 
-const CarStoreCard: React.FC<CarCardProps> = ({
+const CarCard: React.FC<CarCardProps> = ({
   car,
   onDelete,
   onEdit,
@@ -161,7 +161,7 @@ const CarStoreCard: React.FC<CarCardProps> = ({
             )}
           </Menu>
         </div>
-        <p className="text-gray-400 text-sm"> ${car.year}</p>
+        <p className="text-gray-400 text-sm"> {car.year}</p>
       </div>
 
       {/* صورة السيارة */}
@@ -206,17 +206,17 @@ const CarStoreCard: React.FC<CarCardProps> = ({
       <div className="p-4">
         <div className="flex justify-between text-sm text-gray-600 mb-4">
           <div className="flex flex-col items-center">
-            <span className="text-black">⛽ Fuel</span>
+            <span className="text-black">⛽ {t("Fuel_Type")}</span>
             <span>{t(fuelText)}</span>
           </div>
           <div className="w-[1px] h-15 bg-gray-400 "></div>
           <div className="flex flex-col items-center">
-            <span className="text-black">🕒 Mileage</span>
+            <span className="text-black">🕒 {t("Mileage")}</span>
             <span>{car.mileage} KM</span>
           </div>
           <div className="w-[1px] h-15 bg-gray-400 "></div>
           <div className="flex flex-col items-center">
-            <span className="text-black">🎨 Color</span>
+            <span className="text-black">🎨 {t("Color")}</span>
             <div className={`flex  gap-1 mt-1`}>
               <span
                 className={`w-4 h-4 flex items-center justify-center text-[8px] rounded-full border border-gray-300 ${excolor} ${
@@ -238,7 +238,7 @@ const CarStoreCard: React.FC<CarCardProps> = ({
 
         <div className="flex justify-between items-center">
           <div>
-            <p className="text-gray-500">Price</p>
+            <p className="text-gray-500">{t("Price")}</p>
             <p className="text-yellow-500 font-bold text-xl">{car.price} RO</p>
           </div>
           <button
@@ -248,9 +248,9 @@ const CarStoreCard: React.FC<CarCardProps> = ({
                 "_blank"
               )
             }
-            className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition"
+            className="bg-teal-600 hover:bg-teal-700 text-sm text-white px-4 py-2 rounded-lg flex items-center gap-2 transition"
           >
-            <ShoppingCart /> Buy Now
+            <ShoppingCart /> {isArabic ? "اشتري الان" : "Buy Now"}
           </button>
         </div>
       </div>
@@ -258,4 +258,4 @@ const CarStoreCard: React.FC<CarCardProps> = ({
   );
 };
 
-export default CarStoreCard;
+export default CarCard;

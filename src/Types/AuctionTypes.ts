@@ -225,7 +225,7 @@ export interface packages {
   pieces: number;
   description: string;
   unit: number;
-  lenght: number;
+  length: number;
   width: number;
   height: number;
   Weight_unit: number;

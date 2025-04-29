@@ -17,12 +17,10 @@ import CustomPagination from "@/components/pagination/extrnalPagenation";
 import {
   deleteCarShipping,
   fetchCarShippings,
-  updateCarShipping,
 } from "@/store/slice/ShippingSlice";
 import { CarShipping, ShippingFormInputs } from "@/Types/AuctionTypes";
 import DeleteMessage from "@/components/messags/deleteMessage";
 import ShippingForm from "@/app/customer/dashboard/ordersForms/shipping";
-import { toast } from "sonner";
 
 export default function Shipping() {
   const { t } = useLanguage();
@@ -35,10 +33,7 @@ export default function Shipping() {
   const [deleteId, setDeleteId] = useState(0);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedRequest, setSelectedRequest] = useState<{
-    id: number;
-    type: "accept" | "reject" | "finish";
-  } | null>(null);
+
   const closeModal = () => {
     setOpenModal(false);
   };
@@ -46,52 +41,35 @@ export default function Shipping() {
   const handleTogleFilter = () => setOpenFilter(!openFilter);
   const columns: Column[] = [
     {
-      id: "user.name",
-      label: "اسم مقدم الطلب",
-      languageDisplay: "en",
-      includeInForm: true,
-    },
-    {
       id: "category.manufacturer.title",
-      label: "الشركة الصانعة",
+      label: "brand",
       languageDisplay: "en",
-      includeInForm: true,
     },
     {
       id: "category.title",
-      label: "الموديل",
+      label: "Car_Model",
       languageDisplay: "en",
-      includeInForm: true,
     },
     {
       id: "year",
-      label: "سنة الصنع",
+      label: "year",
       languageDisplay: "en",
-      includeInForm: true,
     },
     {
       id: "ex_color",
-      label: "اللون",
+      label: "Exterior_Color",
       languageDisplay: "en",
-      includeInForm: true,
     },
     {
       id: "shipping_from",
-      label: "مرفا الشحن",
+      label: "shipping_from",
       languageDisplay: "en",
       includeInForm: true,
     },
     {
-      id: "created_at",
-      label: "تاريخ انشاء الطلب",
-      languageDisplay: "en",
-      includeInForm: false,
-    },
-    {
       id: "status",
-      label: "حالة الطلب",
+      label: "status",
       languageDisplay: "en",
-      includeInForm: false,
     },
   ];
   const apiUrl = "admin/car-shippings";
@@ -103,17 +81,15 @@ export default function Shipping() {
     add: true,
     delete: true,
     view: true,
-    finish: true,
-    reject: true,
-    accept: true,
   });
-  const { carShippings, loading, totalPages, actionLoadingIds } = useSelector(
+  const { carShippings, loading, actionLoadingIds, totalPages } = useSelector(
     (state: RootState) => state.carShippings
   );
   useEffect(() => {
     const apiUrl = `admin/car-shippings?page_size=${showing}&page=${currentPage}`;
     dispatch(fetchCarShippings({ API: apiUrl }));
   }, [dispatch, showing]);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (order: any) => {
     const mapOrderToFormInputs = (order: CarShipping): ShippingFormInputs => {
@@ -148,44 +124,17 @@ export default function Shipping() {
         consignee: "",
         apply_consignee: null,
         use_type: 0,
-        package_shippings: [],
+        package_shippings: order.package_shippings ?? [],
       };
     };
-    console.log(selectedRequest);
+
     const formData = mapOrderToFormInputs(order);
     setInitForm(formData);
-    // console.log(formData);
     setOpenModal(true);
   };
   const handleDelete = (id: number) => {
     setOpenDeleteModal(true);
     setDeleteId(id);
-  };
-  const handleAcceptReject = async (
-    id: number,
-    type: "accept" | "reject" | "finish"
-  ) => {
-    setSelectedRequest({ id, type });
-    const status = type === "accept" ? 2 : type === "reject" ? 0 : 3; // تحديد القيمة بناءً على نوع الإجراء
-    try {
-      //await axiosInstance.put(`${apiUrl}/${id}`, { status });
-      await dispatch(
-        updateCarShipping({
-          apiUrl: apiUrl,
-          id: id,
-          updatedData: { status },
-        })
-      );
-      toast.success(
-        `تم ${
-          type === "accept" ? "قبول" : type === "reject" ? "رفض" : "اكمال"
-        } الطلب رقم ${id}`
-      );
-    } catch (error) {
-      console.error("حدث خطأ أثناء تحديث الطلب:", error);
-      toast.error("حدث خطأ ما");
-    } finally {
-    }
   };
   return (
     <div className="flex flex-col items-center w-full  gap-[5px]">
@@ -227,7 +176,6 @@ export default function Shipping() {
           sortBy={sortby}
           showing={showing}
           searchTerm={searchTerm}
-          onChangeStatus={handleAcceptReject}
           customEditForm={(data, close) => (
             <ShippingForm
               onSubmit={(data) => {
@@ -248,12 +196,10 @@ export default function Shipping() {
           onTotalCountChange={setTotalCount}
           searchTerm={searchTerm}
           onEdit={(order) => {
-            if ("is_pickup" in order) {
-              handleEdit(order);
-            }
+            console.log("edit:", order);
+            handleEdit(order);
           }}
           onDelete={(id) => handleDelete(id)}
-          onChangeStatus={handleAcceptReject}
         />
       )}
       <CustomPagination
@@ -280,20 +226,20 @@ export default function Shipping() {
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-              width: "80%", // 80% من عرض الشاشة (يبقى 10% من الجوانب)
-              maxWidth: "1000px", // الحد الأقصى لعرض المودال
-              height: "80%", // 80% من ارتفاع الشاشة (يبقى 10% من الأعلى والأسفل)
-              maxHeight: "90vh", // ضمان عدم تجاوز الشاشة
+              width: "80%",
+              maxWidth: "1000px",
+              height: "80%",
+              maxHeight: "90vh",
               bgcolor: "background.paper",
               boxShadow: 24,
               p: 3,
               borderRadius: "8px",
-              overflowY: "auto", // السماح بالتمرير عند زيادة المحتوى
+              overflowY: "auto",
               outline: "none",
             }}
           >
             <ShippingForm
-              close={() => setOpenModal(false)}
+              close={closeModal}
               onSubmit={(data) => console.log(`added data: ${data}`)}
               initialData={initForm}
             />

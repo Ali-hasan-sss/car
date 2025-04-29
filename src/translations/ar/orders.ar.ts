@@ -30,6 +30,7 @@ export const orders_ar = {
   container: "حاوية منفصلة",
   group: "مجموعة",
   Shipping_Country: "بلد الشحن",
+  Color: "اللون",
   Exterior_Color: "اللون الخارجي",
   Interior_Color: "اللون الداخلي",
   white: "أبيض",
@@ -144,6 +145,7 @@ export const orders_ar = {
   use_type_option1: "استخدام شخصي",
   use_type_option2: "إعادة بيع / تجارة / استخدام تجاري",
   Package: "طرد",
+  Packages: "الطرود",
   send_shipping_request: "إرسال طلب الشحن",
   add_package: "إضافة طرد",
   add_another_package: "إضافة طرد آخر",
@@ -168,4 +170,5 @@ export const orders_ar = {
   Item_value: "قيمة العنصر",
   Total_value: "القيمة الإجمالية",
   Total_weight: "الوزن الإجمالي",
+  Edit_shipping_request: "تعديل طلب الشحن",
 };

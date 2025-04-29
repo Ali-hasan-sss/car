@@ -27,7 +27,7 @@ export default function PackageForm({
     pieces: 0,
     description: "",
     unit: 1,
-    lenght: 0,
+    length: 0,
     width: 0,
     height: 0,
     Weight_unit: 0,
@@ -42,7 +42,7 @@ export default function PackageForm({
     if (!packageData.pieces) newErrors.pieces = " ";
     if (!packageData.height) newErrors.height = " ";
     if (!packageData.width) newErrors.width = " ";
-    if (!packageData.lenght) newErrors.lenght = " ";
+    if (!packageData.length) newErrors.length = " ";
     if (!packageData.item_weight) newErrors.item_weight = " ";
     if (!packageData.item_value) newErrors.item_value = " ";
 
@@ -144,11 +144,11 @@ export default function PackageForm({
           <label className="mb-1 block text-sm">{t("Length")}</label>
           <Number_input
             placeholder="Enter..."
-            value={packageData.lenght}
+            value={packageData.length}
             onChange={(e) =>
-              handleInputChange("lenght", Number(e.target.value))
+              handleInputChange("length", Number(e.target.value))
             }
-            error={errors.lenght}
+            error={errors.length}
           />
         </div>
 
@@ -230,7 +230,7 @@ export default function PackageForm({
             />
             <div className="py-[10px] flex w-1/2 items-center justify-center">
               <p className="text-sm mt-3">
-                {"Total_value"}:
+                {t("Total_value")}:
                 <span className="mx-1 py-1 px-2 rounded-full bg-green-400">
                   $ {packageData.item_value * packageData.pieces}
                 </span>

@@ -280,7 +280,7 @@ export default function ShippingForm({
           {t("General_des1")}
         </p>
         <p className="text-text_des text-start text-xl">{t("General_des2")}</p>
-        <div className="selector">
+        <div className="selector w-full">
           <label>{t("Commodity_Type")} *</label>
           <Text_selector
             options={[{ value: "vehicle", label: "Vehicle" }]}
@@ -353,8 +353,8 @@ export default function ShippingForm({
         <p className="text-text_des text-start font-bold text-lg">
           {t("Commodity_des")}
         </p>
-        <div className="flex flex-wrap items-center justify-between  gap-3">
-          <div className="selector">
+        <div className="flex flex-wrap w-full items-center justify-between  gap-3">
+          <div className="selector w-full md:w-1/4">
             <label>{t("Car_Manufacturer")} :</label>
             <DainamicSelector
               placeholder="BMW , Audi , kia ..."
@@ -365,7 +365,7 @@ export default function ShippingForm({
               dataLoading={manufacturerLoading}
             />
           </div>
-          <div className="selector">
+          <div className="selector w-full md:w-1/4 ">
             <label>{t("Car_Model")} :</label>
             <DainamicSelector
               data={categories}
@@ -374,7 +374,7 @@ export default function ShippingForm({
               // error={errors.category_id}
             />
           </div>
-          <div className="selector">
+          <div className="selector w-full md:w-1/4">
             <label>{t("Category")} :</label>
             <DainamicSelector
               data={models}
@@ -383,8 +383,8 @@ export default function ShippingForm({
             />
           </div>
         </div>
-        <div className="flex flex-wrap items-center justify-between  gap-3">
-          <div className="selector">
+        <div className="flex w-full flex-wrap items-center justify-between  gap-3">
+          <div className="selector w-full md:w-1/4">
             <label>{t("year")} :</label>
             <Text_selector
               options={yearOfMade}
@@ -394,7 +394,7 @@ export default function ShippingForm({
               //error={errors.year}
             />
           </div>
-          <div className="selector">
+          <div className="selector w-full md:w-1/4">
             <label> {t("Drive_System")} :</label>
             <Text_selector
               options={driveSystemOPtions}
@@ -406,7 +406,7 @@ export default function ShippingForm({
               // error={errors.drive_system}
             />
           </div>
-          <div className="selector">
+          <div className="selector w-full md:w-1/4">
             <label>{t("Number_of_Cylinders")} :</label>
             <Text_selector
               options={NumberOfCylinders}
@@ -419,8 +419,8 @@ export default function ShippingForm({
             />
           </div>
         </div>
-        <div className="flex flex-wrap items-center justify-between  gap-3">
-          <div className="selector">
+        <div className="flex w-full flex-wrap items-center justify-between  gap-3">
+          <div className="selector w-full md:w-1/4">
             <label>{t("Transmission_Type")} :</label>
             <Text_selector
               options={TransmissionTypeOptions}
@@ -432,7 +432,7 @@ export default function ShippingForm({
               //error={errors.transmission_type}
             />
           </div>
-          <div className="selector">
+          <div className="selector w-full md:w-1/4">
             <label>{t("Fuel_Type")} :</label>
             <Text_selector
               options={fuelTypeOptions}
@@ -444,7 +444,7 @@ export default function ShippingForm({
               //  error={errors.fuel_type}
             />
           </div>
-          <div className="selector">
+          <div className="selector w-full md:w-1/4">
             <label>{t("Exterior_Color")} :</label>
             <Text_selector
               options={ExteriorColor}
@@ -455,8 +455,8 @@ export default function ShippingForm({
             />
           </div>
         </div>
-        <div className="flex flex-wrap items-center justify-between  gap-3">
-          <div className="selector">
+        <div className="flex flex-wrap w-full items-center justify-between  gap-3">
+          <div className="selector w-full md:w-1/4">
             <label>{t("Interior_Color")} :</label>
             <Text_selector
               options={InteriorColor}
@@ -466,7 +466,7 @@ export default function ShippingForm({
               error={errors.in_color}
             />
           </div>
-          <div className="selector">
+          <div className="selector w-full md:w-1/4">
             <label>{t("Car_Status")} :</label>
             <Text_selector
               options={CarStatusOptions}
@@ -478,7 +478,7 @@ export default function ShippingForm({
               //     error={errors.car_status}
             />
           </div>
-          <div className="selector">
+          <div className="selector w-full md:w-1/4">
             <label>{t("Mileage")} :</label>
             <Text_selector
               options={mileageOptions}
@@ -489,8 +489,8 @@ export default function ShippingForm({
             />
           </div>
         </div>
-        <div className="flex flex-wrap items-center justify-between  gap-3">
-          <div className="selector">
+        <div className="flex w-full flex-wrap items-center justify-between  gap-3">
+          <div className="selector w-full md:w-1/4">
             <label>Location of car</label>
             <DainamicSelector
               Api_URL="customer/countries?is_shown_auction=1"
@@ -499,7 +499,7 @@ export default function ShippingForm({
               onChange={(value) => handleInputChange("location_of_car", value)}
             />
           </div>
-          <div className="selector">
+          <div className="selector w-full md:w-1/4">
             <label>{t("Shipping_from")} :</label>
             <Text_selector
               options={[{ value: "torento", label: "Torento" }]}
@@ -512,8 +512,8 @@ export default function ShippingForm({
             />
           </div>
         </div>
-        <div className="flex flex-wrap items-center justify-between  gap-3">
-          <div className="selector">
+        <div className="flex w-full flex-wrap items-center justify-between  gap-3">
+          <div className="selector w-full md:w-1/4">
             <label>{t("Price")} :</label>
             <Text_input
               placeholder="2000 RO"
@@ -522,7 +522,7 @@ export default function ShippingForm({
               //   error={errors.price}
             />
           </div>
-          <div className="selector">
+          <div className="selector w-full md:w-1/4">
             <label>{t("VIN_NO")}</label>
             <Text_input
               placeholder="UK02584...."
@@ -650,7 +650,13 @@ export default function ShippingForm({
           className="button_outline py-1 px-2 bg-primary1 hover:bg-transparent hover:border-primary1 hover:text-black text-light"
           onClick={handleSubmit}
         >
-          {Loading ? <LoadingBTN /> : t("send_shipping_request")}
+          {Loading ? (
+            <LoadingBTN />
+          ) : initialData ? (
+            t("Edit_shipping_request")
+          ) : (
+            t("send_shipping_request")
+          )}
         </button>
       </div>
     </div>

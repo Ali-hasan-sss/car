@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import OrderCard from "../cards/order_card";
 import Loader from "../loading/loadingPage";
 import { Auction, CarSale, CarShipping } from "@/Types/AuctionTypes"; // تأكد من أن الأنواع تشمل كلاً من الطلبات والسيارات
-import CarCard from "../cards/carCard";
+import CarCard from "../cards/car_card";
 
 interface Grid_ViewProps {
   API?: string;

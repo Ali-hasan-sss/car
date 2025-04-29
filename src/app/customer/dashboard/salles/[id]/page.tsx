@@ -4,12 +4,24 @@ import { useEffect, useState } from "react";
 //import { useLanguage } from "@/context/LanguageContext";
 import { createPortal } from "react-dom";
 
+import { useLanguage } from "@/context/LanguageContext";
+import { base_url } from "@/utils/domain";
+import {
+  getDriveSystemText,
+  getFuelText,
+  getStatusInfo,
+  getTimeAgo,
+  getTransmissionText,
+} from "@/utils/orderUtils";
+
 export default function Car() {
+  const { isArabic, t } = useLanguage();
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [carData, setCarData] = useState<any>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [showAllImages, setShowAllImages] = useState(false);
-  //const { t } = useLanguage();
+  // const { t } = useLanguage();
 
   useEffect(() => {
     const storedCar = localStorage.getItem("selectedCar");
@@ -22,50 +34,60 @@ export default function Car() {
 
   const images = carData.images || [];
   const displayedImages = showAllImages ? images : images.slice(0, 4);
-
-  const isOdd = displayedImages.length % 2 !== 0;
-
+  const fuleText = getFuelText(carData.fuel_type);
+  const driveText = getDriveSystemText(carData.drive_system);
+  const transmissionText = getTransmissionText(carData.transmission_type);
+  const timeAgo = getTimeAgo(carData.created_at);
+  const statusInfo = getStatusInfo(carData.status);
+  const InfoItem = ({ label, value }: { label: string; value: string }) => (
+    <div className=" text-sm  font-bold text-center">
+      <div className="  px-3 text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis">
+        {label}
+      </div>
+      <div
+        className={` whitespace-nowrap overflow-hidden text-ellipsis ${
+          label === "Price" || label === "السعر"
+            ? "text-yellow-700"
+            : "text-primary1"
+        }`}
+      >
+        {value || "-"}
+      </div>
+    </div>
+  );
   return (
-    <>
-      <h1 className="text-3xl font-bold mb-6 text-center">
-        {carData.category?.manufacturer?.title} {carData.category?.title}
-      </h1>
-
-      {/* الحاوية الرئيسية: شبكة الصور + التفاصيل */}
-      <div className="flex flex-col md:flex-row gap-6 items-start">
+    <div className=" mx-auto">
+      <div
+        className="flex flex-col md:flex-row md:gap-6 items-center"
+        style={{ direction: "rtl" }}
+      >
         {/* شبكة الصور */}
         <div className="w-full md:w-1/2">
-          <div className="relative aspect-square overflow-hidden rounded-lg border w-full">
+          <div className="rounded-lg border w-full overflow-hidden max-h-[400px]">
             <div
-              className={`grid grid-cols-2 gap-1 absolute inset-0 p-1`}
+              className={`grid grid-cols-2 gap-1 p-1 overflow-y-auto`}
               style={{
-                overflowY: showAllImages ? "auto" : "hidden",
+                maxHeight: showAllImages ? "400px" : "100%",
               }}
             >
               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              {displayedImages.map((img: any, index: number) => {
-                const isLastAndOdd =
-                  isOdd && index === displayedImages.length - 1;
-                return (
-                  <div
-                    key={index}
-                    className={`relative ${
-                      isLastAndOdd ? "col-span-2" : "col-span-1"
-                    } aspect-square overflow-hidden cursor-pointer`}
-                    onClick={() =>
-                      setSelectedImage(
-                        `https://test.smarty.design/assets/img/common/${img.image}`
-                      )
-                    }
-                  >
-                    <img
-                      src={`https://test.smarty.design/assets/img/common/${img.image}`}
-                      alt={`car-${index}`}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                );
-              })}
+              {displayedImages.map((img: any, index: number) => (
+                <div
+                  key={index}
+                  className="w-full h-48 overflow-hidden cursor-pointer"
+                  onClick={() =>
+                    setSelectedImage(
+                      `https://${base_url}/assets/img/common/${img.image}`
+                    )
+                  }
+                >
+                  <img
+                    src={`https://${base_url}/assets/img/common/${img.image}`}
+                    alt={`car-${index}`}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+              ))}
             </div>
           </div>
 
@@ -73,54 +95,91 @@ export default function Car() {
             <div className="text-center my-4">
               <button
                 onClick={() => setShowAllImages(true)}
-                className="text-blue-600 hover:underline"
+                className="text-blue-600 text-sm hover:underline"
               >
-                عرض كل الصور ({images.length})
+                {isArabic ? "عرض كل الصور" : "Show All Images"} ({images.length}
+                )
               </button>
             </div>
           )}
         </div>
 
         {/* تفاصيل السيارة */}
-        <div className="w-full md:w-1/2">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-lg bg-white p-6 rounded shadow">
-            <p>
-              <strong>السعر:</strong> {carData.price} $
-            </p>
-            <p>
-              <strong>الموديل:</strong> {carData.cmodel?.title}
-            </p>
-            <p>
-              <strong>سنة الصنع:</strong> {carData.year}
-            </p>
-            <p>
-              <strong>عدد الأسطوانات:</strong> {carData.cylinders}
-            </p>
-            <p>
-              <strong>اللون الخارجي:</strong> {carData.ex_color}
-            </p>
-            <p>
-              <strong>اللون الداخلي:</strong> {carData.in_color}
-            </p>
-            <p>
-              <strong>المسافة المقطوعة:</strong> {carData.mileage} كم
-            </p>
-            <p>
-              <strong>نوع الوقود:</strong>{" "}
-              {carData.fuel_type === 1 ? "بنزين" : "ديزل"}
-            </p>
-            <p>
-              <strong>نظام القيادة:</strong>{" "}
-              {carData.drive_system === 1 ? "أمامي" : "خلفي"}
-            </p>
-            <p>
-              <strong>ناقل الحركة:</strong>{" "}
-              {carData.transmission_type === 1 ? "أوتوماتيك" : "عادي"}
-            </p>
-            <p>
-              <strong>تمت الإضافة:</strong>{" "}
-              {new Date(carData.created_at).toLocaleDateString()}
-            </p>
+        <div className="w-full py-6 md:w-1/2 relative overflow-hidden">
+          <h1 className="text-3xl font-bold mb-6 text-center">
+            {carData.category?.manufacturer?.title} - {carData.category?.title}
+          </h1>
+          <img
+            src="/images/EllipseCarPage.png"
+            className="absolute top-0 z-0 w-[350px] "
+            alt=""
+          />
+          <div className="flex flex-col items-center z-10 justify-center">
+            <div className="relative flex items-center w-[100px] h-[50px]">
+              {!isArabic && (
+                <img
+                  src="/images/detailscar.png"
+                  className="w-[50px] absolute top-0 left-0"
+                  alt="sss"
+                />
+              )}
+              <h2
+                className="absolute top-2 text-primary1 font-bold text-xl"
+                style={{ left: "35px" }}
+              >
+                {isArabic ? "التفاصيل" : "Details"}
+              </h2>
+            </div>
+            <div className="flex gap-3 w-[300px] z-10 items-center justify-between">
+              <InfoItem label={t("Car_Model")} value={carData.cmodel?.title} />
+
+              <InfoItem label={t("year")} value={carData.year} />
+            </div>
+            <div className="flex gap-3 mt-4 z-10 w-[300px] items-center justify-between">
+              <InfoItem label={t("Exterior_Color")} value={carData.ex_color} />
+              <InfoItem label={t("Interior_Color")} value={carData.in_color} />
+            </div>
+            <div className="flex gap-3 mt-4 z-10 w-[300px]  items-center justify-between">
+              <InfoItem
+                label={t("Mileage")}
+                value={carData.mileage + " " + "KM"}
+              />
+              <InfoItem label={t("Fuel_Type")} value={t(fuleText)} />
+            </div>
+            <div className="flex gap-3 mt-4 w-[300px] z-10 items-center justify-between">
+              <InfoItem label={t("Drive_System")} value={t(driveText)} />
+              <InfoItem label={t("Transmission")} value={t(transmissionText)} />
+            </div>
+            <div className="flex gap-3 mt-4 z-10 w-[300px] items-center justify-between">
+              <InfoItem label={t("Cylinders")} value={carData.cylinders} />
+              <InfoItem label={t("Price")} value={carData.price + " " + "RO"} />
+            </div>
+            <div className=" gap-1 p-2 mt-10 z-10 w-[300px] flex items-center justify-between w-full">
+              {/* <button
+                onClick={() =>
+                  window.open(
+                    "https://api.whatsapp.com/send/?phone=+963994888888",
+                    "_blank"
+                  )
+                }
+                className="button_outline font-bold text-white px-4 py-2 rounded-lg flex items-center gap-2 transition"
+              >
+                <ShoppingCart /> {isArabic ? "اشتري الان" : "Buy Now"}
+              </button> */}
+              <p className="px-2 z-10 py-1 font-bold text-xs">
+                {t("status")} :
+                <span className={` rounded-full px-2 py-1 ${statusInfo.color}`}>
+                  {t(statusInfo.label)}
+                </span>
+              </p>
+              <p className="text-xs text-gray-400 z-10 ">
+                <strong>{isArabic ? "تمت الإضافة" : "Added On"}:</strong>{" "}
+                {new Date(carData.created_at).toLocaleDateString()}
+              </p>
+              <span className="bg-primary1 text-white p-1 rounded-full text-xs">
+                {t("time_ago")} : {timeAgo}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -143,7 +202,7 @@ export default function Car() {
                   e.stopPropagation();
                   setSelectedImage(null);
                 }}
-                className="absolute top-4 left-4 bg-white text-black px-4 py-2 rounded shadow hover:bg-gray-200"
+                className="absolute top-4 left-4 bg-white text-black px-4 py-2 rounded shadow hover:bg-rex-400"
               >
                 X
               </button>
@@ -151,6 +210,6 @@ export default function Car() {
           </div>,
           document.body
         )}
-    </>
+    </div>
   );
 }

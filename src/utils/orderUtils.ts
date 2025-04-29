@@ -105,6 +105,33 @@ export const getFuelText = (fuel_type: number) => {
     ? "Hybrid"
     : "Electric";
 };
+export const getPackageTypeText = (package_type: number) => {
+  return package_type === 1
+    ? "Spare_Part"
+    : package_type === 2
+    ? "Tire"
+    : package_type === 3
+    ? "Battery"
+    : package_type === 4
+    ? "Engine"
+    : package_type === 5
+    ? "Car_Body_Part"
+    : package_type === 6
+    ? "Accessory"
+    : "Other";
+};
+export const getWeightUnitText = (Weight_unit: number) => {
+  return Weight_unit === 1 ? "Kg" : "Ton";
+};
+export const getDimensionunitText = (Dimension_unit: number) => {
+  return Dimension_unit === 1
+    ? "CM"
+    : Dimension_unit === 2
+    ? "M"
+    : Dimension_unit === 3
+    ? "Foot"
+    : "Inch";
+};
 export const getDriveSystemText = (fuel_type: number) => {
   return fuel_type === 1 ? "FWD" : fuel_type === 2 ? "RWD" : "d4WD";
 };

@@ -124,7 +124,7 @@ export default function Shipping() {
         consignee: "",
         apply_consignee: null,
         use_type: 0,
-        package_shippings: order.packages ?? [],
+        package_shippings: order.package_shippings ?? [],
       };
     };
 
@@ -133,7 +133,6 @@ export default function Shipping() {
     setOpenModal(true);
   };
   const handleDelete = (id: number) => {
-    console.log("تم النقر على حذف، رقم الطلب:", id);
     setOpenDeleteModal(true);
     setDeleteId(id);
   };
@@ -227,15 +226,15 @@ export default function Shipping() {
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-              width: "80%", // 80% من عرض الشاشة (يبقى 10% من الجوانب)
-              maxWidth: "1000px", // الحد الأقصى لعرض المودال
-              height: "80%", // 80% من ارتفاع الشاشة (يبقى 10% من الأعلى والأسفل)
-              maxHeight: "90vh", // ضمان عدم تجاوز الشاشة
+              width: "80%",
+              maxWidth: "1000px",
+              height: "80%",
+              maxHeight: "90vh",
               bgcolor: "background.paper",
               boxShadow: 24,
               p: 3,
               borderRadius: "8px",
-              overflowY: "auto", // السماح بالتمرير عند زيادة المحتوى
+              overflowY: "auto",
               outline: "none",
             }}
           >

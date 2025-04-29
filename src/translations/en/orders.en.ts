@@ -30,6 +30,7 @@ export const orders_en = {
   container: "container",
   group: "group",
   Shipping_Country: "Shipping Country",
+  Color: "Color",
   Exterior_Color: "Exterior Color",
   Interior_Color: "Interior Color",
   white: "white",
@@ -146,6 +147,7 @@ export const orders_en = {
   use_type_option1: "Personal use",
   use_type_option2: "Resale/Wholesale/Business related use",
   Package: "Package",
+  Packages: "Packages",
   send_shipping_request: "send shipping request",
   add_package: "add package",
   add_another_package: "add another package",
@@ -171,4 +173,5 @@ export const orders_en = {
   Item_value: "Item value",
   Total_value: "Total value",
   Total_weight: "Total weight",
+  Edit_shipping_request: "Edit shipping request",
 };
