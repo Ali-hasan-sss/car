@@ -82,7 +82,8 @@ const OrderCard: React.FC<OrderCardProps> = ({
   };
 
   const handleView = (id: number) => {
-    router.push(`${pathname}/${id}`);
+    localStorage.setItem("itemselected", String(id));
+    router.push(`${pathname}/details`);
     handleMenuClose();
   };
 

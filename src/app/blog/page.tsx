@@ -1,45 +1,54 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Navbar from "@/components/header/navbar";
+import Navbar from "@/components/NavBar/navbar";
 import Footer from "@/components/footer";
-import CoverImage from "@/components/Hero_general/cover_image";
+import CoverImage from "@/components/common/cover_image";
 import BlogCard from "@/components/cards/blogCard";
-import WellCome from "@/components/Hello_section/wellcome";
+import WellCome from "@/components/common/wellcome";
 import axiosInstance from "@/utils/axiosInstance";
 import { useLanguage } from "@/context/LanguageContext";
 import Loader from "@/components/loading/loadingPage";
-interface Blog {
-  id: number;
-  title: string;
-  description: string;
-  body: string;
-  slug: string;
-  image: string;
-  images: string[];
-  created_at: string;
-  updated_at: string;
-}
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { fetchBlogUserSuccess } from "@/store/slice/blogUser";
+
 const BlogPage: React.FC = () => {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loadingPage, setLoadingPage] = useState(false);
   const isArabic = useLanguage();
   useEffect(() => {
     document.title = "SOUFAN GLOBAL | Blogs";
   }, []);
+  const dispatch = useDispatch();
+  const blogs = useSelector((state: RootState) => state.blogsUser.blogList);
+  const lastUpdated = useSelector(
+    (state: RootState) => state.blogsUser.lastUpdated
+  );
+  const shouldFetch = () => {
+    const now = Date.now();
+    const fiveMinutes = 5 * 60 * 1000;
+    return now - lastUpdated > fiveMinutes || blogs.length === 0;
+  };
+
   useEffect(() => {
-    const fetchServices = async () => {
-      setLoadingPage(true);
-      try {
-        const response = await axiosInstance.get("/customer/blogs");
-        setBlogs(response.data.data);
-      } catch (error) {
-        console.error("فشل جلب الخدمات", error);
-      } finally {
-        setLoadingPage(false);
-      }
-    };
-    fetchServices();
+    document.title = "SOUFAN GLOBAL | Services";
+  }, []);
+
+  useEffect(() => {
+    if (shouldFetch()) {
+      const fetchServices = async () => {
+        setLoadingPage(true);
+        try {
+          const response = await axiosInstance.get("/customer/services");
+          dispatch(fetchBlogUserSuccess(response.data.data));
+        } catch (error) {
+          console.error("فشل جلب الخدمات", error);
+        } finally {
+          setLoadingPage(false);
+        }
+      };
+      fetchServices();
+    }
   }, [isArabic]);
   return (
     <div>

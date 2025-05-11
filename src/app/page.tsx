@@ -1,14 +1,14 @@
 "use client";
 
-import CTA from "@/components/CTA";
+import CTA from "@/components/common/CTA";
 import Footer from "@/components/footer";
-import Gallery from "@/components/gallery";
-import Navbar from "@/components/header/navbar";
-import Hero from "@/components/hero/hero";
-import HowItWorks from "@/components/HowItWorks";
-import Reviwe from "@/components/reviwe/index";
-import Store from "@/components/store";
-import Success from "@/components/SuccessNO";
+import Gallery from "@/components/homePage/gallery";
+import Navbar from "@/components/NavBar/navbar";
+import Hero from "@/components/homePage/hero/hero";
+import HowItWorks from "@/components/homePage/HowItWorks";
+import Reviwe from "@/components/homePage/reviwe/index";
+import Store from "@/components/carStore";
+import Success from "@/components/homePage/SuccessNO";
 import { useLanguage } from "@/context/LanguageContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";

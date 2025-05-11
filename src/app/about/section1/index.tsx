@@ -3,27 +3,24 @@ import { useLanguage } from "@/context/LanguageContext";
 export default function About_section1() {
   const { isArabic } = useLanguage();
   return (
-    <div className="py-[10px] flex flex-col gap-[40px] md:py-[50px] px-[10px] md:px-[50px] bg-white ">
-      <div className="flex flex-col gap-[10px]">
-        <h2 className="text-3xl font-bold">
-          {isArabic ? "مهمتنا" : "Our Mission"}
-        </h2>
-        <p className="text-text_des text-lg">
-          {isArabic
-            ? "مهمتنا هي تبسيط عملية السيارات لعملائنا من خلال تقديم خدمات شفافة وموثوقة وعالية الجودة. نسعى لأن نكون وجهتك الشاملة لجميع احتياجاتك المتعلقة بالسيارات، مع تقديم قيمة استثنائية وتجاوز التوقعات."
-            : "Our mission is to simplify the automotive process for our customers by offering transparent, reliable, and high-quality services. We aim to be a one-stop destination for all your car-related needs, delivering exceptional value and exceeding expectations."}
-        </p>
+    <div className="py-10 px-2 md:px-10 bg-white ">
+      <div className="block md:flex gap-[80px] items-center justify-between  ">
+        <div className=" w-full py-4 md:w-1/2">
+          <h1 className="title1">
+            {isArabic
+              ? "كيف نشأت شركتنا"
+              : "Tell the story of how our company came about"}
+          </h1>
+        </div>
+        <div className="w-full py-4 md:w-1/2">
+          <p className="des1">
+            {isArabic
+              ? "لماذا توجد شركتنا – بيان المهمة في Soufan Global، تتمثل مهمتنا في تبسيط عملية شراء وبيع السيارات للعملاء حول العالم. نحن ملتزمون بتقديم خدمات شفافة وآمنة وفعّالة في مجالات مزادات السيارات، وشحن المركبات، وبيع السيارات.من خلال الاستفادة من التكنولوجيا المتقدمة والخبرة العميقة في هذا القطاع، نسعى إلى تقديم قيمة استثنائية وتجاوز توقعات عملائنا."
+              : "Why Our Company Exists – Mission Statement At Soufan Global, our mission is to simplify the automotive process for customers around the world. We are committed to delivering transparent, secure, and efficient services in car auctions, vehicle shipping, and auto sales. By leveraging advanced technology and deep industry expertise, we aim to provide exceptional value while exceeding expectations."}
+          </p>
+        </div>
       </div>
-      <div className="flex flex-col gap-[10px]">
-        <h2 className="text-3xl font-bold">
-          {isArabic ? "رؤيتنا" : "Our Vision"}
-        </h2>
-        <p className="text-text_des text-lg">
-          {isArabic
-            ? "رؤيتنا هي أن نصبح رواداً عالميين في مجال خدمات السيارات من خلال بناء سمعة تقوم على التميز والثقة والابتكار. نسعى لربط المشترين والبائعين وشركات الشحن من خلال أحدث التقنيات والحلول التي تركز على العميل."
-            : "To become a global leader in the automotive services industry by building a reputation for excellence, trust, and innovation. We strive to connect buyers, sellers, and shippers through cutting-edge technology and customer-focused solutions."}
-        </p>
-      </div>
+      <div className="placeholder w-full md:h-[75vh]  overflow-hidden "></div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Register_nav from "@/components/header/register_navbar";
+import Register_nav from "@/components/NavBar/register_navbar";
 import Register_footer from "@/components/footer/Register_footer";
 import "../login/login.css";
 import { useLanguage } from "../../context/LanguageContext";
@@ -47,7 +47,6 @@ const Signup: React.FC = () => {
     (state: RootState) => state.auth.user?.is_full_data
   );
 
-  //التحقق من تسجيل الدخول
   useEffect(() => {
     if (isLoggedIn && is_full_data) {
       router.push("/customer/dashboard");
@@ -164,7 +163,7 @@ const Signup: React.FC = () => {
         };
         toast.success("register_success");
         dispatch(setLogin({ token, user: userDataTransformed }));
-        router.push("register/complete");
+        router.push("register/success");
       } catch (error) {
         setLoading(false);
 

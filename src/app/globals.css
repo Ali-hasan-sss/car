@@ -46,7 +46,6 @@ button {
   color: black;
 }
 
-/* تغطية النص من المنتصف */
 .enimat_title::after {
   content: "";
   position: absolute;
@@ -159,4 +158,8 @@ button {
   border: 1px solid #fd0000;
   width: 100%;
   outline: none;
+}
+.placeholder {
+  background-image: url("/images/Placeholder.png");
+  background-position: center;
 }

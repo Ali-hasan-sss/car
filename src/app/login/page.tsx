@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react"; // إضافة useEffect
-import Register_nav from "@/components/header/register_navbar";
+import Register_nav from "@/components/NavBar/register_navbar";
 import Register_footer from "@/components/footer/Register_footer";
 import "./login.css";
 import { useLanguage } from "../../context/LanguageContext";
@@ -78,6 +78,7 @@ const Login: React.FC = () => {
           is_full_data,
           contact,
           idDetail,
+          email_verified_at,
         } = response.data.data;
         const [first_name, last_name] = name.split(" ");
 
@@ -89,6 +90,7 @@ const Login: React.FC = () => {
           userRole: type === 1 ? "USER" : "COMPANY",
           type,
           is_full_data: is_full_data === 1,
+          email_verified_at: email_verified_at,
           contact: contact || null,
           idDetail: idDetail || null,
         };
@@ -121,7 +123,7 @@ const Login: React.FC = () => {
   };
 
   if (isLoggedIn) {
-    return null; // أو يمكنك عرض رسالة أو إعادة توجيه مباشرة
+    return null;
   }
 
   return (
@@ -134,7 +136,7 @@ const Login: React.FC = () => {
               <h1 className="title">{t("Login")}</h1>
               <p className="des">{t("login_des")}</p>
             </div>
-            <form className="flex w-full flex-col" onSubmit={handleSubmit}>
+            <form className="flex w-full flex-col " onSubmit={handleSubmit}>
               <EmailInput
                 value={formData.email}
                 error={errors.email}

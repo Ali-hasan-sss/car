@@ -2,8 +2,8 @@
 
 import Footer from "@/components/footer";
 import ContactForm from "@/components/forms/contact_form";
-import Navbar from "@/components/header/navbar";
-import CoverImage from "@/components/Hero_general/cover_image";
+import Navbar from "@/components/NavBar/navbar";
+import CoverImage from "@/components/common/cover_image";
 import Follow_us from "@/components/sucial_Midia/follow_us";
 import React, { useEffect } from "react";
 

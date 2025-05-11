@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { CircularProgress, Dialog } from "@mui/material";
-import UserForm from "@/components/adminComponents/forms/UserForm";
+import UserForm from "@/components/forms/UserForm";
 import DeleteMessage from "@/components/messags/deleteMessage";
 import {
   FaBuilding,

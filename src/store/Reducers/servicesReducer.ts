@@ -13,14 +13,14 @@ const servicesSlice = createSlice({
   reducers: {
     fetchServicesSuccess(state, action: PayloadAction<Service[]>) {
       state.servicesList = action.payload;
-      state.lastUpdated = Date.now(); // <-- تحديث وقت آخر تحديث
+      state.lastUpdated = Date.now();
     },
     selectService(state, action: PayloadAction<Service>) {
       state.selectedService = action.payload;
     },
     addService(state, action: PayloadAction<Service>) {
       state.servicesList.push(action.payload);
-      state.lastUpdated = Date.now(); // <-- تحديث وقت آخر تعديل
+      state.lastUpdated = Date.now();
     },
     updateService(state, action: PayloadAction<Service>) {
       const index = state.servicesList.findIndex(
@@ -31,14 +31,14 @@ const servicesSlice = createSlice({
           ...state.servicesList[index],
           ...action.payload,
         };
-        state.lastUpdated = Date.now(); // <-- تحديث وقت آخر تعديل
+        state.lastUpdated = Date.now();
       }
     },
     deleteService(state, action: PayloadAction<number>) {
       state.servicesList = state.servicesList.filter(
         (service) => service.id !== action.payload
       );
-      state.lastUpdated = Date.now(); // <-- تحديث وقت آخر تعديل
+      state.lastUpdated = Date.now();
     },
   },
 });

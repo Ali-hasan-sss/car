@@ -12,14 +12,18 @@ import adminManufacturerSlice from "./slice/adminManufacturerSlice";
 import auctionSlice from "./slice/AuctionsSlice";
 import carSalesReducer from "./slice/carSalesSlice";
 import userReducer from "./slice/userSlice";
+import servicesuserReducer from "./slice/servicesCustomer";
 import carShippingReducer from "./slice/ShippingSlice";
+import BlogUserReducer from "./slice/blogUser";
 const store = configureStore({
   reducer: {
     auth: authReducer,
     admins: adminsReducer,
     socialMedia: socialMediaReducer,
     services: servicesReducer,
+    servicesUser: servicesuserReducer,
     blogs: blogsReducer,
+    blogsUser: BlogUserReducer,
     fileUpload: fileUploadReducer,
     tableData: tableDataReducer,
     countries: countriesReducer,

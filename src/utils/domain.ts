@@ -1,1 +1,1 @@
-export const base_url = "test.smarty.design";
+export const base_url = "backend.soufanglobal.com";

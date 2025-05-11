@@ -5,8 +5,9 @@ import { useDropzone } from "react-dropzone";
 import { Image, Trash2 } from "lucide-react";
 import { useLanguage } from "../../../context/LanguageContext";
 import LoadingBTN from "@/components/loading/loadingBTN";
+import { base_url } from "@/utils/domain";
 
-const BASE_IMAGE_URL = "https://test.smarty.design/assets/img/common/";
+const BASE_IMAGE_URL = `https://${base_url}/assets/img/common/`;
 
 interface ImageUploaderProps {
   onImagesUpload: (fileNames: string[]) => void;

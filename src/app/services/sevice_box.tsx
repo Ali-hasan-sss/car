@@ -28,7 +28,7 @@ export default function Servic_box({
               : "border-primary1 text-primary1 hover:bg-secondary1"
           }`}
         >
-          {isActive ? "Hide Details" : "Show Details"}
+          {isActive ? "Hide Details" : "Explore Service"}
           {isActive ? <ChevronUp /> : <ChevronDown />}
         </button>
       </div>

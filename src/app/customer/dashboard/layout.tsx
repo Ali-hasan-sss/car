@@ -1,8 +1,8 @@
 "use client";
 import "./dashboard.css";
-import Footer from "../../../components/DashboardComponernt/footer";
-import Sidebar from "../../../components/DashboardComponernt/siedbar";
-import Topbar from "../../../components/DashboardComponernt/topbar";
+import Footer from "../../../components/DashboardComponernt/customer/footer";
+import Sidebar from "../../../components/DashboardComponernt/customer/siedbar";
+import Topbar from "../../../components/DashboardComponernt/customer/topbar";
 import AuthGuard from "@/app/admin/AuthGuard";
 import { useEffect, useState } from "react";
 

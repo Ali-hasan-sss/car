@@ -3,8 +3,8 @@
 import { useLanguage } from "../../../../context/LanguageContext";
 import GeneralFilter from "@/components/DashboardComponernt/filters/generalFilter";
 import QuickFilter from "@/components/DashboardComponernt/filters/quickFillter";
-import TableHeader from "@/components/DashboardComponernt/titleBar/tableHeader";
-import ToolBar from "@/components/DashboardComponernt/toolbar";
+import TableHeader from "@/components/common/titleBar/tableHeader";
+import ToolBar from "@/components/common/toolbar";
 import Search_input from "@/components/inputs/search_input";
 import { Modal, Box } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -130,7 +130,6 @@ export default function SallesPage() {
   };
 
   const handleDelete = (id: number) => {
-    console.log("تم النقر على حذف، رقم الطلب:", id);
     setOpenDeleteModal(true);
     setDeleteId(id);
   };

@@ -1,49 +1,54 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Navbar from "@/components/header/navbar";
+import Navbar from "@/components/NavBar/navbar";
 import Servic_box from "./sevice_box";
 import Footer from "@/components/footer";
-import CTA from "@/components/CTA";
-import CoverImage from "@/components/Hero_general/cover_image";
+import CTA from "@/components/common/CTA";
+import CoverImage from "@/components/common/cover_image";
 import { useLanguage } from "../../context/LanguageContext";
-
 import axiosInstance from "@/utils/axiosInstance";
 import Loader from "@/components/loading/loadingPage";
 import { useRouter } from "next/navigation";
-
-interface Service {
-  id: number;
-  title: string;
-  description: string;
-  body: string;
-  slug: string;
-  image: string;
-  images: string[];
-  created_at: string;
-  updated_at: string;
-}
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { fetchServicesUserSuccess } from "@/store/slice/servicesCustomer";
 
 const ServicesPage: React.FC = () => {
   const { t, isArabic } = useLanguage();
-  const [services, setServices] = useState<Service[]>([]);
   const [loadingPage, setLoadingPage] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch();
+  const services = useSelector(
+    (state: RootState) => state.servicesUser.servicesList
+  );
+  const lastUpdated = useSelector(
+    (state: RootState) => state.servicesUser.lastUpdated
+  );
+  const shouldFetch = () => {
+    const now = Date.now();
+    const fiveMinutes = 5 * 60 * 1000;
+    return now - lastUpdated > fiveMinutes || services.length === 0;
+  };
+
   useEffect(() => {
     document.title = "SOUFAN GLOBAL | Services";
   }, []);
+
   useEffect(() => {
-    const fetchServices = async () => {
-      setLoadingPage(true);
-      try {
-        const response = await axiosInstance.get("/customer/services");
-        setServices(response.data.data);
-      } catch (error) {
-        console.error("فشل جلب الخدمات", error);
-      } finally {
-        setLoadingPage(false);
-      }
-    };
-    fetchServices();
+    if (shouldFetch()) {
+      const fetchServices = async () => {
+        setLoadingPage(true);
+        try {
+          const response = await axiosInstance.get("/customer/services");
+          dispatch(fetchServicesUserSuccess(response.data.data));
+        } catch (error) {
+          console.error("فشل جلب الخدمات", error);
+        } finally {
+          setLoadingPage(false);
+        }
+      };
+      fetchServices();
+    }
   }, [isArabic]);
 
   const [selectedService, setSelectedService] = useState<string | null>(null);

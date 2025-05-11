@@ -5,9 +5,9 @@ import axiosInstance from "@/utils/axiosInstance";
 import { Service, ServiceBlogFormProps } from "@/Types/adminTypes";
 import { RootState } from "@/store/store";
 import "../services/style.css";
-import TitleBar from "@/components/DashboardComponernt/titleBar";
+import TitleBar from "@/components/common/titleBar";
 import { useLanguage } from "../../../../context/LanguageContext";
-import ServiceBlogForm from "../../../../components/adminComponents/forms/service+blogForm";
+import ServiceBlogForm from "../../../../components/forms/service+blogForm";
 import {
   addService,
   deleteService,

@@ -3,6 +3,7 @@ import { Switch } from "@mui/material";
 import { Blog } from "@/Types/adminTypes";
 import Link from "next/link";
 import { Edit, Eye, Trash } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function BlogCard({
   id,
@@ -24,11 +25,15 @@ export default function BlogCard({
 
   const handleImageLoad = () => setLoading(false);
   const handleImageError = () => setLoading(false);
-
+  const router = useRouter();
   // ✅ دالة لاستخراج النص بناءً على كونه كائنًا أو نصًا مباشرًا
   const getLocalizedText = (text: string | { en: string; ar: string }) => {
     if (typeof text === "string") return text;
     return isArabic ? text.ar : text.en;
+  };
+  const handleView = () => {
+    localStorage.setItem("itemselected", String(id));
+    router.push("/admin/dashboard/blogs/details");
   };
 
   return (
@@ -103,12 +108,12 @@ export default function BlogCard({
           >
             <Trash />
           </button>
-          <Link
-            href={`/admin/dashboard/blogs/${id}`}
+          <button
+            onClick={handleView}
             className="flex items-center justify-center w-[30px] h-[30px] bg-blue-100 p-1 rounded-full"
           >
             <Eye />
-          </Link>
+          </button>
           <button
             onClick={onedit}
             className="flex items-center justify-center w-[30px] h-[30px] bg-yellow-100 p-1 rounded-full"

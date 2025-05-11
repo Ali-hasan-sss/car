@@ -1,8 +1,8 @@
 "use client";
 import { Provider } from "react-redux";
 import React, { useEffect, useState } from "react";
-import Sidebar from "../../../components/adminComponents/Sidebar";
-import AdminNavbar from "../../../components/adminComponents/navbar";
+import Sidebar from "../../../components/DashboardComponernt/admin/Sidebar";
+import AdminNavbar from "../../../components/DashboardComponernt/admin/navbar";
 import AuthGuard from "../AuthGuard";
 import store from "@/store/store";
 

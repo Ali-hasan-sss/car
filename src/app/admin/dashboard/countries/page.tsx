@@ -1,5 +1,5 @@
 "use client";
-import ToolBar from "@/components/DashboardComponernt/toolbar";
+import ToolBar from "@/components/common/toolbar";
 import Search_input from "@/components/inputs/search_input";
 import GeneralTable, { Column } from "@/components/table";
 import { useState } from "react";

@@ -7,9 +7,10 @@ export const pages_en = {
   What_shipping: "What are you shipping?",
   Select_address: "Select your address",
   Enter_Email: "Enter Your Email Address",
-  Get_Quote: "Get Instant Quote up",
+  Get_Quote: "Get an Instant Quote",
   store_title: "Car Showroom",
-  store_des: "Shop your perfect car from our platform with ease and confidence",
+  store_des:
+    "Find your perfect car through our platform with ease and confidence",
   Lot_No: "Listing No.",
   Current_Bid: "Price",
   Location: "Location",

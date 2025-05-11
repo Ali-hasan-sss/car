@@ -121,6 +121,14 @@ export interface Blog {
   ondelete?: () => void;
   onedit?: () => void;
 }
+export interface BlogUser {
+  id: number;
+  title: string;
+  description: string;
+  body: string;
+  image: string;
+  images?: string[];
+}
 
 export interface BlogsState {
   blogsList: Blog[];
@@ -137,6 +145,14 @@ export interface Service {
   description: { en: string; ar: string };
   ondelete?: () => void;
   onedit?: () => void;
+}
+export interface ServiceUser {
+  id: number;
+  title: string;
+  body: string;
+  image: string;
+  images?: string[];
+  description: string;
 }
 
 export interface ServicesState {

@@ -29,7 +29,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/types/app/admin-dashboard/page.ts",
-    "src/components/DashboardComponernt/toolbar"
+    "src/components/common/toolbar"
   ],
   "exclude": ["node_modules"]
 }

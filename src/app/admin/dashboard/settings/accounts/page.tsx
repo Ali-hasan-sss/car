@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useLanguage } from "../../../../../context/LanguageContext";
-import PasswordForm from "@/components/adminComponents/forms/changePassword";
-import ProfileForm from "@/components/adminComponents/forms/ProfileForm";
+import PasswordForm from "@/components/forms/changePassword";
+import ProfileForm from "@/components/forms/ProfileForm";
 import AnimatedModal from "@/components/modal/AnimatedModal";
 import { Switch, Typography } from "@mui/material";
 import { Admin } from "@/Types/adminTypes";

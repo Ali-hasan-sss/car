@@ -4,7 +4,7 @@ import axiosInstance from "@/utils/axiosInstance";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import DeleteMessage from "../messags/deleteMessage";
-import DynamicForm from "../adminComponents/forms/DynamicForm";
+import DynamicForm from "../forms/DynamicForm";
 import AnimatedModal from "../modal/AnimatedModal";
 import { usePathname, useRouter } from "next/navigation";
 import { Box, IconButton, Menu, MenuItem, Modal } from "@mui/material";
@@ -289,7 +289,8 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
     handleMenuClose();
   };
   const handleView = (id: number) => {
-    router.push(`${pathname}/${id}`);
+    localStorage.setItem("itemselected", String(id));
+    router.push(`${pathname}/details`);
     handleMenuClose();
   };
 

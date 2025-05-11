@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axiosInstance from "@/utils/axiosInstance";
-import Navbar from "@/components/header/navbar";
+import Navbar from "@/components/NavBar/navbar";
 import Footer from "@/components/footer";
 import Loader from "@/components/loading/loadingPage";
 import { useLanguage } from "@/context/LanguageContext";

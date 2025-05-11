@@ -63,7 +63,8 @@ const CarCard: React.FC<CarCardProps> = ({
 
   const handleView = (id: number) => {
     localStorage.setItem("selectedCar", JSON.stringify(car));
-    router.push(`${pathname}/${id}`);
+    localStorage.setItem("itemselected", String(id));
+    router.push(`${pathname}/details`);
     handleMenuClose();
   };
 
