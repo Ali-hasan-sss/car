@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { BlogUser, ServiceUser } from "../../Types/adminTypes";
+import { BlogUser } from "../../Types/adminTypes";
 
 // الحالة الأولية
 interface BlogUserState {
@@ -19,11 +19,11 @@ const blogUserSlice = createSlice({
   name: "services",
   initialState,
   reducers: {
-    fetchBlogUserSuccess(state, action: PayloadAction<ServiceUser[]>) {
+    fetchBlogUserSuccess(state, action: PayloadAction<BlogUser[]>) {
       state.blogList = action.payload;
       state.lastUpdated = Date.now();
     },
-    selectUserBlog(state, action: PayloadAction<ServiceUser>) {
+    selectUserBlog(state, action: PayloadAction<BlogUser>) {
       state.selectedBlog = action.payload;
       state.lastUpdated = Date.now();
     },

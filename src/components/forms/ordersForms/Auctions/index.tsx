@@ -39,7 +39,7 @@ export default function Auctions({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [categories, setCategories] = useState<any[]>([]);
   // const [models, setModels] = useState<any[]>([]);
-
+  const userRole = useSelector((state: RootState) => state.auth.user?.userRole);
   const [formData, setFormData] = useState<AuctionsFormInputs>({
     auction_link: "",
     manufacturer: null,
@@ -179,8 +179,10 @@ export default function Auctions({
 
   useEffect(() => {
     if (status === "idle") {
-      setManufacturerLoading(true);
-      dispatch(fetchManufacturers());
+      if (userRole === "ADMIN" || userRole === "USER") {
+        setManufacturerLoading(true);
+        dispatch(fetchManufacturers(userRole));
+      }
     }
   }, [dispatch, status]);
 
@@ -345,7 +347,9 @@ export default function Auctions({
             onChange={(value) =>
               setFormData({ ...formData, country_id: value })
             }
-            Api_URL="customer/countries?is_shown_auction=1"
+            Api_URL={`${
+              userRole === "ADMIN" ? "admin" : "customer"
+            }/countries?is_shown_auction=1`}
             error={errors.country_id}
           />
         </div>

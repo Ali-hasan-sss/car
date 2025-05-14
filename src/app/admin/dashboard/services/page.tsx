@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import axiosInstance from "@/utils/axiosInstance";
 import { Service, ServiceBlogFormProps } from "@/Types/adminTypes";
 import { RootState } from "@/store/store";
-import "../services/style.css";
 import TitleBar from "@/components/common/titleBar";
 import { useLanguage } from "../../../../context/LanguageContext";
 import ServiceBlogForm from "../../../../components/forms/service+blogForm";
@@ -126,7 +125,7 @@ export default function Services() {
       const payload = {
         title: JSON.stringify(formData.title),
         body: JSON.stringify(formData.body),
-        image: formData.image, // إرسال الاسم فقط
+        image: formData.image,
         description: JSON.stringify(formData.description),
         images: formData.images.length > 0 ? formData.images : undefined, // إرسال أسماء الصور فقط
       };
@@ -178,7 +177,7 @@ export default function Services() {
   };
 
   return (
-    <div className="flex flex-col gap-[30px] items-center">
+    <div className="flex w-full flex-col gap-5 items-center">
       <TitleBar
         title={t("Services")}
         btnLabel={"+" + " " + t("Add_New_ٍService")}
@@ -204,21 +203,22 @@ export default function Services() {
         />
       </AnimatedModal>
       <div className="mt-5 w-full">
-        <div className="mt-5 flex flex-wrap gap-4 w-full">
+        <div className="flex flex-wrap bg-white p-5 rounded-2xl justify-between gap-2 w-full">
           {loadingPage ? (
-            <div className="w-full flex items-center justify-center">
+            <div className="w-full h-[70vh] flex items-center justify-center">
               <Loader />
             </div>
           ) : (
             services.map((service: Service) => (
               <InfoCard
+                id={service.id}
                 className="bg-secondary1"
                 key={service.id}
                 title={service.title}
                 body={service.body}
                 des={service.description}
                 image={service.image}
-                width="300"
+                width="280"
                 ondelete={() => handleDelete(service.id)}
                 onedit={() => {
                   openModal(service);

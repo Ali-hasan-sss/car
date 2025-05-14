@@ -205,19 +205,20 @@ export default function SocialMediaSettings() {
     setOpenDelete(true);
   };
   return (
-    <Box className="p-6 bg-white">
-      <Typography variant="h5" className="font-bold mb-4 text-center">
-        {t("socialMidia")}
-      </Typography>
+    <Box className="p-6 bg-white w-[400px] border">
+      <div className="flex items-center gap-2 justify-between">
+        <Typography className="font-bold text-xl mb-4 text-center">
+          {t("socialMidia")}
+        </Typography>
+        <button
+          onClick={() => handleOpen()}
+          className="button_outline  py-1 px-2"
+        >
+          + {t("Add_New_Social")}
+        </button>{" "}
+      </div>
 
-      <button
-        onClick={() => handleOpen()}
-        className="button_outline  py-2 px-3"
-      >
-        + {t("Add_New_Social")}
-      </button>
-
-      <div className="space-y-4 mt-5 e-w-full">
+      <div className="space-y-4 mt-5 bg-gray-50 min-h-[200px] rounded-xl e-w-full">
         {loading ? (
           <div className="w-full flex items-center justify-center">
             <Loader />
@@ -226,7 +227,7 @@ export default function SocialMediaSettings() {
           socialMediaList.map((item) => (
             <div
               key={item.id}
-              className="flex items-center border-b border-gray-400 w-full md:w-1/2 gap-4"
+              className="flex items-center border-b border-gray-400 w-full gap-4"
             >
               {getIcon(item.icon)}
               <a
@@ -280,7 +281,7 @@ export default function SocialMediaSettings() {
         <Typography variant="h6" className="font-bold mb-4">
           {editing ? t("Edit_Social") : t("Add_New_Social")}
         </Typography>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 p-3">
           <TextField
             select
             fullWidth

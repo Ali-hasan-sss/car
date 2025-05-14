@@ -8,7 +8,7 @@ import ToolBar from "@/components/common/toolbar";
 import Search_input from "@/components/inputs/search_input";
 import { Modal, Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import Auctions from "../ordersForms/Auctions";
+import Auctions from "../../../../components/forms/ordersForms/Auctions";
 import GeneralTable, { Column } from "@/components/table";
 import Grid_View from "@/components/table/gridView";
 import { useAppDispatch } from "@/store/Reducers/hooks";

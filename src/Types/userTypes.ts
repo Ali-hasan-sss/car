@@ -34,3 +34,26 @@ export interface UserData {
   created_at: string;
   updated_at: string;
 }
+export interface NotificationPayload {
+  type: string;
+  uId: number;
+}
+
+export interface NotificationItem {
+  id: number;
+  title: string;
+  message: string;
+  readed_at: string | null;
+  payload: NotificationPayload;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface NotificationsResponse {
+  success: boolean;
+  data: {
+    notifications: NotificationItem[];
+    page_count: number;
+  };
+  message: string;
+}

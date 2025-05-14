@@ -60,7 +60,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   useEffect(() => {
     if (open) {
       axiosInstance
-        .get("admin/manufacturers") // تعديل الرابط حسب API الخاص بك
+        .get("admin/manufacturers")
         .then((res) => setManufacturers(res.data.data))
         .catch((err) => console.error("❌ خطأ في جلب الأنواع:", err));
     }
@@ -70,7 +70,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   useEffect(() => {
     if (open) {
       axiosInstance
-        .get("admin/categories") // تعديل الرابط حسب API الخاص بك
+        .get("admin/categories")
         .then((res) => setCategories(res.data.data))
         .catch((err) => console.error("❌ خطأ في جلب الفئات:", err));
     }

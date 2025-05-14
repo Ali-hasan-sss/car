@@ -1,5 +1,5 @@
 "use client";
-import Auctions from "@/app/customer/dashboard/ordersForms/Auctions";
+import Auctions from "@/components/forms/ordersForms/Auctions";
 import InfoItem from "@/components/common/orderinfoItem";
 import SectionBox from "@/components/common/sectionbox";
 import Loader from "@/components/loading/loadingPage";

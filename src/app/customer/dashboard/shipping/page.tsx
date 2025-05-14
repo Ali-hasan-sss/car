@@ -14,7 +14,7 @@ import { useAppDispatch } from "@/store/Reducers/hooks";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import CustomPagination from "@/components/pagination/extrnalPagenation";
-import ShippingForm from "../ordersForms/shipping";
+import ShippingForm from "../../../../components/forms/ordersForms/shipping";
 import {
   deleteCarShipping,
   fetchCarShippings,

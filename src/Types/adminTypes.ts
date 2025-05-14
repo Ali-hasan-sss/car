@@ -121,13 +121,21 @@ export interface Blog {
   ondelete?: () => void;
   onedit?: () => void;
 }
+export interface blogImages {
+  id: number;
+  image: string;
+  blog_id: number;
+}
 export interface BlogUser {
   id: number;
   title: string;
   description: string;
   body: string;
   image: string;
-  images?: string[];
+  images?: blogImages[];
+  slug: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface BlogsState {

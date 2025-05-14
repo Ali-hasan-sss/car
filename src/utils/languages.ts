@@ -258,8 +258,8 @@ export const translations: Record<Language, { [key: string]: string }> = {
     //actions
 
     //titles
-    Arabic_Info: "المقال بالعربي",
-    English_Info: "المقال الانجليزي",
+    Arabic_Info: "المحتوى بالعربي",
+    English_Info: "المحتوى الانجليزي",
     Body_ar: "النص (عربي)",
     Body_en: "النص (انجليزي)",
     desc_ar: "الوصف (عربي)",

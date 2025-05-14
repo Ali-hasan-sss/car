@@ -22,7 +22,7 @@ import {
   updateCarSale,
 } from "@/store/slice/carSalesSlice";
 import { Box, Modal } from "@mui/material";
-import Salles from "@/app/customer/dashboard/ordersForms/salles";
+import Salles from "@/components/forms/ordersForms/salles";
 import { toast } from "sonner";
 
 export default function Sales() {
@@ -96,8 +96,9 @@ export default function Sales() {
   const apiUrl = `admin/car-sales`;
   const [view, setView] = useState("table");
   const dispatch = useAppDispatch();
-  const { carSales, error, loading, actionLoadingIds, totalPages } =
-    useSelector((state: RootState) => state.carSales);
+  const { carSales, loading, actionLoadingIds, totalPages } = useSelector(
+    (state: RootState) => state.carSales
+  );
   const [actions] = useState({
     edit: true,
     add: true,
@@ -174,7 +175,7 @@ export default function Sales() {
     setOpenDeleteModal(true);
     setDeleteId(id);
   };
-  if (error) return <div>{error}</div>;
+  // if (error) return <div>{error}</div>;
   return (
     <div className="flex flex-col items-center w-full  gap-[5px]">
       <TableHeader

@@ -2,9 +2,11 @@
 import ToolBar from "@/components/common/toolbar";
 import Search_input from "@/components/inputs/search_input";
 import GeneralTable, { Column } from "@/components/table";
+import { useLanguage } from "@/context/LanguageContext";
 import { useState } from "react";
 
 const CountryList = () => {
+  const { t } = useLanguage();
   const apiUrl = "admin/countries";
   const columns: Column[] = [
     { id: "title", label: "البلد", languageDisplay: "en" },
@@ -19,7 +21,7 @@ const CountryList = () => {
     delete: true,
   });
   return (
-    <div>
+    <div className="w-full">
       <Search_input value={searchTerm} onChange={setSearchTerm} />
 
       <ToolBar
@@ -28,8 +30,8 @@ const CountryList = () => {
         totalItems={totalCount}
       />
       <GeneralTable
-        title="انواع السيارات"
-        AddButtonLabel="اضافة بلد جديد"
+        title={t("countries")}
+        AddButtonLabel={t("add_new_country")}
         columns={columns}
         actionLoading={[]}
         apiUrl={apiUrl}

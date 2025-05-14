@@ -58,6 +58,7 @@ export default function ShippingForm({
   const { manufacturers, status } = useSelector(
     (state: RootState) => state.manufacturer
   );
+  const userRole = useSelector((state: RootState) => state.auth.user?.userRole);
   const [manufacturerLoading, setManufacturerLoading] = useState(false);
   const currentYear = new Date().getFullYear();
   const yearOfMade = Array.from({ length: 30 }, (_, i) => {
@@ -66,8 +67,10 @@ export default function ShippingForm({
   });
   useEffect(() => {
     if (status === "idle") {
-      setManufacturerLoading(true);
-      dispatch(fetchManufacturers());
+      if (userRole === "ADMIN" || userRole === "USER") {
+        setManufacturerLoading(true);
+        dispatch(fetchManufacturers(userRole));
+      }
     }
   }, [dispatch, status]);
 
@@ -493,7 +496,9 @@ export default function ShippingForm({
           <div className="selector w-full md:w-1/4">
             <label>Location of car</label>
             <DainamicSelector
-              Api_URL="customer/countries?is_shown_auction=1"
+              Api_URL={`${
+                userRole === "ADMIN" ? "admin" : "customer"
+              }/countries?is_shown_auction=1`}
               placeholder="Canada"
               value={formData.location_of_car}
               onChange={(value) => handleInputChange("location_of_car", value)}

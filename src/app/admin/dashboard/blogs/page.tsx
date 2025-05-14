@@ -10,7 +10,6 @@ import {
   updateBlog,
 } from "@/store/Reducers/blogsReducer";
 import { RootState } from "@/store/store";
-import "../services/style.css";
 import TitleBar from "@/components/common/titleBar";
 import { useLanguage } from "../../../../context/LanguageContext";
 import ServiceBlogForm from "../../../../components/forms/service+blogForm";

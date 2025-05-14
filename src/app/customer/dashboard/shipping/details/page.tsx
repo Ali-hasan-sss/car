@@ -1,5 +1,5 @@
 "use client";
-import ShippingForm from "@/app/customer/dashboard/ordersForms/shipping";
+import ShippingForm from "@/components/forms/ordersForms/shipping";
 import InfoItem from "@/components/common/orderinfoItem";
 import SectionBox from "@/components/common/sectionbox";
 import Loader from "@/components/loading/loadingPage";

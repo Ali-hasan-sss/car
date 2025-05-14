@@ -5,6 +5,7 @@ import { useLanguage } from "../../../context/LanguageContext";
 import Link from "next/link";
 import { useSelector } from "react-redux"; // استيراد useSelector
 import { RootState } from "@/store/store"; // استيراد RootState للوصول إلى الحالة من Redux
+import NotificationDropdown from "@/components/notifications/NotificationDropdown";
 
 export default function Navbutton() {
   const { t } = useLanguage();
@@ -13,7 +14,10 @@ export default function Navbutton() {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   return isLoggedIn ? (
-    <Avatar width="20" />
+    <div className="flex items-center justify-center gap-6">
+      <Avatar width="20" />
+      <NotificationDropdown />
+    </div>
   ) : (
     <div className="flex gap-[8px] items-center">
       <Link

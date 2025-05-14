@@ -8,7 +8,7 @@ import ToolBar from "@/components/common/toolbar";
 import Search_input from "@/components/inputs/search_input";
 import { Modal, Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import Salles from "../ordersForms/salles";
+import Salles from "../../../../components/forms/ordersForms/salles";
 import GeneralTable, { Column } from "@/components/table";
 import { useAppDispatch } from "@/store/Reducers/hooks";
 import CustomPagination from "@/components/pagination/extrnalPagenation";

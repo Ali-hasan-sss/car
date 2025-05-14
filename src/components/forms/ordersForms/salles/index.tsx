@@ -72,6 +72,7 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
   const { manufacturers, status } = useSelector(
     (state: RootState) => state.manufacturer
   );
+  const userRole = useSelector((state: RootState) => state.auth.user?.userRole);
   const currentYear = new Date().getFullYear();
   const yearOfMade = Array.from({ length: 30 }, (_, i) => {
     const yearString = (currentYear - i).toString();
@@ -113,8 +114,10 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
 
   useEffect(() => {
     if (status === "idle") {
-      setManufacturerLoading(true);
-      dispatch(fetchManufacturers());
+      if (userRole === "ADMIN" || userRole === "USER") {
+        setManufacturerLoading(true);
+        dispatch(fetchManufacturers(userRole));
+      }
     }
   }, [dispatch, status]);
   useEffect(() => {
@@ -224,14 +227,14 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
   };
 
   return (
-    <div className="flex flex-col gap-[16px] px-[15px]">
+    <div className="flex w-full flex-col gap-5 px-[15px]">
       <div className="heading_form flex item-center justify-center">
-        <h2 className="text-xl">{t("Car_Sales")}</h2>
+        <h2 className="text-xl font-bold ">{t("Car_Sales")}</h2>
       </div>
-      <div className="carInfo flwx fles-col items-center justify-start gap-[15px]">
-        <h3 className="text-xl">{t("Car_Information")} :</h3>
-        <div className="flex flex-wrap items-center justify-between  gap-[15px]">
-          <div className="selector">
+      <div className="carInfo w-full flex flex-col justify-start gap-5">
+        <h3 className="text-xl font-bold mt-4">{t("Car_Information")} :</h3>
+        <div className="flex flex-wrap w-full items-center justify-between gap-[15px]">
+          <div className="selector w-[250px]">
             <label>{t("Car_Manufacturer")} :</label>
             <DainamicSelector
               placeholder="BMW , Audi , kia ..."
@@ -242,7 +245,7 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
               dataLoading={manufacturerLoading}
             />
           </div>
-          <div className="selector">
+          <div className="selector w-[250px]">
             <label>{t("Car_Model")} :</label>
             <DainamicSelector
               data={categories}
@@ -252,7 +255,7 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
               error={errors.category_id}
             />
           </div>
-          <div className="selector">
+          <div className="selector w-[250px]">
             <label>{t("Category")} :</label>
             <DainamicSelector
               placeholder={t("choes_category_first")}
@@ -261,7 +264,9 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
               onChange={handleModelChange}
             />
           </div>
-          <div className="selector">
+        </div>
+        <div className="flex flex-wrap w-full items-center justify-between gap-[15px]">
+          <div className="selector w-[250px]">
             <label>{t("year")} :</label>
             <Text_selector
               options={yearOfMade}
@@ -271,7 +276,7 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
               error={errors.year}
             />
           </div>
-          <div className="selector">
+          <div className="selector w-[250px]">
             <label>{t("Mileage")} :</label>
             <Text_selector
               options={mileageOptions}
@@ -281,7 +286,7 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
               error={errors.mileage}
             />
           </div>
-          <div className="selector">
+          <div className="selector w-[250px]">
             <label> {t("Drive_System")} :</label>
             <Text_selector
               options={driveSystemOPtions}
@@ -294,12 +299,11 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
             />
           </div>
         </div>
-        <div className="flex flex-wrap items-center justify-between  gap-[10px]"></div>
       </div>
-      <div className="carInfo flwx fles-col items-center justify-start gap-[10px]">
-        <h3 className="text-xl">{t("Specifications")} :</h3>
-        <div className="flex flex-wrap items-center justify-between  gap-[10px]">
-          <div className="selector">
+      <div className="carInfo w-full flex flex-col justify-start gap-5">
+        <h3 className="text-xl font-bold mt-4">{t("Specifications")} :</h3>
+        <div className="flex w-full flex-wrap items-center justify-between  gap-[10px]">
+          <div className="selector w-[250px]">
             <label>{t("Number_of_Cylinders")} :</label>
             <Text_selector
               options={NumberOfCylinders}
@@ -311,7 +315,7 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
               error={errors.cylinders}
             />
           </div>
-          <div className="selector">
+          <div className="selector w-[250px]">
             <label>{t("Transmission_Type")} :</label>
             <Text_selector
               options={TransmissionTypeOptions}
@@ -323,7 +327,7 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
               error={errors.transmission_type}
             />
           </div>
-          <div className="selector">
+          <div className="selector w-[250px]">
             <label>{t("Fuel_Type")} :</label>
             <Text_selector
               options={fuelTypeOptions}
@@ -335,7 +339,9 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
               error={errors.fuel_type}
             />
           </div>
-          <div className="selector">
+        </div>
+        <div className="flex w-full flex-wrap items-center justify-between  gap-[10px]">
+          <div className="selector w-[250px]">
             <label>{t("Price")}</label>
             <Text_input
               placeholder="2500 RO"
@@ -344,7 +350,7 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
               error={errors.price}
             />
           </div>
-          <div className="selector">
+          <div className="selector w-[250px]">
             <label>{t("Exterior_Color")} :</label>
             <Text_selector
               options={ExteriorColor}
@@ -354,7 +360,7 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
               error={errors.ex_color}
             />
           </div>
-          <div className="selector">
+          <div className="selector w-[250px]">
             <label>{t("Interior_Color")} :</label>
             <Text_selector
               options={InteriorColor}
@@ -364,7 +370,7 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
               error={errors.in_color}
             />
           </div>
-          <div className="selector">
+          <div className="selector w-[250px]">
             <label>{t("Car_Status")} :</label>
             <Text_selector
               options={CarStatusOptions}
@@ -390,18 +396,20 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
 
       {shipping && (
         <div className="carInfo flwx fles-col items-center justify-start gap-[10px]">
-          <h3 className="text-xl">{t("Shipping_Location")} :</h3>
-          <div className="flex flex-wrap items-center justify-between  gap-[10px]">
-            <div className="selector">
+          <h3 className="text-xl font-bold">{t("Shipping_Location")} :</h3>
+          <div className="flex flex-wrap justify-between mt-4 gap-5">
+            <div className="selector w-[250px]">
               <label>{t("Shipping_from")} :</label>
               <DainamicSelector
-                Api_URL="customer/countries?is_shown_auction=1"
+                Api_URL={`${
+                  userRole === "ADMIN" ? "admin" : "customer"
+                }/countries?is_shown_auction=1`}
                 placeholder="Canada"
                 value={formData.shipping_from}
                 onChange={(value) => handleInputChange("shipping_from", value)}
               />
             </div>
-            <div className="selector">
+            <div className="selector w-[250px]">
               <label>{t("Shipping_Status")} :</label>
               <Text_selector
                 options={shippingStatusOptions}
@@ -412,7 +420,7 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
                 }
               />
             </div>
-            <div className="selector mb-10">
+            <div className="selector w-[250px]">
               <label>
                 {t("Location_of_Car")} ({t("If_shipped")})
               </label>
@@ -426,21 +434,23 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
               />
             </div>
           </div>
-          <Chooser
-            question={t("Location_of_Car") + "(" + t("if_not_shipped") + ")"}
-            option1={t("On_the_way")}
-            value1="On the way"
-            option2={t("In_transit")}
-            value2="In transit"
-            value={formData.not_shippedlocations}
-            onChange={(value) =>
-              handleInputChange("not_shippedlocations", String(value))
-            }
-          />
+          <div className="flex mt-6">
+            <Chooser
+              question={t("Location_of_Car") + "(" + t("if_not_shipped") + ")"}
+              option1={t("On_the_way")}
+              value1="On the way"
+              option2={t("In_transit")}
+              value2="In transit"
+              value={formData.not_shippedlocations}
+              onChange={(value) =>
+                handleInputChange("not_shippedlocations", String(value))
+              }
+            />
+          </div>
         </div>
       )}
       <div className="carInfo flwx fles-col items-center justify-start gap-[10px]">
-        <h3 className="text-xl">{t("Additional_Features")} :</h3>
+        <h3 className="text-xl font-bold">{t("Additional_Features")} :</h3>
         <div className="flex flex-wrap items-center justify-between  gap-[10px]">
           <div className="py-[10px] w-full md:w-2/5">
             <label className="mb-1 block font-semibold">{t("Carfax")} :</label>

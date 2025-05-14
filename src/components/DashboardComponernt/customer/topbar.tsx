@@ -1,7 +1,7 @@
 import Avatar from "@/components/avatar/avatar";
 import LanguageSwitcher from "@/components/buttons/btn-switch/LanguageSwitcher";
-import { FaBell } from "react-icons/fa";
 import Logo from "../../NavBar/top-bar/logo";
+import NotificationDropdown from "@/components/notifications/NotificationDropdown";
 interface TopBarProps {
   isExpand: boolean;
 }
@@ -25,7 +25,7 @@ export default function Topbar({ isExpand }: TopBarProps) {
 
       <div className="flex items-center justify-center gap-4">
         <LanguageSwitcher />
-        <FaBell className="text-gray-400 text-2xl cursor-pointer" />
+        <NotificationDropdown />
         <Avatar width="8" />
       </div>
     </div>

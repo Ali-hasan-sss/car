@@ -24,10 +24,15 @@ const ServicesPage: React.FC = () => {
   const lastUpdated = useSelector(
     (state: RootState) => state.servicesUser.lastUpdated
   );
+  const [lastLang, setLastLang] = useState(isArabic);
   const shouldFetch = () => {
     const now = Date.now();
     const fiveMinutes = 5 * 60 * 1000;
-    return now - lastUpdated > fiveMinutes || services.length === 0;
+    return (
+      now - lastUpdated > fiveMinutes ||
+      services.length === 0 ||
+      isArabic !== lastLang
+    );
   };
 
   useEffect(() => {
@@ -41,6 +46,7 @@ const ServicesPage: React.FC = () => {
         try {
           const response = await axiosInstance.get("/customer/services");
           dispatch(fetchServicesUserSuccess(response.data.data));
+          setLastLang(isArabic);
         } catch (error) {
           console.error("فشل جلب الخدمات", error);
         } finally {

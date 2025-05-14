@@ -1,6 +1,7 @@
 // components/StatsCards.tsx
 import React from "react";
 import { PackageSearch, ShoppingCart, Truck } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface StatCardProps {
   title: string;
@@ -21,20 +22,21 @@ const StatCard: React.FC<StatCardProps> = ({ title, count, icon }) => (
 );
 
 export default function StatsCards() {
+  const { t } = useLanguage();
   return (
     <div className="flex w-full items-center flex-wrap gap-5">
       <StatCard
-        title="طلبات المزاد"
+        title={t("Auctions_Requests")}
         count={12}
         icon={<PackageSearch className="text-blue-500" size={32} />}
       />
       <StatCard
-        title="طلبات البيع"
+        title={t("sale_Requests")}
         count={8}
         icon={<ShoppingCart className="text-blue-500" size={32} />}
       />
       <StatCard
-        title="طلبات الشحن"
+        title={t("Shipping_Requests")}
         count={5}
         icon={<Truck size={32} className="text-yellow-300" />}
       />

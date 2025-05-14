@@ -15,6 +15,9 @@ const servicesSlice = createSlice({
       state.servicesList = action.payload;
       state.lastUpdated = Date.now();
     },
+    singleServiceSuccess(state, action: PayloadAction<Service>) {
+      state.selectedService = action.payload;
+    },
     selectService(state, action: PayloadAction<Service>) {
       state.selectedService = action.payload;
     },
@@ -31,8 +34,17 @@ const servicesSlice = createSlice({
           ...state.servicesList[index],
           ...action.payload,
         };
-        state.lastUpdated = Date.now();
       }
+
+      // ✅ تحديث selectedService إذا كانت نفس الخدمة
+      if (state.selectedService?.id === action.payload.id) {
+        state.selectedService = {
+          ...state.selectedService,
+          ...action.payload,
+        };
+      }
+
+      state.lastUpdated = Date.now();
     },
     deleteService(state, action: PayloadAction<number>) {
       state.servicesList = state.servicesList.filter(
@@ -45,6 +57,7 @@ const servicesSlice = createSlice({
 
 export const {
   fetchServicesSuccess,
+  singleServiceSuccess,
   selectService,
   addService,
   updateService,

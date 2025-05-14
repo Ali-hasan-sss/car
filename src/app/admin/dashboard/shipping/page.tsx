@@ -20,7 +20,7 @@ import {
 } from "@/store/slice/ShippingSlice";
 import { CarShipping, ShippingFormInputs } from "@/Types/AuctionTypes";
 import DeleteMessage from "@/components/messags/deleteMessage";
-import ShippingForm from "@/app/customer/dashboard/ordersForms/shipping";
+import ShippingForm from "@/components/forms/ordersForms/shipping";
 
 export default function Shipping() {
   const { t } = useLanguage();

@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import { Switch } from "@mui/material";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { Edit, Trash } from "lucide-react";
+import { Edit, Eye, Trash } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface InfoCardProps {
+  id: number;
   image: string;
   title: { ar?: string; en?: string };
   des: { ar?: string; en?: string };
@@ -17,6 +20,7 @@ interface InfoCardProps {
 }
 
 export default function InfoCard({
+  id,
   image,
   title,
   des,
@@ -30,6 +34,8 @@ export default function InfoCard({
   const [imageSrc, setImageSrc] = useState(image);
   const [loading, setLoading] = useState(true);
   const [isArabic, setIsArabic] = useState(true);
+  const router = useRouter();
+  const { t } = useLanguage();
   const user = useSelector((state: RootState) => state.auth.user);
   useEffect(() => {
     setImageSrc(image);
@@ -37,7 +43,10 @@ export default function InfoCard({
   }, [image]);
 
   const handleImageLoad = () => setLoading(false);
-
+  const oneView = () => {
+    localStorage.setItem("itemselected", String(id));
+    router.push("/admin/dashboard/services/details");
+  };
   const handleImageError = () => {
     setLoading(false);
     setImageSrc("/images/default-placeholder.png");
@@ -92,15 +101,26 @@ export default function InfoCard({
         <div className="flex w-full items-center px-5 py-2 gap-4">
           <button
             onClick={ondelete}
+            title={t("Delete")}
             className="flex items-center justify-center w-[30px] h-[30px] bg-red-100 p-1 rounded-full"
           >
             <Trash />
           </button>
+
           <button
             onClick={onedit}
+            title={t("Edit")}
             className="flex items-center justify-center w-[30px] h-[30px] bg-yellow-100 p-1 rounded-full"
           >
             <Edit />
+          </button>
+
+          <button
+            onClick={oneView}
+            title={t("View")}
+            className="flex items-center justify-center w-[30px] h-[30px] bg-blue-100 p-1 rounded-full"
+          >
+            <Eye />
           </button>
         </div>
       )}

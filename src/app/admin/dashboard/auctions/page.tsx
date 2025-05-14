@@ -21,7 +21,7 @@ import {
   fetchAuctions,
   updateAuction,
 } from "@/store/slice/AuctionsSlice";
-import Auctions from "@/app/customer/dashboard/ordersForms/Auctions";
+import Auctions from "@/components/forms/ordersForms/Auctions";
 import { Box, Modal } from "@mui/material";
 import { toast } from "sonner";
 //import GeneralTable from "@/components/table";
@@ -150,20 +150,20 @@ export default function Actions() {
   const handleEdit = (order: Auction) => {
     const mapOrderToFormInputs = (order: Auction): AuctionsFormInputs => {
       return {
-        auction_link: order.auction_link || "", // الرابط الخاص بالمزاد
-        manufacturer: order.category?.manufacturer?.id || null, // تحويل category إلى manufacturer (في حال كان category يحتوي على id)
-        category_id: order.category?.id || null, // نفس الشيء مع category
-        year: order.year.toString() || "", // تحويل السنة إلى نص
-        transmission_type: order.transmission_type || 1, // نفس الشيء مع transmission_type
-        drive_system: order.drive_system || 1, // نفس الشيء مع drive_system
-        fuel_type: order.fuel_type || 1, // نفس الشيء مع fuel_type
-        cylinders: order.cylinders || 4, // نفس الشيء مع cylinders
-        from_budget: order.from_budget.toString() || "", // تحويل القيمة إلى نص
-        to_budget: order.to_budget.toString() || "", // تحويل القيمة إلى نص
-        shipping_option: order.shipping_option || 1, // نفس الشيء مع shipping_option
-        car_status: order.status?.toString() || "", // تحويل الحالة إلى نص
-        ex_color: order.ex_color || "", // اللون الخارجي
-        in_color: order.in_color || "", // اللون الداخلي
+        auction_link: order.auction_link || "",
+        manufacturer: order.category?.manufacturer?.id || null,
+        category_id: order.category?.id || null,
+        year: order.year.toString() || "",
+        transmission_type: order.transmission_type || 1,
+        drive_system: order.drive_system || 1,
+        fuel_type: order.fuel_type || 1,
+        cylinders: order.cylinders || 4,
+        from_budget: order.from_budget.toString() || "",
+        to_budget: order.to_budget.toString() || "",
+        shipping_option: order.shipping_option || 1,
+        car_status: order.status?.toString() || "",
+        ex_color: order.ex_color || "",
+        in_color: order.in_color || "",
         country_id: order.country?.id || null,
         shipping_from: order.country.id.toString(),
         id: order.id,
@@ -240,7 +240,7 @@ export default function Actions() {
           onDelete={(id) => handleDelete(id)}
           onEdit={(order) => {
             if ("auction_link" in order) {
-              handleEdit(order); // ✅ TypeScript يعرف إنه Auction
+              handleEdit(order);
             }
           }}
           onChangeStatus={handleAcceptReject}

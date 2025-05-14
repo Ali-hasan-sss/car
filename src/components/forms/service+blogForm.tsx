@@ -44,7 +44,7 @@ export default function ServiceBlogForm({
   };
 
   return (
-    <div className="max-w-lg py-4 mx-auto">
+    <div className="max-w-lg py-4 px-5 w-full">
       <div className="flex w-full items-center justify-around mb-4 gap-1">
         {steps.map((label, index) => (
           <div key={index} className="flex flex-col items-center">
@@ -109,16 +109,16 @@ export default function ServiceBlogForm({
               }
               fullWidth
               multiline
-              rows={3}
+              rows={1}
               sx={{
                 "& .MuiOutlinedInput-root": {
                   "&.Mui-focused fieldset": {
-                    borderColor: "#008080", // تغيير لون الإطار عند الفوكس
+                    borderColor: "#008080",
                   },
                 },
                 "& .MuiInputLabel-root": {
                   "&.Mui-focused": {
-                    color: "#008080", // تغيير لون التسمية عند الفوكس
+                    color: "#008080",
                   },
                 },
               }}
@@ -134,16 +134,16 @@ export default function ServiceBlogForm({
               }
               fullWidth
               multiline
-              rows={5}
+              rows={4}
               sx={{
                 "& .MuiOutlinedInput-root": {
                   "&.Mui-focused fieldset": {
-                    borderColor: "#008080", // تغيير لون الإطار عند الفوكس
+                    borderColor: "#008080",
                   },
                 },
                 "& .MuiInputLabel-root": {
                   "&.Mui-focused": {
-                    color: "#008080", // تغيير لون التسمية عند الفوكس
+                    color: "#008080",
                   },
                 },
               }}
@@ -166,12 +166,12 @@ export default function ServiceBlogForm({
               sx={{
                 "& .MuiOutlinedInput-root": {
                   "&.Mui-focused fieldset": {
-                    borderColor: "#008080", // تغيير لون الإطار عند الفوكس
+                    borderColor: "#008080",
                   },
                 },
                 "& .MuiInputLabel-root": {
                   "&.Mui-focused": {
-                    color: "#008080", // تغيير لون التسمية عند الفوكس
+                    color: "#008080",
                   },
                 },
               }}
@@ -187,16 +187,16 @@ export default function ServiceBlogForm({
               }
               fullWidth
               multiline
-              rows={3}
+              rows={1}
               sx={{
                 "& .MuiOutlinedInput-root": {
                   "&.Mui-focused fieldset": {
-                    borderColor: "#008080", // تغيير لون الإطار عند الفوكس
+                    borderColor: "#008080",
                   },
                 },
                 "& .MuiInputLabel-root": {
                   "&.Mui-focused": {
-                    color: "#008080", // تغيير لون التسمية عند الفوكس
+                    color: "#008080",
                   },
                 },
               }}
@@ -212,16 +212,16 @@ export default function ServiceBlogForm({
               }
               fullWidth
               multiline
-              rows={5}
+              rows={4}
               sx={{
                 "& .MuiOutlinedInput-root": {
                   "&.Mui-focused fieldset": {
-                    borderColor: "#008080", // تغيير لون الإطار عند الفوكس
+                    borderColor: "#008080",
                   },
                 },
                 "& .MuiInputLabel-root": {
                   "&.Mui-focused": {
-                    color: "#008080", // تغيير لون التسمية عند الفوكس
+                    color: "#008080",
                   },
                 },
               }}

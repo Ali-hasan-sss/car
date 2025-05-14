@@ -1,6 +1,5 @@
 "use client";
 
-import "./style.css";
 import Footer from "@/components/footer";
 import Navbar from "@/components/NavBar/navbar";
 import Section3 from "./section3";

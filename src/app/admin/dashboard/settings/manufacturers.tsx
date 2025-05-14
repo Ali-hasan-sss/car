@@ -26,7 +26,7 @@ const CarTypes: React.FC = () => {
   });
 
   return (
-    <div>
+    <div className="w-full">
       <Search_input value={searchTerm} onChange={setSearchTerm} />
 
       <ToolBar

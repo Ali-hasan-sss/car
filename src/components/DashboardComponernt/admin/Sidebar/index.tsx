@@ -2,21 +2,18 @@ import { useLanguage } from "../../../../context/LanguageContext";
 import {
   BellRing,
   Box,
+  CarFrontIcon,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
   ChevronUp,
   Container,
-  Factory,
-  Globe,
   HomeIcon,
   ListChecks,
   Newspaper,
-  Phone,
   Settings,
   Store,
   Users,
-  Wrench,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -36,7 +33,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   const toggleDropdown = (label: string) => {
-    setOpenDropdown(openDropdown === label ? null : label);
+    if (!isExpanded) {
+      onToggle();
+    } else {
+      setOpenDropdown(openDropdown === label ? null : label);
+    }
   };
 
   const menuItems = [
@@ -65,16 +66,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
       label: t("Users"),
       path: "/admin/dashboard/users",
     },
-    {
-      icon: <Wrench className="text-3xl" />,
-      label: t("Services"),
-      path: "/admin/dashboard/services",
-    },
-    {
-      icon: <Newspaper className="text-3xl" />,
-      label: t("Blogs"),
-      path: "/admin/dashboard/blogs",
-    },
+
     {
       icon: <BellRing className="text-3xl" />,
       label: t("Notfications"),
@@ -82,48 +74,35 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
     },
     {
       icon: <ListChecks className="text-3xl" />,
-      label: t("Systim_Category"),
+      label: t("Pages"),
       path: "#",
       subItems: [
         {
-          icon: <Factory className="text-xl" />,
-          label: t("Manufacturers"),
-          path: "/admin/dashboard/manufacturers",
+          icon: <Newspaper className="text-3xl" />,
+          label: t("Blogs"),
+          path: "/admin/dashboard/blogs",
         },
         {
-          icon: <Globe className="text-xl" />,
-          label: t("Countries"),
-          path: "/admin/dashboard/countries",
+          icon: <CarFrontIcon className="text-3xl" />,
+          label: t("Services"),
+          path: "/admin/dashboard/services",
         },
       ],
     },
     {
       icon: <Settings className="text-3xl" />,
       label: t("Settings"),
-      path: "#",
-      subItems: [
-        {
-          icon: <Phone className="text-xl" />,
-          label: t("Settings"),
-          path: "/admin/dashboard/settings",
-        },
-        {
-          icon: <Users className="text-xl" />,
-          label: t("Accounts"),
-          path: "/admin/dashboard/settings/accounts",
-        },
-      ],
+      path: "/admin/dashboard/settings",
     },
   ];
 
   return (
     <div
-      className={`bg-secondary1 border p-2 overflow-y-auto overflow-x-hidden text-text_title transition-all duration-300 ${
-        isExpanded ? "w-[200px]" : "w-[70px]"
+      className={`bg-secondary1 min-h-[90vh] border p-2 overflow-y-auto overflow-x-hidden text-text_title transition-all duration-300 ${
+        isExpanded ? "w-[250px]" : "w-[70px]"
       } flex flex-col`}
       style={{ borderRadius: "10px" }}
     >
-      {/* زر التحكم في فتح/إغلاق السايدبار */}
       <div
         className={`flex  items-center justify-center w-full p-2 ${
           isExpanded ? "justify-end" : "justify-start"

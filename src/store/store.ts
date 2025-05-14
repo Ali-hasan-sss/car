@@ -15,6 +15,8 @@ import userReducer from "./slice/userSlice";
 import servicesuserReducer from "./slice/servicesCustomer";
 import carShippingReducer from "./slice/ShippingSlice";
 import BlogUserReducer from "./slice/blogUser";
+import notificationsReducer from "./slice/notificationsSlice";
+
 const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -32,6 +34,7 @@ const store = configureStore({
     auctions: auctionSlice,
     carSales: carSalesReducer,
     carShippings: carShippingReducer,
+    notifications: notificationsReducer,
     users: userReducer,
   },
 });

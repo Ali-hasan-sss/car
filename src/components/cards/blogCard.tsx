@@ -33,7 +33,7 @@ export default function BlogCard({
   };
   const handleView = () => {
     localStorage.setItem("itemselected", String(id));
-    router.push("/admin/dashboard/blogs/details");
+    router.push("/blog/details");
   };
 
   return (

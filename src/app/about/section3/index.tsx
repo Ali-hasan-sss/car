@@ -3,12 +3,12 @@ import { Boxs } from "./data";
 export default function Section3() {
   return (
     <div className="w-full px-2 md:px-10 ">
-      <div className="flex flex-col items-center justify-center gap-[40px] py-[30px] md:py-[80px]">
-        <div className="heading max-w-[500px] flex flex-col items-center justify-center gap-[18px]">
-          <h2 className="title1 text-center">
+      <div className="flex flex-col items-center justify-center gap-10 py-[60px] ">
+        <div className="heading max-w-[700px] flex flex-col items-center justify-center gap-4">
+          <h2 className="text-xl md:text-3xl font-bold text-center">
             Emphasize whats important to your company
           </h2>
-          <p className="des1 text-center">
+          <p className="text-text_des text-sm md:text-lg text-center">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
             varius enim in eros elementum tristique. Duis cursus, mi quis
             viverra ornare.

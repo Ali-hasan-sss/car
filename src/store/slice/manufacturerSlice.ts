@@ -1,12 +1,15 @@
 import axiosInstance from "@/utils/axiosInstance";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// 🟢 جلب بيانات الشركات الصانعة بشكل غير متزامن
+// ✅ تعديل الدالة لقبول الـ role
 export const fetchManufacturers = createAsyncThunk(
   "manufacturers/fetchManufacturers",
-  async () => {
-    const response = await axiosInstance.get("customer/manufacturers");
-    return response.data.data; // قائمة الشركات الصانعة
+  async (role: "ADMIN" | "USER") => {
+    const endpoint =
+      role === "ADMIN" ? "admin/manufacturers" : "customer/manufacturers";
+
+    const response = await axiosInstance.get(endpoint);
+    return response.data.data;
   }
 );
 

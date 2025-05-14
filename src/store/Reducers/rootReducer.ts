@@ -7,6 +7,7 @@ import socialMediaReducer from "./socialMediaReducer";
 import manufacturerReducer from "../slice/countriesSlice";
 import servicesCustomer from "../slice/servicesCustomer";
 import blogUser from "../slice/blogUser";
+import notificationsReducer from "../slice/notificationsSlice";
 
 const rootReducer = combineReducers({
   admins: adminsReducer,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   blogs: blogsReducer,
   socialMedia: socialMediaReducer,
   manufacturer: manufacturerReducer,
+  notifications: notificationsReducer,
 });
 
 export default rootReducer;

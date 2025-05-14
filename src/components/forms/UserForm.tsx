@@ -1,4 +1,4 @@
-import { languageOption } from "@/app/customer/dashboard/ordersForms/data";
+import { languageOption } from "@/components/forms/ordersForms/data";
 import DainamicSelector from "@/components/inputs/selectors/DainamicSelector";
 import TextSelector from "@/components/inputs/selectors/text_selector";
 import LoadingBTN from "@/components/loading/loadingBTN";

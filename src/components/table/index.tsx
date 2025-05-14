@@ -450,7 +450,7 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
                               {t("details")}
                             </MenuItem>
                           )}
-                          {actions.edit && row.status === 1 && (
+                          {actions.edit && (
                             <MenuItem
                               onClick={() => {
                                 const simplifiedRow = {
@@ -582,6 +582,18 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
               />
             </AnimatedModal>
           ))}
+        {openForm && !editData && (
+          <AnimatedModal open={openForm} handleClose={() => setOpenForm(false)}>
+            <DynamicForm
+              key={"new"}
+              open={openForm}
+              onClose={() => setOpenForm(false)}
+              apiUrl={apiForForm ? apiForForm : apiUrl}
+              fields={formColumns ? formColumns : formFields}
+              initialData={editData}
+            />
+          </AnimatedModal>
+        )}
         <style jsx>{`
           @keyframes loadingBar {
             0% {

@@ -3,6 +3,7 @@ import "./globals.css";
 import ClientWrapper from "./ClientWrapper";
 import { Toaster } from "sonner";
 import { Montserrat, Poppins, Roboto } from "next/font/google";
+import NotificationsSetup from "@/components/notifications/NotificationsSetup";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -69,6 +70,7 @@ export default function RootLayout({
       </head>
       <body>
         <ClientWrapper>
+          <NotificationsSetup />
           <Toaster richColors position="top-center" />
           {children}
         </ClientWrapper>
