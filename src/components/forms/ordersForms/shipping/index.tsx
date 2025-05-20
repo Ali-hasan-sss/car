@@ -12,7 +12,6 @@ import {
   ExteriorColor,
   fuelTypeOptions,
   InteriorColor,
-  location_port,
   mileageOptions,
   NumberOfCylinders,
   TransmissionTypeOptions,
@@ -327,11 +326,15 @@ export default function ShippingForm({
         </p>
         <div className="selector">
           <label>{t("Final_port")} *</label>
-          <Text_selector
-            options={location_port}
+          <DainamicSelector
+            returnTitle={true}
             placeholder="Select"
+            Api_URL={`${
+              userRole === "ADMIN" ? "admin" : "customer"
+            }/ports?type=1`}
             value={formData.final_port}
             onChange={(value) => handleInputChange("final_port", String(value))}
+            error={errors.final_port}
           />
         </div>
         <Checkbox
@@ -506,14 +509,17 @@ export default function ShippingForm({
           </div>
           <div className="selector w-full md:w-1/4">
             <label>{t("Shipping_from")} :</label>
-            <Text_selector
-              options={[{ value: "torento", label: "Torento" }]}
-              placeholder={t("Port_Shipping")}
+            <DainamicSelector
+              returnTitle={true}
+              placeholder="Select"
+              Api_URL={`${
+                userRole === "ADMIN" ? "admin" : "customer"
+              }/ports?type=2`}
               value={formData.shipping_from}
               onChange={(value) =>
                 handleInputChange("shipping_from", String(value))
               }
-              //  error={errors.mileage}
+              error={errors.shipping_from}
             />
           </div>
         </div>

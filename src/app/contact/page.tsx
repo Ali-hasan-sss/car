@@ -4,7 +4,6 @@ import Footer from "@/components/footer";
 import ContactForm from "@/components/forms/contact_form";
 import Navbar from "@/components/NavBar/navbar";
 import CoverImage from "@/components/common/cover_image";
-import Follow_us from "@/components/sucial_Midia/follow_us";
 import React, { useEffect } from "react";
 
 const ContactPage: React.FC = () => {
@@ -59,7 +58,7 @@ const ContactPage: React.FC = () => {
         </div>
       </div>
       <ContactForm />
-      <Follow_us />
+      {/* <Follow_us /> */}
       <div className="flex flex-col gap-[10px] py-[20px] px-[50px]">
         <h2 className="title">Visit US</h2>
         <p className="text-text_des text-xl">

@@ -21,7 +21,8 @@ interface Manufacturer {
 }
 
 const DainamicSelector: React.FC<{
-  value: number | null;
+  returnTitle?: boolean;
+  value: number | string | null;
   data?: Manufacturer[];
   Api_URL?: string;
   onChange: (value: number | null) => void;
@@ -30,6 +31,7 @@ const DainamicSelector: React.FC<{
   error?: string;
   dataLoading?: boolean;
 }> = ({
+  returnTitle,
   value,
   data,
   Api_URL,
@@ -40,7 +42,8 @@ const DainamicSelector: React.FC<{
   dataLoading,
 }) => {
   const { t } = useLanguage();
-  const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [manufacturers, setManufacturers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -67,10 +70,12 @@ const DainamicSelector: React.FC<{
   }, [data, Api_URL]);
 
   const selectedManufacturer =
-    manufacturers.find((manufacturer) => manufacturer.id === value) || null;
-
-  const handleSelectionChange = (newValue: Manufacturer | null) => {
-    onChange(newValue ? newValue.id : null);
+    manufacturers.find((manufacturer) =>
+      returnTitle ? manufacturer.title === value : manufacturer.id === value
+    ) || null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleSelectionChange = (newValue: any) => {
+    onChange(newValue ? (returnTitle ? newValue.title : newValue.id) : null);
     if (onCategoriesChange) {
       onCategoriesChange(newValue ? newValue.categories : []);
     }
@@ -81,6 +86,12 @@ const DainamicSelector: React.FC<{
       <Autocomplete
         options={manufacturers}
         getOptionLabel={(option) => option.title}
+        isOptionEqualToValue={(option, value) => option.id === value.id}
+        renderOption={(props, option) => (
+          <li {...props} key={option.id}>
+            {option.title}
+          </li>
+        )}
         value={selectedManufacturer}
         onChange={(event, newValue) => handleSelectionChange(newValue)}
         className="w-full"

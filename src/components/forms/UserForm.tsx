@@ -4,9 +4,11 @@ import TextSelector from "@/components/inputs/selectors/text_selector";
 import LoadingBTN from "@/components/loading/loadingBTN";
 import UploadFile from "@/components/uploders/Uploader/UploadFile";
 import { useLanguage } from "@/context/LanguageContext";
+import { RootState } from "@/store/store";
 import { Box, TextField } from "@mui/material";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 export interface UserFormProps {
   initialData: {
     email: string;
@@ -32,6 +34,7 @@ export interface UserFormProps {
   loading: boolean;
   isNew: boolean;
 }
+
 const UserForm: React.FC<UserFormProps> = ({
   initialData,
   onSubmit,
@@ -44,6 +47,8 @@ const UserForm: React.FC<UserFormProps> = ({
   const [idselect, setIdSelect] = useState(true);
   const { t } = useLanguage();
   const router = useRouter();
+  const UserRole = useSelector((state: RootState) => state.auth.user?.userRole);
+
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
 
@@ -143,7 +148,11 @@ const UserForm: React.FC<UserFormProps> = ({
                   onChange={(value) =>
                     setFormData({ ...formData, country_id: value })
                   }
-                  Api_URL="customer/countries"
+                  Api_URL={
+                    UserRole === "ADMIN"
+                      ? "admin/countries"
+                      : "customer/countries"
+                  }
                   error={errors.country_id}
                 />
                 {/* City */}

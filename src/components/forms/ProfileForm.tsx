@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { TextField, Switch, FormControlLabel, IconButton } from "@mui/material";
-import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import LoadingBTN from "@/components/loading/loadingBTN";
-import { RootState } from "@/store/store";
 import { Admin } from "@/Types/adminTypes";
 import { useLanguage } from "../../context/LanguageContext";
 import { Eye, EyeOff } from "lucide-react";
@@ -11,7 +9,7 @@ import { Eye, EyeOff } from "lucide-react";
 interface ProfileFormProps {
   onClose: () => void;
   onSubmit: (adminData: Admin) => Promise<void>;
-  initialData?: Admin;
+  initialData?: Admin | null;
   isNew?: boolean;
 }
 
@@ -22,13 +20,12 @@ export default function ProfileForm({
   isNew = false,
 }: ProfileFormProps) {
   const { t } = useLanguage();
-  const user = useSelector((state: RootState) => state.auth.user);
   const [loading, setLoading] = useState(false);
 
   const [profile, setProfile] = useState({
-    firstName: initialData?.first_name || user?.first_name || "",
-    lastName: initialData?.last_name || user?.last_name || "",
-    email: initialData?.email || user?.email || "",
+    firstName: initialData?.first_name || "",
+    lastName: initialData?.last_name || "",
+    email: initialData?.email || "",
     password: "", // حقل كلمة المرور
     isActive: initialData?.is_active === 1, // تحويل الرقم إلى boolean (1 إلى true و 0 إلى false)
   });
@@ -44,16 +41,16 @@ export default function ProfileForm({
         password: "", // عند التعديل لا يتم تحميل كلمة المرور
         isActive: initialData.is_active === 1, // تحويل الرقم إلى boolean (1 إلى true و 0 إلى false)
       });
-    } else if (user) {
+    } else {
       setProfile({
-        firstName: user.first_name,
-        lastName: user.last_name,
-        email: user.email,
+        firstName: "",
+        lastName: "",
+        email: "",
         password: "",
-        isActive: user.is_active === 1, // تحويل الرقم إلى boolean (1 إلى true و 0 إلى false)
+        isActive: 1 === 1, // تحويل الرقم إلى boolean (1 إلى true و 0 إلى false)
       });
     }
-  }, [initialData, user]);
+  }, [initialData]);
 
   const handleSubmit = async () => {
     try {

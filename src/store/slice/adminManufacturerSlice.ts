@@ -26,12 +26,14 @@ interface ManufacturerData {
 
 interface ManufacturerState {
   manufacturer: ManufacturerData | null;
+  manufacturers: ManufacturerData[];
   loading: boolean;
   error: string | null;
 }
 
 const initialState: ManufacturerState = {
   manufacturer: null,
+  manufacturers: [],
   loading: false,
   error: null,
 };
@@ -49,7 +51,17 @@ export const fetchManufacturer = createAsyncThunk(
     }
   }
 );
-
+export const fetchManufacturers = createAsyncThunk(
+  "manufacturer/fetchAll",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.get(`admin/manufacturers`);
+      return res.data.data as ManufacturerData[];
+    } catch (error) {
+      return rejectWithValue(error || "حدث خطأ أثناء جلب الشركات");
+    }
+  }
+);
 // ========== Slice ==========
 const adminManufacturerSlice = createSlice({
   name: "manufacturer",
@@ -114,6 +126,22 @@ const adminManufacturerSlice = createSlice({
         );
       }
     },
+    updateManufacturerInList(state, action: PayloadAction<ManufacturerData>) {
+      const index = state.manufacturers.findIndex(
+        (m) => m.id === action.payload.id
+      );
+      if (index >= 0) {
+        state.manufacturers[index] = action.payload;
+      }
+    },
+    addManufacturerToList(state, action: PayloadAction<ManufacturerData>) {
+      state.manufacturers.push(action.payload);
+    },
+    deleteManufacturerFromList(state, action: PayloadAction<number>) {
+      state.manufacturers = state.manufacturers.filter(
+        (m) => m.id !== action.payload
+      );
+    },
   },
 
   extraReducers: (builder) => {
@@ -129,6 +157,18 @@ const adminManufacturerSlice = createSlice({
       .addCase(fetchManufacturer.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      .addCase(fetchManufacturers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchManufacturers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.manufacturers = action.payload;
+      })
+      .addCase(fetchManufacturers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });
@@ -140,6 +180,9 @@ export const {
   addCarModel,
   editCarModel,
   deleteCarModel,
+  updateManufacturerInList,
+  addManufacturerToList,
+  deleteManufacturerFromList,
 } = adminManufacturerSlice.actions;
 
 export default adminManufacturerSlice.reducer;

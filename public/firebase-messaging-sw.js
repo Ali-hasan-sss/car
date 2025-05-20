@@ -23,11 +23,23 @@ messaging.onBackgroundMessage(function (payload) {
     payload
   );
 
-  const { title, body } = payload.notification;
+  const { title, body } = payload.notification || {};
   const notificationOptions = {
     body,
-    icon: "/icons/icon-512x512.png",
+    icon: "/favicon.png",
   };
+
+  // إرسال رسالة إلى جميع الصفحات المفتوحة لتحديث الإشعارات
+  self.clients
+    .matchAll({ type: "window", includeUncontrolled: true })
+    .then((clients) => {
+      clients.forEach((client) => {
+        client.postMessage({
+          type: "NEW_NOTIFICATION",
+          payload: payload, // يمكنك تمرير بيانات أكثر هنا
+        });
+      });
+    });
 
   self.registration.showNotification(title, notificationOptions);
 });

@@ -137,7 +137,7 @@ export interface CarSale {
   price: string;
   ex_color: string;
   in_color: string;
-  shipping_from: number | null;
+  shipping_from: string;
   car_status: number;
   status: number;
   location_of_car?: string | null;
@@ -158,7 +158,7 @@ export interface SallesFormInputs {
   cylinders: number;
   fuel_type: number;
   price: string;
-  shipping_from: number | null;
+  shipping_from: string;
   car_status: number;
   ex_color: string;
   in_color: string;

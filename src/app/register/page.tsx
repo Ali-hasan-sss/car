@@ -158,7 +158,7 @@ const Signup: React.FC = () => {
           first_name: name.split(" ")[0] || "",
           last_name: name.split(" ")[1] || "",
           is_active: 1,
-          userRole: type === 1 ? "USER" : "COMPANY",
+          userRole: type === 1 ? "USER" : "USER",
           type: type,
         };
         toast.success("register_success");
@@ -182,7 +182,6 @@ const Signup: React.FC = () => {
             } else {
               setStep(3);
             }
-            // عرض الرسالة تحت حقل الإيميل
             setErrors((prev) => ({
               ...prev,
               email: customMessage,

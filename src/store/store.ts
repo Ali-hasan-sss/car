@@ -7,6 +7,7 @@ import fileUploadReducer from "./Reducers/fileUploadReducer";
 import tableDataReducer from "./Reducers/tableDataReducer";
 import socialMediaReducer from "./Reducers/socialMediaReducer";
 import countriesReducer from "./slice/countriesSlice";
+import portsReducer from "./slice/portsClise";
 import manufacturerReducer from "./slice/manufacturerSlice";
 import adminManufacturerSlice from "./slice/adminManufacturerSlice";
 import auctionSlice from "./slice/AuctionsSlice";
@@ -29,6 +30,7 @@ const store = configureStore({
     fileUpload: fileUploadReducer,
     tableData: tableDataReducer,
     countries: countriesReducer,
+    ports: portsReducer,
     manufacturer: manufacturerReducer,
     adminManufacturer: adminManufacturerSlice,
     auctions: auctionSlice,

@@ -56,55 +56,6 @@ export default function Footer() {
             {isArabic ? "" : "Your Trusted Partner in Car Imports and Shipping"}
           </p>
           <div className="content flex flex-col gap-[20px]">
-            <div className="address flex flex-col gap-[5px]">
-              <p
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "600",
-                  color: "#FFFFFF",
-                }}
-              >
-                {t("Address")}:
-              </p>
-              <p
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "400",
-                  color: "#FFFFFF",
-                }}
-              >
-                Level 1, 12 Sample St, Sydney NSW 2000
-              </p>
-            </div>
-            <div className="contact flex flex-col gap-[5px]">
-              <p
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "600",
-                  color: "#FFFFFF",
-                }}
-              >
-                {t("contact")}:
-              </p>
-              <p
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "400",
-                  color: "#FFFFFF",
-                }}
-              >
-                +968444455
-              </p>
-              <p
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "400",
-                  color: "#FFFFFF",
-                }}
-              >
-                info@bariq.tech
-              </p>
-            </div>
             <Sucial_icon />
           </div>
         </div>

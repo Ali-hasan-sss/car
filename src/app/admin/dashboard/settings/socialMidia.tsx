@@ -22,7 +22,6 @@ import {
   FaPinterest,
   FaReddit,
   FaTwitch,
-  FaEnvelope,
   FaXTwitter,
 } from "react-icons/fa6";
 import { FaEdit, FaSnapchatGhost, FaTrash } from "react-icons/fa";
@@ -35,6 +34,8 @@ import LoadingBTN from "../../../../components/loading/loadingBTN";
 import { toast } from "sonner";
 import DeleteMessage from "@/components/messags/deleteMessage";
 import AnimatedModal from "@/components/modal/AnimatedModal";
+
+import ContactSection from "./ContactSection";
 
 interface SocialMedia {
   id: number;
@@ -69,7 +70,6 @@ const iconOptions = [
   },
   { name: "reddit", icon: <FaReddit className="text-orange-500 text-2xl" /> },
   { name: "twitch", icon: <FaTwitch className="text-purple-600 text-2xl" /> },
-  { name: "email", icon: <FaEnvelope className="text-gray-600 text-2xl" /> },
   { name: "x", icon: <FaXTwitter className="text-black text-2xl" /> },
   { name: "website", icon: <FaGlobe className="text-gray-600 text-2xl" /> },
 ];
@@ -88,6 +88,10 @@ export default function SocialMediaSettings() {
   const [newSocialMedia, setNewSocialMedia] = useState({ icon: "", link: "" });
   const [errors, setErrors] = useState<{ icon?: string; link?: string }>({});
   const { t } = useLanguage();
+  const emailItem = socialMediaList.find((item) => item.icon === "email");
+  const phoneItem = socialMediaList.find((item) => item.icon === "phone");
+  const addressItem = socialMediaList.find((item) => item.icon === "address");
+
   useEffect(() => {
     const fetchSocialMedia = async () => {
       try {
@@ -104,7 +108,6 @@ export default function SocialMediaSettings() {
     };
     const UPDATE_INTERVAL = 5 * 60 * 1000; // 5 دقائق
 
-    // التحقق مما إذا كان يجب جلب البيانات أم لا
     const currentTime = Date.now();
     if (currentTime - lastUpdated >= UPDATE_INTERVAL) {
       fetchSocialMedia();
@@ -161,7 +164,6 @@ export default function SocialMediaSettings() {
     setNewSocialMedia({ ...newSocialMedia, [e.target.name]: e.target.value });
   };
 
-  // إرسال البيانات إلى API
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -204,157 +206,181 @@ export default function SocialMediaSettings() {
     setEditing({ id, icon: "", link: "" });
     setOpenDelete(true);
   };
+
   return (
-    <Box className="p-6 bg-white w-[400px] border">
-      <div className="flex items-center gap-2 justify-between">
-        <Typography className="font-bold text-xl mb-4 text-center">
-          {t("socialMidia")}
-        </Typography>
-        <button
-          onClick={() => handleOpen()}
-          className="button_outline  py-1 px-2"
-        >
-          + {t("Add_New_Social")}
-        </button>{" "}
-      </div>
-
-      <div className="space-y-4 mt-5 bg-gray-50 min-h-[200px] rounded-xl e-w-full">
-        {loading ? (
-          <div className="w-full flex items-center justify-center">
-            <Loader />
-          </div>
-        ) : socialMediaList.length > 0 ? (
-          socialMediaList.map((item) => (
-            <div
-              key={item.id}
-              className="flex items-center border-b border-gray-400 w-full gap-4"
-            >
-              {getIcon(item.icon)}
-              <a
-                href={
-                  item.link.startsWith("http")
-                    ? item.link
-                    : `https://${item.link}`
-                }
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline"
-              >
-                {item.link}
-              </a>
-              <div className="actions flex items-center justify-end w-full gap-3">
-                <IconButton onClick={() => handleOpen(item)}>
-                  <FaEdit className="text-yellow-600 text-xl" />
-                </IconButton>
-                <IconButton onClick={() => OpenDeleteMassage(item.id)}>
-                  <FaTrash className="text-red-500 text-xl" />
-                </IconButton>
-              </div>
-              <DeleteMessage
-                API={`/admin/socials`}
-                open={openDelete}
-                handleClose={() => setOpenDelete(false)}
-                id={editing?.id}
-                onDeleteSuccess={(id) => {
-                  dispatch(
-                    fetchSocialMediaSuccess(
-                      socialMediaList.filter((item) => item.id !== id)
-                    )
-                  );
-                }}
-              />
-            </div>
-          ))
-        ) : (
-          <Typography className="text-gray-500 text-center">
-            {t("No_Social_Media_Found")}
-          </Typography>
-        )}
-      </div>
-
-      {/* الـ Modal لإضافة وسيلة جديدة */}
-      <AnimatedModal
-        open={open}
-        handleClose={handleClose}
-        className="w-[400px]"
-      >
-        <Typography variant="h6" className="font-bold mb-4">
-          {editing ? t("Edit_Social") : t("Add_New_Social")}
-        </Typography>
-        <form onSubmit={handleSubmit} className="space-y-4 p-3">
-          <TextField
-            select
-            fullWidth
-            label={t("Choose_Icon")}
-            name="icon"
-            value={newSocialMedia.icon}
-            onChange={handleChange}
-            variant="outlined"
-            required
-            error={!!errors.icon}
-            helperText={errors.icon}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "&.Mui-focused fieldset": {
-                  borderColor: "#008080",
-                },
-              },
-              "& .MuiInputLabel-root": {
-                "&.Mui-focused": {
-                  color: "#008080",
-                },
-              },
-            }}
+    <Box className="p-6 bg-white w-full flex gap-5 items-center justify-between ">
+      <div className="w-[400px] h-[50vh] overflow-y-auto border p-2 ">
+        <div className="flex items-center gap-2 justify-between">
+          <h3 className="font-bold text-xl mb-4 text-center">
+            {t("socialMidia")}
+          </h3>
+          <button
+            onClick={() => handleOpen()}
+            className="button_outline  py-1 px-2"
           >
-            {iconOptions.map((option) => (
-              <MenuItem key={option.name} value={option.name}>
-                {option.icon} <span className="ml-2">{option.name}</span>
-              </MenuItem>
-            ))}
-          </TextField>
+            + {t("Add_New_Social")}
+          </button>{" "}
+        </div>
 
-          <TextField
-            fullWidth
-            label={t("Enter_The_Link")}
-            name="link"
-            value={newSocialMedia.link}
-            onChange={handleChange}
-            variant="outlined"
-            required
-            error={!!errors.link}
-            helperText={errors.link}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "&.Mui-focused fieldset": {
-                  borderColor: "#008080",
+        <div className="space-y-4 mt-5 bg-gray-50 min-h-[200px] rounded-xl e-w-full">
+          {loading ? (
+            <div className="w-full flex items-center justify-center">
+              <Loader />
+            </div>
+          ) : socialMediaList.length > 0 ? (
+            socialMediaList
+              .filter(
+                (item) =>
+                  item.icon &&
+                  !["email", "address", "phone"].includes(item.icon)
+              )
+              .map((item) => (
+                <div
+                  key={item.id}
+                  className="flex items-center border-b border-gray-400 w-full gap-4"
+                >
+                  {getIcon(item.icon)}
+                  <a
+                    href={
+                      item.link.startsWith("http")
+                        ? item.link
+                        : `https://${item.link}`
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 hover:underline"
+                  >
+                    {item.link}
+                  </a>
+
+                  <div className="actions flex items-center justify-end w-full gap-3">
+                    <IconButton onClick={() => handleOpen(item)}>
+                      <FaEdit className="text-yellow-600 text-xl" />
+                    </IconButton>
+                    <IconButton onClick={() => OpenDeleteMassage(item.id)}>
+                      <FaTrash className="text-red-500 text-xl" />
+                    </IconButton>
+                  </div>
+
+                  <DeleteMessage
+                    API={`/admin/socials`}
+                    open={openDelete}
+                    handleClose={() => setOpenDelete(false)}
+                    id={editing?.id}
+                    onDeleteSuccess={(id) => {
+                      dispatch(
+                        fetchSocialMediaSuccess(
+                          socialMediaList.filter((item) => item.id !== id)
+                        )
+                      );
+                    }}
+                  />
+                </div>
+              ))
+          ) : (
+            <Typography className="text-gray-500 text-center">
+              {t("No_Social_Media_Found")}
+            </Typography>
+          )}
+        </div>
+
+        {/* الـ Modal لإضافة وسيلة جديدة */}
+        <AnimatedModal
+          open={open}
+          handleClose={handleClose}
+          className="w-[400px]"
+        >
+          <Typography variant="h6" className="font-bold mb-4">
+            {editing ? t("Edit_Social") : t("Add_New_Social")}
+          </Typography>
+          <form onSubmit={handleSubmit} className="space-y-4 p-3">
+            <TextField
+              select
+              fullWidth
+              label={t("Choose_Icon")}
+              name="icon"
+              value={newSocialMedia.icon}
+              onChange={handleChange}
+              variant="outlined"
+              required
+              error={!!errors.icon}
+              helperText={errors.icon}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#008080",
+                  },
                 },
-              },
-              "& .MuiInputLabel-root": {
-                "&.Mui-focused": {
-                  color: "#008080",
+                "& .MuiInputLabel-root": {
+                  "&.Mui-focused": {
+                    color: "#008080",
+                  },
                 },
-              },
-            }}
-          />
-          <div className="flex justify-between gap-4 mt-4">
-            <button
-              type="button"
-              onClick={handleClose}
-              className="button_close  py-2 px-3"
+              }}
             >
-              {t("Close")}
-            </button>
-            <button
-              type="submit"
-              onClick={handleSubmit}
-              className="button_outline  py-2 px-3"
-              disabled={actionloading}
-            >
-              {actionloading ? <LoadingBTN /> : editing ? t("Save") : t("Add")}
-            </button>
-          </div>
-        </form>
-      </AnimatedModal>
+              {iconOptions.map((option) => (
+                <MenuItem key={option.name} value={option.name}>
+                  {option.icon} <span className="ml-2">{option.name}</span>
+                </MenuItem>
+              ))}
+            </TextField>
+
+            <TextField
+              fullWidth
+              label={t("Enter_The_Link")}
+              name="link"
+              value={newSocialMedia.link}
+              onChange={handleChange}
+              variant="outlined"
+              required
+              error={!!errors.link}
+              helperText={errors.link}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#008080",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  "&.Mui-focused": {
+                    color: "#008080",
+                  },
+                },
+              }}
+            />
+            <div className="flex justify-between gap-4 mt-4">
+              <button
+                type="button"
+                onClick={handleClose}
+                className="button_close  py-2 px-3"
+              >
+                {t("Close")}
+              </button>
+              <button
+                type="submit"
+                onClick={handleSubmit}
+                className="button_outline  py-2 px-3"
+                disabled={actionloading}
+              >
+                {actionloading ? (
+                  <LoadingBTN />
+                ) : editing ? (
+                  t("Save")
+                ) : (
+                  t("Add")
+                )}
+              </button>
+            </div>
+          </form>
+        </AnimatedModal>
+      </div>
+      <div className="w-[400px] p-2 h-[50vh] overflow-y-auto border">
+        <ContactSection
+          addressItem={addressItem}
+          phoneItem={phoneItem}
+          emailItem={emailItem}
+        />
+      </div>
     </Box>
   );
 }

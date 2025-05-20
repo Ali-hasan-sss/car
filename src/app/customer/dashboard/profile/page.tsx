@@ -2,11 +2,10 @@
 
 import { RootState } from "@/store/store";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { CircularProgress, Dialog } from "@mui/material";
 import UserForm from "@/components/forms/UserForm";
-import DeleteMessage from "@/components/messags/deleteMessage";
 import {
   FaBuilding,
   FaCheckCircle,
@@ -16,6 +15,12 @@ import {
   FaUser,
 } from "react-icons/fa";
 import Loader from "@/components/loading/loadingPage";
+import NotificationToggle from "@/components/notifications/notif_toggle";
+import { useRouter } from "next/navigation";
+import { setLogout } from "@/store/slice/authSlice";
+import ActionComfirm from "@/components/messags/actionComfirm";
+import axiosInstance from "@/utils/axiosInstance";
+import { toast } from "sonner";
 
 const Profile = () => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -23,15 +28,16 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [formData] = useState<{
     email: string;
     type: number;
     name: string;
-    user_id: string;
+    user_id: number;
     mobile: string;
     other_mobile: string;
-    country_id: number | null; // Ensure this field supports both number and null
+    country_id: number | null;
     language: string;
     address1: string;
     address2: string;
@@ -42,22 +48,22 @@ const Profile = () => {
     tax_info: string;
     cr_certificate: string;
   }>({
-    email: "",
-    type: 1,
-    name: "",
-    user_id: "",
-    mobile: "",
-    other_mobile: "",
-    country_id: null, // Default value is null
-    language: "",
-    address1: "",
-    address2: "",
-    city: "",
-    zip_code: "",
-    id_number: "",
-    id_file: "",
-    tax_info: "",
-    cr_certificate: "",
+    email: userData?.email || "",
+    type: Number(userData?.type) || 0,
+    name: userData?.first_name + " " + userData?.last_name || "",
+    user_id: userData?.id || 0,
+    mobile: userData?.contact?.mobile || "",
+    other_mobile: userData?.contact?.other_mobile || "",
+    country_id: userData?.contact?.country_id || null,
+    language: userData?.contact?.language || "",
+    address1: userData?.contact?.address1 || "",
+    address2: userData?.contact?.address2 || "",
+    city: userData?.contact?.city || "",
+    zip_code: userData?.contact?.zip_code || "",
+    id_number: userData?.idDetail?.id_number || "",
+    id_file: userData?.idDetail?.id_file || "",
+    tax_info: userData?.idDetail?.tax_info || "",
+    cr_certificate: userData?.idDetail?.cr_certificate || "",
   });
 
   useEffect(() => {
@@ -88,12 +94,24 @@ const Profile = () => {
       }
     }
   }, [user]);
-  const handleDelete = () => {
-    setOpenDelete(true);
+  const handleDelete = async () => {
+    try {
+      setLoading(true);
+      const res = await axiosInstance.delete("customer/deleteMyAccount");
+      if (res.data.success) {
+        toast.success("تم حذف الحساب بنجاح");
+        localStorage.removeItem("user");
+        dispatch(setLogout());
+        router.push("/");
+      }
+    } catch (err) {
+      toast.error("حدث خطأ أثناء حذف الحساب");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
-  const handleDeleteSuccess = () => {
-    console.log("User deleted successfully");
-  };
+
   const handleEdit = () => {
     setModalOpen(true);
   };
@@ -111,7 +129,7 @@ const Profile = () => {
       //   email,
       //   first_name: first_name || "",
       //   last_name: last_name || "",
-      //   userRole: type === 1 ? "USER" : "COMPANY",
+      //   userRole: type === 1 ? "USER" : "USER",
       //   type, // نوع المستخدم (1 أو 2)
       //   is_full_data: is_full_data === 1,
       //   contact: contact || null,
@@ -244,6 +262,7 @@ const Profile = () => {
                 </div>
               )}
             </div>
+            <NotificationToggle />
 
             {/* أزرار التعديل والحذف */}
             <div className="flex justify-between gap-4 mt-6">
@@ -257,9 +276,10 @@ const Profile = () => {
               <button
                 className="button_close py-1 px-2 flex items-center gap-2"
                 onClick={handleDelete}
+                disabled={loading}
               >
                 <FaTrash />
-                حذف
+                حذف الحساب{" "}
               </button>
             </div>
             {/* <p className="flex text-xs items-center mt-6 gap-2 text-gray-400 ">
@@ -277,12 +297,11 @@ const Profile = () => {
       </div>
 
       {/* مودال الحذف */}
-      <DeleteMessage
-        API="ccc"
+      <ActionComfirm
         open={openDelete}
         handleClose={() => setOpenDelete(false)}
-        id={userData.id}
-        onDeleteSuccess={handleDeleteSuccess}
+        message="هل انت متأكد من حذف الحساب"
+        onActionSuccess={handleDelete}
       />
       {modalOpen && (
         <Dialog open={modalOpen} onClose={() => setModalOpen(false)}>
@@ -290,7 +309,10 @@ const Profile = () => {
             onSubmit={handleSubmit}
             handlClose={() => setModalOpen(false)}
             isNew={false}
-            initialData={formData}
+            initialData={{
+              ...formData,
+              user_id: String(formData.user_id),
+            }}
             loading={loading}
           />
         </Dialog>

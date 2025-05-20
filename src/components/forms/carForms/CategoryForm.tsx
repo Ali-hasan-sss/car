@@ -54,15 +54,15 @@ export default function CategoryForm({
       setLoading(true);
       if (isNew) {
         const res = await axiosInstance.post(Api, formData);
-        const newCategory = res.data.data; // حسب شكل البيانات في الاستجابة
-        dispatch(addCategory(newCategory)); // تحديث الحالة بعد الإضافة
+        const newCategory = res.data.data;
+        dispatch(addCategory(newCategory));
       } else {
         const res = await axiosInstance.put(
           `${Api}/${initialData?.id}`,
           formData
         );
-        const updatedCategory = res.data.data; // حسب شكل البيانات في الاستجابة
-        dispatch(editCategory(updatedCategory)); // تحديث الحالة بعد التعديل
+        const updatedCategory = res.data.data;
+        dispatch(editCategory(updatedCategory));
       }
 
       toast.success(t("Edit_Success"));
@@ -79,9 +79,9 @@ export default function CategoryForm({
     <>
       <div className="px-4 py-3 w-full mb-4">
         {isNew ? (
-          <h2 className="text-center">اضافة موديل</h2>
+          <h2 className="text-center">{t("Add_Model")}</h2>
         ) : (
-          <h2 className="text-center">تعديل موديل</h2>
+          <h2 className="text-center">{t("Edit_Model")}</h2>
         )}
       </div>
       <TextField

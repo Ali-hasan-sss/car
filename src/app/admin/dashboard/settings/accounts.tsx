@@ -27,6 +27,7 @@ export default function Accounts() {
   const [loadingToggle, setLoadingToggle] = useState<number | null>(null);
   const [loadingAdmins, setLoadingAdmins] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const [AdminId, setAdminId] = useState(0);
   const [selectedAdmin, setSelectedAdmin] = useState<Admin | null>(null);
   const [adminsList, setAdminsList] = useState<Admin[]>([]);
   const { t } = useLanguage();
@@ -69,11 +70,18 @@ export default function Accounts() {
     <div className=" w-full gap-6 flex  px-5 ">
       <div className="flex h-[50vh] overflow-y-auto w-[500px] border py-2 px-4 flex-col gap-4">
         {/* معلومات الحساب */}
-        <div className="bg-secondary1 p-4 rounded-lg shadow-md">
-          <Typography className="mb-2 text-xl font-bold">
-            {t("System_Adminstrator")}
-          </Typography>
+        <div className="bg-secondary1 font-bold p-4 rounded-sm shadow-md">
+          <h3 className="mb-2 text-lg">{t("System_Adminstrator")}</h3>
           {/* تفاصيل الحساب */}
+          <p className=" text-sm mt-3 text-gray-600">
+            {t("name")}:
+            <span className="text-black px-1">
+              {user?.first_name + " " + user?.last_name}
+            </span>
+          </p>
+          <p className=" text-sm mt-3 text-gray-600">
+            {t("Email")}:<span className="text-black px-1">{user?.email}</span>
+          </p>
         </div>
 
         {/* أزرار التعديل */}
@@ -92,7 +100,7 @@ export default function Accounts() {
           </button>
         </div>
       </div>
-      <div className="flex h-[50vh] overflow-y-auto w-[500px] border py-2 px-4 flex-col gap-4">
+      <div className="flex h-[50vh] overflow-y-auto w-[450px] border py-2 px-4 flex-col gap-4">
         {/* قائمة المديرين */}
         <div className="bg-secondary1 flex flex-col gap-2 p-4 rounded-lg shadow-md">
           <Typography className="mb-2 text-3xl font-bold">
@@ -105,91 +113,104 @@ export default function Accounts() {
               setOpenModal("add-admin");
             }}
           >
-            {t("Add Admin")}
+            {t("Add_Admin")}
           </button>
 
           {loadingAdmins ? (
             <Loader />
           ) : adminsList.length > 0 ? (
             <ul className="space-y-2">
-              {adminsList.map((admin) => (
-                <li
-                  key={admin.id}
-                  className="flex justify-between items-center p-2 border rounded-md"
-                >
-                  <span>
-                    {admin.first_name} - {admin.email}
-                  </span>
-                  <div className="space-x-2 flex items-center">
-                    {/* عنصر ثابت للحجم */}
-                    <div className="h-12 flex items-senter justify-center">
-                      {loadingToggle === admin.id ? (
-                        <PulseLoader size={6} color="#4A90E2" />
-                      ) : (
-                        <Switch
-                          checked={admin.is_active === 1}
-                          disabled={loadingToggle === admin.id}
-                          onChange={async () => {
-                            const newStatus =
-                              admin.is_active === 1 ? false : true;
-                            setLoadingToggle(admin.id);
+              {adminsList
+                .filter(
+                  (item) =>
+                    item.email && !"admin@gmail.com".includes(item.email)
+                )
+                .map((admin) => (
+                  <li
+                    key={admin.id}
+                    className="flex justify-between items-center p-2 border rounded-md"
+                  >
+                    <span>
+                      {admin.first_name} - {admin.email}
+                    </span>
+                    <div className="space-x-2 flex items-center">
+                      {/* عنصر ثابت للحجم */}
+                      <div className="h-12 flex items-senter justify-center">
+                        {loadingToggle === admin.id ? (
+                          <PulseLoader size={6} color="#4A90E2" />
+                        ) : (
+                          <Switch
+                            checked={admin.is_active === 1}
+                            disabled={loadingToggle === admin.id}
+                            onChange={async () => {
+                              const newStatus =
+                                admin.is_active === 1 ? false : true;
+                              setLoadingToggle(admin.id);
 
-                            try {
-                              await toggleAdminStatus(
-                                admin.id,
-                                admin.email,
-                                newStatus
-                              );
-                              setAdminsList((prev) =>
-                                prev.map((item) =>
-                                  item.id === admin.id
-                                    ? { ...item, is_active: newStatus ? 1 : 0 }
-                                    : item
-                                )
-                              );
-                            } catch (error) {
-                              console.error(
-                                "Error updating admin status:",
-                                error
-                              );
-                            } finally {
-                              setLoadingToggle(null);
-                            }
-                          }}
-                          name="isActive"
-                        />
-                      )}
+                              try {
+                                await toggleAdminStatus(
+                                  admin.id,
+                                  admin.email,
+                                  newStatus
+                                );
+                                setAdminsList((prev) =>
+                                  prev.map((item) =>
+                                    item.id === admin.id
+                                      ? {
+                                          ...item,
+                                          is_active: newStatus ? 1 : 0,
+                                        }
+                                      : item
+                                  )
+                                );
+                              } catch (error) {
+                                console.error(
+                                  "Error updating admin status:",
+                                  error
+                                );
+                              } finally {
+                                setLoadingToggle(null);
+                              }
+                            }}
+                            name="isActive"
+                          />
+                        )}
+                      </div>
+
+                      <button
+                        onClick={() => {
+                          setSelectedAdmin(admin);
+                          setOpenModal("edit-admin");
+                        }}
+                      >
+                        <FaEdit className="text-yellow-500" />
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setOpenDelete(true);
+                          setAdminId(admin.id);
+                        }}
+                      >
+                        <FaTrash className="text-red-500" />
+                      </button>
+                      <DeleteMessage
+                        API={`/admin/admins`}
+                        open={openDelete}
+                        handleClose={() => setOpenDelete(false)}
+                        id={AdminId}
+                        onDeleteSuccess={(id) => {
+                          setAdminsList((prev) =>
+                            prev.filter((admin) => admin.id !== id)
+                          );
+                        }}
+                      />
                     </div>
-
-                    <button
-                      onClick={() => {
-                        setSelectedAdmin(admin);
-                        setOpenModal("edit-admin");
-                      }}
-                    >
-                      <FaEdit className="text-yellow-500" />
-                    </button>
-
-                    <button onClick={() => setOpenDelete(true)}>
-                      <FaTrash className="text-red-500" />
-                    </button>
-                    <DeleteMessage
-                      API={`/admin/admins`}
-                      open={openDelete}
-                      handleClose={() => setOpenDelete(false)}
-                      id={admin.id}
-                      onDeleteSuccess={(id) => {
-                        setAdminsList((prev) =>
-                          prev.filter((admin) => admin.id !== id)
-                        );
-                      }}
-                    />
-                  </div>
-                </li>
-              ))}
+                  </li>
+                ))}
             </ul>
           ) : (
-            <p>{t("No Admins Found")}</p>
+            <p>{t("No_Admins_Found")}</p>
           )}
         </div>
       </div>
@@ -205,8 +226,8 @@ export default function Accounts() {
             : openModal === "password"
             ? t("Change") + " " + t("Password")
             : openModal === "add-admin"
-            ? t("Add Admin")
-            : t("Edit Admin")}
+            ? t("Add_Admin")
+            : t("Edit_Admin")}
         </Typography>
 
         {openModal === "profile" && (
@@ -223,7 +244,18 @@ export default function Accounts() {
 
         {(openModal === "add-admin" || openModal === "edit-admin") && (
           <ProfileForm
-            initialData={selectedAdmin ?? undefined}
+            initialData={
+              openModal === "add-admin"
+                ? {
+                    id: 0,
+                    first_name: " ",
+                    last_name: " ",
+                    email: " ",
+                    password: " ",
+                    is_active: 1,
+                  }
+                : selectedAdmin
+            }
             onSubmit={handleAdminSubmit}
             isNew={openModal === "add-admin"}
             onClose={() => {

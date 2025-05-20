@@ -41,7 +41,7 @@ export default function Settings() {
             activeTap === "contact" ? "bg-white text-gray-900 " : "text-gray-50"
           }  hover:bg-white hover:text-gray-900 border-r-[2px] border-primary1`}
         >
-          contact
+          {t("contact")}
         </button>
         <button
           onClick={() => {
@@ -54,7 +54,7 @@ export default function Settings() {
               : " text-gray-50"
           } hover:bg-white hover:text-gray-900 border-r-[2px] border-primary1`}
         >
-          manufacturers
+          {t("Manufacturers")}
         </button>
         <button
           onClick={() => {
@@ -67,7 +67,7 @@ export default function Settings() {
               : " text-gray-50"
           } hover:bg-white hover:text-gray-900 border-r-[2px] border-primary1`}
         >
-          countries
+          {t("Countries")}
         </button>
         <button
           onClick={() => {
@@ -78,11 +78,11 @@ export default function Settings() {
             activeTap === "accounts" ? "bg-white text-gray-900" : "text-gray-50"
           } hover:bg-white hover:text-gray-900 border-r-[2px] border-primary1`}
         >
-          accounts
+          {t("Accounts")}
         </button>
       </div>
       {activeTap === "contact" && (
-        <div className="flex w-full px-5 h-[50vh] overflow-y-auto bg-white">
+        <div className="flex w-full px-5 items-center justify-between bg-white">
           <SocialMediaSettings />
         </div>
       )}
@@ -97,7 +97,7 @@ export default function Settings() {
         </div>
       )}
       {activeTap === "countries" && (
-        <div className="flex w-full px-5 h-[50vh] overflow-y-auto bg-white">
+        <div className="flex w-full px-5 bg-white">
           <CountryList />
         </div>
       )}

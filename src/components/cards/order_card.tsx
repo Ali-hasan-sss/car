@@ -1,6 +1,7 @@
 import { useLanguage } from "@/context/LanguageContext";
 import { RootState } from "@/store/store";
-import { Auction } from "@/Types/AuctionTypes";
+import { Auction, CarSale, CarShipping } from "@/Types/AuctionTypes";
+import axiosInstance from "@/utils/axiosInstance";
 import {
   getFuelText,
   getShippingText,
@@ -8,7 +9,14 @@ import {
   getTimeAgo,
   getTransmissionText,
 } from "@/utils/orderUtils";
-import { IconButton, Menu, MenuItem } from "@mui/material";
+import {
+  FormControl,
+  IconButton,
+  InputLabel,
+  Menu,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import {
   Check,
   CheckCircle,
@@ -22,6 +30,10 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { PulseLoader } from "react-spinners";
+import { toast } from "sonner";
+import AnimatedModal from "../modal/AnimatedModal";
+import ImageUploader from "../uploders/Uploader/ImageUploader";
+import LoadingBTN from "../loading/loadingBTN";
 
 interface OrderCardProps {
   order: Auction;
@@ -67,13 +79,65 @@ const OrderCard: React.FC<OrderCardProps> = ({
   const [finish, setFinish] = useState<number | null>(null);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
   const userRole = useSelector((state: RootState) => state.auth.user?.userRole);
-
+  const [openModal, setOpenModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+  const [shippingStatus, setShippingStatus] = useState("");
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLButtonElement>,
     id: number
   ) => {
     setAnchorEl(event.currentTarget);
     setSelectedRow(id);
+  };
+  const isShipping = (
+    item: Auction | CarSale | CarShipping
+  ): item is CarSale => {
+    return (item as CarShipping).package_shippings !== undefined;
+  };
+  const shippingStatuses = [
+    "Received",
+    "Delivered_To_Shipping_Co",
+    "Shipped",
+    "Arrived_To_Oman",
+    "Arrived_To_Destination",
+  ];
+  const shippingStatusMap: Record<string, number> = {
+    Received: 4,
+    Delivered: 5,
+    Shipped: 6,
+    Arrived_To_Oman: 7,
+    Arrived_To_Destination: 8,
+  };
+
+  const handleSubmitShippingStatus = async () => {
+    if (!selectedStatus) return;
+
+    const statusNumber = shippingStatusMap[selectedStatus];
+
+    const images_status = uploadedImages.map((image) => ({
+      image,
+      status: statusNumber,
+    }));
+
+    try {
+      setLoading(true);
+      await axiosInstance.put(`admin/car-shippings/${order.id}`, {
+        status: statusNumber,
+        images_status: images_status,
+      });
+
+      toast.success(t("edit_car_shipping"));
+      setOpenModal(false);
+      setUploadedImages([]);
+      setSelectedStatus(null);
+    } catch (error) {
+      toast.error(t("Error"));
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleMenuClose = () => {
@@ -177,6 +241,30 @@ const OrderCard: React.FC<OrderCardProps> = ({
                   }}
                 >
                   <Check className="text-green-500 mr-2" /> {t("complete")}
+                </MenuItem>
+              )}
+              {userRole === "ADMIN" && isShipping(order) && (
+                <MenuItem disableRipple>
+                  <FormControl fullWidth size="small">
+                    <InputLabel id="shipping-status-label">
+                      {t("shipping_status")}
+                    </InputLabel>
+                    <Select
+                      value={shippingStatus}
+                      onChange={(e) => {
+                        const selected = e.target.value;
+                        setShippingStatus(selected);
+                        setSelectedStatus(selected);
+                        setOpenModal(true);
+                      }}
+                    >
+                      {shippingStatuses.map((status) => (
+                        <MenuItem key={status} value={status}>
+                          {t(status)}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </MenuItem>
               )}
             </Menu>
@@ -289,6 +377,43 @@ const OrderCard: React.FC<OrderCardProps> = ({
           {t("time_ago")} : {timeAgo}
         </span>
       </div>
+      <AnimatedModal
+        className="w-[500px]"
+        open={openModal}
+        handleClose={() => setOpenModal(false)}
+      >
+        <div className="p-2 bg-white rounded-lg w-[90%]  mx-auto mt-2">
+          <h2 className="mb-4 text-lg font-semibold text-center">
+            {t("upload_images_for_status")}: {selectedStatus}
+          </h2>
+
+          <ImageUploader
+            onImagesUpload={(fileNames) => setUploadedImages(fileNames)}
+            multiple
+          />
+
+          <div className="mt-6 flex justify-between gap-4">
+            <button
+              className=" px-2 py-1 button_close"
+              onClick={() => {
+                setOpenModal(false);
+                setUploadedImages([]);
+                setSelectedStatus(null);
+              }}
+            >
+              {t("Close")}
+            </button>
+
+            <button
+              className=" px-2 py-1 button_outline"
+              onClick={handleSubmitShippingStatus}
+              disabled={uploadedImages.length === 0}
+            >
+              {loading ? <LoadingBTN /> : t("Save")}
+            </button>
+          </div>
+        </div>
+      </AnimatedModal>
     </div>
   );
 };

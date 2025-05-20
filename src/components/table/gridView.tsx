@@ -23,6 +23,9 @@ interface Grid_ViewProps {
 const isCarSale = (item: Auction | CarSale | CarShipping): item is CarSale => {
   return (item as CarSale).images !== undefined;
 };
+const isShipping = (item: Auction | CarSale | CarShipping): item is CarSale => {
+  return (item as CarShipping).package_shippings !== undefined;
+};
 
 // // دالة لفحص ما إذا كان العنصر من نوع Auction
 // const isAuction = (item: Auction | CarSale): item is Auction => {
@@ -152,7 +155,7 @@ export default function Grid_View({
         {displayedData &&
           displayedData.map((item, index) =>
             // نعرض كارد الطلب أو كارد السيارة حسب نوع البيانات
-            isCarSale(item) ? (
+            isCarSale(item) && !isShipping ? (
               <CarCard
                 isloagedin
                 key={index}

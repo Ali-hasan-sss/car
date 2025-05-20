@@ -6,7 +6,7 @@ interface ActionComfirm {
   handleClose: () => void;
   open: boolean;
   message: string;
-  onActionSuccess?: () => void; // دالة يتم استدعاؤها بعد الحذف
+  onActionSuccess?: () => void;
 }
 
 export default function ActionComfirm({

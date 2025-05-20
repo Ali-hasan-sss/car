@@ -148,8 +148,13 @@ export const statusMap: Record<
 > = {
   0: { label: "rejected", color: "bg-red-500" },
   1: { label: "pending", color: "bg-yellow-200" },
-  2: { label: "in_progress", color: "bg-blue-500" },
-  3: { label: "completed", color: "bg-green-500" },
+  2: { label: "in_progress", color: "bg-blue-400" },
+  3: { label: "completed", color: "bg-green-700" },
+  4: { label: "Received", color: "bg-blue-500" },
+  5: { label: "Delivered_To_Shipping_Co", color: "bg-blue-600" },
+  6: { label: "Shipped", color: "bg-blue-700" },
+  7: { label: "Arrived_To_Oman", color: "bg-green-500" },
+  8: { label: "Arrived_To_Destination", color: "bg-green-600" },
   null: { label: "witing", color: "bg-gray-400" },
 };
 

@@ -26,7 +26,16 @@ import {
   getTransmissionText,
   getWeightUnitText,
 } from "@/utils/orderUtils";
-import { Box, IconButton, Menu, MenuItem, Modal } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  IconButton,
+  InputLabel,
+  Menu,
+  MenuItem,
+  Modal,
+  Select,
+} from "@mui/material";
 import {
   Check,
   CheckCircle,
@@ -38,26 +47,55 @@ import {
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
+import AnimatedModal from "@/components/modal/AnimatedModal";
+import ImageUploader from "@/components/uploders/Uploader/ImageUploader";
+import LoadingBTN from "@/components/loading/loadingBTN";
+import axiosInstance from "@/utils/axiosInstance";
 
 export default function ShippingOrder() {
   const dispatch = useAppDispatch();
   const shipping = useAppSelector((state) => state.carShippings.carShipping);
+  const { loading, error } = useAppSelector((state) => ({
+    loading: state.carShippings.loading,
+    error: state.carShippings.error,
+  }));
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [initForm, setInitForm] = useState<ShippingFormInputs | null>(null);
   const [openModal, setOpenModal] = useState(false);
+  const [OpenstatusModal, setOpenstatusModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
+  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+  const [shippingStatus, setShippingStatus] = useState("");
+  const [Loading, setLoading] = useState(false);
+
   const userRole = useSelector((state: RootState) => state.auth.user?.userRole);
 
   const { t } = useLanguage();
   const apiUrl = "admin/car-shippings";
   const [id, setId] = useState(0);
+  const shippingStatuses = [
+    "Received",
+    "Delivered",
+    "Shipped",
+    "Arrived_To_Oman",
+    "Arrived_To_Destination",
+  ];
+  const shippingStatusMap: Record<string, number> = {
+    Received: 4,
+    Delivered: 5,
+    Shipped: 6,
+    Arrived_To_Oman: 7,
+    Arrived_To_Destination: 8,
+  };
   useEffect(() => {
     const storedid = localStorage.getItem("itemselected");
     if (storedid) {
       setId(Number(storedid));
     }
   }, []);
+
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLButtonElement>,
     id: number
@@ -75,7 +113,7 @@ export default function ShippingOrder() {
     id: number,
     type: "accept" | "reject" | "finish"
   ) => {
-    const status = type === "accept" ? 2 : type === "reject" ? 0 : 3; // تحديد القيمة بناءً على نوع الإجراء
+    const status = type === "accept" ? 2 : type === "reject" ? 0 : 3;
     try {
       handleMenuClose();
       //await axiosInstance.put(`${apiUrl}/${id}`, { status });
@@ -107,12 +145,13 @@ export default function ShippingOrder() {
     }
   }, [dispatch, id]);
 
-  if (!shipping)
+  if (loading)
     return (
       <div className="p-6 text-center">
         <Loader />
       </div>
     );
+  if (!shipping) return <div className="p-6 text-center">{error}</div>;
   const transmissionText = getTransmissionText(shipping.transmission_type);
   const fuelText = getFuelText(shipping.fuel_type);
   const DriveSystemText = getDriveSystemText(shipping.drive_system);
@@ -158,7 +197,34 @@ export default function ShippingOrder() {
     setInitForm(formData);
     setOpenModal(true);
   };
+  const handleSubmitShippingStatus = async () => {
+    if (!selectedStatus) return;
 
+    const statusNumber = shippingStatusMap[selectedStatus];
+
+    const images_status = uploadedImages.map((image) => ({
+      image,
+      status: statusNumber,
+    }));
+
+    try {
+      setLoading(true);
+      await axiosInstance.put(`admin/car-shippings/${shipping.id}`, {
+        status: statusNumber,
+        images_status: images_status,
+      });
+
+      toast.success(t("edit_car_shipping"));
+      setOpenstatusModal(false);
+      setUploadedImages([]);
+      setSelectedStatus(null);
+    } catch (error) {
+      toast.error(t("Error"));
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="p-4 bg-white w-full min-h-screen">
       {/* بيانات السيارة */}
@@ -227,6 +293,30 @@ export default function ShippingOrder() {
                     }}
                   >
                     <Check className="text-green-500 mx-2" /> {t("complete")}
+                  </MenuItem>
+                )}
+                {userRole === "ADMIN" && (
+                  <MenuItem disableRipple>
+                    <FormControl fullWidth size="small">
+                      <InputLabel id="shipping-status-label">
+                        {t("shipping_status")}
+                      </InputLabel>
+                      <Select
+                        value={shippingStatus}
+                        onChange={(e) => {
+                          const selected = e.target.value;
+                          setShippingStatus(selected);
+                          setSelectedStatus(selected);
+                          setOpenstatusModal(true);
+                        }}
+                      >
+                        {shippingStatuses.map((status) => (
+                          <MenuItem key={status} value={status}>
+                            {t(status)}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   </MenuItem>
                 )}
               </Menu>
@@ -455,6 +545,43 @@ export default function ShippingOrder() {
           </Box>
         </Modal>
       )}
+      <AnimatedModal
+        className="w-[500px]"
+        open={OpenstatusModal}
+        handleClose={() => setOpenstatusModal(false)}
+      >
+        <div className="p-2 bg-white rounded-lg w-[90%]  mx-auto mt-2">
+          <h2 className="mb-4 text-lg font-semibold text-center">
+            {t("upload_images_for_status")}: {selectedStatus}
+          </h2>
+
+          <ImageUploader
+            onImagesUpload={(fileNames) => setUploadedImages(fileNames)}
+            multiple
+          />
+
+          <div className="mt-6 flex justify-between gap-4">
+            <button
+              className=" px-2 py-1 button_close"
+              onClick={() => {
+                setOpenstatusModal(false);
+                setUploadedImages([]);
+                setSelectedStatus(null);
+              }}
+            >
+              {t("Close")}
+            </button>
+
+            <button
+              className=" px-2 py-1 button_outline"
+              onClick={handleSubmitShippingStatus}
+              disabled={uploadedImages.length === 0}
+            >
+              {Loading ? <LoadingBTN /> : t("Save")}
+            </button>
+          </div>
+        </div>
+      </AnimatedModal>
     </div>
   );
 }

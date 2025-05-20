@@ -1,3 +1,5 @@
+import NotificationsPage from "@/app/customer/dashboard/notifications/page";
+
 export default function Notfications() {
-  return <div>Notfications</div>;
+  return <NotificationsPage />;
 }

@@ -32,7 +32,7 @@ export default function Card({ car }: { car: CarResponse }) {
   const category = car.category.title;
   const lotNumber = car.id.toString();
   const currentBid = car.price.toString();
-  const location = car.user.contact.city;
+  const location = car.user?.contact?.city;
   const router = useRouter();
   const { t } = useLanguage();
   return (

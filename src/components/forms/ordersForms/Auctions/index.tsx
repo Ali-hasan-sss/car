@@ -39,7 +39,6 @@ export default function Auctions({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [categories, setCategories] = useState<any[]>([]);
   // const [models, setModels] = useState<any[]>([]);
-  const userRole = useSelector((state: RootState) => state.auth.user?.userRole);
   const [formData, setFormData] = useState<AuctionsFormInputs>({
     auction_link: "",
     manufacturer: null,
@@ -176,7 +175,7 @@ export default function Auctions({
     }
   };
   const [manufacturerLoading, setManufacturerLoading] = useState(false);
-
+  const userRole = useSelector((state: RootState) => state.auth.user?.userRole);
   useEffect(() => {
     if (status === "idle") {
       if (userRole === "ADMIN" || userRole === "USER") {
@@ -351,6 +350,21 @@ export default function Auctions({
               userRole === "ADMIN" ? "admin" : "customer"
             }/countries?is_shown_auction=1`}
             error={errors.country_id}
+          />
+        </div>
+        <div className="selector w-[250px]">
+          <label>{t("Shipping_from")} :</label>
+          <DainamicSelector
+            returnTitle={true}
+            placeholder="Select"
+            Api_URL={`${
+              userRole === "ADMIN" ? "admin" : "customer"
+            }/ports?type=2`}
+            value={formData.shipping_from}
+            onChange={(value) =>
+              handleInputChange("shipping_from", String(value))
+            }
+            error={errors.shipping_from}
           />
         </div>
       </div>

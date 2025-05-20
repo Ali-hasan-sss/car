@@ -3,6 +3,7 @@
 import Logo from "@/components/NavBar/top-bar/logo";
 import Avatar from "../../../avatar/avatar";
 import LanguageSwitcher from "@/components/buttons/btn-switch/LanguageSwitcher";
+import NotificationDropdown from "@/components/notifications/NotificationDropdown";
 
 export default function AdminNavbar() {
   return (
@@ -11,6 +12,7 @@ export default function AdminNavbar() {
         <Logo />
         <div className="flex items-center gap-[40px]">
           <LanguageSwitcher />
+          <NotificationDropdown />
           <Avatar width="8" />
         </div>
       </div>

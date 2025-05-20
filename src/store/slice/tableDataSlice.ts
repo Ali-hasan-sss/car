@@ -1,25 +1,21 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// ✅ تعريف الحالة العامة التي تدعم أي نوع `T`
 interface TableDataState<T> {
-  data: Record<string, T[]>; // تخزين البيانات حسب `apiUrl`
+  data: Record<string, T[]>;
   loading: boolean;
   error: string | null;
 }
-
-// ✅ الحالة الأولية (تبدأ كـ `unknown`)
 const initialState: TableDataState<unknown> = {
   data: {},
   loading: false,
   error: null,
 };
 
-// ✅ `Thunk` عام لجلب البيانات مع نوع `T`
 export const fetchTableData = createAsyncThunk<
-  { apiUrl: string; data: unknown[] }, // ✅ استبدال `any[]` بـ `unknown[]`
-  string, // ✅ المتغير المدخل (apiUrl)
-  { rejectValue: string } // ✅ نوع الخطأ
+  { apiUrl: string; data: unknown[] },
+  string,
+  { rejectValue: string }
 >("tableData/fetchTableData", async (apiUrl, { rejectWithValue }) => {
   try {
     const response = await axios.get<unknown[]>(apiUrl); // ✅ تأكيد أن البيانات مصفوفة من `unknown`

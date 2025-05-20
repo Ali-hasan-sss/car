@@ -14,7 +14,6 @@ import {
   ExteriorColor,
   shippingStatusOptions,
   CarfaxOptions,
-  location_port,
 } from "../data";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -58,7 +57,7 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
     cylinders: 4,
     fuel_type: 1,
     price: "",
-    shipping_from: 0,
+    shipping_from: "",
     car_status: 1,
     carfax: null,
     shipping_status: 0,
@@ -401,12 +400,15 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
             <div className="selector w-[250px]">
               <label>{t("Shipping_from")} :</label>
               <DainamicSelector
+                returnTitle
                 Api_URL={`${
                   userRole === "ADMIN" ? "admin" : "customer"
-                }/countries?is_shown_auction=1`}
+                }/ports?type=1`}
                 placeholder="Canada"
                 value={formData.shipping_from}
-                onChange={(value) => handleInputChange("shipping_from", value)}
+                onChange={(value) =>
+                  handleInputChange("shipping_from", String(value))
+                }
               />
             </div>
             <div className="selector w-[250px]">
@@ -424,13 +426,17 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
               <label>
                 {t("Location_of_Car")} ({t("If_shipped")})
               </label>
-              <Text_selector
-                options={location_port}
-                placeholder="Duqm, Sohar"
+              <DainamicSelector
+                returnTitle={true}
+                placeholder="Select"
+                Api_URL={`${
+                  userRole === "ADMIN" ? "admin" : "customer"
+                }/ports?type=1`}
                 value={formData.location_port}
                 onChange={(value) =>
                   handleInputChange("location_port", String(value))
                 }
+                error={errors.location_port}
               />
             </div>
           </div>

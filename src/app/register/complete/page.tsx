@@ -68,7 +68,7 @@ const Registration: React.FC = () => {
           email,
           first_name: first_name || "",
           last_name: last_name || "",
-          userRole: type === 1 ? "USER" : "COMPANY",
+          userRole: type === 1 ? "USER" : "USER",
           type,
           is_full_data: is_full_data === 1,
           contact: contact || null,

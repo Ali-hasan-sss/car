@@ -5,12 +5,12 @@ interface filterProps {
 }
 export default function GeneralFilter({ label }: filterProps) {
   const [filtervalue, setFiltervalue] = useState("");
-  const changeFilter = () => {
-    setFiltervalue("");
+  const changeFilter = (value: string) => {
+    setFiltervalue(value);
   };
   const filterOption = [
-    { label: "All", value: "all" },
-    { label: "cars Moldels", value: "models" },
+    { label: "All", value: "" },
+    { label: "cars", value: "models" },
     { label: "cars Color", value: "Colors" },
   ];
   return (
@@ -18,7 +18,7 @@ export default function GeneralFilter({ label }: filterProps) {
       <label className="text-sm  text-text_des flex-shrink-0">{label}</label>
       <Text_selector
         options={filterOption}
-        onChange={changeFilter}
+        onChange={(val) => changeFilter(String(val))}
         value={filtervalue}
         placeholder="All"
       />

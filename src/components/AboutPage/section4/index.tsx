@@ -58,7 +58,7 @@ export default function Section4() {
           <Loader />
         ) : (
           <div className="flex w-full flex-wrap gap-6 items-center justify-center md:justify-between">
-            {blogs.map((plog, index) => (
+            {blogs.slice(-3).map((plog, index) => (
               <Card key={index} post={plog} />
             ))}
           </div>

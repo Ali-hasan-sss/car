@@ -37,14 +37,11 @@ const NotificationsPage = () => {
     dispatch(markAllNotificationsAsRead(role));
   };
 
-  if (!notifications.length)
-    return <p className="text-center mt-4">{t("No_notifications")}</p>;
-
   return (
     <div className="w-full mx-auto  py-5 md:px-10">
       <div className="flex w-full items-center justify-between">
         <h2 className="text-xl font-bold mb-4 text-center">
-          {t("Notifications")}
+          {t("Notfications")}
         </h2>
 
         {unreadCount > 0 && (
@@ -59,46 +56,50 @@ const NotificationsPage = () => {
         )}
       </div>
 
-      <ul className="space-y-4">
-        {notifications.map((notif) => (
-          <li
-            key={notif.id}
-            className={`relative border rounded-lg p-4 shadow-sm ${
-              notif.readed_at ? "bg-gray-100" : "bg-white"
-            }`}
-          >
-            {!notif.readed_at && (
-              <span className="absolute top-2 right-2 h-3 w-3 rounded-full bg-red-400" />
-            )}
-            <div className="flex w-full items-center justify-between">
-              <h3 className="text-lg font-semibold">{notif.title}</h3>
+      {notifications ? (
+        <ul className="space-y-4">
+          {notifications.map((notif) => (
+            <li
+              key={notif.id}
+              className={`relative border rounded-lg p-4 shadow-sm ${
+                notif.readed_at ? "bg-gray-100" : "bg-white"
+              }`}
+            >
               {!notif.readed_at && (
-                <button
-                  onClick={() => handleMarkAsRead(notif.id)}
-                  className="mt-2 text-sm border border-primary1 hover:bg-primary1 hover:text-white p-1 rounded text-gray-900 hover:underline"
-                >
-                  {t("mark_as_read")}
-                </button>
+                <span className="absolute top-2 right-2 h-3 w-3 rounded-full bg-red-400" />
               )}
-            </div>
-            <p className="text-sm text-gray-600">{notif.message}</p>
+              <div className="flex w-full items-center justify-between">
+                <h3 className="text-lg font-semibold">{notif.title}</h3>
+                {!notif.readed_at && (
+                  <button
+                    onClick={() => handleMarkAsRead(notif.id)}
+                    className="mt-2 text-sm border border-primary1 hover:bg-primary1 hover:text-white p-1 rounded text-gray-900 hover:underline"
+                  >
+                    {t("mark_as_read")}
+                  </button>
+                )}
+              </div>
+              <p className="text-sm text-gray-600">{notif.message}</p>
 
-            {/* {notif.payload && (
+              {/* {notif.payload && (
               <div className="text-sm text-gray-700 mt-2">
                 نوع: {notif.payload.type}، معرف المستخدم: {notif.payload.uId}
               </div>
             )} */}
-            <div className="flex w-full items-center justify-between">
-              <p className="text-xs text-gray-500 mt-1">
-                {new Date(notif.created_at).toLocaleString("ar-EG")}
-              </p>
-              <span className="bg-blue-400 text-white px-2 py-1 rounded-full text-xs">
-                {t("time_ago")} : {getTimeAgo(notif.created_at)}
-              </span>
-            </div>
-          </li>
-        ))}
-      </ul>
+              <div className="flex w-full items-center justify-between">
+                <p className="text-xs text-gray-500 mt-1">
+                  {new Date(notif.created_at).toLocaleString("ar-EG")}
+                </p>
+                <span className="bg-blue-400 text-white px-2 py-1 rounded-full text-xs">
+                  {t("time_ago")} : {getTimeAgo(notif.created_at)}
+                </span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>{t("no_notfications")}</p>
+      )}
       <CustomPagination
         totalPages={pageCount}
         currentPage={currentPage}

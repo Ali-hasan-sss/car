@@ -67,4 +67,6 @@ export const pages_en = {
   thu: "Thursday",
   fri: "Friday",
   week: "Week",
+  contact_info: "contact info",
+  Pages: "Pages",
 };

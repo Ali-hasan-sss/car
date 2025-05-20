@@ -37,13 +37,14 @@ const useFirebaseNotifications = (role: "admin" | "customer") => {
           return;
         }
 
-        if (!messaging || !process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY) {
+        const msg = await messaging();
+        if (!msg || !process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY) {
           console.warn("Firebase messaging or VAPID key not available.");
           return;
         }
 
         const oldToken = localStorage.getItem("fcmToken");
-        const newToken = await getToken(messaging, {
+        const newToken = await getToken(msg, {
           vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
         });
 

@@ -2,7 +2,6 @@
 
 import { useLanguage } from "../../../../context/LanguageContext";
 import GeneralFilter from "@/components/DashboardComponernt/filters/generalFilter";
-import QuickFilter from "@/components/DashboardComponernt/filters/quickFillter";
 import TableHeader from "@/components/common/titleBar/tableHeader";
 import ToolBar from "@/components/common/toolbar";
 import Search_input from "@/components/inputs/search_input";
@@ -153,13 +152,11 @@ export default function SallesPage() {
       {openFilter && (
         <>
           <GeneralFilter label="Filter & Sort Control" />
-          <QuickFilter />
         </>
       )}
       {openFilter && (
         <>
           <GeneralFilter label="Filter & Sort Control" />
-          <QuickFilter />
         </>
       )}
       <ToolBar

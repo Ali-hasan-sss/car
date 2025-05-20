@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import useFirebaseNotifications from "@/utils/useFirebase"; // يجب أن تكون دالة قابلة للنداء فقط وليس هوك
+import useFirebaseNotifications from "@/utils/useFirebase";
 
 const FCMInitializer = () => {
   const userRole = useSelector((state: RootState) => state.auth.user?.userRole);
@@ -10,6 +10,14 @@ const FCMInitializer = () => {
 
   useEffect(() => {
     if (typeof window !== "undefined" && "Notification" in window) {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          console.log("✅ تم منح إذن الإشعارات");
+        } else {
+          console.warn("🚫 لم يتم منح إذن الإشعارات");
+        }
+      });
+
       navigator.serviceWorker
         .register("/firebase-messaging-sw.js")
         .then((registration) => {

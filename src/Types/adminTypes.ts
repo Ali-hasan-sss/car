@@ -190,6 +190,10 @@ export interface manufacturers {
   title: string;
   manufacturer_id: number | null;
 }
+export interface Manufacturer {
+  id: number;
+  title: string;
+}
 export interface category {
   id: number;
   title: string;
@@ -199,6 +203,18 @@ export interface category {
 export interface CountriesState {
   countriesList: Country[];
   selectedCountry: Country | null;
+  lastUpdated: number;
+}
+
+export interface Port {
+  id: number;
+  title: string;
+  type: number;
+}
+
+export interface PortState {
+  portsList: Port[];
+  selectedPort: Port | null;
   lastUpdated: number;
 }
 

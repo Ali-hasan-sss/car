@@ -50,7 +50,7 @@ export default function CmodelForm({
 
   const handleSubmit = async () => {
     if (!formData.category_id) {
-      toast.error("يرجى تحديد الفئة");
+      toast.error(t("Choies_category"));
       return;
     }
 
@@ -97,9 +97,9 @@ export default function CmodelForm({
     <>
       <div className="px-4 py-3 w-full mb-4">
         {isNew ? (
-          <h2 className="text-center">اضافة موديل</h2>
+          <h2 className="text-center">{t("Add_category")}</h2>
         ) : (
-          <h2 className="text-center">تعديل موديل</h2>
+          <h2 className="text-center">{t("Edit_category")}</h2>
         )}
       </div>
       <TextField

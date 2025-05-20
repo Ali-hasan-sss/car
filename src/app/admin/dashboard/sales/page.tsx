@@ -2,7 +2,6 @@
 
 import { useLanguage } from "../../../../context/LanguageContext";
 import GeneralFilter from "@/components/DashboardComponernt/filters/generalFilter";
-import QuickFilter from "@/components/DashboardComponernt/filters/quickFillter";
 import TableHeader from "@/components/common/titleBar/tableHeader";
 import ToolBar from "@/components/common/toolbar";
 import Search_input from "@/components/inputs/search_input";
@@ -152,7 +151,7 @@ export default function Sales() {
         cylinders: order.cylinders ?? 4,
         fuel_type: order.fuel_type ?? 1,
         price: order.price?.toString() ?? "",
-        shipping_from: order.shipping_from ?? null,
+        shipping_from: order.shipping_from ?? "",
         car_status: typeof order.status === "number" ? order.status : 0,
         ex_color: order.ex_color ?? "",
         in_color: order.in_color ?? "",
@@ -195,7 +194,6 @@ export default function Sales() {
       {openFilter && (
         <>
           <GeneralFilter label="Filter & Sort Control" />
-          <QuickFilter />
         </>
       )}
       <ToolBar

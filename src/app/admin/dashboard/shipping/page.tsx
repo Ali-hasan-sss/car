@@ -2,7 +2,6 @@
 
 import { useLanguage } from "../../../../context/LanguageContext";
 import GeneralFilter from "@/components/DashboardComponernt/filters/generalFilter";
-import QuickFilter from "@/components/DashboardComponernt/filters/quickFillter";
 import TableHeader from "@/components/common/titleBar/tableHeader";
 import ToolBar from "@/components/common/toolbar";
 import Search_input from "@/components/inputs/search_input";
@@ -17,13 +16,15 @@ import CustomPagination from "@/components/pagination/extrnalPagenation";
 import {
   deleteCarShipping,
   fetchCarShippings,
+  updateCarShipping,
 } from "@/store/slice/ShippingSlice";
 import { CarShipping, ShippingFormInputs } from "@/Types/AuctionTypes";
 import DeleteMessage from "@/components/messags/deleteMessage";
 import ShippingForm from "@/components/forms/ordersForms/shipping";
+import { toast } from "sonner";
 
 export default function Shipping() {
-  const { t } = useLanguage();
+  const { t, isArabic } = useLanguage();
   const [openFilter, setOpenFilter] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [initForm, setInitForm] = useState<ShippingFormInputs | null>(null);
@@ -33,6 +34,11 @@ export default function Shipping() {
   const [deleteId, setDeleteId] = useState(0);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedRequest, setSelectedRequest] = useState<{
+    id: number;
+    type: "accept" | "reject" | "finish";
+  } | null>(null);
+  console.log(selectedRequest);
 
   const closeModal = () => {
     setOpenModal(false);
@@ -132,6 +138,44 @@ export default function Shipping() {
     setInitForm(formData);
     setOpenModal(true);
   };
+  const handleAcceptReject = async (
+    id: number,
+    type: "accept" | "reject" | "finish"
+  ) => {
+    setSelectedRequest({ id, type });
+    const status = type === "accept" ? 2 : type === "reject" ? 0 : 3; // تحديد القيمة بناءً على نوع الإجراء
+    try {
+      //await axiosInstance.put(`${apiUrl}/${id}`, { status });
+      await dispatch(
+        updateCarShipping({
+          apiUrl: apiUrl,
+          id: id,
+          updatedData: { status },
+        })
+      );
+      if (isArabic) {
+        toast.success(
+          `تم ${
+            type === "accept" ? "قبول" : type === "reject" ? "رفض" : "اكمال"
+          } الطلب رقم ${id}`
+        );
+      } else {
+        toast.success(
+          `${
+            type === "accept"
+              ? "accepted"
+              : type === "reject"
+              ? "rejected"
+              : "completed"
+          } the request : ${id}`
+        );
+      }
+    } catch (error) {
+      console.error("حدث خطأ أثناء تحديث الطلب:", error);
+      toast.error(t("Error"));
+    } finally {
+    }
+  };
   const handleDelete = (id: number) => {
     setOpenDeleteModal(true);
     setDeleteId(id);
@@ -152,7 +196,6 @@ export default function Shipping() {
       {openFilter && (
         <>
           <GeneralFilter label="Filter & Sort Control" />
-          <QuickFilter />
         </>
       )}
       <ToolBar
@@ -200,6 +243,7 @@ export default function Shipping() {
             handleEdit(order);
           }}
           onDelete={(id) => handleDelete(id)}
+          onChangeStatus={handleAcceptReject}
         />
       )}
       <CustomPagination

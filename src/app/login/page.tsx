@@ -87,7 +87,7 @@ const Login: React.FC = () => {
           email,
           first_name: first_name || "",
           last_name: last_name || "",
-          userRole: type === 1 ? "USER" : "COMPANY",
+          userRole: type === 1 ? "USER" : "USER",
           type,
           is_full_data: is_full_data === 1,
           email_verified_at: email_verified_at,
@@ -98,12 +98,12 @@ const Login: React.FC = () => {
         dispatch(setAuthToken(token));
 
         dispatch(setUser(userData));
-        toast.success("Logged_successfully");
+        toast.success(t("Logged_successfully"));
         // إعادة توجيه المستخدم إلى لوحة التحكم
         router.push("/customer/dashboard");
       } catch (error) {
         console.error(error);
-        toast.error("حدث خطا اثناء تسجيل الدخول");
+        toast.error(t("Error"));
         setErrors({
           email: t("Error_Email_pass"),
           password: t("Error_Email_pass"),

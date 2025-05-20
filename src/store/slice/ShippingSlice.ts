@@ -162,9 +162,17 @@ const carShippingsSlice = createSlice({
       })
 
       // 📦 جلب شحنة واحدة
+      .addCase(fetchCarShippingById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(fetchCarShippingById.fulfilled, (state, action) => {
         state.loading = false;
         state.carShipping = action.payload;
+      })
+      .addCase(fetchCarShippingById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "فشل في جلب بيانات الشحنة";
       })
 
       // ✏️ تعديل

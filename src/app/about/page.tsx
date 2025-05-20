@@ -2,11 +2,11 @@
 
 import Footer from "@/components/footer";
 import Navbar from "@/components/NavBar/navbar";
-import Section3 from "./section3";
-import Section4 from "./section4";
-import About_header from "./header";
-import About_section1 from "./section1";
-import About_section2 from "./section2";
+import Section3 from "../../components/AboutPage/section3";
+import Section4 from "../../components/AboutPage/section4";
+import About_header from "../../components/AboutPage/header";
+import About_section1 from "../../components/AboutPage/section1";
+import About_section2 from "../../components/AboutPage/section2";
 
 export default function About() {
   return (

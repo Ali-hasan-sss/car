@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { Switch } from "@mui/material";
 import { Blog } from "@/Types/adminTypes";
 import Link from "next/link";
-import { Edit, Eye, Trash } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Edit, Trash } from "lucide-react";
 
 export default function BlogCard({
   id,
@@ -25,15 +24,10 @@ export default function BlogCard({
 
   const handleImageLoad = () => setLoading(false);
   const handleImageError = () => setLoading(false);
-  const router = useRouter();
   // ✅ دالة لاستخراج النص بناءً على كونه كائنًا أو نصًا مباشرًا
   const getLocalizedText = (text: string | { en: string; ar: string }) => {
     if (typeof text === "string") return text;
     return isArabic ? text.ar : text.en;
-  };
-  const handleView = () => {
-    localStorage.setItem("itemselected", String(id));
-    router.push("/blog/details");
   };
 
   return (
@@ -107,12 +101,6 @@ export default function BlogCard({
             className="flex items-center justify-center w-[30px] h-[30px] bg-red-100 p-1 rounded-full"
           >
             <Trash />
-          </button>
-          <button
-            onClick={handleView}
-            className="flex items-center justify-center w-[30px] h-[30px] bg-blue-100 p-1 rounded-full"
-          >
-            <Eye />
           </button>
           <button
             onClick={onedit}

@@ -15,7 +15,7 @@ export const fetchManufacturers = createAsyncThunk(
 
 interface ManufacturerState {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  manufacturers: any[];
+  manufacturers: any;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }

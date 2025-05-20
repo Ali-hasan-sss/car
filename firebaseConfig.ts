@@ -1,7 +1,13 @@
 // firebase.ts
 import { initializeApp } from "firebase/app";
-import { getAnalytics, isSupported } from "firebase/analytics";
-import { getMessaging } from "firebase/messaging";
+import {
+  getAnalytics,
+  isSupported as isAnalyticsSupported,
+} from "firebase/analytics";
+import {
+  getMessaging,
+  isSupported as isMessagingSupported,
+} from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -15,14 +21,24 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-// Analytics only works in browser environment
+// Analytics (only if supported and in browser)
 let analytics: ReturnType<typeof getAnalytics> | null = null;
 if (typeof window !== "undefined") {
-  isSupported().then((supported) => {
+  isAnalyticsSupported().then((supported) => {
     if (supported) {
       analytics = getAnalytics(app);
     }
   });
 }
-export const messaging = getMessaging(app);
-export { app, analytics };
+
+// Messaging (lazy load & safe check)
+const messaging = async () => {
+  if (typeof window === "undefined") return null;
+
+  const supported = await isMessagingSupported();
+  if (!supported) return null;
+
+  return getMessaging(app);
+};
+
+export { app, analytics, messaging };

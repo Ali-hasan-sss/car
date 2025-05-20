@@ -15,8 +15,12 @@ import {
 import { Dialog } from "@mui/material";
 import UserForm from "@/components/forms/UserForm";
 import Loader from "@/components/loading/loadingPage";
+import { initialData } from "@/Types/adminTypes";
+import { toast } from "sonner";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function User() {
+  const { t } = useLanguage();
   const [id, setId] = useState(0);
   useEffect(() => {
     const storedid = localStorage.getItem("itemselected");
@@ -48,7 +52,7 @@ export default function User() {
     user_id: string;
     mobile: string;
     other_mobile: string;
-    country_id: number | null; // Ensure this field supports both number and null
+    country_id: number | null;
     language: string;
     address1: string;
     address2: string;
@@ -65,7 +69,7 @@ export default function User() {
     user_id: "",
     mobile: "",
     other_mobile: "",
-    country_id: null, // Default value is null
+    country_id: null,
     language: "",
     address1: "",
     address2: "",
@@ -81,12 +85,12 @@ export default function User() {
       if (userData) {
         const initialData = {
           email: userData?.email || "",
-          type: Number(userData?.type) || 1, // تحويل type إلى string
+          type: Number(userData?.type) || 1,
           name: userData.name,
-          user_id: String(userData?.id || ""), // تحويل user_id إلى string
+          user_id: String(userData?.id || ""),
           mobile: userData?.contact?.mobile || "",
           other_mobile: userData?.contact?.other_mobile || "",
-          country_id: userData?.contact?.country_id ?? null, // التأكد من دعم null
+          country_id: userData?.contact?.country_id ?? null,
           language: userData?.contact?.language || "",
           address1: userData?.contact?.address1 || "",
           address2: userData?.contact?.address2 || "",
@@ -106,27 +110,11 @@ export default function User() {
       initializeFormData();
     }
   }, [userData]);
-  const handleSubmit = async () => {
+  const handleSubmit = async (formData: initialData) => {
     try {
       setLoading(true);
-      //   const response = await axiosInstance.post("customer/profile", formData);
-      // const { id, name, type, email, is_full_data, contact, idDetail } =
-      //   response.data.data;
-
-      // تقسيم الاسم إلى اسم أول واسم ثاني
-      // const [first_name, last_name] = name.split(" ");
-      // const userData = {
-      //   id,
-      //   email,
-      //   first_name: first_name || "",
-      //   last_name: last_name || "",
-      //   userRole: type === 1 ? "USER" : "COMPANY",
-      //   type, // نوع المستخدم (1 أو 2)
-      //   is_full_data: is_full_data === 1,
-      //   contact: contact || null,
-      //   idDetail: idDetail || null,
-      // };
-      router.push("/customer/dashboard");
+      await axiosInstance.put(`admin/users/${formData.user_id}`, formData);
+      toast.success(t("edit_user_success"));
     } catch (error) {
       console.error("خطأ أثناء التسجيل:", error);
       alert("حدث خطأ أثناء التسجيل. حاول مرة أخرى.");

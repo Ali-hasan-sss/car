@@ -64,4 +64,6 @@ export const pages_ar = {
   thu: "الخميس",
   fri: "الجمعة",
   week: "الاسبوع",
+  contact_info: "معلومات الاتصال",
+  Pages: "الصفحات",
 };

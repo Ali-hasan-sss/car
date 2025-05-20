@@ -14,20 +14,19 @@ const tokenFromCookies = Cookies.get("authToken") || null;
 
 let parsedUser: User | null = null;
 
-// التحقق من أن الكود يعمل في المتصفح قبل استخدام localStorage
 if (typeof window !== "undefined") {
   const userFromStorage = localStorage.getItem("user");
   parsedUser = userFromStorage ? JSON.parse(userFromStorage) : null;
 }
-const isClient = typeof window !== "undefined"; // ✅ التحقق من بيئة المتصفح
+const isClient = typeof window !== "undefined";
 const storedLanguage = isClient ? localStorage.getItem("language") : null;
 const initialLang: Language = storedLanguage === "ar" ? "ar" : "en";
 
 const initialState: AuthState = {
   authToken: tokenFromCookies,
-  user: parsedUser, // تحميل بيانات المستخدم من localStorage
+  user: parsedUser,
   lang: initialLang,
-  isLoggedIn: !!tokenFromCookies && !!parsedUser, // التأكد من أن المستخدم مسجل دخول
+  isLoggedIn: !!tokenFromCookies && !!parsedUser,
 };
 
 const authSlice = createSlice({
@@ -66,7 +65,7 @@ const authSlice = createSlice({
       });
 
       if (typeof window !== "undefined") {
-        localStorage.setItem("user", JSON.stringify(action.payload.user)); // حفظ المستخدم في localStorage
+        localStorage.setItem("user", JSON.stringify(action.payload.user)); // حفظ المستخدم في localStorag
       }
     },
     setLogout(state) {
@@ -76,7 +75,7 @@ const authSlice = createSlice({
 
       Cookies.remove("authToken");
       if (typeof window !== "undefined") {
-        localStorage.removeItem("user"); // حذف بيانات المستخدم من localStorage
+        localStorage.removeItem("user");
       }
     },
   },
