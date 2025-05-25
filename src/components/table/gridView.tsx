@@ -4,6 +4,7 @@ import OrderCard from "../cards/order_card";
 import Loader from "../loading/loadingPage";
 import { Auction, CarSale, CarShipping } from "@/Types/AuctionTypes"; // تأكد من أن الأنواع تشمل كلاً من الطلبات والسيارات
 import CarCard from "../cards/car_card";
+import { CarShippingCard } from "../cards/ShippingCard";
 
 interface Grid_ViewProps {
   API?: string;
@@ -19,18 +20,19 @@ interface Grid_ViewProps {
   onChangeStatus?: (id: number, type: "accept" | "reject" | "finish") => void;
 }
 
-// دالة لفحص ما إذا كان العنصر من نوع CarSale
 const isCarSale = (item: Auction | CarSale | CarShipping): item is CarSale => {
-  return (item as CarSale).images !== undefined;
+  return "images" in item && !("package_shippings" in item);
 };
-const isShipping = (item: Auction | CarSale | CarShipping): item is CarSale => {
+
+const isShipping = (
+  item: Auction | CarSale | CarShipping
+): item is CarShipping => {
   return (item as CarShipping).package_shippings !== undefined;
 };
 
-// // دالة لفحص ما إذا كان العنصر من نوع Auction
-// const isAuction = (item: Auction | CarSale): item is Auction => {
-//   return (item as Auction).created_at !== undefined;
-// };
+const isAuction = (item: Auction | CarSale | CarShipping): item is Auction => {
+  return (item as Auction).auction_link !== undefined;
+};
 
 export default function Grid_View({
   API,
@@ -79,7 +81,7 @@ export default function Grid_View({
     } else if (API) {
       fetchData();
     }
-  }, [API, data]);
+  }, [API, data, onTotalCountChange]);
 
   const sortData = (
     data: (Auction | CarSale | CarShipping)[] | undefined,
@@ -154,12 +156,12 @@ export default function Grid_View({
         {isLoading && <Loader />}
         {displayedData &&
           displayedData.map((item, index) =>
-            // نعرض كارد الطلب أو كارد السيارة حسب نوع البيانات
-            isCarSale(item) && !isShipping ? (
+            isCarSale(item) ? (
               <CarCard
+                isDashboard
                 isloagedin
                 key={index}
-                car={item as CarSale}
+                car={item}
                 onDelete={(id) =>
                   onDelete ? onDelete(id) : console.log("deleted")
                 }
@@ -168,7 +170,20 @@ export default function Grid_View({
                 }
                 onChangeStatus={onChangeStatus}
               />
-            ) : (
+            ) : isShipping(item) ? (
+              <CarShippingCard
+                actionLoading={actionLoading.includes(item.id)}
+                key={index}
+                shipping={item as CarShipping}
+                onDelete={(id) =>
+                  onDelete ? onDelete(id) : console.log("deleted")
+                }
+                onEdit={(order) =>
+                  onEdit ? onEdit(order) : console.log(`editing: ${order}`)
+                }
+                onChangeStatus={onChangeStatus}
+              />
+            ) : isAuction(item) ? (
               <OrderCard
                 actionLoading={actionLoading.includes(item.id)}
                 key={index}
@@ -181,6 +196,8 @@ export default function Grid_View({
                 }
                 onChangeStatus={onChangeStatus}
               />
+            ) : (
+              <div>نوع غير معروف</div>
             )
           )}
       </div>

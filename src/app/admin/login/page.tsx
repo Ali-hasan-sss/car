@@ -2,7 +2,6 @@
 import "../../login/login.css";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
 import axiosInstance from "@/utils/axiosInstance";
 import { setLogin } from "@/store/slice/authSlice"; // استيراد الأكشن المعدل
 import LoadingBTN from "../../../components/loading/loadingBTN";
@@ -11,7 +10,6 @@ import EmailInput from "@/components/inputs/EmailInput";
 import PasswordInput from "@/components/inputs/PasswordInput";
 
 const AdminLogin: React.FC = () => {
-  const router = useRouter();
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -65,7 +63,7 @@ const AdminLogin: React.FC = () => {
       dispatch(setLogin({ token: access_token, user: userDataTransformed }));
 
       // ✅ تحويل المستخدم إلى صفحة لوحة التحكم
-      router.push("/admin/dashboard");
+      window.location.replace("/admin/dashboard");
     } catch (err) {
       setError("Invalid email or password");
       console.error(err);

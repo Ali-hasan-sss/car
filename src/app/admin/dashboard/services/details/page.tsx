@@ -157,17 +157,17 @@ export default function ServiceDetails() {
       <div className="w-full bg-white py-5 px-10 flex flex-col gap-10 items-center justify-center rounded-xl">
         {isArabic ? (
           <div className="items w-full flex flex-wrap items-center justify-center">
-            <div className="flex flex-col items-center w-[250px] h-[250px] bg-white shadow-md rounded-lg border p-5 justify-between">
+            <div className="flex relative flex-col items-center w-[250px] h-[250px] pb-4 shadow-md rounded-lg border justify-between">
               {editMode ? (
-                <div className="relative w-full h-[100px] flex justify-center items-center">
+                <div className=" w-full h-1/2 overflow-hidden rounded-t-lg  flex justify-center items-center">
                   <img
                     src={`${BASE_IMAGE_URL}${formData.image}`}
                     alt="service"
-                    className="w-15 object-cover rounded-md"
+                    className=" object-contain "
                   />
 
                   {editMode && (
-                    <div className="absolute bottom-2 left-2">
+                    <div className="absolute top-10 left-0 p-3">
                       <UploadFile
                         transparentMode
                         onFileUpload={(file) =>
@@ -181,13 +181,19 @@ export default function ServiceDetails() {
                   )}
                 </div>
               ) : (
-                <img src={service.image} alt="service" />
+                <div className=" w-full h-1/2 overflow-hidden rounded-t-lg flex justify-center items-center ">
+                  <img
+                    src={service.image}
+                    alt="service"
+                    className=" object-contain "
+                  />
+                </div>
               )}
 
               {editMode ? (
                 <div className="flex my-1 w-full flex-col items-center justify-center ">
                   <TextField
-                    label={t("title_ar")}
+                    variant="standard"
                     value={formData.title.ar}
                     onChange={(e) =>
                       setFormData({
@@ -199,18 +205,23 @@ export default function ServiceDetails() {
                       })
                     }
                     fullWidth
-                    multiline
-                    rows={1}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "&.Mui-focused fieldset": {
-                          borderColor: "#008080",
-                        },
+                    InputProps={{
+                      disableUnderline: false,
+                      sx: {
+                        fontSize: "1.5rem",
+                        padding: 0,
+                        margin: 0,
                       },
-                      "& .MuiInputLabel-root": {
-                        "&.Mui-focused": {
-                          color: "#008080",
-                        },
+                    }}
+                    InputLabelProps={{ shrink: false }}
+                    sx={{
+                      "& .MuiInputBase-root": {
+                        padding: 0,
+                        margin: 0,
+                      },
+                      "& .MuiInput-input": {
+                        padding: 0,
+                        margin: 0,
                       },
                     }}
                   />
@@ -234,17 +245,17 @@ export default function ServiceDetails() {
           </div>
         ) : (
           <div className="items w-full flex flex-wrap items-center justify-center gap-[50px]">
-            <div className=" flex flex-col items-center w-[250px] h-[250px] bg-white shadow-md rounded-lg border p-[20px] justify-between">
+            <div className=" flex relative flex-col items-center w-[250px] h-[250px] bg-white shadow-md rounded-lg border pb-4 justify-between">
               {editMode ? (
-                <div className="relative w-full h-[100px] flex justify-center items-center">
+                <div className="w-full h-1/2 overflow-hidden rounded-t-lg flex justify-center items-center ">
                   <img
                     src={`${BASE_IMAGE_URL}${formData.image}`}
                     alt="service"
-                    className="w-15 object-cover rounded-md"
+                    className="object-contain"
                   />
 
                   {editMode && (
-                    <div className="absolute bottom-2 left-2">
+                    <div className="absolute top-10 left-0 p-3">
                       <UploadFile
                         transparentMode
                         onFileUpload={(file) => {
@@ -258,12 +269,18 @@ export default function ServiceDetails() {
                   )}
                 </div>
               ) : (
-                <img src={service.image} alt="service" />
+                <div className=" w-full h-1/2 overflow-hidden rounded-t-lg flex justify-center items-center ">
+                  <img
+                    src={service.image}
+                    alt="service"
+                    className="object-contain"
+                  />
+                </div>
               )}
               {editMode ? (
                 <div className="flex w-full my-1 flex-col items-center justify-center ">
                   <TextField
-                    label={t("title_en")}
+                    variant="standard"
                     value={formData.title.en}
                     onChange={(e) =>
                       setFormData({
@@ -275,18 +292,23 @@ export default function ServiceDetails() {
                       })
                     }
                     fullWidth
-                    multiline
-                    rows={1}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "&.Mui-focused fieldset": {
-                          borderColor: "#008080",
-                        },
+                    InputProps={{
+                      disableUnderline: false,
+                      sx: {
+                        fontSize: "1.5rem",
+                        padding: 0,
+                        margin: 0,
                       },
-                      "& .MuiInputLabel-root": {
-                        "&.Mui-focused": {
-                          color: "#008080",
-                        },
+                    }}
+                    InputLabelProps={{ shrink: false }}
+                    sx={{
+                      "& .MuiInputBase-root": {
+                        padding: 0,
+                        margin: 0,
+                      },
+                      "& .MuiInput-input": {
+                        padding: 0,
+                        margin: 0,
                       },
                     }}
                   />

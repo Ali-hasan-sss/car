@@ -5,7 +5,6 @@ import "swiper/css/navigation";
 import Card from "./card";
 import { useRef, useEffect, useState } from "react";
 import axiosInstance from "@/utils/axiosInstance";
-import { useRouter } from "next/navigation";
 import Loader from "../loading/loadingPage";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -37,7 +36,6 @@ export default function Slider_card() {
   const nextRef = useRef<HTMLDivElement | null>(null);
   const [cars, setCars] = useState<CarResponse[]>([]);
   const [loadingPage, setLoadingPage] = useState(false);
-  const Router = useRouter();
   const { t } = useLanguage();
   useEffect(() => {
     const fetchServices = async () => {
@@ -68,10 +66,10 @@ export default function Slider_card() {
     updateSwiperNavigation();
   }, [prevRef, nextRef]);
   const goToStore = () => {
-    Router.push("/car-store");
+    window.location.replace("/car-store");
   };
   return (
-    <div className="slider-container">
+    <div className="slider-container" style={{ direction: "ltr" }}>
       <Swiper
         modules={[Navigation]}
         spaceBetween={1}

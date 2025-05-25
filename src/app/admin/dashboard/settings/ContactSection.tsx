@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FaPhone, FaEdit, FaSave } from "react-icons/fa";
+import { FaPhone, FaEdit, FaSave, FaWhatsapp } from "react-icons/fa";
 import { Mail } from "lucide-react";
 import { IconButton } from "@mui/material";
 import { FaLocationDot } from "react-icons/fa6";
@@ -7,20 +7,26 @@ import { toast } from "sonner";
 import { useLanguage } from "@/context/LanguageContext";
 import axiosInstance from "@/utils/axiosInstance";
 
-export default function ContactSection({ addressItem, phoneItem, emailItem }) {
+export default function ContactSection({
+  addressItem,
+  phoneItem,
+  emailItem,
+  whatsapplItem,
+}) {
   const { t } = useLanguage();
   const [editField, setEditField] = useState<
-    "address" | "phone" | "email" | null
+    "address" | "phone" | "whatsapp" | "email" | null
   >(null);
 
   const [editValues, setEditValues] = useState({
     address: "",
     phone: "",
     email: "",
+    whatsapp: "",
   });
 
   const [loadingField, setLoadingField] = useState<
-    "address" | "phone" | "email" | null
+    "address" | "phone" | "email" | "whatsapp" | null
   >(null);
 
   useEffect(() => {
@@ -28,10 +34,17 @@ export default function ContactSection({ addressItem, phoneItem, emailItem }) {
       address: addressItem?.link || "",
       phone: phoneItem?.link || "",
       email: emailItem?.link || "",
+      whatsapp:
+        whatsapplItem?.link?.replace(
+          "https://api.whatsapp.com/send/?phone=",
+          ""
+        ) || "",
     });
-  }, [addressItem, phoneItem, emailItem]);
+  }, [addressItem, phoneItem, emailItem, whatsapplItem]);
 
-  const handleEditClick = (field: "address" | "phone" | "email") => {
+  const handleEditClick = (
+    field: "address" | "phone" | "whatsapp" | "email"
+  ) => {
     setEditField(field);
   };
 
@@ -39,25 +52,42 @@ export default function ContactSection({ addressItem, phoneItem, emailItem }) {
     setEditValues((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSave = async (field: "address" | "phone" | "email") => {
+  const handleSave = async (
+    field: "address" | "phone" | "whatsapp" | "email"
+  ) => {
     const itemId =
       field === "address"
         ? addressItem?.id
         : field === "phone"
         ? phoneItem?.id
+        : field === "whatsapp"
+        ? whatsapplItem?.id
         : emailItem?.id;
 
     if (!itemId) return;
+
     try {
       setLoadingField(field);
 
+      let linkValue = editValues[field];
+
+      // تعديل رابط واتساب
+      if (field === "whatsapp") {
+        const phoneNumber = linkValue.replace(/\D/g, "");
+        linkValue = `https://api.whatsapp.com/send/?phone=${phoneNumber}`;
+      }
+
       const response = await axiosInstance.put(`/admin/socials/${itemId}`, {
         icon: field,
-        link: editValues[field],
+        link: linkValue,
       });
+
       if (response.data.success) {
         toast.success(t("Edit_Item"));
-      } else toast.error(t("Error_Edit_Item"));
+      } else {
+        toast.error(t("Error_Edit_Item"));
+      }
+
       setEditField(null);
     } catch (error) {
       console.error("حدث خطأ أثناء الحفظ:", error);
@@ -69,7 +99,7 @@ export default function ContactSection({ addressItem, phoneItem, emailItem }) {
   const renderRow = (
     label: string,
     icon: React.ReactNode,
-    field: "address" | "phone" | "email",
+    field: "address" | "phone" | "whatsapp" | "email",
     value: string
   ) => (
     <div className="flex flex-col w-full my-5">
@@ -90,7 +120,7 @@ export default function ContactSection({ addressItem, phoneItem, emailItem }) {
               disabled={loadingField === field}
             />
           ) : (
-            <span className="text-sm text-gray-700  break-words">
+            <span className="text-sm mx-2 text-gray-700  break-words">
               {editValues[field]}
             </span>
           )}
@@ -120,7 +150,7 @@ export default function ContactSection({ addressItem, phoneItem, emailItem }) {
   );
 
   return (
-    <div className="w-full w-[400px] h-[40vh] overflow-y-auto mx-auto ">
+    <div className="w-full w-[400px]  mx-auto ">
       <h3 className="font-bold text-start text-xl mb-6 text-center text-gray-800">
         {t("contact_info")}
       </h3>
@@ -136,6 +166,12 @@ export default function ContactSection({ addressItem, phoneItem, emailItem }) {
         <FaPhone className="text-primary1 text-xl min-w-[20px]" />,
         "phone",
         editValues.phone
+      )}
+      {renderRow(
+        t("Whatsapp_Num"),
+        <FaWhatsapp className="text-green-500 text-xl min-w-[20px]" />,
+        "whatsapp",
+        editValues.whatsapp
       )}
       {renderRow(
         t("Email"),

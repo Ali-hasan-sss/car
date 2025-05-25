@@ -22,6 +22,7 @@ import DeleteMessage from "@/components/messags/deleteMessage";
 export default function SallesPage() {
   const { t } = useLanguage();
   const [openFilter, setOpenFilter] = useState(false);
+  const [filterValue, setFilterValue] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const closeModal = () => {
@@ -92,9 +93,11 @@ export default function SallesPage() {
   );
   const apiUrl = "customer/car-sales";
   useEffect(() => {
-    const apiUrl = `customer/car-sales?page_size=${showing}&page=${currentPage}`;
+    const apiUrl = `customer/car-sales?page_size=${showing}&page=${currentPage}${
+      filterValue ? `&status=${filterValue}` : ""
+    }`;
     dispatch(fetchCarSales({ API: apiUrl }));
-  }, [dispatch, showing]);
+  }, [dispatch, showing, currentPage]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (order: any) => {
     const mapOrderToFormInputs = (order: CarSale): SallesFormInputs => {
@@ -108,6 +111,7 @@ export default function SallesPage() {
         transmission_type: order.transmission_type ?? 1,
         cylinders: order.cylinders ?? 4,
         fuel_type: order.fuel_type ?? 1,
+        car_source: order.car_source ?? 1,
         price: order.price?.toString() ?? "",
         shipping_from: order.shipping_from ?? null,
         car_status: typeof order.status === "number" ? order.status : 0,
@@ -136,7 +140,7 @@ export default function SallesPage() {
   return (
     <div className="flex flex-col items-center w-full  gap-[5px]">
       <TableHeader
-        title={t("Salles")}
+        title={t("Sales")}
         action={{
           filter: true,
           export: true,
@@ -151,7 +155,10 @@ export default function SallesPage() {
       <Search_input value={searchTerm} onChange={setSearchTerm} />
       {openFilter && (
         <>
-          <GeneralFilter label="Filter & Sort Control" />
+          <GeneralFilter
+            label={t("Filter")}
+            onFilterChange={(val) => setFilterValue(val)}
+          />{" "}
         </>
       )}
       {openFilter && (

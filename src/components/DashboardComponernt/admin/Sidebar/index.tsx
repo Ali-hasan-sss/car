@@ -8,6 +8,7 @@ import {
   ChevronRight,
   ChevronUp,
   Container,
+  Home,
   HomeIcon,
   ListChecks,
   Newspaper,
@@ -16,8 +17,7 @@ import {
   Users,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface SidebarProps {
   isExpanded: boolean;
@@ -26,9 +26,14 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
   const { t, isArabic } = useLanguage();
-  const router = useRouter();
-  const pathName = usePathname();
 
+  const [currentPath, setCurrentPath] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentPath(window.location.pathname);
+    }
+  }, []);
   // تحكم بفتح وإغلاق القائمة المنسدلة
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
@@ -77,6 +82,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
       label: t("Pages"),
       path: "#",
       subItems: [
+        {
+          icon: <Home className="text-3xl" />,
+          label: t("Home"),
+          path: "/admin/dashboard/home-page",
+        },
         {
           icon: <Newspaper className="text-3xl" />,
           label: t("Blogs"),
@@ -165,7 +175,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
                           <Link
                             href={subItem.path}
                             className={`flex items-senter gap-2  py-1 px-3 rounded hover:bg-primary1 hover:text-white transition-all duration-300 ${
-                              pathName === subItem.path
+                              currentPath === subItem.path
                                 ? "bg-primary1 text-white"
                                 : ""
                             }`}
@@ -185,13 +195,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, onToggle }) => {
                       e.preventDefault();
                       onToggle();
                       setTimeout(() => {
-                        router.push(item.path);
+                        window.location.replace(item.path);
                       }, 300);
                     }
                   }}
                   className={`flex items-center gap-4 p-2 rounded hover:bg-primary1 transition-all duration-300 hover:text-white ${
                     !isExpanded ? "justify-center rounded-full" : ""
-                  } ${pathName === item.path ? "bg-primary1 text-white" : ""}`}
+                  } ${
+                    currentPath === item.path ? "bg-primary1 text-white" : ""
+                  }`}
                 >
                   {item.icon}
                   {isExpanded && <span>{item.label}</span>}

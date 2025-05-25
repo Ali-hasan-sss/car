@@ -14,6 +14,7 @@ import {
   ExteriorColor,
   shippingStatusOptions,
   CarfaxOptions,
+  carSourceOptions,
 } from "../data";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -59,6 +60,7 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
     price: "",
     shipping_from: "",
     car_status: 1,
+    car_source: 1,
     carfax: null,
     shipping_status: 0,
     ex_color: "",
@@ -77,7 +79,7 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
     const yearString = (currentYear - i).toString();
     return { value: yearString, label: yearString };
   });
-  const loading = useSelector((state: RootState) => state.carSales.loading);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (initialData) {
@@ -190,38 +192,51 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
     if (!formData.price) newErrors.price = " ";
     if (!formData.ex_color) newErrors.ex_color = " ";
     if (!formData.in_color) newErrors.in_color = " ";
+    if (!formData.car_status) newErrors.car_status = " ";
+    if (!formData.car_source) newErrors.car_source = " ";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
   const handleSubmit = async () => {
+    setLoading(true);
     try {
-      if (initialData?.id) {
-        // ✅ تعديل
-        if (validateForm()) {
-          await dispatch(
-            updateCarSale({
-              apiUrl: "customer/car-sales",
-              id: initialData.id,
-              updatedData: formData,
-            })
-          );
-          toast.success(t("Edit_sales"));
-        } else return;
-      } else {
-        // ✅ إضافة
-        if (validateForm()) {
-          await dispatch(
-            addCarSale({ apiUrl: "customer/car-sales", carSaleData: formData })
-          );
-          toast.error(t("Add_sales"));
-        } else return;
+      if (!validateForm()) {
+        setLoading(false);
+        return;
       }
-      // ✅ تحديث الحالة في المكون الأب
+
+      let result;
+      if (initialData?.id) {
+        // تعديل
+        result = await dispatch(
+          updateCarSale({
+            apiUrl: `${userRole === "ADMIN" ? "admin" : "customer"}/car-sales`,
+            id: initialData.id,
+            updatedData: formData,
+          })
+        );
+        if (result.error) throw new Error("Failed to update");
+        toast.success(t("Edit_sales"));
+      } else {
+        // إضافة
+        result = await dispatch(
+          addCarSale({
+            apiUrl: `${userRole === "ADMIN" ? "admin" : "customer"}/car-sales`,
+            carSaleData: formData,
+          })
+        );
+        if (result.error) throw new Error("Failed to add");
+        toast.success(t("Add_sales"));
+      }
+
+      // تحديث الحالة في المكون الأب
       onSubmit(formData);
       close();
     } catch (error) {
       console.error(error);
       toast.error(t("Error"));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -379,6 +394,18 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
                 handleInputChange("car_status", Number(value))
               }
               error={errors.car_status}
+            />
+          </div>
+          <div className="selector w-[250px]">
+            <label>{t("car_source")} :</label>
+            <Text_selector
+              options={carSourceOptions}
+              placeholder={t("car_source")}
+              value={formData.car_source}
+              onChange={(value) =>
+                handleInputChange("car_source", Number(value))
+              }
+              error={errors.car_source}
             />
           </div>
         </div>

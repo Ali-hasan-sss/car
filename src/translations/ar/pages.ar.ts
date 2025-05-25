@@ -66,4 +66,5 @@ export const pages_ar = {
   week: "الاسبوع",
   contact_info: "معلومات الاتصال",
   Pages: "الصفحات",
+  view_post: "عرض المقال",
 };

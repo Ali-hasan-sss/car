@@ -159,3 +159,7 @@ export const location_port = [
   { value: "Sohar", label: "Sohar" },
   { value: "Duqm", label: "Duqm" },
 ];
+export const carSourceOptions = [
+  { value: 1, label: "GULF" },
+  { value: 2, label: "IMPORTED" },
+];

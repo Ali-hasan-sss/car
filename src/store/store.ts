@@ -17,6 +17,7 @@ import servicesuserReducer from "./slice/servicesCustomer";
 import carShippingReducer from "./slice/ShippingSlice";
 import BlogUserReducer from "./slice/blogUser";
 import notificationsReducer from "./slice/notificationsSlice";
+import heroReducer from "./slice/heroSlice";
 
 const store = configureStore({
   reducer: {
@@ -38,6 +39,7 @@ const store = configureStore({
     carShippings: carShippingReducer,
     notifications: notificationsReducer,
     users: userReducer,
+    hero: heroReducer,
   },
 });
 

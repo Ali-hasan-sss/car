@@ -1,9 +1,7 @@
-import { useRouter } from "next/navigation";
 import InfoCard_cust from "../../cards/info_cardcust";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function HowItWorks() {
-  const router = useRouter();
   const { isArabic, t } = useLanguage();
 
   const steps = [
@@ -78,7 +76,7 @@ export default function HowItWorks() {
           <div className="px-3 mt-5 flex  items-center justify-center">
             <button
               className="button_outline py-1 px-4 "
-              onClick={() => router.push("/register")}
+              onClick={() => window.location.replace("/register")}
             >
               {t("Start_Now")}
             </button>

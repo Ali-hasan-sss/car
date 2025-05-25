@@ -4,7 +4,6 @@ import Register_nav from "@/components/NavBar/register_navbar";
 import Register_footer from "@/components/footer/Register_footer";
 import "./login.css";
 import { useLanguage } from "../../context/LanguageContext";
-import { useRouter } from "next/navigation";
 import EmailInput from "@/components/inputs/EmailInput";
 import PasswordInput from "@/components/inputs/PasswordInput";
 import axiosInstance from "@/utils/axiosInstance";
@@ -20,20 +19,18 @@ interface LoginFormInputs {
 }
 
 const Login: React.FC = () => {
-  const router = useRouter();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
-  // التحقق من حالة تسجيل الدخول عند تحميل المكون
   useEffect(() => {
     if (isLoggedIn) {
-      router.push("/customer/dashboard"); // إعادة توجيه المستخدم إلى لوحة التحكم
+      window.location.replace("/customer/dashboard"); // إعادة توجيه المستخدم إلى لوحة التحكم
     }
-  }, [isLoggedIn, router]);
+  }, [isLoggedIn]);
 
   const handleBack = () => {
-    router.push("/");
+    window.location.replace("/");
   };
 
   const [formData, setFormData] = useState<LoginFormInputs>({
@@ -90,7 +87,7 @@ const Login: React.FC = () => {
           userRole: type === 1 ? "USER" : "USER",
           type,
           is_full_data: is_full_data === 1,
-          email_verified_at: email_verified_at,
+          IsVerified: email_verified_at,
           contact: contact || null,
           idDetail: idDetail || null,
         };
@@ -100,7 +97,7 @@ const Login: React.FC = () => {
         dispatch(setUser(userData));
         toast.success(t("Logged_successfully"));
         // إعادة توجيه المستخدم إلى لوحة التحكم
-        router.push("/customer/dashboard");
+        window.location.replace("/customer/dashboard");
       } catch (error) {
         console.error(error);
         toast.error(t("Error"));

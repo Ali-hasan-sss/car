@@ -1,13 +1,64 @@
-# تفعيل إعادة الكتابة RewriteEngine On # جعل الروابط تعمل بدون www (اختياري)
-RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC] RewriteRule ^(.*)$ https://%1/$1
-[R=301,L] RewriteCond %{REQUEST_FILENAME} !-f RewriteCond %{REQUEST_FILENAME}
-!-d RewriteRule ^ index.html [QSA,L] # دعم روابط مثل /about بدلاً من /about.html
-RewriteRule ^about/?$ /about.html [L] RewriteRule ^blog/?$ /blog.html [L]
-RewriteRule ^contact/?$ /contact.html [L] RewriteRule ^services/?$
-/services.html [L] RewriteRule ^car-store/?$ /car-store.html [L] RewriteRule
-^login/?$ /login.html [L] RewriteRule ^register/?$ /register.html [L]
-RewriteRule ^resetpassword/?$ /resetpassword.html [L] RewriteRule
-^Information/?$ /Information.html [L] RewriteRule ^faq/?$ /faq.html [L]
-RewriteRule ^email/verify/success/?$ /email/verify/success.html [L] # يمكنك
-تكرار القاعدة أعلاه لأي صفحة ثابتة موجودة في الجذر # صفحة الخطأ 404
+# تفعيل إعادة الكتابة
+RewriteEngine On
+
+# إزالة www من الروابط (اختياري)
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+# تأكد أن الملف أو المجلد غير موجود أولاً
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# إعادة توجيه المسارات العامة إلى index.html (Next.js static fallback)
+RewriteRule ^index$ index.html [QSA,L]
+
+# روابط نظيفة بدون .html لصفحات الجذر
+RewriteRule ^about/?$ about.html [L]
+RewriteRule ^blog/?$ blog.html [L]
+RewriteRule ^blog/details/?$ blog/details.html [L]
+RewriteRule ^contact/?$ contact.html [L]
+RewriteRule ^services/?$ services.html [L]
+RewriteRule ^car-store/?$ car-store.html [L]
+RewriteRule ^car-store/details?$ car-store/details.html [L]
+RewriteRule ^login/?$ login.html [L]
+RewriteRule ^register/?$ register.html [L]
+RewriteRule ^register/complete?$ register/complete.html [L]
+RewriteRule ^register/success?$ register/success.html [L]
+RewriteRule ^resetpassword/?$ resetpassword.html [L]
+RewriteRule ^Information/?$ Information.html [L]
+RewriteRule ^faq/?$ faq.html [L]
+RewriteRule ^email/verify/success/?$ email/verify/success.html [L]
+
+# دعم صفحات داخل مجلدات مثل customer/dashboard.html
+RewriteRule ^customer/dashboard/?$ customer/dashboard.html [L]
+RewriteRule ^customer/dashboard/profile/?$ customer/dashboard/profile.html [L]
+RewriteRule ^customer/dashboard/settings/?$ customer/dashboard/settings.html [L]
+RewriteRule ^customer/dashboard/auction/?$ customer/dashboard/auction.html [L]
+RewriteRule ^customer/dashboard/auction/details/?$ customer/dashboard/auction/details.html [L]
+RewriteRule ^customer/dashboard/notifications/?$ customer/dashboard/notifications.html [L]
+RewriteRule ^customer/dashboard/salles/?$ customer/dashboard/salles.html [L]
+RewriteRule ^customer/dashboard/salles/details/?$ customer/dashboard/salles/details.html [L]
+RewriteRule ^customer/dashboard/shipping/?$ customer/dashboard/shipping.html [L]
+RewriteRule ^customer/dashboard/shipping/details/?$ customer/dashboard/shipping/details.html [L]
+
+# نفس الشيء مع مسارات لوحة تحكم الأدمن
+RewriteRule ^admin/dashboard/?$ admin/dashboard.html [L]
+RewriteRule ^admin/dashboard/users/?$ admin/dashboard/users.html [L]
+RewriteRule ^admin/dashboard/users/details/?$ admin/dashboard/users/details.html [L]
+RewriteRule ^admin/dashboard/notifications/?$ admin/dashboard/notifications.html [L]
+RewriteRule ^admin/dashboard/sales/?$ admin/dashboard/sales.html [L]
+RewriteRule ^admin/dashboard/sales/details/?$ admin/dashboard/sales/details.html [L]
+RewriteRule ^admin/dashboard/auctions/?$ admin/dashboard/auctions.html [L]
+RewriteRule ^admin/dashboard/auctions/details/?$ admin/dashboard/auctions/details.html [L]
+RewriteRule ^admin/dashboard/services/?$ admin/dashboard/services.html [L]
+RewriteRule ^admin/dashboard/services/details/?$ admin/dashboard/services/details.html [L]
+RewriteRule ^admin/dashboard/home-page/?$ admin/dashboard/home-page.html [L]
+RewriteRule ^admin/dashboard/blogs/?$ admin/dashboard/blogs.html [L]
+RewriteRule ^admin/dashboard/blogs/details/?$ admin/dashboard/blogs/details.html [L]
+RewriteRule ^admin/dashboard/shipping/?$ admin/dashboard/shipping.html [L]
+RewriteRule ^admin/dashboard/shipping/details/?$ admin/dashboard/shipping/details.html [L]
+RewriteRule ^admin/dashboard/settings/?$ admin/dashboard/settings.html [L]
+RewriteRule ^admin/login/?$ admin/login.html [L]
+
+# صفحة الخطأ 404
 ErrorDocument 404 /404.html

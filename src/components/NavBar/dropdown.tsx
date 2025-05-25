@@ -1,14 +1,12 @@
 "use client";
 import { useLanguage } from "../../context/LanguageContext";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import LanguageSwitcher from "../buttons/btn-switch/LanguageSwitcher";
 import Search from "./top-bar/Search-form";
 
 export default function Dropdown() {
   const [expanded, setExpanded] = useState(false);
-  const pathname = usePathname();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLUListElement>(null);
   const { t, isArabic } = useLanguage();
@@ -59,6 +57,14 @@ export default function Dropdown() {
     { id: 6, label: t("Contact_Us"), path: "/contact" },
   ];
 
+  const [currentPath, setCurrentPath] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentPath(window.location.pathname);
+    }
+  }, []);
+
   return (
     <div className="relative md:hidden p-1" ref={dropdownRef}>
       <div
@@ -95,7 +101,7 @@ export default function Dropdown() {
             <li
               key={item.path}
               className={`mt-2 pb-1 px-2 nav-item ${
-                pathname === item.path ? "active" : ""
+                currentPath === item.path ? "active" : ""
               }`}
             >
               <Link href={item.path}>{item.label}</Link>

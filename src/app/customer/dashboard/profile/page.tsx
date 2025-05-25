@@ -3,32 +3,26 @@
 import { RootState } from "@/store/store";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import { CircularProgress, Dialog } from "@mui/material";
+import { Dialog } from "@mui/material";
 import UserForm from "@/components/forms/UserForm";
-import {
-  FaBuilding,
-  FaCheckCircle,
-  FaEdit,
-  FaTimesCircle,
-  FaTrash,
-  FaUser,
-} from "react-icons/fa";
+import { FaBuilding, FaEdit, FaTrash, FaUser } from "react-icons/fa";
 import Loader from "@/components/loading/loadingPage";
 import NotificationToggle from "@/components/notifications/notif_toggle";
-import { useRouter } from "next/navigation";
-import { setLogout } from "@/store/slice/authSlice";
+import { setLogout, setUser } from "@/store/slice/authSlice";
 import ActionComfirm from "@/components/messags/actionComfirm";
 import axiosInstance from "@/utils/axiosInstance";
 import { toast } from "sonner";
+import { useLanguage } from "@/context/LanguageContext";
+import { capitalizeName } from "@/utils/orderUtils";
 
 const Profile = () => {
+  const { t } = useLanguage();
   const user = useSelector((state: RootState) => state.auth.user);
   const [userData, setUserData] = useState(user || null);
   const [loading, setLoading] = useState(false);
+  const [editLoading, setEditLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-  const router = useRouter();
   const dispatch = useDispatch();
   const [formData] = useState<{
     email: string;
@@ -61,7 +55,7 @@ const Profile = () => {
     city: userData?.contact?.city || "",
     zip_code: userData?.contact?.zip_code || "",
     id_number: userData?.idDetail?.id_number || "",
-    id_file: userData?.idDetail?.id_file || "",
+    id_file: userData?.idDetail?.id_file.split("/").pop() ?? "",
     tax_info: userData?.idDetail?.tax_info || "",
     cr_certificate: userData?.idDetail?.cr_certificate || "",
   });
@@ -73,7 +67,7 @@ const Profile = () => {
         const userId =
           user?.id || JSON.parse(localStorage.getItem("user") || "{}").id;
         if (userId) {
-          const response = await axios.get(`/api/users/${userId}`);
+          const response = await axiosInstance.get(`customer/profile`);
           setUserData(response.data);
         }
       } catch (error) {
@@ -99,10 +93,10 @@ const Profile = () => {
       setLoading(true);
       const res = await axiosInstance.delete("customer/deleteMyAccount");
       if (res.data.success) {
-        toast.success("تم حذف الحساب بنجاح");
+        toast.success("Account Deleted successfuly");
         localStorage.removeItem("user");
         dispatch(setLogout());
-        router.push("/");
+        window.location.replace("/");
       }
     } catch (err) {
       toast.error("حدث خطأ أثناء حذف الحساب");
@@ -117,35 +111,44 @@ const Profile = () => {
   };
   const handleSubmit = async () => {
     try {
-      setLoading(true);
-      //   const response = await axiosInstance.post("customer/profile", formData);
-      // const { id, name, type, email, is_full_data, contact, idDetail } =
-      //   response.data.data;
-
-      // تقسيم الاسم إلى اسم أول واسم ثاني
-      // const [first_name, last_name] = name.split(" ");
-      // const userData = {
-      //   id,
-      //   email,
-      //   first_name: first_name || "",
-      //   last_name: last_name || "",
-      //   userRole: type === 1 ? "USER" : "USER",
-      //   type, // نوع المستخدم (1 أو 2)
-      //   is_full_data: is_full_data === 1,
-      //   contact: contact || null,
-      //   idDetail: idDetail || null,
-      // };
+      setEditLoading(true);
+      const response = await axiosInstance.post("customer/profile", formData);
+      const {
+        id,
+        name,
+        type,
+        email,
+        is_full_data,
+        email_verified_at,
+        contact,
+        idDetail,
+      } = response.data.data;
+      const [first_name, last_name] = name.split(" ");
+      const userData = {
+        id,
+        email,
+        first_name: first_name || "",
+        last_name: last_name || "",
+        userRole: type === 1 ? "USER" : "USER",
+        type,
+        IsVerified: email_verified_at,
+        is_full_data: is_full_data,
+        contact: contact || null,
+        idDetail: idDetail || null,
+      };
+      dispatch(setUser(userData));
+      toast.success("edit_profile_success");
+      setModalOpen(false);
     } catch (error) {
       console.error("خطأ أثناء التسجيل:", error);
-      alert("حدث خطأ أثناء التسجيل. حاول مرة أخرى.");
     } finally {
-      setLoading(false);
+      setEditLoading(false);
     }
   };
-  if (!userData || loading) return <CircularProgress />;
+  if (!userData || loading) return <Loader />;
 
   return (
-    <div className="p-6 w-full mx-auto bg-white rounded-lg shadow-lg">
+    <div className="p-1 md:p-6 w-full mx-auto bg-white rounded-lg shadow-lg">
       <div className="relative w-full">
         <img
           src="/images/cover.png"
@@ -164,72 +167,84 @@ const Profile = () => {
 
       {/* محتوى المستخدم */}
       <div className="mt-16">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
-          {userData?.first_name + " " + userData.last_name}
+        <h2 className="text-sm md:text-2xl font-semibold text-gray-800 mb-6 text-center">
+          {capitalizeName(
+            `${userData?.first_name ?? ""} ${userData?.last_name ?? ""}`
+          )}
         </h2>
 
         {userData ? (
           <div className="bg-gray-100 p-6 rounded-lg shadow-md">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <p className="flex items-center gap-2 text-gray-700 ">
-                <strong>الاسم:</strong>{" "}
-                {userData?.first_name + " " + userData.last_name}
+              <p className="text-sm md:text-xl flex items-center gap-2 text-gray-700 ">
+                <strong>{t("Full_Name") + " "}:</strong>{" "}
+                {capitalizeName(
+                  `${userData?.first_name ?? ""} ${userData?.last_name ?? ""}`
+                )}
               </p>
-              <p className="flex items-center gap-2 text-gray-700 ">
-                <strong>البريد الإلكتروني:</strong> {userData.email}
-              </p>
-
-              <p className="flex items-center gap-2 text-gray-700">
-                <strong>رقم الجوال:</strong> {userData.contact?.mobile || "NA"}
+              <p className="text-sm md:text-xl flex items-center gap-2 text-gray-700 ">
+                <strong>{t("Email") + " "}:</strong> {userData.email}
               </p>
 
-              <p className="flex items-center gap-2 text-gray-700 ">
-                <strong>رقم جوال اخر:</strong>{" "}
-                {userData.contact?.other_mobile || "NA"}
+              <p className="text-sm md:text-xl flex items-center gap-2 text-gray-700">
+                <strong>{t("Phone_Num") + " "}:</strong>{" "}
+                {userData.contact?.mobile || "-"}
               </p>
 
-              <p className="flex items-center gap-2 text-gray-700 ">
+              <p className="text-sm md:text-xl flex items-center gap-2 text-gray-700 ">
+                <strong>{t("Phone_Num") + "(2)" + " "} :</strong>{" "}
+                {userData.contact?.other_mobile || "-"}
+              </p>
+
+              <p className="text-sm md:text-xl flex items-center gap-2 text-gray-700 ">
                 {userData.type === 1 ? (
                   <>
-                    <strong>نوع الحساب:</strong> شخصي{" "}
+                    <strong>{t("account_type") + " "}:</strong>{" "}
+                    {" " + t("private")}
                     <FaUser className="text-green-500" />
                   </>
                 ) : (
                   <>
-                    <strong>نوع الحساب:</strong> شركة{" "}
+                    <strong>{t("account_type") + " "}:</strong> {t("company")}
                     <FaBuilding className="text-purple-500" />
                   </>
                 )}
               </p>
 
-              <p className="flex items-center gap-2 text-gray-700 ">
-                <strong>العنوان:</strong> {userData.contact?.address1 || "NA"}
+              <p className="text-sm md:text-xl flex items-center gap-2 text-gray-700 ">
+                <strong>{t("Address") + " "}:</strong>{" "}
+                {userData.contact?.address1 || "-"}
+              </p>
+              <p className="text-sm md:text-xl flex items-center gap-2 text-gray-700 ">
+                <strong>{t("Address") + "(2)" + " "}:</strong>{" "}
+                {userData.contact?.address2 || "-"}
               </p>
 
-              <p className="flex items-center gap-2 text-gray-700 ">
-                <strong>المدينة:</strong> {userData.contact?.city || "NA"}
+              <p className="text-sm md:text-xl flex items-center gap-2 text-gray-700 ">
+                <strong>{t("City") + " "}:</strong>{" "}
+                {capitalizeName(userData.contact?.city || "-")}
               </p>
 
               {userData.type === 2 && (
-                <p className="flex items-center gap-2 text-gray-700 ">
-                  <strong>الرقم الضريبي:</strong>{" "}
-                  {userData.idDetail?.tax_info || "NA"}
+                <p className="text-sm md:text-xl flex items-center gap-2 text-gray-700 ">
+                  <strong> {t("Tax") + " "}:</strong>{" "}
+                  {userData.idDetail?.tax_info || "-"}
                 </p>
               )}
 
               {userData.type === 2 && (
-                <p className="flex items-center gap-2 text-gray-700 ">
-                  <strong>السجل التجاري:</strong>
+                <p className="text-sm md:text-xl flex items-center gap-2 text-gray-700 ">
+                  <strong>{t("CR") + " "}:</strong>
                   {userData.idDetail?.cr_certificate ? (
                     <a
                       href={userData.idDetail?.cr_certificate}
                       className="text-blue-500 underline"
                       target="_blank"
                     >
-                      عرض
+                      {t("View")}
                     </a>
                   ) : (
-                    "غير متوفر"
+                    "-"
                   )}
                 </p>
               )}
@@ -237,7 +252,9 @@ const Profile = () => {
 
             {userData.idDetail?.id_file && (
               <div className="mt-4">
-                <p className="text-gray-700  font-semibold">صورة الهوية</p>
+                <p className="text-sm md:text-xl text-gray-700  font-semibold">
+                  {t("id")}
+                </p>
                 <img
                   src={userData.idDetail?.id_file}
                   alt="هوية المستخدم"
@@ -245,23 +262,6 @@ const Profile = () => {
                 />
               </div>
             )}
-
-            <div className="flex items-center gap-4 mt-4">
-              <strong className="text-gray-700">البيانات مستكملة؟</strong>
-              {userData.is_full_data ? (
-                <FaCheckCircle className="text-green-500 text-xl" />
-              ) : (
-                <div className="flex items-center gap-3">
-                  <FaTimesCircle className="text-red-500 text-xl" />
-                  <button
-                    className="text-blue-600 underline"
-                    onClick={() => setModalOpen(true)}
-                  >
-                    استكمال
-                  </button>
-                </div>
-              )}
-            </div>
             <NotificationToggle />
 
             {/* أزرار التعديل والحذف */}
@@ -271,25 +271,17 @@ const Profile = () => {
                 onClick={handleEdit}
               >
                 <FaEdit />
-                تعديل
+                {t("Edit")}
               </button>
               <button
                 className="button_close py-1 px-2 flex items-center gap-2"
-                onClick={handleDelete}
+                onClick={() => setOpenDelete(true)}
                 disabled={loading}
               >
                 <FaTrash />
-                حذف الحساب{" "}
+                {t("delete_account")}
               </button>
             </div>
-            {/* <p className="flex text-xs items-center mt-6 gap-2 text-gray-400 ">
-              <strong>تاريخ الإنشاء:</strong>
-              {createdDate?.toLocaleDateString("ar-EG", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </p> */}
           </div>
         ) : (
           <Loader />
@@ -300,11 +292,15 @@ const Profile = () => {
       <ActionComfirm
         open={openDelete}
         handleClose={() => setOpenDelete(false)}
-        message="هل انت متأكد من حذف الحساب"
+        message={t("dellete_account_message")}
         onActionSuccess={handleDelete}
       />
       {modalOpen && (
-        <Dialog open={modalOpen} onClose={() => setModalOpen(false)}>
+        <Dialog
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          className="w-full"
+        >
           <UserForm
             onSubmit={handleSubmit}
             handlClose={() => setModalOpen(false)}
@@ -313,7 +309,7 @@ const Profile = () => {
               ...formData,
               user_id: String(formData.user_id),
             }}
-            loading={loading}
+            loading={editLoading}
           />
         </Dialog>
       )}

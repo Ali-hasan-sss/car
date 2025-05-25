@@ -3,13 +3,11 @@ import "./dashboard.css";
 import { useState } from "react";
 import { Modal, Box } from "@mui/material";
 
-import { useRouter } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 
 const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { t, isArabic } = useLanguage();
-  const router = useRouter();
   const services = [
     {
       title: "Auctions",
@@ -49,7 +47,7 @@ const Dashboard = () => {
         {services.map((service) => (
           <div
             onClick={() => {
-              router.push(service.link);
+              window.location.replace(service.link);
             }}
             key={service.key}
             className="box flex flex-col items-center justify-center gap-[20px] py-[20px] px-[15px] cursor-pointer"

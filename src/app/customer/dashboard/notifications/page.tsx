@@ -2,6 +2,9 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import {
   fetchNotifications,
   markNotificationAsRead,
@@ -13,10 +16,11 @@ import { useLanguage } from "@/context/LanguageContext";
 import CustomPagination from "@/components/pagination/extrnalPagenation";
 
 const NotificationsPage = () => {
-  const { t } = useLanguage();
+  const { t, isArabic } = useLanguage();
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
-
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
   const role = useSelector((state: RootState) =>
     state.auth.user?.userRole === "ADMIN" ? "admin" : "customer"
   );
@@ -88,10 +92,15 @@ const NotificationsPage = () => {
             )} */}
               <div className="flex w-full items-center justify-between">
                 <p className="text-xs text-gray-500 mt-1">
-                  {new Date(notif.created_at).toLocaleString("ar-EG")}
+                  {dayjs
+                    .utc(notif.created_at)
+                    .local()
+                    .format("YYYY-MM-DD HH:mm")}
                 </p>
+
                 <span className="bg-blue-400 text-white px-2 py-1 rounded-full text-xs">
-                  {t("time_ago")} : {getTimeAgo(notif.created_at)}
+                  {t("time_ago")} :{" "}
+                  {getTimeAgo(notif.created_at, isArabic ? "ar" : "en")}
                 </span>
               </div>
             </li>

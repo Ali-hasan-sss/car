@@ -134,6 +134,7 @@ export interface CarSale {
   transmission_type: number;
   cylinders: number;
   fuel_type: number;
+  car_source: number;
   price: string;
   ex_color: string;
   in_color: string;
@@ -164,6 +165,7 @@ export interface SallesFormInputs {
   in_color: string;
   id?: number;
   status?: number;
+  car_source: number;
   images: string[];
   not_shippedlocations: string;
   shipping_status: number;
@@ -219,6 +221,8 @@ export interface CarShipping {
   vin: string;
   images: string[];
   packages: packages[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
 }
 export interface packages {
   package_type: number;

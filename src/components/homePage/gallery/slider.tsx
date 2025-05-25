@@ -11,7 +11,7 @@ export default function Slider_image() {
   const nextRef = useRef<HTMLDivElement | null>(null);
   const { t } = useLanguage();
   return (
-    <div className="slider-container">
+    <div className="slider-container" style={{ direction: "ltr" }}>
       <Swiper
         spaceBetween={1} // المسافة بين البطاقات
         slidesPerView={4} // عدد البطاقات الافتراضي

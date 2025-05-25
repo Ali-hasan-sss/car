@@ -6,7 +6,6 @@ import LoadingBTN from "@/components/loading/loadingBTN";
 import { useLanguage } from "@/context/LanguageContext";
 import axiosInstance from "@/utils/axiosInstance";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 interface resetFormInputs {
   password: string;
@@ -15,7 +14,6 @@ interface resetFormInputs {
 
 export default function ResetPasswword() {
   const { t } = useLanguage();
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Partial<resetFormInputs>>({});
   const [formData, setFormData] = useState({
@@ -56,7 +54,7 @@ export default function ResetPasswword() {
       try {
         await axiosInstance.post("/customer/password/reset", formData);
         toast.success(t("reset_success"));
-        router.push("/login");
+        window.location.replace("/login");
       } catch (error) {
         toast.error("err_reset");
         console.error(error);
@@ -82,7 +80,7 @@ export default function ResetPasswword() {
           error={errors.password}
         />
         <PasswordInput
-          label={t("confirm_password")}
+          label={t("Confirm_password")}
           Forgot_password={false}
           value={formData.password_confirmation}
           onChange={(e) =>

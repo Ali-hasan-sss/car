@@ -47,6 +47,7 @@ export interface User {
   type: number | string;
   is_active?: number;
   is_full_data?: boolean;
+  IsVerified?: boolean;
   userRole?: string;
   password?: string;
   contact?: Contact | null;

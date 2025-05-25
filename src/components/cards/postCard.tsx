@@ -1,8 +1,7 @@
 "use client";
 
-// import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { BlogUser } from "@/Types/adminTypes";
-import { useRouter } from "next/navigation";
 import React from "react";
 
 interface PostCardProps {
@@ -10,12 +9,11 @@ interface PostCardProps {
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post }) => {
-  // const { t } = useLanguage();
-  const router = useRouter();
+  const { t } = useLanguage();
   const viewBlog = (post) => {
     const blog = JSON.stringify(post);
     localStorage.setItem("blog", blog);
-    router.push("blog/details");
+    window.location.replace("blog/details");
   };
   return (
     <div>
@@ -43,7 +41,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
             onClick={() => viewBlog(post)}
             className="text-blue-500 text-sm underline mt-2"
           >
-            عرض المقال
+            {t("view_post")}
           </button>
         </div>
       </div>

@@ -13,7 +13,7 @@ export default function AnimatedModal({
   open,
   handleClose,
   children,
-  className = "",
+  className,
   style = {},
 }: AnimatedModalProps) {
   return (
@@ -26,20 +26,25 @@ export default function AnimatedModal({
             "& .MuiPaper-root": {
               backgroundColor: "transparent",
               boxShadow: "none",
+              overflowX: "hidden", // ✅ منع السكرول العرضي داخل Dialog
             },
             "& .MuiBackdrop-root": {
-              backgroundColor: "rgba(0, 0, 0, 0.3)", // خلفية شفافة
-              width: "100vw", // خلفية شفافة
+              backgroundColor: "rgba(0, 0, 0, 0.3)",
+              width: "100vw",
             },
           }}
         >
           <motion.div
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.5, opacity: 0 }} // تأثير الخروج
+            exit={{ scale: 0.5, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className={`py-4 px-2 bg-white rounded-md shadow-lg object-contain ${className}`}
-            style={style}
+            className={`py-4 px-2 bg-white rounded-md shadow-lg max-w-full overflow-x-hidden object-contain ${className}`}
+            style={{
+              ...style,
+              maxWidth: "100%",
+              overflowX: "hidden", // ✅ منع السكرول داخل العنصر المتحرك
+            }}
           >
             {children}
           </motion.div>

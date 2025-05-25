@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ClientWrapper from "./ClientWrapper";
 import { Toaster } from "sonner";
-import { Montserrat, Poppins, Roboto } from "next/font/google";
+import { Montserrat, Poppins, Roboto, Cairo } from "next/font/google";
+
 import NotificationsSetup from "@/components/notifications/NotificationsSetup";
 
 const poppins = Poppins({
@@ -20,6 +21,11 @@ const montserrat = Montserrat({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-montserrat",
+});
+const cairo = Cairo({
+  subsets: ["arabic"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-cairo",
 });
 
 export const metadata: Metadata = {
@@ -62,8 +68,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="ar"
-      className={`${poppins.variable} ${roboto.variable}  ${montserrat.variable}`}
+      className={`${poppins.variable} ${roboto.variable}  ${montserrat.variable} ${cairo.variable} `}
     >
       <head>
         <link rel="icon" href="/favicon.png" type="image/png" />

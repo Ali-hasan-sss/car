@@ -3,11 +3,11 @@ import { useLanguage } from "../../context/LanguageContext";
 import { useState, useEffect, useRef } from "react";
 import { FaUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
-import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { setLogout } from "@/store/slice/authSlice";
 import { RootState } from "@/store/store";
 import ActionComfirm from "../messags/actionComfirm";
+import { LayoutDashboard } from "lucide-react";
 interface AvatarProps {
   width: string;
 }
@@ -16,7 +16,6 @@ export default function Avatar({ width }: AvatarProps) {
   const { t, isArabic } = useLanguage();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const router = useRouter();
   const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -64,17 +63,17 @@ export default function Avatar({ width }: AvatarProps) {
   const handleLogout = () => {
     localStorage.removeItem("user");
     dispatch(setLogout());
-    router.push("/");
+    window.location.replace("/");
     onClose();
   };
 
   const goToDashBoard = () => {
-    router.push(
+    window.location.replace(
       userRole === "ADMIN" ? "/admin/dashboard" : "/customer/dashboard"
     );
   };
   const goToProfile = () => {
-    router.push(
+    window.location.replace(
       userRole === "ADMIN"
         ? "/admin/dashboard/sitings"
         : "/customer/dashboard/profile"
@@ -84,14 +83,22 @@ export default function Avatar({ width }: AvatarProps) {
   const menuItems = [
     {
       id: 1,
-      label: t("dashboard"),
-      icon: <FaUser className="text-gray-500 text-2xl" />,
+      label: t("Dashboard"),
+      icon: <LayoutDashboard className="text-gray-500 text-2xl" />,
       action: goToDashBoard,
       textColor: "text-gray-800",
       hoverBg: "hover:bg-gray-200",
     },
     {
       id: 2,
+      label: t("profile"),
+      icon: <FaUser className="text-gray-500 text-2xl" />,
+      action: goToProfile,
+      textColor: "text-gray-800",
+      hoverBg: "hover:bg-gray-200",
+    },
+    {
+      id: 3,
       label: t("Logout"),
       icon: <FiLogOut className="text-red-500 text-2xl" />,
       action: () => setModalOpen(true),

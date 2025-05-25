@@ -1,11 +1,9 @@
 "use client";
 
 import { useLanguage } from "@/context/LanguageContext";
-import { useRouter } from "next/navigation";
 
 export default function EmailVerify() {
   const { t } = useLanguage();
-  const router = useRouter();
   return (
     <div className="flex w-full h-[100vh] bg-secondary1 items-center justify-center">
       <div className="flex flex-col gap-5 w-[350px] md:w-[400px] items-center justify-center rounded-xl shadow bg-white px-5 py-6">
@@ -14,9 +12,9 @@ export default function EmailVerify() {
         <p>{t("verify_email_success")}</p>
         <button
           className="w-3/4 button_outline rounded-xl p-2 "
-          onClick={() => router.push("/register/complete")}
+          onClick={() => window.location.replace("/register/complete")}
         >
-          {t("Go to dashboard")}
+          {t("Go_to_dashboard")}
         </button>
       </div>
     </div>

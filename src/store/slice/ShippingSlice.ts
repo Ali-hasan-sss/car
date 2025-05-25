@@ -87,7 +87,16 @@ export const updateCarShipping = createAsyncThunk<
   {
     apiUrl: string;
     id: number;
-    updatedData: Partial<ShippingFormInputs> | { status: number } | FormData;
+    updatedData:
+      | Partial<ShippingFormInputs>
+      | FormData
+      | {
+          status: number;
+          images_status?: {
+            image: string;
+            status: number;
+          }[];
+        };
   },
   { rejectValue: string }
 >(
@@ -176,18 +185,21 @@ const carShippingsSlice = createSlice({
       })
 
       // ✏️ تعديل
-      .addCase(updateCarShipping.pending, (state, action) => {
-        addLoadingId(state, action.meta.arg.id);
-      })
       .addCase(updateCarShipping.fulfilled, (state, action) => {
         removeLoadingId(state, action.meta.arg.id);
+
         const index = state.carShippings.findIndex(
           (c) => c.id === action.payload.id
         );
         if (index !== -1) {
           state.carShippings[index] = action.payload;
         }
+
+        if (state.carShipping && state.carShipping.id === action.payload.id) {
+          state.carShipping = action.payload;
+        }
       })
+
       .addCase(updateCarShipping.rejected, (state, action) => {
         removeLoadingId(state, action.meta.arg.id);
         state.error = action.payload || "فشل في تعديل الشحنة";

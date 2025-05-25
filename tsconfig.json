@@ -29,7 +29,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/types/app/admin-dashboard/page.ts",
-    "src/components/common/toolbar"
+    "src/components/common/toolbar",
+    "src/app/verify-email"
   ],
   "exclude": ["node_modules"]
 }

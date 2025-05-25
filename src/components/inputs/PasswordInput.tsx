@@ -105,11 +105,11 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
       {error && <span className="text-red-500 text-xs">{error}</span>}
       {openForget && (
         <AnimatedModal
-          className="w-[300px]"
+          className="w-[350px]"
           open={openForget}
           handleClose={() => setopenForget(false)}
         >
-          <form className="flex flex-col w-full bg-secondary1 rounded-xl shadow p-4">
+          <form className="flex flex-col bg-secondary1 rounded-xl shadow p-4">
             <EmailInput
               value={forgetData.email}
               onChange={(e) => {
@@ -121,7 +121,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
               onClick={handleSubmit}
               className="w-full mt-4 flex items-center justify-center bg-primary1 submit"
             >
-              {loading ? <LoadingBTN /> : t("send")}
+              {loading ? <LoadingBTN /> : t("Send")}
             </button>
           </form>
         </AnimatedModal>

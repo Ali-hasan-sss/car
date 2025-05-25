@@ -4,7 +4,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { RootState } from "@/store/store";
 import { CarSale } from "@/Types/AuctionTypes";
 import { base_url } from "@/utils/domain";
-import { getColorValue, getFuelText } from "@/utils/orderUtils";
+import { getColorValue, getFuelText, getStatusInfo } from "@/utils/orderUtils";
 import { Menu, MenuItem } from "@mui/material";
 import {
   Check,
@@ -15,14 +15,13 @@ import {
   Trash,
   XCircle,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
 interface CarCardProps {
   car: CarSale;
   isloagedin: boolean;
+  isDashboard?: boolean;
   onEdit: (order: CarSale) => void;
   onDelete: (id: number) => void;
   onChangeStatus?: (id: number, type: "accept" | "reject" | "finish") => void;
@@ -32,6 +31,7 @@ const CarCard: React.FC<CarCardProps> = ({
   car,
   onDelete,
   onEdit,
+  isDashboard,
   isloagedin,
   onChangeStatus,
 }) => {
@@ -42,12 +42,12 @@ const CarCard: React.FC<CarCardProps> = ({
   const [finish, setFinish] = useState<number | null>(null);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const router = useRouter();
-  const pathname = usePathname();
   const userRole = useSelector((state: RootState) => state.auth.user?.userRole);
   const fuelText = getFuelText(car.fuel_type);
   const excolor = getColorValue(car.ex_color);
   const incolor = getColorValue(car.in_color);
+  const statusInfo = getStatusInfo(car.status);
+
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLDivElement>,
     id: number
@@ -64,7 +64,10 @@ const CarCard: React.FC<CarCardProps> = ({
   const handleView = (id: number) => {
     localStorage.setItem("selectedCar", JSON.stringify(car));
     localStorage.setItem("itemselected", String(id));
-    router.push(`${pathname}/details`);
+    if (typeof window !== "undefined") {
+      const currentPath = window.location.pathname;
+      window.location.href = `${currentPath}/details`;
+    }
     handleMenuClose();
   };
 
@@ -220,16 +223,12 @@ const CarCard: React.FC<CarCardProps> = ({
             <span className="text-black">🎨 {t("Color")}</span>
             <div className={`flex  gap-1 mt-1`}>
               <span
-                className={`w-4 h-4 flex items-center justify-center text-[8px] rounded-full border border-gray-300 ${excolor} ${
-                  car.ex_color === "white" ? "text-black" : "text-white"
-                }`}
+                className={`w-4 h-4 flex items-center text-black  justify-center text-[8px] rounded-full border border-gray-300 ${excolor}`}
               >
                 ex
               </span>
               <span
-                className={`w-4 h-4 flex items-center justify-center text-[8px] rounded-full border border-gray-300 ${incolor}  ${
-                  car.in_color === "white" ? "text-black" : "text-white"
-                }`}
+                className={`w-4 h-4 flex items-center text-black justify-center text-[8px] rounded-full border border-gray-300 ${incolor} `}
               >
                 in
               </span>
@@ -242,17 +241,23 @@ const CarCard: React.FC<CarCardProps> = ({
             <p className="text-gray-500">{t("Price")}</p>
             <p className="text-yellow-500 font-bold text-xl">{car.price} RO</p>
           </div>
-          <button
-            onClick={() =>
-              window.open(
-                "https://api.whatsapp.com/send/?phone=+963994888888",
-                "_blank"
-              )
-            }
-            className="bg-teal-600 hover:bg-teal-700 text-sm text-white px-4 py-2 rounded-lg flex items-center gap-2 transition"
-          >
-            <ShoppingCart /> {isArabic ? "اشتري الان" : "Buy Now"}
-          </button>
+          {isDashboard ? (
+            <div className="bg-teal-600 hover:bg-teal-700 text-sm text-white px-4 py-2 rounded-lg flex items-center gap-2">
+              {statusInfo.label}
+            </div>
+          ) : (
+            <button
+              onClick={() =>
+                window.open(
+                  "https://api.whatsapp.com/send/?phone=+963994888888",
+                  "_blank"
+                )
+              }
+              className="bg-teal-600 hover:bg-teal-700 text-sm text-white px-4 py-2 rounded-lg flex items-center gap-2 transition"
+            >
+              <ShoppingCart /> {isArabic ? "اشتري الان" : "Buy Now"}
+            </button>
+          )}
         </div>
       </div>
     </div>

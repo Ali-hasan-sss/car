@@ -22,6 +22,7 @@ import { deleteAuctionLocal, fetchAuctions } from "@/store/slice/AuctionsSlice";
 export default function Actions() {
   const { t } = useLanguage();
   const [openFilter, setOpenFilter] = useState(false);
+  const [filterValue, setFilterValue] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
@@ -87,9 +88,11 @@ export default function Actions() {
   });
 
   useEffect(() => {
-    const apiUrl = `customer/car-auctions?page_size=${showing}&page=${currentPage}`;
+    const apiUrl = `customer/car-auctions?page_size=${showing}&page=${currentPage}${
+      filterValue ? `&status=${filterValue}` : ""
+    }`;
     dispatch(fetchAuctions({ API: apiUrl }));
-  }, [dispatch, showing]);
+  }, [dispatch, showing, currentPage, filterValue]);
 
   const handleDelete = (id: number) => {
     setOpenDeleteModal(true);
@@ -139,9 +142,10 @@ export default function Actions() {
       />
       <Search_input value={searchTerm} onChange={setSearchTerm} />
       {openFilter && (
-        <>
-          <GeneralFilter label="Filter & Sort Control" />
-        </>
+        <GeneralFilter
+          label={t("Flter")}
+          onFilterChange={(val) => setFilterValue(val)}
+        />
       )}
       <ToolBar
         view={view}
@@ -186,7 +190,7 @@ export default function Actions() {
           onDelete={(id) => handleDelete(id)}
           onEdit={(order) => {
             if ("auction_link" in order) {
-              handleEdit(order); // ✅ TypeScript يعرف إنه Auction
+              handleEdit(order as Auction);
             }
           }}
         />

@@ -1,24 +1,101 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLanguage } from "../../../context/LanguageContext";
 import TextSelector from "../../inputs/selectors/text_selector";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import Textarea from "@/components/inputs/Textarea";
+import axiosInstance from "@/utils/axiosInstance";
+import { Switch } from "@mui/material";
+import { toast } from "sonner";
+import { selectBlog, updateBlog } from "@/store/Reducers/blogsReducer";
+import LoadingBTN from "@/components/loading/loadingBTN";
+import { setHeroImages } from "@/store/slice/heroSlice";
+import Loader from "@/components/loading/loadingPage";
 
 export default function Cotation() {
-  const { t } = useLanguage();
+  const { t, isArabic } = useLanguage();
+  const userRole = useSelector((state: RootState) => state.auth.user?.userRole);
   const items = [
     { src: "/images/sedan.png", alt: "sedan", label: "Car" },
     { src: "/images/pickup-truck.png", alt: "pickup-truck", label: "Pickup" },
-    { src: "/images/van.png", alt: "SUV", label: "SUV" },
-    { src: "/images/bus.png", alt: "bus", label: "Min bus" },
+    { src: "/images/suv.png", alt: "SUV", label: "SUV" },
+    { src: "/images/van.png", alt: "bus", label: "van" },
   ];
+  const [isArabice, setIsArabic] = useState(true);
   const [car, setCar] = useState("");
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
+  const [editing, setEditing] = useState(false);
+  const [loadingPage, setLoadingPage] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [shippingPort, setShippingPort] = useState("");
   const RLM = "\u200F"; // Right-To-Left Mark
-
+  const dispatch = useDispatch();
   const message = `المستخدم ذو البريد الإلكتروني ${RLM}(${email})${RLM} يطلب الحصول على عرض سعر لشحن سيارة من فئة ${RLM}"${car}"${RLM} من ${RLM}"${shippingPort}"${RLM} إلى ${RLM}"${address}"${RLM}.`;
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const pathName = window.location.pathname;
+  const isDashboard = pathName.includes("dashboard");
+  const heroInfo = useSelector((state: RootState) => state.blogs.selectedBlog);
+  const [userHero, setUserHero] = useState({
+    title: "",
+    description: "",
+  });
+  type LocalizedString = string | { ar: string; en: string } | undefined;
 
+  function getLocalized(value: LocalizedString, lang: "ar" | "en"): string {
+    if (!value) return "";
+    if (typeof value === "string") {
+      try {
+        const parsed = JSON.parse(value);
+        return parsed?.[lang] ?? "";
+      } catch {
+        return value;
+      }
+    }
+    return value[lang];
+  }
+  //fetch blog for admin
+  useEffect(() => {
+    const fetchBlog = async () => {
+      setLoadingPage(true);
+      try {
+        const response = await axiosInstance.get("/admin/blogs/31");
+        dispatch(selectBlog(response.data.data));
+      } catch (error) {
+        console.error("فشل جلب المقالات", error);
+      } finally {
+        setLoadingPage(false);
+      }
+    };
+    if (isDashboard) fetchBlog();
+  }, [dispatch]);
+  //fetch blog for user
+  useEffect(() => {
+    const fetchBlog = async () => {
+      setLoadingPage(true);
+      try {
+        const response = await axiosInstance.get(
+          `${userRole === "ADMIN" ? "admin" : "customer"}/blogs/31`
+        );
+        const title = response.data.data.title;
+        const description = response.data.data.description;
+        const images = response.data.data.images;
+        const imageUrls = images.map((img: { image: string }) => img.image);
+        setUserHero({
+          title: title,
+          description: description,
+        });
+        dispatch(setHeroImages(imageUrls));
+      } catch (error) {
+        console.error("فشل جلب المقالات", error);
+      } finally {
+        setLoadingPage(false);
+      }
+    };
+    fetchBlog();
+  }, [dispatch, isArabic]);
+
+  //validate form for user cotetion
   const validateForm = (): boolean => {
     const newErrors: { [key: string]: string } = {};
     if (!car) newErrors.car = "select car category*";
@@ -32,17 +109,208 @@ export default function Cotation() {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  const [adminForm, setAdminForm] = useState<{
+    title: { en: string; ar: string };
+    body: { en: string; ar: string };
+    description: { en: string; ar: string };
+    image: string;
+    images: string[];
+  }>({
+    title: { en: "", ar: "" },
+    body: { en: "", ar: "" },
+    description: { en: "", ar: "" },
+    image: "",
+    images: [],
+  });
+  //init form for edit blog
+  useEffect(() => {
+    if (heroInfo && isDashboard) {
+      setAdminForm({
+        title:
+          typeof heroInfo.title === "string"
+            ? JSON.parse(heroInfo.title)
+            : heroInfo.title,
+        description:
+          typeof heroInfo.description === "string"
+            ? JSON.parse(heroInfo.description)
+            : heroInfo.description,
+        body:
+          typeof heroInfo.body === "string"
+            ? JSON.parse(heroInfo.body)
+            : heroInfo.body,
+        images: (heroInfo.images ?? [])
+          .filter((img): img is string => typeof img === "string")
+          .map((img) => img.split("/").pop() ?? ""),
 
+        image: heroInfo.image ? heroInfo.image.split("/").pop() ?? "" : "",
+      });
+    }
+  }, [heroInfo]);
+  //send cotetion
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) console.log("message:", message);
   };
+  //edit hero info
+  const handleSave = async () => {
+    try {
+      setLoading(true);
+      const payload = {
+        title: JSON.stringify(adminForm.title),
+        description: JSON.stringify(adminForm.description),
+        body: JSON.stringify(adminForm.body),
+        image: adminForm.image,
+        images: adminForm.images.length > 0 ? adminForm.images : undefined,
+      };
+
+      const response = await axiosInstance.put("/admin/blogs/31", payload);
+      if (response.data.success) {
+        const updatedBlog = {
+          ...adminForm,
+          ...payload,
+          id: 31,
+          image: response.data.data?.image || payload.image,
+          images: response.data.data?.images
+            ?.filter((img): img is string => typeof img === "string")
+            .map((img) => img.split("/").pop() ?? ""),
+        };
+        dispatch(updateBlog(updatedBlog));
+        toast.success(t("Edit_Item"));
+        setEditing(false);
+      }
+    } catch (error) {
+      console.error("فشل التعديل:", error);
+      toast.error(t("Error_Edit_Item"));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="fillter w-full ">
+      {userRole === "ADMIN" && isDashboard && (
+        <div className="flex w-full justify-between items-center py-4 gap-4">
+          <button
+            className="button_outline px-2 py-1"
+            onClick={() => {
+              if (editing) {
+                handleSave();
+              } else {
+                setEditing(true);
+              }
+            }}
+          >
+            {" "}
+            {editing ? loading ? <LoadingBTN /> : t("Save") : t("Edit")}
+          </button>
+          <div className="px-2 flex items-center gap-2">
+            <span className="text-sm font-medium">
+              {isArabice ? "AR" : "EN"}
+            </span>
+            <Switch
+              onChange={() => setIsArabic(!isArabice)}
+              checked={isArabice}
+              color="primary"
+            />
+          </div>
+          {editing && (
+            <button
+              className="button_close px-2 py-1"
+              onClick={() => {
+                setEditing(false);
+              }}
+            >
+              {" "}
+              {t("Cansle")}{" "}
+            </button>
+          )}
+        </div>
+      )}
       <div className="text">
-        <h1 className="text-4xl font-bold">{t("hero_title")}</h1>
-        <p className="text-sm my-3 text-gray-500">{t("hero_des")}</p>
+        {userRole === "ADMIN" && isDashboard ? (
+          editing ? (
+            isArabice ? (
+              <div className="flex flex-col py-4 gap-3">
+                <Textarea
+                  name="title"
+                  value={adminForm.title.ar}
+                  onChange={(e) => {
+                    setAdminForm({
+                      ...adminForm,
+                      title: {
+                        ...adminForm.title,
+                        ar: e.target.value,
+                      },
+                    });
+                  }}
+                  className="w-full h-[70px]"
+                />
+                <Textarea
+                  name="description"
+                  value={adminForm.description.ar}
+                  onChange={(e) => {
+                    setAdminForm({
+                      ...adminForm,
+                      description: {
+                        ...adminForm.description,
+                        ar: e.target.value,
+                      },
+                    });
+                  }}
+                  className="w-full h-[70px]"
+                />
+              </div>
+            ) : (
+              <div className="flex flex-col py-4 gap-3">
+                <Textarea
+                  name="title"
+                  value={adminForm.title.en}
+                  onChange={(e) => {
+                    setAdminForm({
+                      ...adminForm,
+                      title: {
+                        ...adminForm.title,
+                        en: e.target.value,
+                      },
+                    });
+                  }}
+                  className="w-full h-[70px]"
+                />
+                <Textarea
+                  name="description"
+                  value={adminForm.description.en}
+                  onChange={(e) => {
+                    setAdminForm({
+                      ...adminForm,
+                      description: {
+                        ...adminForm.description,
+                        en: e.target.value,
+                      },
+                    });
+                  }}
+                  className="w-full h-[70px]"
+                />
+              </div>
+            )
+          ) : (
+            <>
+              <h1 className="text-4xl font-bold">
+                {getLocalized(heroInfo?.title, isArabice ? "ar" : "en")}
+              </h1>
+              <p className="text-sm my-3 text-gray-500">
+                {" "}
+                {getLocalized(heroInfo?.description, isArabice ? "ar" : "en")}
+              </p>
+            </>
+          )
+        ) : loadingPage ? (
+          <Loader />
+        ) : (
+          <>
+            <h1 className="text-4xl font-bold">{userHero.title}</h1>
+            <p className="text-sm my-3 text-gray-500">{userHero.description}</p>
+          </>
+        )}
         <div className="fillter p-[10px] sm:p-[0px] gap-[20px]">
           <p className="text-primary1 text-sm font-montserrat">
             {t("What_shipping")}

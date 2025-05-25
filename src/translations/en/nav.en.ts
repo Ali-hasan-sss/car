@@ -68,4 +68,5 @@ export const nav_en = {
   Shipping: "Shipping",
   Address: "Address",
   contact: "Contact",
+  Whatsapp_Num: "Whatsapp Num",
 };

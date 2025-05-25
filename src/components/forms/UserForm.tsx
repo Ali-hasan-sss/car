@@ -6,7 +6,6 @@ import UploadFile from "@/components/uploders/Uploader/UploadFile";
 import { useLanguage } from "@/context/LanguageContext";
 import { RootState } from "@/store/store";
 import { Box, TextField } from "@mui/material";
-import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 export interface UserFormProps {
@@ -46,7 +45,6 @@ const UserForm: React.FC<UserFormProps> = ({
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [idselect, setIdSelect] = useState(true);
   const { t } = useLanguage();
-  const router = useRouter();
   const UserRole = useSelector((state: RootState) => state.auth.user?.userRole);
 
   const validateForm = () => {
@@ -74,9 +72,7 @@ const UserForm: React.FC<UserFormProps> = ({
   const handleFileChange = (file: string) => {
     setFormData({ ...formData, id_file: file });
   };
-  const handleSkip = async () => {
-    router.push("/customer/dashboard");
-  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -272,15 +268,7 @@ const UserForm: React.FC<UserFormProps> = ({
             </div>
             {/* Submit Button */}
             <div className="flex items-center justify-between mt-5 w-full">
-              {isNew ? (
-                <button
-                  className="button_bordered py-2 px-5"
-                  onClick={handleSkip}
-                  disabled={loading}
-                >
-                  {t("Skip")}
-                </button>
-              ) : (
+              {!isNew && (
                 <button
                   className="button_bordered py-2 px-5"
                   onClick={handlClose}
@@ -291,7 +279,9 @@ const UserForm: React.FC<UserFormProps> = ({
               )}
               <button
                 type="submit"
-                className="button_outline py-2 px-5"
+                className={`button_outline py-2 flex items-center justify-center px-5 ${
+                  isNew ? "w-full" : ""
+                }`}
                 onClick={handleSubmit}
                 disabled={loading}
               >

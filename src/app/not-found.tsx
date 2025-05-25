@@ -1,10 +1,7 @@
 // src/app/not-found.tsx
 "use client";
 
-import { useRouter } from "next/navigation";
-
 export default function NotFound() {
-  const router = useRouter();
   return (
     <section className="bg-white">
       <div className="container min-h-screen px-6 py-12 mx-auto lg:flex lg:items-center lg:gap-12">
@@ -42,7 +39,7 @@ export default function NotFound() {
             </button>
 
             <button
-              onClick={() => router.push("/")}
+              onClick={() => window.location.replace("/")}
               className="w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-primary1 rounded-lg shrink-0 sm:w-auto hover:bg-blue-600 "
             >
               Take me home

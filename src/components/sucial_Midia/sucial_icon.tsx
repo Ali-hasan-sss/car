@@ -160,7 +160,8 @@ export default function Sucial_icon() {
         {socialMediaList
           .filter(
             (item) =>
-              item.icon && !["email", "address", "phone"].includes(item.icon)
+              item.icon &&
+              !["email", "address", "phone", "whatsapp"].includes(item.icon)
           )
           .map((item, index) => (
             <div key={index} className="flex items-center ">

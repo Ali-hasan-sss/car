@@ -72,9 +72,11 @@ const BlogPage: React.FC = () => {
             <Loader />
           ) : (
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
-              {blogs.map((post) => (
-                <PostCard key={post.id} post={post} />
-              ))}
+              {blogs
+                .filter((post) => post.id !== 31)
+                .map((post) => (
+                  <PostCard key={post.id} post={post} />
+                ))}
             </div>
           )}
         </div>

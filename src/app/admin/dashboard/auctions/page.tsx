@@ -28,6 +28,7 @@ import { toast } from "sonner";
 export default function Actions() {
   const { t } = useLanguage();
   const [openFilter, setOpenFilter] = useState(false);
+  const [filterValue, setFilterValue] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
@@ -109,9 +110,11 @@ export default function Actions() {
     finish: true,
   });
   useEffect(() => {
-    const apiUrl = `admin/car-auctions?page_size=${showing}&page=${currentPage}`;
+    const apiUrl = `admin/car-auctions?page_size=${showing}&page=${currentPage}${
+      filterValue ? `&status=${filterValue}` : ""
+    }`;
     dispatch(fetchAuctions({ API: apiUrl }));
-  }, [dispatch, currentPage, showing]);
+  }, [dispatch, currentPage, showing, filterValue]);
   const closeModal = () => {
     setOpenModal(false);
   };
@@ -191,7 +194,10 @@ export default function Actions() {
       <Search_input value={searchTerm} onChange={setSearchTerm} />
       {openFilter && (
         <>
-          <GeneralFilter label="Filter & Sort Control" />
+          <GeneralFilter
+            label={t("Filter")}
+            onFilterChange={(val) => setFilterValue(val)}
+          />
         </>
       )}
       <ToolBar
@@ -238,7 +244,7 @@ export default function Actions() {
           onDelete={(id) => handleDelete(id)}
           onEdit={(order) => {
             if ("auction_link" in order) {
-              handleEdit(order);
+              handleEdit(order as Auction);
             }
           }}
           onChangeStatus={handleAcceptReject}

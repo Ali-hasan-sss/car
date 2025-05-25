@@ -1,5 +1,4 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axiosInstance from "@/utils/axiosInstance";
 import DeleteMessage from "@/components/messags/deleteMessage";
@@ -18,6 +17,7 @@ import Loader from "@/components/loading/loadingPage";
 import { initialData } from "@/Types/adminTypes";
 import { toast } from "sonner";
 import { useLanguage } from "@/context/LanguageContext";
+import { capitalizeName } from "@/utils/orderUtils";
 
 export default function User() {
   const { t } = useLanguage();
@@ -28,7 +28,6 @@ export default function User() {
       setId(Number(storedid));
     }
   }, []);
-  const router = useRouter();
   const [userData, setUserData] = useState<UserData | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -129,12 +128,9 @@ export default function User() {
   }, [id]);
   const createdDate = userData && new Date(userData.created_at);
 
-  const handleDelete = () => {
-    setOpenDelete(true);
-  };
   const handleDeleteSuccess = () => {
     console.log("User deleted successfully");
-    router.push("/admin/dashboard/users");
+    window.location.replace("/admin/dashboard/users");
   };
   const handleEdit = () => {
     setModalOpen(true);
@@ -160,71 +156,79 @@ export default function User() {
 
       {/* محتوى المستخدم */}
       <div className="mt-16">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
-          {userData?.name}
+        <h2 className="text-sm md:text-2xl font-semibold text-gray-800 mb-6 text-center">
+          {capitalizeName(`${userData?.name ?? ""}`)}
         </h2>
 
         {userData ? (
           <div className="bg-gray-100 p-6 rounded-lg shadow-md">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <p className="flex items-center gap-2 text-gray-700 ">
-                <strong>الاسم:</strong> {userData.name}
+              <p className="text-sm md:text-xl flex items-center gap-2 text-gray-700 ">
+                <strong>{t("Full_Name") + " "}:</strong>{" "}
+                {capitalizeName(`${userData?.name ?? ""}`)}
               </p>
-              <p className="flex items-center gap-2 text-gray-700 ">
-                <strong>البريد الإلكتروني:</strong> {userData.email}
-              </p>
-
-              <p className="flex items-center gap-2 text-gray-700">
-                <strong>رقم الجوال:</strong> {userData.contact?.mobile || "NA"}
+              <p className="text-sm md:text-xl flex items-center gap-2 text-gray-700 ">
+                <strong>{t("Email") + " "}:</strong> {userData.email}
               </p>
 
-              <p className="flex items-center gap-2 text-gray-700 ">
-                <strong>رقم جوال اخر:</strong>{" "}
-                {userData.contact?.other_mobile || "NA"}
+              <p className="text-sm md:text-xl flex items-center gap-2 text-gray-700">
+                <strong>{t("Phone_Num") + " "}:</strong>{" "}
+                {userData.contact?.mobile || "-"}
               </p>
 
-              <p className="flex items-center gap-2 text-gray-700 ">
+              <p className="text-sm md:text-xl flex items-center gap-2 text-gray-700 ">
+                <strong>{t("Phone_Num") + "(2)" + " "} :</strong>{" "}
+                {userData.contact?.other_mobile || "-"}
+              </p>
+              <p className="text-sm md:text-xl flex items-center gap-2 text-gray-700 ">
                 {userData.type === 1 ? (
                   <>
-                    <strong>نوع الحساب:</strong> شخصي{" "}
+                    <strong>{t("account_type") + " "}:</strong>{" "}
+                    {" " + t("private")}
                     <FaUser className="text-green-500" />
                   </>
                 ) : (
                   <>
-                    <strong>نوع الحساب:</strong> شركة{" "}
+                    <strong>{t("account_type") + " "}:</strong> {t("company")}
                     <FaBuilding className="text-purple-500" />
                   </>
                 )}
               </p>
 
-              <p className="flex items-center gap-2 text-gray-700 ">
-                <strong>العنوان:</strong> {userData.contact?.address1 || "NA"}
+              <p className="text-sm md:text-xl flex items-center gap-2 text-gray-700 ">
+                <strong>{t("Address") + " "}:</strong>{" "}
+                {userData.contact?.address1 || "-"}
+              </p>
+              <p className="text-sm md:text-xl flex items-center gap-2 text-gray-700 ">
+                <strong>{t("Address") + "(2)" + " "}:</strong>{" "}
+                {userData.contact?.address2 || "-"}
               </p>
 
-              <p className="flex items-center gap-2 text-gray-700 ">
-                <strong>المدينة:</strong> {userData.contact?.city || "NA"}
+              <p className="text-sm md:text-xl flex items-center gap-2 text-gray-700 ">
+                <strong>{t("City") + " "}:</strong>{" "}
+                {capitalizeName(userData.contact?.city || "-")}
               </p>
 
               {userData.type === 2 && (
-                <p className="flex items-center gap-2 text-gray-700 ">
-                  <strong>الرقم الضريبي:</strong>{" "}
-                  {userData.idDetail?.tax_info || "NA"}
+                <p className="text-sm md:text-xl flex items-center gap-2 text-gray-700 ">
+                  <strong> {t("Tax") + " "}:</strong>{" "}
+                  {userData.idDetail?.tax_info || "-"}
                 </p>
               )}
 
               {userData.type === 2 && (
-                <p className="flex items-center gap-2 text-gray-700 ">
-                  <strong>السجل التجاري:</strong>
+                <p className="text-sm md:text-xl flex items-center gap-2 text-gray-700 ">
+                  <strong>{t("CR") + " "}:</strong>
                   {userData.idDetail?.cr_certificate ? (
                     <a
                       href={userData.idDetail?.cr_certificate}
                       className="text-blue-500 underline"
                       target="_blank"
                     >
-                      عرض
+                      {t("View")}
                     </a>
                   ) : (
-                    "غير متوفر"
+                    "-"
                   )}
                 </p>
               )}
@@ -232,7 +236,9 @@ export default function User() {
 
             {userData.idDetail?.id_file && (
               <div className="mt-4">
-                <p className="text-gray-700  font-semibold">صورة الهوية</p>
+                <p className="text-sm md:text-xl text-gray-700  font-semibold">
+                  {t("id")}
+                </p>
                 <img
                   src={userData.idDetail?.id_file}
                   alt="هوية المستخدم"
@@ -242,18 +248,12 @@ export default function User() {
             )}
 
             <div className="flex items-center gap-4 mt-4">
-              <strong className="text-gray-700">البيانات مستكملة؟</strong>
+              <strong className="text-gray-700"> full data?</strong>
               {userData.is_full_data ? (
                 <FaCheckCircle className="text-green-500 text-xl" />
               ) : (
                 <div className="flex items-center gap-3">
                   <FaTimesCircle className="text-red-500 text-xl" />
-                  <button
-                    className="text-blue-600 underline"
-                    onClick={() => setModalOpen(true)}
-                  >
-                    استكمال
-                  </button>
                 </div>
               )}
             </div>
@@ -265,18 +265,19 @@ export default function User() {
                 onClick={handleEdit}
               >
                 <FaEdit />
-                تعديل
+                {t("Edit")}
               </button>
               <button
                 className="button_close py-1 px-2 flex items-center gap-2"
-                onClick={handleDelete}
+                onClick={() => setOpenDelete(true)}
+                disabled={loading}
               >
                 <FaTrash />
-                حذف
+                {t("Delete")}
               </button>
             </div>
             <p className="flex text-xs items-center mt-6 gap-2 text-gray-400 ">
-              <strong>تاريخ الإنشاء:</strong>
+              <strong>created at:</strong>
               {createdDate?.toLocaleDateString("ar-EG", {
                 year: "numeric",
                 month: "long",

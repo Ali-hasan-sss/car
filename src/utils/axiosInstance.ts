@@ -21,12 +21,17 @@ axiosInstance.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    if (typeof window !== "undefined" && userRole === "ADMIN") {
+    if (typeof window !== "undefined") {
       const isDashboard = window.location.pathname.includes("/dashboard");
 
-      if (isDashboard) {
-        config.headers["Accept-Language"] = "not";
-        config.headers["lang"] = "not";
+      if (userRole === "ADMIN") {
+        if (isDashboard) {
+          config.headers["Accept-Language"] = "not";
+          config.headers["lang"] = "not";
+        } else {
+          config.headers["Accept-Language"] = storedLanguage;
+          config.headers["lang"] = storedLanguage;
+        }
       } else {
         config.headers["Accept-Language"] = storedLanguage;
         config.headers["lang"] = storedLanguage;

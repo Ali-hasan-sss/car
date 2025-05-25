@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Box } from "@mui/material";
-import { useRouter } from "next/navigation";
 import axiosInstance from "@/utils/axiosInstance";
 import Register_nav from "@/components/NavBar/register_navbar";
 import Register_footer from "@/components/footer/Register_footer";
@@ -16,7 +15,6 @@ import { toast } from "sonner";
 import { useLanguage } from "@/context/LanguageContext";
 
 const Registration: React.FC = () => {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { t } = useLanguage();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -48,10 +46,10 @@ const Registration: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (is_full_data) {
-      router.push("/customer/dashboard");
+    if (is_full_data === true) {
+      window.location.replace("/customer/dashboard");
     }
-  }, [router]);
+  }, []);
 
   const handleSubmit = async (formData: initialData) => {
     try {
@@ -59,8 +57,16 @@ const Registration: React.FC = () => {
       const response = await axiosInstance.post("customer/profile", formData);
 
       if (response.status === 200 && response.data?.data) {
-        const { id, name, type, email, is_full_data, contact, idDetail } =
-          response.data.data;
+        const {
+          id,
+          name,
+          type,
+          email,
+          is_full_data,
+          email_verified_at,
+          contact,
+          idDetail,
+        } = response.data.data;
 
         const [first_name, last_name] = name.split(" ");
         const userData = {
@@ -70,14 +76,15 @@ const Registration: React.FC = () => {
           last_name: last_name || "",
           userRole: type === 1 ? "USER" : "USER",
           type,
-          is_full_data: is_full_data === 1,
+          is_full_data: is_full_data,
+          IsVerified: email_verified_at,
           contact: contact || null,
           idDetail: idDetail || null,
         };
 
         dispatch(setUser(userData));
         toast.success(t("completed_succss"));
-        router.push("/customer/dashboard");
+        window.location.replace("/customer/dashboard");
       } else {
         console.error("فشل في استجابة السيرفر:", response);
         toast.error(t("completed_error"));

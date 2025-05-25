@@ -7,7 +7,10 @@ interface UserState {
   users: UserData[];
   user: UserData | null;
   loading: boolean;
+  actionLoadingIds: number[];
   error: string | null;
+  totalPages: number;
+  currentPage: number;
 }
 
 // الحالة الابتدائية
@@ -15,21 +18,26 @@ const initialState: UserState = {
   users: [],
   user: null,
   loading: false,
+  actionLoadingIds: [],
   error: null,
+  totalPages: 0,
+  currentPage: 1,
 };
 
 // ✅ جلب جميع المستخدمين
 export const fetchUsers = createAsyncThunk(
   "users/fetchUsers",
-  async (_, { rejectWithValue }) => {
+  async (apiUrl: string, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/admin/users");
-      return response.data.data;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.message || "حدث خطأ أثناء جلب المستخدمين"
-      );
+      const response = await axiosInstance.get(apiUrl);
+      const { users, total_pages } = response.data.data;
+
+      return {
+        users,
+        totalPages: total_pages,
+      };
+    } catch (error) {
+      return rejectWithValue(error || "حدث خطأ أثناء جلب المستخدمين");
     }
   }
 );
@@ -99,11 +107,16 @@ const userSlice = createSlice({
       })
       .addCase(
         fetchUsers.fulfilled,
-        (state, action: PayloadAction<UserData[]>) => {
+        (
+          state,
+          action: PayloadAction<{ users: UserData[]; totalPages: number }>
+        ) => {
           state.loading = false;
-          state.users = action.payload;
+          state.users = action.payload.users;
+          state.totalPages = action.payload.totalPages;
         }
       )
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .addCase(fetchUsers.rejected, (state, action: PayloadAction<any>) => {
         state.loading = false;

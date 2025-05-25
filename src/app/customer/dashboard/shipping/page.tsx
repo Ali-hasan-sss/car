@@ -24,6 +24,7 @@ import DeleteMessage from "@/components/messags/deleteMessage";
 export default function Shipping() {
   const { t } = useLanguage();
   const [openFilter, setOpenFilter] = useState(false);
+  const [filterValue, setFilterValue] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [initForm, setInitForm] = useState<ShippingFormInputs | null>(null);
   const [showing, setShowing] = useState(10);
@@ -85,9 +86,11 @@ export default function Shipping() {
     (state: RootState) => state.carShippings
   );
   useEffect(() => {
-    const apiUrl = `customer/car-shippings?page_size=${showing}&page=${currentPage}`;
+    const apiUrl = `customer/car-shippings?page_size=${showing}&page=${currentPage}${
+      filterValue ? `&status=${filterValue}` : ""
+    }`;
     dispatch(fetchCarShippings({ API: apiUrl }));
-  }, [dispatch, showing]);
+  }, [dispatch, showing, currentPage]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (order: any) => {
@@ -150,7 +153,10 @@ export default function Shipping() {
       <Search_input value={searchTerm} onChange={setSearchTerm} />
       {openFilter && (
         <>
-          <GeneralFilter label="Filter & Sort Control" />
+          <GeneralFilter
+            label={t("Filter")}
+            onFilterChange={(val) => setFilterValue(val)}
+          />{" "}
         </>
       )}
       <ToolBar

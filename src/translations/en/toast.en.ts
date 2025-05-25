@@ -34,4 +34,7 @@ export const toast_en = {
     "An error occurred while completing the data, please try again later",
   add_car_shipping: "Shipping request added successfully",
   edit_car_shipping: "Shipping request updated successfully",
+  dellete_account_message: "Are you sure you want to delete your account?",
+  edit_profile_success: "Profile updated successfully",
+  reset_success: "reset password successfuly",
 };

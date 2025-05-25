@@ -10,7 +10,7 @@ export default function Slider_card() {
   const nextRef = useRef<HTMLDivElement | null>(null);
 
   return (
-    <div className="slider-container">
+    <div className="slider-container" style={{ direction: "ltr" }}>
       <Swiper
         spaceBetween={20} // المسافة بين البطاقات
         slidesPerView={3} // عدد البطاقات الافتراضي

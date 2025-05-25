@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import DeleteMessage from "../messags/deleteMessage";
 import DynamicForm from "../forms/DynamicForm";
 import AnimatedModal from "../modal/AnimatedModal";
-import { usePathname, useRouter } from "next/navigation";
 import { Box, IconButton, Menu, MenuItem, Modal } from "@mui/material";
 import {
   Check,
@@ -103,8 +102,7 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
   );
   const [displayedData, setDisplayedData] = useState<TableRow[] | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const router = useRouter();
-  const pathname = usePathname();
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
   const { t } = useLanguage();
@@ -146,7 +144,7 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
     };
 
     fetchData();
-  }, [apiUrl, dispatch, initialData]);
+  }, [apiUrl, dispatch, initialData, onTotalCountChange]);
 
   const typeMap: Record<number, { label: string; color: string }> = {
     1: { label: "شخصي", color: "bg-blue-500 text-white" },
@@ -290,7 +288,10 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
   };
   const handleView = (id: number) => {
     localStorage.setItem("itemselected", String(id));
-    router.push(`${pathname}/details`);
+    if (typeof window !== "undefined") {
+      const path = window.location.pathname;
+      window.location.href = `${path}/details`;
+    }
     handleMenuClose();
   };
 

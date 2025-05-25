@@ -66,4 +66,5 @@ export const nav_ar = {
   View_as: "عرض ك",
   Sales: "طلبات البيع",
   Shipping: "طلبات الشحن",
+  Whatsapp_Num: "رقم الواتساب",
 };

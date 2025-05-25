@@ -8,7 +8,6 @@ import CoverImage from "@/components/common/cover_image";
 import { useLanguage } from "../../context/LanguageContext";
 import axiosInstance from "@/utils/axiosInstance";
 import Loader from "@/components/loading/loadingPage";
-import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { fetchServicesUserSuccess } from "@/store/slice/servicesCustomer";
@@ -16,7 +15,6 @@ import { fetchServicesUserSuccess } from "@/store/slice/servicesCustomer";
 const ServicesPage: React.FC = () => {
   const { t, isArabic } = useLanguage();
   const [loadingPage, setLoadingPage] = useState(false);
-  const router = useRouter();
   const dispatch = useDispatch();
   const services = useSelector(
     (state: RootState) => state.servicesUser.servicesList
@@ -135,7 +133,7 @@ const ServicesPage: React.FC = () => {
         title={t("servises_CTA_Title")}
         des={t("servises_CTA_Body")}
         btnText={t("Contact_Us")}
-        onClick={() => router.push("/contact")}
+        onClick={() => window.location.replace("/contact")}
       />
 
       {/* Footer */}

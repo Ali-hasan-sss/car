@@ -25,9 +25,10 @@ export const auth_en = {
   New_Password: "New Password",
   Email: "Email",
   company: "Company",
-
   Phone_Num: "Phone Number",
   Country: "Country",
+  delete_account: "Delete my account",
+  account_type: "account type",
   City: "City",
   ZIP_Code: "ZIP Code (optional)",
   ID_Details: "ID Details",
@@ -40,6 +41,7 @@ export const auth_en = {
   Another_mobile: "Alternate phone number (optional)",
   Another_Address: "Alternate address (optional)",
   Tax: "Tax Info",
+  Confirm_password: "Confirm password",
   CR: " Commercial Registration",
   company_des: "(For businesses and organizations)",
   private: "Private",
@@ -49,4 +51,13 @@ export const auth_en = {
   Company_name: "Company name",
   Privacy_Policy_des:
     "“By signing up, you agree to our Terms & Conditions and Privacy Policy.”",
+  Go_to_dashboard: "Go to dashboard",
+  verify_email_success: "verify email success",
+  Success: "Success",
+  Verify_email: "Verify Your Email Address",
+  Didnt_receive: "Didnt receive the email?",
+  Resend_Code: "Resend Code",
+  Check_email:
+    "Check your email and click on the confirmation link to continue.",
+  send_email: "We have sent a confirmation email to your email address",
 };

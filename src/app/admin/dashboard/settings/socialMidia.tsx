@@ -91,6 +91,7 @@ export default function SocialMediaSettings() {
   const emailItem = socialMediaList.find((item) => item.icon === "email");
   const phoneItem = socialMediaList.find((item) => item.icon === "phone");
   const addressItem = socialMediaList.find((item) => item.icon === "address");
+  const whatsappItem = socialMediaList.find((item) => item.icon === "whatsapp");
 
   useEffect(() => {
     const fetchSocialMedia = async () => {
@@ -232,7 +233,7 @@ export default function SocialMediaSettings() {
               .filter(
                 (item) =>
                   item.icon &&
-                  !["email", "address", "phone"].includes(item.icon)
+                  !["email", "address", "phone", "whatsapp"].includes(item.icon)
               )
               .map((item) => (
                 <div
@@ -379,6 +380,7 @@ export default function SocialMediaSettings() {
           addressItem={addressItem}
           phoneItem={phoneItem}
           emailItem={emailItem}
+          whatsapplItem={whatsappItem}
         />
       </div>
     </Box>

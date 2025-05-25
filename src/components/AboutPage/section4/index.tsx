@@ -48,10 +48,14 @@ export default function Section4() {
       <div className="py-[30px] flex flex-col items-center justify-center gap-8">
         <div className="flex max-h-[500px] flex-col items-center justify-center gap-4">
           <h1 className="text-xl md:text-3xl font-bold">
-            News from Soufan Global
+            {isArabic
+              ? "أخبار السيارات من Soufan Global"
+              : "News from Soufan Global"}
           </h1>
           <p className="text-text_des text-sm md:text-lg">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            {isArabic
+              ? "اكتشف أحدث المقالات والنصائح في عالم السيارات الدولية"
+              : "Explore the latest articles and tips in global automotive industry"}
           </p>
         </div>
         {loadingPage ? (
@@ -64,7 +68,7 @@ export default function Section4() {
           </div>
         )}
         <a href="/blog" className=" button_outline rounded-lg  py-1 px-4">
-          View all
+          {isArabic ? "عرض كل المقالات" : "View all"}
         </a>
       </div>
     </div>

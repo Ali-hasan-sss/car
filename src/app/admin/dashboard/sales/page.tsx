@@ -39,6 +39,7 @@ export default function Sales() {
   };
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [filterValue, setFilterValue] = useState("");
   const handleTogleFilter = () => setOpenFilter(!openFilter);
   const [selectedRequest, setSelectedRequest] = useState<{
     id: number;
@@ -108,9 +109,11 @@ export default function Sales() {
     finish: true,
   });
   useEffect(() => {
-    const apiUrl = `admin/car-sales?page_size=${showing}&page=${currentPage}`;
+    const apiUrl = `admin/car-sales?page_size=${showing}&page=${currentPage}${
+      filterValue ? `&status=${filterValue}` : ""
+    }`;
     dispatch(fetchCarSales({ API: apiUrl }));
-  }, [dispatch, currentPage, showing]);
+  }, [dispatch, currentPage, showing, filterValue]);
 
   const handleAcceptReject = async (
     id: number,
@@ -150,6 +153,7 @@ export default function Sales() {
         transmission_type: order.transmission_type ?? 1,
         cylinders: order.cylinders ?? 4,
         fuel_type: order.fuel_type ?? 1,
+        car_source: order.car_source ?? 1,
         price: order.price?.toString() ?? "",
         shipping_from: order.shipping_from ?? "",
         car_status: typeof order.status === "number" ? order.status : 0,
@@ -178,7 +182,7 @@ export default function Sales() {
   return (
     <div className="flex flex-col items-center w-full  gap-[5px]">
       <TableHeader
-        title={t("Auctions")}
+        title={t("Sales")}
         action={{
           filter: true,
           export: true,
@@ -193,7 +197,10 @@ export default function Sales() {
       <Search_input value={searchTerm} onChange={setSearchTerm} />
       {openFilter && (
         <>
-          <GeneralFilter label="Filter & Sort Control" />
+          <GeneralFilter
+            label={t("Filter")}
+            onFilterChange={(val) => setFilterValue(val)}
+          />
         </>
       )}
       <ToolBar

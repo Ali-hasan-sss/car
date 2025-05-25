@@ -31,7 +31,12 @@ const blogsSlice = createSlice({
           ...state.blogsList[index],
           ...action.payload,
         };
-        state.lastUpdated = Date.now(); // <-- تحديث وقت آخر تحديث
+      }
+      if (state.selectedBlog?.id === action.payload.id) {
+        state.selectedBlog = {
+          ...state.selectedBlog,
+          ...action.payload,
+        };
       }
     },
     deleteBlog(state, action: PayloadAction<number>) {

@@ -6,6 +6,7 @@ import store from "@/store/store";
 import AuthProvider from "../context/AuthContext";
 import NextNProgress from "nextjs-progressbar";
 import "nprogress/nprogress.css";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface ClientWrapperProps {
   children: React.ReactNode;
@@ -13,7 +14,6 @@ interface ClientWrapperProps {
 
 const ClientWrapper: React.FC<ClientWrapperProps> = ({ children }) => {
   //  console.log("NextNProgress Loaded");
-
   return (
     <Provider store={store}>
       <NextNProgress
@@ -24,7 +24,23 @@ const ClientWrapper: React.FC<ClientWrapperProps> = ({ children }) => {
         showOnShallow={true}
       />
       <LanguageProvider>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={
+                typeof window !== "undefined"
+                  ? window.location.pathname
+                  : "page"
+              }
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              {children}
+            </motion.div>
+          </AnimatePresence>
+        </AuthProvider>
       </LanguageProvider>
     </Provider>
   );

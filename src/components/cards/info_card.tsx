@@ -3,7 +3,6 @@ import { Switch } from "@mui/material";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { Edit, Eye, Trash } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 
 interface InfoCardProps {
@@ -34,7 +33,6 @@ export default function InfoCard({
   const [imageSrc, setImageSrc] = useState(image);
   const [loading, setLoading] = useState(true);
   const [isArabic, setIsArabic] = useState(true);
-  const router = useRouter();
   const { t } = useLanguage();
   const user = useSelector((state: RootState) => state.auth.user);
   useEffect(() => {
@@ -45,7 +43,7 @@ export default function InfoCard({
   const handleImageLoad = () => setLoading(false);
   const oneView = () => {
     localStorage.setItem("itemselected", String(id));
-    router.push("/admin/dashboard/services/details");
+    window.location.replace("/admin/dashboard/services/details");
   };
   const handleImageError = () => {
     setLoading(false);

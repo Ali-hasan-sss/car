@@ -10,7 +10,6 @@ import Personal_step1 from "./personal_steps/step1";
 import Company_step1 from "./company_steps/step1";
 import Personal_step2 from "./personal_steps/step2";
 import Company_step2 from "./company_steps/step2";
-import { useRouter } from "next/navigation";
 import axiosInstance from "@/utils/axiosInstance";
 import { setLogin } from "@/store/slice/authSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -40,7 +39,6 @@ const Signup: React.FC = () => {
     type: "",
   });
   const [errors, setErrors] = useState<Partial<SignupFormInputs>>({});
-  const router = useRouter();
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const is_full_data = useSelector(
@@ -49,15 +47,15 @@ const Signup: React.FC = () => {
 
   useEffect(() => {
     if (isLoggedIn && is_full_data) {
-      router.push("/customer/dashboard");
+      window.location.replace("/customer/dashboard");
     }
-  }, [isLoggedIn, router]);
+  }, [isLoggedIn]);
   useEffect(() => {
     document.title = "SOUFAN GLOBAL | Signup";
   }, []);
   const handleBack = () => {
     if (step === 1) {
-      router.push("/");
+      window.location.replace("/");
     } else {
       setStep(step - 1);
     }
@@ -161,9 +159,9 @@ const Signup: React.FC = () => {
           userRole: type === 1 ? "USER" : "USER",
           type: type,
         };
-        toast.success("register_success");
+        toast.success(t("register_success"));
         dispatch(setLogin({ token, user: userDataTransformed }));
-        router.push("register/success");
+        window.location.replace("register/success");
       } catch (error) {
         setLoading(false);
 

@@ -7,7 +7,6 @@ import { RootState } from "@/store/store";
 import { useAppDispatch } from "@/store/Reducers/hooks";
 import { getTimeAgo } from "@/utils/orderUtils";
 import { fetchNotifications } from "@/store/slice/notificationsSlice";
-import { useRouter } from "next/navigation";
 import { onMessage } from "firebase/messaging";
 import { messaging } from "../../../firebaseConfig";
 import { toast } from "sonner";
@@ -17,7 +16,6 @@ export default function NotificationDropdown() {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { t, isArabic } = useLanguage();
-  const router = useRouter();
   const handleClickOutside = (event: MouseEvent) => {
     if (
       dropdownRef.current &&
@@ -35,7 +33,7 @@ export default function NotificationDropdown() {
   );
 
   useEffect(() => {
-    dispatch(fetchNotifications({ role, pageSize: 5 }));
+    dispatch(fetchNotifications({ role, pageSize: 10 }));
   }, [dispatch, role]);
 
   useEffect(() => {
@@ -48,7 +46,7 @@ export default function NotificationDropdown() {
 
       onMessage(msg, (payload) => {
         console.log("📩 :", payload);
-        dispatch(fetchNotifications({ role, pageSize: 5 }));
+        dispatch(fetchNotifications({ role, pageSize: 10 }));
         const title = payload?.notification?.title || "إشعار جديد";
         const body = payload?.notification?.body || "لديك إشعار جديد.";
 
@@ -75,7 +73,7 @@ export default function NotificationDropdown() {
       navigator.serviceWorker.addEventListener("message", (event) => {
         console.log("📨 رسالة من service worker:", event.data);
         if (event.data && event.data.type === "NEW_NOTIFICATION") {
-          dispatch(fetchNotifications({ role, pageSize: 5 }));
+          dispatch(fetchNotifications({ role, pageSize: 10 }));
         }
       });
     }
@@ -108,7 +106,7 @@ export default function NotificationDropdown() {
 
       {open && notifications.length > 0 && (
         <div
-          className={`z-20 absolute ${
+          className={`z-50 absolute ${
             isArabic ? "left-2" : "right-2"
           } mt-2 w-[350px] max-h-[80vh] overflow-y-auto max-w-sm bg-white divide-y divide-gray-100 rounded-lg shadow`}
         >
@@ -134,14 +132,20 @@ export default function NotificationDropdown() {
                   </div>
                   <div className="text-xs text-blue-600">
                     <span className="bg-blue-400 text-white px-2 py-1 rounded-full text-xs">
-                      {t("time_ago")} : {getTimeAgo(notification.created_at)}
+                      {t("time_ago")} :{" "}
+                      {getTimeAgo(
+                        notification.created_at,
+                        isArabic ? "ar" : "en"
+                      )}
                     </span>
                   </div>
                 </div>
               </Link>
             ))}
             <div
-              onClick={() => router.push(`/${role}/dashboard/notifications`)}
+              onClick={() =>
+                window.location.replace(`/${role}/dashboard/notifications`)
+              }
               className="block px-4 py-1 font-medium text-center cursor-pointer rounded-b-lg text-gray-700 bg-gray-200 hover:bg-gray-100"
             >
               {t("see_all_noti")}

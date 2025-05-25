@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import "./style.css";
-import { usePathname } from "next/navigation";
 import Sucial_icon from "../sucial_Midia/sucial_icon";
 import { useLanguage } from "@/context/LanguageContext";
+import { useEffect, useState } from "react";
 export default function Footer() {
   const navItems = [
     { id: 1, title_en: "Home", title_ar: "الرئيسية", path: "/" },
@@ -38,7 +38,14 @@ export default function Footer() {
     },
     { id: 3, title_en: "FAQ", title_ar: "الأسئلة الشائعة", path: "/faq" },
   ];
-  const pathname = usePathname();
+
+  const [currentPath, setCurrentPath] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentPath(window.location.pathname);
+    }
+  }, []);
   const { isArabic, t } = useLanguage();
   return (
     <div className="footer flex flex-col gap-5 py-4 px-[10px] md:px-[85px]">
@@ -68,7 +75,7 @@ export default function Footer() {
                   <li key={item.id} className="py-2">
                     <Link
                       className={`footer_nav text-lg p-[10px] gap-[10px] ${
-                        pathname === item.path ? "active" : ""
+                        currentPath === item.path ? "active" : ""
                       }`}
                       href={item.path}
                     >
@@ -82,7 +89,7 @@ export default function Footer() {
                   <li key={item.id} className="py-2">
                     <Link
                       className={`footer_nav text-lg p-2 gap-1 ${
-                        pathname === item.path ? "active" : ""
+                        currentPath === item.path ? "active" : ""
                       }`}
                       href={item.path}
                     >

@@ -3,11 +3,18 @@
 import { useLanguage } from "../../../context/LanguageContext";
 import LanguageSwitcher from "@/components/buttons/btn-switch/LanguageSwitcher";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Bottombar() {
   const { t } = useLanguage();
-  const pathname = usePathname();
+
+  const [currentPath, setCurrentPath] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentPath(window.location.pathname);
+    }
+  }, []);
   const navItems = [
     { id: 1, label: t("Home"), path: "/" },
     { id: 2, label: t("About_us"), path: "/about" },
@@ -36,7 +43,7 @@ export default function Bottombar() {
           <li key={item.id}>
             <Link
               className={`nav-item text-xs p-[10px] gap-2 ${
-                pathname === item.path ? "active" : ""
+                currentPath === item.path ? "active" : ""
               }`}
               href={item.path}
             >

@@ -33,4 +33,7 @@ export const toast_ar = {
   completed_error: "حدث خطأ أثناء إكمال البيانات الرجاء المحاولة لاحقًا",
   add_car_shipping: "تم اضافة طلب الشحن بنجاح",
   edit_car_shipping: "تم تعديل طلب الشحن بنجاح",
+  dellete_account_message: "هل انت متأكد من حذف حسابك؟",
+  edit_profile_success: " تم تعديل الملف الشخصي بنجاح",
+  reset_success: " تم اعادة تعيين كلمة المرور بنجاح",
 };

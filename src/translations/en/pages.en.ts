@@ -69,4 +69,5 @@ export const pages_en = {
   week: "Week",
   contact_info: "contact info",
   Pages: "Pages",
+  view_post: "View post",
 };

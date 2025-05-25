@@ -96,6 +96,11 @@ export default function Auctions({
   useEffect(() => {
     if (initialData) {
       setFormData(initialData);
+    }
+  }, [initialData]);
+
+  useEffect(() => {
+    if (initialData?.manufacturer && manufacturers.length > 0) {
       const selectedManufacturer = manufacturers.find(
         (m) => m.id === initialData.manufacturer
       );
@@ -103,7 +108,7 @@ export default function Auctions({
         setCategories(selectedManufacturer.categories);
       }
     }
-  }, [initialData, manufacturers]);
+  }, [manufacturers, initialData?.manufacturer]);
 
   const handleManufacturerChange = (value: number | null) => {
     setFormData((prev) => ({

@@ -1,6 +1,5 @@
 import { useLanguage } from "../../../context/LanguageContext";
 import { base_url } from "@/utils/domain";
-import { useRouter } from "next/navigation";
 
 interface CarResponse {
   id: number;
@@ -33,7 +32,6 @@ export default function Card({ car }: { car: CarResponse }) {
   const lotNumber = car.id.toString();
   const currentBid = car.price.toString();
   const location = car.user?.contact?.city;
-  const router = useRouter();
   const { t } = useLanguage();
   return (
     <div
@@ -108,7 +106,7 @@ export default function Card({ car }: { car: CarResponse }) {
           style={{ fontSize: "14px", borderRadius: "20px" }}
           onClick={() => {
             localStorage.setItem("selectedCar", JSON.stringify(car));
-            router.push(`/car-store/${car.id}`);
+            window.location.replace(`/car-store/details`);
           }}
         >
           {t("details")}

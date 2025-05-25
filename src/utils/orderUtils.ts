@@ -1,5 +1,7 @@
 import { Auction } from "@/Types/AuctionTypes";
-
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
 export const extractOrderDetails = (order: Auction) => {
   const {
     id,
@@ -140,6 +142,9 @@ export const getDriveSystemText = (fuel_type: number) => {
 export const getShippingText = (shipping_option: number) => {
   return shipping_option === 1 ? "container" : "group";
 };
+export const getCarSourceText = (car_source: number) => {
+  return car_source === 1 ? "GULF" : "IMPORTED";
+};
 
 // 🛠️ خريطة الحالات مع الألوان
 export const statusMap: Record<
@@ -148,13 +153,13 @@ export const statusMap: Record<
 > = {
   0: { label: "rejected", color: "bg-red-500" },
   1: { label: "pending", color: "bg-yellow-200" },
-  2: { label: "in_progress", color: "bg-blue-400" },
-  3: { label: "completed", color: "bg-green-700" },
+  2: { label: "in_progress", color: "bg-blue-500" },
+  3: { label: "completed", color: "bg-blue-500" },
   4: { label: "Received", color: "bg-blue-500" },
-  5: { label: "Delivered_To_Shipping_Co", color: "bg-blue-600" },
+  5: { label: "Delivered_To_Shipping_Co", color: "bg-blue-500" },
   6: { label: "Shipped", color: "bg-blue-700" },
-  7: { label: "Arrived_To_Oman", color: "bg-green-500" },
-  8: { label: "Arrived_To_Destination", color: "bg-green-600" },
+  7: { label: "Arrived_To_Oman", color: "bg-blue-500" },
+  8: { label: "Arrived_To_Destination", color: "bg-blue-500" },
   null: { label: "witing", color: "bg-gray-400" },
 };
 
@@ -163,17 +168,38 @@ export const getStatusInfo = (status: number | null) => {
   const statusKey = status === null ? "null" : status;
   return statusMap[statusKey];
 };
-
 // حساب المدة منذ إنشاء الطلب
-export const getTimeAgo = (created_at: string) => {
-  const now = new Date();
-  const createdDate = new Date(created_at);
-  const diffMs = now.getTime() - createdDate.getTime();
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-  const diffDays = Math.floor(diffHours / 24);
+export const getTimeAgo = (
+  dateString: string,
+  locale: "ar" | "en" = "en"
+): string => {
+  const now = dayjs();
+  const targetDate = dayjs.utc(dateString).local();
+  const diffInMinutes = now.diff(targetDate, "minute");
+  const diffInHours = now.diff(targetDate, "hour");
+  const diffInDays = now.diff(targetDate, "day");
+  const diffInWeeks = now.diff(targetDate, "week");
+  const diffInMonths = now.diff(targetDate, "month");
+  const diffInYears = now.diff(targetDate, "year");
 
-  if (diffHours < 24) return `${diffHours} ساعة`;
-  if (diffDays < 7) return `${diffDays} يوم`;
-  if (diffDays < 30) return `${Math.floor(diffDays / 7)} أسبوع`;
-  return `${Math.floor(diffDays / 30)} شهر`;
+  if (diffInMinutes < 1) return locale === "ar" ? "الآن" : "Now";
+  if (diffInMinutes < 60)
+    return locale === "ar"
+      ? `${diffInMinutes} دقيقة`
+      : `${diffInMinutes} minute(s)`;
+  if (diffInHours < 24)
+    return locale === "ar" ? `${diffInHours} ساعة` : `${diffInHours} hour(s)`;
+  if (diffInDays < 7)
+    return locale === "ar" ? `${diffInDays} يوم` : `${diffInDays} day(s)`;
+  if (diffInWeeks < 4)
+    return locale === "ar" ? `${diffInWeeks} أسبوع` : `${diffInWeeks} week(s)`;
+  if (diffInMonths < 12)
+    return locale === "ar" ? `${diffInMonths} شهر` : `${diffInMonths} month(s)`;
+  return locale === "ar" ? `${diffInYears} سنة` : `${diffInYears} year(s)`;
+};
+export const capitalizeName = (name: string) => {
+  return name
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
 };

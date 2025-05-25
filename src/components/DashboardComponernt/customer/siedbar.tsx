@@ -12,8 +12,7 @@ import {
   User,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ButtomNavBar from "./buttomNav";
 interface SidebarProps {
   setisExpand: (val: boolean) => void;
@@ -21,14 +20,23 @@ interface SidebarProps {
 export default function Sidebar({ setisExpand }: SidebarProps) {
   const { t, isArabic } = useLanguage();
   const [isExpand, setIsExpand] = useState(false);
-  const pathname = usePathname();
+
+  const [currentPath, setCurrentPath] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentPath(window.location.pathname);
+    }
+  }, []);
   const sideItems_top = [
     {
       label: t("Home"),
       icon: (
         <HomeIcon
           className={`text-primary1 rounded-lg text-2xl side_icon ${
-            pathname === "/customer/dashboard" ? "bg-primary1 text-white" : ""
+            currentPath === "/customer/dashboard"
+              ? "bg-primary1 text-white"
+              : ""
           }`}
         />
       ),
@@ -40,7 +48,7 @@ export default function Sidebar({ setisExpand }: SidebarProps) {
       icon: (
         <Box
           className={`text-primary1 rounded-lg text-2xl side_icon ${
-            pathname === "/customer/dashboard/auction"
+            currentPath === "/customer/dashboard/auction"
               ? "bg-primary1 text-white"
               : ""
           }`}
@@ -54,7 +62,7 @@ export default function Sidebar({ setisExpand }: SidebarProps) {
       icon: (
         <Container
           className={`text-primary1 rounded-lg text-2xl side_icon ${
-            pathname === "/customer/dashboard/shipping"
+            currentPath === "/customer/dashboard/shipping"
               ? "bg-primary1 text-white"
               : ""
           }`}
@@ -68,7 +76,7 @@ export default function Sidebar({ setisExpand }: SidebarProps) {
       icon: (
         <Store
           className={`text-primary1 rounded-lg text-2xl side_icon ${
-            pathname === "/customer/dashboard/salles"
+            currentPath === "/customer/dashboard/salles"
               ? "bg-primary1 text-white"
               : ""
           }`}
@@ -82,7 +90,7 @@ export default function Sidebar({ setisExpand }: SidebarProps) {
       icon: (
         <BellRing
           className={`text-primary1 rounded-lg text-2xl side_icon ${
-            pathname === "/customer/dashboard/notifications"
+            currentPath === "/customer/dashboard/notifications"
               ? "bg-primary1 text-white"
               : ""
           }`}
@@ -99,7 +107,7 @@ export default function Sidebar({ setisExpand }: SidebarProps) {
       icon: (
         <User
           className={`text-primary1 rounded-lg text-2xl side_icon ${
-            pathname === "/customer/dashboard/profile"
+            currentPath === "/customer/dashboard/profile"
               ? "bg-primary1 text-white"
               : ""
           }`}
@@ -113,7 +121,7 @@ export default function Sidebar({ setisExpand }: SidebarProps) {
       icon: (
         <Settings
           className={`text-primary1 rounded-lg text-2xl side_icon ${
-            pathname === "/customer/dashboard/settings"
+            currentPath === "/customer/dashboard/settings"
               ? "bg-primary1 text-white"
               : ""
           }`}
@@ -173,7 +181,7 @@ export default function Sidebar({ setisExpand }: SidebarProps) {
               <li
                 key={index}
                 className={`sied_item mb-1 flex items-center gap-2 ${
-                  pathname === item.path ? "sied_item_active" : ""
+                  currentPath === item.path ? "sied_item_active" : ""
                 } `}
               >
                 <Link
@@ -194,7 +202,7 @@ export default function Sidebar({ setisExpand }: SidebarProps) {
               <li
                 key={index}
                 className={`sied_item mb-1 flex items-center gap-2 ${
-                  pathname === item.path ? "sied_item_active" : ""
+                  currentPath === item.path ? "sied_item_active" : ""
                 } `}
               >
                 <Link

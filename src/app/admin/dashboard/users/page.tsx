@@ -3,6 +3,7 @@ import TableHeader from "@/components/common/titleBar/tableHeader";
 import ToolBar from "@/components/common/toolbar";
 // import UserForm from "@/components/forms/UserForm";
 import Search_input from "@/components/inputs/search_input";
+import CustomPagination from "@/components/pagination/extrnalPagenation";
 // import AnimatedModal from "@/components/modal/AnimatedModal";
 //import CustomPagination from "@/components/pagination/extrnalPagenation";
 import GeneralTable, { Column } from "@/components/table";
@@ -48,14 +49,18 @@ const Users: React.FC = () => {
   // const [Loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [showing, setShowing] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useAppDispatch();
-  const { users, loading, error } = useSelector(
+  const { users, loading, totalPages, error } = useSelector(
     (state: RootState) => state.users
   );
-  const apiUrl = "admin/users";
+  const apiUrl = `admin/users`;
   useEffect(() => {
-    dispatch(fetchUsers());
-  }, [dispatch]);
+    const apiUrl = `admin/users?page_size=${showing}&page=${currentPage}`;
+    dispatch(fetchUsers(apiUrl));
+  }, [dispatch, currentPage, showing]);
+
+  console.log("users:", users);
 
   const [actions] = useState({
     edit: false,
@@ -125,22 +130,11 @@ const Users: React.FC = () => {
         initialData={users}
         loading={loading}
       />
-      {/*<CustomPagination
+      <CustomPagination
         totalPages={totalPages}
         currentPage={currentPage}
         onPageChange={setCurrentPage}
-      />*/}
-
-      {/* {openModal && (
-        <AnimatedModal open={openModal} handleClose={() => setOpenModal(false)}>
-          <UserForm
-            initialData={InitialData}
-            isNew={true}
-            onSubmit={onSubmit}
-            loading={Loading}
-          />
-        </AnimatedModal>
-      )} */}
+      />
     </div>
   );
 };

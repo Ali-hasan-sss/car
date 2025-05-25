@@ -6,18 +6,24 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --font-cairo: "Cairo", sans-serif;
   --font-poppins: "Poppins", sans-serif;
   --font-roboto: "Roboto", sans-serif;
   --font-montserrat: "Montserrat", sans-serif;
 }
+
 html[dir="rtl"] {
   direction: rtl;
   text-align: right;
+  font-family: var(--font-cairo);
 }
+
 html[dir="ltr"] {
   direction: ltr;
   text-align: left;
+  font-family: var(--font-roboto);
 }
+
 #nprogress .bar {
   z-index: 9999 !important;
   top: 0;
@@ -29,7 +35,6 @@ body,
 input,
 button {
   color: var(--foreground);
-  font-family: var(--font-roboto);
 }
 
 /*--------------buttons-------------*/

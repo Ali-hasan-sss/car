@@ -135,9 +135,9 @@ export default function Blogs() {
       const payload = {
         title: JSON.stringify(formData.title),
         body: JSON.stringify(formData.body),
-        image: formData.image, // إرسال الاسم فقط
+        image: formData.image,
         description: JSON.stringify(formData.description),
-        images: formData.images.length > 0 ? formData.images : undefined, // إرسال أسماء الصور فقط
+        images: formData.images.length > 0 ? formData.images : undefined,
       };
 
       if (isEditing && editingBlog) {
@@ -224,14 +224,16 @@ export default function Blogs() {
           {loadingPage ? (
             <Loader />
           ) : blogs.length > 0 ? (
-            blogs.map((blog) => (
-              <BlogCard
-                key={blog.id}
-                {...blog}
-                ondelete={() => handleDelete(blog.id)}
-                onedit={() => openModal(blog)}
-              />
-            ))
+            blogs
+              .filter((item) => item.id !== 31)
+              .map((blog) => (
+                <BlogCard
+                  key={blog.id}
+                  {...blog}
+                  ondelete={() => handleDelete(blog.id)}
+                  onedit={() => openModal(blog)}
+                />
+              ))
           ) : (
             <p>لا توجد مقالات متاحة</p>
           )}

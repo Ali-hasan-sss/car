@@ -10,11 +10,9 @@ import Reviwe from "@/components/homePage/reviwe/index";
 import Store from "@/components/carStore";
 import Success from "@/components/homePage/SuccessNO";
 import { useLanguage } from "@/context/LanguageContext";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Home() {
-  const router = useRouter();
   useEffect(() => {
     document.title = "SOUFAN GLOBAL";
   }, []);
@@ -40,7 +38,7 @@ export default function Home() {
             : "Book a personalized demo to explore how we simplify car imports and shipping. Experience our seamless process firsthand!"
         }
         btnText={isArabic ? "احجز عرضك الآن" : "Book Your Demo Now"}
-        onClick={() => router.push("/register")}
+        onClick={() => window.location.replace("/register")}
       />
 
       <Footer />

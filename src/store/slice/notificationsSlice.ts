@@ -49,10 +49,8 @@ export const fetchNotifications = createAsyncThunk(
 // ✅ 2. جلب الإشعارات غير المقروءة
 export const fetchUnreadNotifications = createAsyncThunk(
   "notifications/fetchUnread",
-  async ({ role, pageSize = 10 }: FetchNotificationsArgs) => {
-    const response = await axiosInstance.get(
-      `${role}/notifications/unreaded?page_size=${pageSize}`
-    );
+  async ({ role }: FetchNotificationsArgs) => {
+    const response = await axiosInstance.get(`${role}/notifications/unreaded`);
     return response.data.data.notifications;
   }
 );
