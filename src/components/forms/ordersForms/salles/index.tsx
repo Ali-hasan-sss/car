@@ -184,6 +184,7 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
 
     if (!formData.manufacturer) newErrors.manufacturer = " ";
     if (!formData.category_id) newErrors.category_id = " ";
+    if (!formData.cmodel_id) newErrors.cmodel_id = " ";
     if (!formData.year) newErrors.year = " ";
     if (!formData.transmission_type) newErrors.transmission_type = " ";
     if (!formData.drive_system) newErrors.drive_system = " ";
@@ -272,10 +273,11 @@ export default function Salles({ close, initialData, onSubmit }: SallesProps) {
           <div className="selector w-[250px]">
             <label>{t("Category")} :</label>
             <DainamicSelector
-              placeholder={t("choes_category_first")}
+              placeholder={t("choes_Model_first")}
               data={models}
               value={formData.cmodel_id}
               onChange={handleModelChange}
+              error={errors.cmodel_id}
             />
           </div>
         </div>

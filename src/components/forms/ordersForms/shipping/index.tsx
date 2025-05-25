@@ -215,25 +215,22 @@ export default function ShippingForm({
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
 
-    if (!formData.manufacturer)
-      newErrors.manufacturer = "يرجى اختيار الشركة المصنعة.";
-    if (!formData.category_id) newErrors.category_id = "يرجى اختيار الموديل.";
-    if (!formData.year) newErrors.year = "يرجى تحديد سنة الصنع.";
-    if (!formData.transmission_type)
-      newErrors.transmission_type = "يرجى تحديد نوع ناقل الحركة.";
-    if (!formData.drive_system)
-      newErrors.drive_system = "يرجى اختيار نظام الدفع.";
-    if (!formData.fuel_type) newErrors.fuel_type = "يرجى تحديد نوع الوقود.";
-    if (!formData.cylinders) newErrors.cylinders = "يرجى تحديد عدد الأسطوانات.";
-    if (!formData.price) newErrors.price = "يرجى إدخال سعر.";
+    if (!formData.manufacturer) newErrors.manufacturer = "";
+    if (!formData.category_id) newErrors.category_id = "";
+    if (!formData.year) newErrors.year = "";
+    if (!formData.transmission_type) newErrors.transmission_type = "";
+    if (!formData.drive_system) newErrors.drive_system = "";
+    if (!formData.fuel_type) newErrors.fuel_type = "";
+    if (!formData.cylinders) newErrors.cylinders = "";
+    if (!formData.price) newErrors.price = "";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
   // إرسال البيانات
   const handleSubmit = async () => {
     try {
-      setLoading(true);
       if (initialData?.id) {
+        setLoading(true);
         // ✅ تعديل
         if (validateForm()) {
           await dispatch(
@@ -248,6 +245,7 @@ export default function ShippingForm({
       } else {
         // ✅ إضافة
         if (validateForm()) {
+          setLoading(true);
           await dispatch(
             addCarShipping({
               apiUrl: "customer/car-shippings",

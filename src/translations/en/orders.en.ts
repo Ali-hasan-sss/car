@@ -58,7 +58,6 @@ export const orders_en = {
   Send_Car_Order: "Send Car Order ",
   Edit_Auction: "The auction was successfully updated.",
   Add_Auction: "The auction was successfully Added.",
-  choes_Manufacturer_first: "choes Manufacturer first",
   choes_category_first: "choes category first",
   //sales words
   Edit_sales: "The car sale was successfully updated.",
@@ -192,6 +191,8 @@ export const orders_en = {
   add_new_model: "Add new model",
   No_model_avilable: "No model avilable",
   choies_manefacturar: "No model avilable",
+  choes_Model_first: "choies Model first",
+  choes_Manufacturer_first: "choies Manufacturer first",
   No_search_result: "No search result",
   Add_Model: "Add Model",
   Edit_Model: "Edit Model",

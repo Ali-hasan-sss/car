@@ -58,7 +58,6 @@ export const orders_ar = {
   Send_Car_Order: "ارسال طلب المزاد",
   Edit_Auction: "تم تعديل المزاد بنجاح",
   Add_Auction: "تمت اضافة المزاد بنجاح",
-  choes_Manufacturer_first: "اختر الشركة الصانعة اولا",
   //sales words
   Edit_sales: "تم تعديل عرض البيع بنجاح",
   Add_sales: "تم اضافة عرض البيع بنجاح",
@@ -189,6 +188,8 @@ export const orders_ar = {
   add_new_model: "إضافة طراز جديد",
   No_model_avilable: "لا يوجد طراز متاح",
   choies_manefacturar: "لا يوجد طراز متاح",
+  choes_Model_first: "اختر الموديل اولا",
+  choes_Manufacturer_first: "اختر الشركة الصانعة اولا",
   No_search_result: "لا توجد نتائج بحث",
   Add_Model: "إضافة طراز",
   Edit_Model: "تعديل الطراز",
