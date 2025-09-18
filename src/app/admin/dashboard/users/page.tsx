@@ -110,7 +110,7 @@ const Users: React.FC = () => {
         title={t("Users")}
         action={{
           filter: false,
-          export: true,
+          export: false,
         }}
       />
       <Search_input value={searchTerm} onChange={setSearchTerm} />

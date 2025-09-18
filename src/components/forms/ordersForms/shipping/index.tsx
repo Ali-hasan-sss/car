@@ -6,13 +6,10 @@ import Text_input from "@/components/inputs/Text_input";
 import FileUploder from "@/components/uploders/Uploader/UploadFile";
 import { useEffect, useState } from "react";
 import {
-  CarfaxOptions,
-  CarStatusOptions,
   driveSystemOPtions,
   ExteriorColor,
   fuelTypeOptions,
   InteriorColor,
-  mileageOptions,
   NumberOfCylinders,
   TransmissionTypeOptions,
 } from "../data";
@@ -22,7 +19,11 @@ import DainamicSelector from "@/components/inputs/selectors/DainamicSelector";
 import { fetchManufacturers } from "@/store/slice/manufacturerSlice";
 import LoadingBTN from "@/components/loading/loadingBTN";
 import { addCarShipping, updateCarShipping } from "@/store/slice/ShippingSlice";
-import { packages, ShippingFormInputs } from "@/Types/AuctionTypes";
+import {
+  packages,
+  ShippingFormInputs,
+  ShippingVehicle,
+} from "@/Types/AuctionTypes";
 import Btn_borded from "@/components/buttons/btn/bordered_btn";
 import PackageForm from "./packageForm";
 import { Minus } from "lucide-react";
@@ -60,10 +61,14 @@ export default function ShippingForm({
   const userRole = useSelector((state: RootState) => state.auth.user?.userRole);
   const [manufacturerLoading, setManufacturerLoading] = useState(false);
   const currentYear = new Date().getFullYear();
-  const yearOfMade = Array.from({ length: 30 }, (_, i) => {
-    const yearString = (currentYear - i).toString();
-    return { value: yearString, label: yearString };
-  });
+  const startYear = 2018;
+  const yearOfMade = Array.from(
+    { length: currentYear - startYear + 1 },
+    (_, i) => {
+      const yearString = (currentYear - i).toString();
+      return { value: yearString, label: yearString };
+    }
+  );
   useEffect(() => {
     if (status === "idle") {
       if (userRole === "ADMIN" || userRole === "USER") {
@@ -82,44 +87,26 @@ export default function ShippingForm({
     if (initialData) {
       setFormData(initialData);
       // تحميل الكاتيجوري والموديل بناءً على البيانات
-      const selectedManufacturer = manufacturers.find(
-        (m) => m.id === initialData.manufacturer
-      );
-      if (selectedManufacturer?.categories) {
-        setCategories(selectedManufacturer.categories);
+      const firstVehicleMan = initialData.vehicles?.[0]?.manufacturer ?? null;
+      if (firstVehicleMan) {
+        const selectedManufacturer = manufacturers.find(
+          (m) => m.id === firstVehicleMan
+        );
+        if (selectedManufacturer?.categories) {
+          setCategories(selectedManufacturer.categories);
+        }
       }
     }
   }, [initialData, manufacturers]);
   const [formData, setFormData] = useState<ShippingFormInputs>({
-    manufacturer: null,
-    is_pickup: 1, // استلام الشحنة
-    is_consolidate: 1, // توحيد الشحنة
-    final_port: "", // الميناء النهائي
-    in_transit: 1, // في الطريق
-    vin: "", // رقم الهيكل
-    cmodel_id: null, // موديل السيارة
-    category_id: null, // الفئة
-    year: "", // سنة الصنع
-    mileage: "", // عدد الأميال
-    drive_system: null, // نظام الدفع
-    transmission_type: null, // ناقل الحركة
-    cylinders: null, // عدد الأسطوانات
-    fuel_type: null, // نوع الوقود
-    price: "", // السعر
-    ex_color: "",
-    in_color: "",
-    images: [],
-    shipping_from: "", // الشحن من
-    car_status: null, // حالة السيارة
-    location_of_car: null, // موقع السيارة
-    car_fax: null, // تقرير السيارة (CarFax)
-    commodity_type: "vehicle", // نوع السلعة
-    bill_pdf: "", // فاتورة الشراء (PDF أو رابط)
-    title_pdf: "", // بيان الملكية (PDF أو رابط)
-    consignee: "", // اسم المستلم
-    apply_consignee: 0, // بيانات المستلم الرسمية
-    use_type: 0, // نوع الاستخدام
+    commodity_type: "vehicle",
+    is_pickup: 1,
+    is_consolidate: 1,
+    final_port: "",
+    in_transit: 1,
+    use_type: 0,
     package_shippings: [],
+    vehicles: [],
   });
   const addPackage = (newPackage: packages) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -169,29 +156,27 @@ export default function ShippingForm({
     }));
   };
 
-  const handleManufacturerChange = (value: number | null) => {
-    setFormData((prev) => ({
+  const handleVehicleManufacturerChange = (value: number | null) => {
+    setVehicleDraft((prev) => ({
       ...prev,
       manufacturer: value,
       category_id: null,
       cmodel_id: null,
     }));
-
     const selectedManufacturer = manufacturers.find((m) => m.id === value);
     if (selectedManufacturer?.categories) {
       setCategories(selectedManufacturer.categories);
     } else {
       setCategories([]);
     }
+    setModels([]);
   };
-
-  const handleCategoryChange = (value: number | null) => {
-    setFormData((prev) => ({
+  const handleVehicleCategoryChange = (value: number | null) => {
+    setVehicleDraft((prev) => ({
       ...prev,
       category_id: value,
       cmodel_id: null,
     }));
-
     const selectedCategory = categories.find((c) => c.id === value);
     if (selectedCategory && selectedCategory.cmodels) {
       setModels(selectedCategory.cmodels);
@@ -199,11 +184,73 @@ export default function ShippingForm({
       setModels([]);
     }
   };
-  const handleModelChange = (value: number | null) => {
+  const handleVehicleModelChange = (value: number | null) => {
+    setVehicleDraft((prev) => ({ ...prev, cmodel_id: value }));
+  };
+  const handleVehicleInputChange = <T extends keyof ShippingVehicle>(
+    key: T,
+    value: ShippingVehicle[T]
+  ) => {
+    setVehicleDraft((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const addVehicle = () => {
+    if (!isVehicleValid(vehicleDraft)) {
+      toast.error(t("Please_fill_vehicle_data"));
+      return;
+    }
     setFormData((prev) => ({
       ...prev,
-      cmodel_id: value,
+      vehicles: [...prev.vehicles, vehicleDraft],
     }));
+    setVehicleDraft({
+      manufacturer: null,
+      category_id: null,
+      cmodel_id: null,
+      year: "",
+      drive_system: null,
+      transmission_type: null,
+      cylinders: null,
+      fuel_type: null,
+      ex_color: "",
+      in_color: "",
+      vin: "",
+      car_status: null,
+      bill_pdf: "",
+      title_pdf: "",
+    });
+    setCategories([]);
+    setModels([]);
+  };
+  const removeVehicle = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      vehicles: prev.vehicles.filter((_, i) => i !== index),
+    }));
+  };
+
+  const getManufacturerTitle = (id: number | null) =>
+    manufacturers.find((m) => m.id === id)?.title || "-";
+  const getCategoryTitle = (
+    manufacturerId: number | null,
+    categoryId: number | null
+  ) => {
+    const man = manufacturers.find((m) => m.id === manufacturerId);
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const cat = man?.categories?.find((c: any) => c.id === categoryId);
+    return cat?.title || "-";
+  };
+  const getModelTitle = (
+    manufacturerId: number | null,
+    categoryId: number | null,
+    cmodelId: number | null
+  ) => {
+    const man = manufacturers.find((m) => m.id === manufacturerId);
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const cat = man?.categories?.find((c: any) => c.id === categoryId);
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const mdl = cat?.cmodels?.find((cm: any) => cm.id === cmodelId);
+    return mdl?.title || "-";
   };
   const handleInputChange = <T extends keyof ShippingFormInputs>(
     key: T,
@@ -212,17 +259,50 @@ export default function ShippingForm({
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [vehicleDraft, setVehicleDraft] = useState<ShippingVehicle>({
+    manufacturer: null,
+    category_id: null,
+    cmodel_id: null,
+    year: "",
+    drive_system: null,
+    transmission_type: null,
+    cylinders: null,
+    fuel_type: null,
+    ex_color: "",
+    in_color: "",
+    vin: "",
+    car_status: null,
+    bill_pdf: "",
+    title_pdf: "",
+  });
+  const isVehicleValid = (v: ShippingVehicle) => {
+    return Boolean(v.manufacturer && v.category_id && v.year);
+  };
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
-
-    if (!formData.manufacturer) newErrors.manufacturer = "";
-    if (!formData.category_id) newErrors.category_id = "";
-    if (!formData.year) newErrors.year = "";
-    if (!formData.transmission_type) newErrors.transmission_type = "";
-    if (!formData.drive_system) newErrors.drive_system = "";
-    if (!formData.fuel_type) newErrors.fuel_type = "";
-    if (!formData.cylinders) newErrors.cylinders = "";
-    if (!formData.price) newErrors.price = "";
+    if (!formData.final_port) newErrors.final_port = " ";
+    if (formData.use_type === null || formData.use_type === undefined)
+      newErrors.use_type = " ";
+    // Require at least one vehicle or one package
+    if (
+      (formData.vehicles?.length ?? 0) === 0 &&
+      (formData.package_shippings?.length ?? 0) === 0
+    ) {
+      toast.error(t("Please add at least one vehicle or one package"));
+      setErrors(newErrors);
+      return false;
+    }
+    // If vehicles exist, ensure each is minimally complete
+    if ((formData.vehicles?.length ?? 0) > 0) {
+      const invalidIndex = formData.vehicles.findIndex(
+        (v) => !isVehicleValid(v)
+      );
+      if (invalidIndex !== -1) {
+        toast.error(t("Please complete vehicle information"));
+        setErrors(newErrors);
+        return false;
+      }
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -275,6 +355,176 @@ export default function ShippingForm({
         </h2>
       </div>
 
+      {/* إضافة سيارات إلى الشحنة */}
+      <div className="flex mt-4 flex-col w-full items-start gap-4">
+        <div className="flex items-center justify-start gap-1">
+          <img src="/images/carSipping.png" alt="car" className="w-[20px]" />
+          <h2 className="text-text_title text-xl font-bold">{t("Vehicles")}</h2>
+        </div>
+        <div className="flex flex-wrap w-full items-center justify-between  gap-3">
+          <div className="selector w-full md:w-1/4">
+            <label>{t("Car_Manufacturer")} :</label>
+            <DainamicSelector
+              placeholder="BMW , Audi , kia ..."
+              data={manufacturers}
+              value={vehicleDraft.manufacturer}
+              onChange={handleVehicleManufacturerChange}
+              dataLoading={manufacturerLoading}
+            />
+          </div>
+          <div className="selector w-full md:w-1/4 ">
+            <label>{t("Car_Model")} :</label>
+            <DainamicSelector
+              data={categories}
+              value={vehicleDraft.category_id}
+              onChange={handleVehicleCategoryChange}
+            />
+          </div>
+          <div className="selector w-full md:w-1/4">
+            <label>{t("Category")} :</label>
+            <DainamicSelector
+              data={models}
+              value={vehicleDraft.cmodel_id}
+              onChange={handleVehicleModelChange}
+            />
+          </div>
+        </div>
+        <div className="flex w-full flex-wrap items-center justify-between  gap-3">
+          <div className="selector w-full md:w-1/4">
+            <label>{t("year")} :</label>
+            <Text_selector
+              options={yearOfMade}
+              placeholder="2018"
+              value={vehicleDraft.year}
+              onChange={(value) =>
+                handleVehicleInputChange("year", String(value))
+              }
+            />
+          </div>
+          <div className="selector w-full md:w-1/4">
+            <label> {t("Drive_System")} :</label>
+            <Text_selector
+              options={driveSystemOPtions}
+              placeholder={t("FWD")}
+              value={vehicleDraft.drive_system}
+              onChange={(value) =>
+                handleVehicleInputChange("drive_system", Number(value))
+              }
+            />
+          </div>
+          <div className="selector w-full md:w-1/4">
+            <label>{t("Number_of_Cylinders")} :</label>
+            <Text_selector
+              options={NumberOfCylinders}
+              placeholder="4,6,8..."
+              value={vehicleDraft.cylinders}
+              onChange={(value) =>
+                handleVehicleInputChange("cylinders", Number(value))
+              }
+            />
+          </div>
+        </div>
+        <div className="flex w-full flex-wrap items-center justify-between  gap-3">
+          <div className="selector w-full md:w-1/4">
+            <label>{t("Transmission_Type")} :</label>
+            <Text_selector
+              options={TransmissionTypeOptions}
+              placeholder={t("manual")}
+              value={vehicleDraft.transmission_type}
+              onChange={(value) =>
+                handleVehicleInputChange("transmission_type", Number(value))
+              }
+            />
+          </div>
+          <div className="selector w-full md:w-1/4">
+            <label>{t("Fuel_Type")} :</label>
+            <Text_selector
+              options={fuelTypeOptions}
+              placeholder={t("Petrol")}
+              value={vehicleDraft.fuel_type}
+              onChange={(value) =>
+                handleVehicleInputChange("fuel_type", Number(value))
+              }
+            />
+          </div>
+          <div className="selector w-full md:w-1/4">
+            <label>{t("Exterior_Color")} :</label>
+            <Text_selector
+              options={ExteriorColor}
+              placeholder={t("white")}
+              value={vehicleDraft.ex_color}
+              onChange={(value) =>
+                handleVehicleInputChange("ex_color", String(value))
+              }
+            />
+          </div>
+        </div>
+        <div className="flex flex-wrap w-full items-center justify-between  gap-3">
+          <div className="selector w-full md:w-1/4">
+            <label>{t("Interior_Color")} :</label>
+            <Text_selector
+              options={InteriorColor}
+              placeholder={t("white")}
+              value={vehicleDraft.in_color}
+              onChange={(value) =>
+                handleVehicleInputChange("in_color", String(value))
+              }
+            />
+          </div>
+          <div className="selector w-full md:w-1/4">
+            <label>{t("VIN_NO")}</label>
+            <Text_input
+              placeholder="UK02584...."
+              value={vehicleDraft.vin}
+              onChange={(e) => handleVehicleInputChange("vin", e.target.value)}
+            />
+          </div>
+          <div className="flex  md:w-1/3 justify-start  items-center gap-4">
+            <FileUploder
+              onFileUpload={(fileName) =>
+                setFormData((prev) => ({ ...prev, bill_pdf: fileName }))
+              }
+              label={t("Upload_bill") + "*"}
+            />
+          </div>
+          <div className="flex  md:w-1/3 justify-start  items-center gap-4">
+            <FileUploder
+              label={t("Upload car image")}
+              onFileUpload={(fileName) =>
+                setFormData((prev) => ({ ...prev, title_pdf: fileName }))
+              }
+            />
+          </div>
+          <div className="flex items-end w-full md:w-1/4">
+            <button className="button_outline px-3 py-1" onClick={addVehicle}>
+              + {t("Add_car")}
+            </button>
+          </div>
+        </div>
+
+        {/* Badges */}
+        {formData.vehicles.length > 0 && (
+          <div className="flex flex-wrap gap-2 w-full">
+            {formData.vehicles.map((v, index) => (
+              <div
+                key={index}
+                className="flex gap-2 h-10 items-center justify-center rounded-full px-3 py-1 bg-secondary1"
+              >
+                <span className="text-sm">
+                  {getManufacturerTitle(v.manufacturer)} -{" "}
+                  {getCategoryTitle(v.manufacturer, v.category_id)} -{" "}
+                  {getModelTitle(v.manufacturer, v.category_id, v.cmodel_id)} -{" "}
+                  {v.year}
+                </span>
+                <Minus
+                  className="text-red-400 bg-red-200 rounded-full text-lg cursor-pointer"
+                  onClick={() => removeVehicle(index)}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
       <div className="flex flex-col w-full items-start gap-4">
         <p className="text-text_title text-start font-bold text-xl">
           {t("General_des1")}
@@ -343,256 +593,16 @@ export default function ShippingForm({
         />
         <div className="bg-text_des h-[1px] w-full"></div>
       </div>
-      <div className="flex mt-4 flex-col w-full items-start gap-4">
-        <div className="flex items-center justify-start gap-1">
-          <img
-            src="/images/information_sec.png"
-            alt="info"
-            className="w-[20px]"
-          />
-          <h2 className="text-text_title text-2xl font-bold">
-            {t("Commodity_information")}
-          </h2>
-        </div>
-        <p className="text-text_des text-start font-bold text-lg">
-          {t("Commodity_des")}
-        </p>
-        <div className="flex flex-wrap w-full items-center justify-between  gap-3">
-          <div className="selector w-full md:w-1/4">
-            <label>{t("Car_Manufacturer")} :</label>
-            <DainamicSelector
-              placeholder="BMW , Audi , kia ..."
-              data={manufacturers}
-              value={formData.manufacturer}
-              onChange={handleManufacturerChange}
-              //  error={errors.manufacturer}
-              dataLoading={manufacturerLoading}
-            />
-          </div>
-          <div className="selector w-full md:w-1/4 ">
-            <label>{t("Car_Model")} :</label>
-            <DainamicSelector
-              data={categories}
-              value={formData.category_id}
-              onChange={handleCategoryChange}
-              // error={errors.category_id}
-            />
-          </div>
-          <div className="selector w-full md:w-1/4">
-            <label>{t("Category")} :</label>
-            <DainamicSelector
-              data={models}
-              value={formData.cmodel_id}
-              onChange={handleModelChange}
-            />
-          </div>
-        </div>
-        <div className="flex w-full flex-wrap items-center justify-between  gap-3">
-          <div className="selector w-full md:w-1/4">
-            <label>{t("year")} :</label>
-            <Text_selector
-              options={yearOfMade}
-              placeholder="2018"
-              value={formData.year}
-              onChange={(value) => handleInputChange("year", String(value))}
-              //error={errors.year}
-            />
-          </div>
-          <div className="selector w-full md:w-1/4">
-            <label> {t("Drive_System")} :</label>
-            <Text_selector
-              options={driveSystemOPtions}
-              placeholder={t("FWD")}
-              value={formData.drive_system}
-              onChange={(value) =>
-                handleInputChange("drive_system", Number(value))
-              }
-              // error={errors.drive_system}
-            />
-          </div>
-          <div className="selector w-full md:w-1/4">
-            <label>{t("Number_of_Cylinders")} :</label>
-            <Text_selector
-              options={NumberOfCylinders}
-              placeholder="4,6,8..."
-              value={formData.cylinders}
-              onChange={(value) =>
-                handleInputChange("cylinders", Number(value))
-              }
-              //    error={errors.cylinders}
-            />
-          </div>
-        </div>
-        <div className="flex w-full flex-wrap items-center justify-between  gap-3">
-          <div className="selector w-full md:w-1/4">
-            <label>{t("Transmission_Type")} :</label>
-            <Text_selector
-              options={TransmissionTypeOptions}
-              placeholder={t("manual")}
-              value={formData.transmission_type}
-              onChange={(value) =>
-                handleInputChange("transmission_type", Number(value))
-              }
-              //error={errors.transmission_type}
-            />
-          </div>
-          <div className="selector w-full md:w-1/4">
-            <label>{t("Fuel_Type")} :</label>
-            <Text_selector
-              options={fuelTypeOptions}
-              placeholder={t("Petrol")}
-              value={formData.fuel_type}
-              onChange={(value) =>
-                handleInputChange("fuel_type", Number(value))
-              }
-              //  error={errors.fuel_type}
-            />
-          </div>
-          <div className="selector w-full md:w-1/4">
-            <label>{t("Exterior_Color")} :</label>
-            <Text_selector
-              options={ExteriorColor}
-              placeholder={t("white")}
-              value={formData.ex_color}
-              onChange={(value) => handleInputChange("ex_color", String(value))}
-              error={errors.ex_color}
-            />
-          </div>
-        </div>
-        <div className="flex flex-wrap w-full items-center justify-between  gap-3">
-          <div className="selector w-full md:w-1/4">
-            <label>{t("Interior_Color")} :</label>
-            <Text_selector
-              options={InteriorColor}
-              placeholder={t("white")}
-              value={formData.in_color}
-              onChange={(value) => handleInputChange("in_color", String(value))}
-              error={errors.in_color}
-            />
-          </div>
-          <div className="selector w-full md:w-1/4">
-            <label>{t("Car_Status")} :</label>
-            <Text_selector
-              options={CarStatusOptions}
-              placeholder={t("New")}
-              value={formData.car_status}
-              onChange={(value) =>
-                handleInputChange("car_status", Number(value))
-              }
-              //     error={errors.car_status}
-            />
-          </div>
-          <div className="selector w-full md:w-1/4">
-            <label>{t("Mileage")} :</label>
-            <Text_selector
-              options={mileageOptions}
-              placeholder="50000 KM"
-              value={formData.mileage}
-              onChange={(value) => handleInputChange("mileage", String(value))}
-              //  error={errors.mileage}
-            />
-          </div>
-        </div>
-        <div className="flex w-full flex-wrap items-center justify-between  gap-3">
-          <div className="selector w-full md:w-1/4">
-            <label>Location of car</label>
-            <DainamicSelector
-              Api_URL={`${
-                userRole === "ADMIN" ? "admin" : "customer"
-              }/countries?is_shown_auction=1`}
-              placeholder="Canada"
-              value={formData.location_of_car}
-              onChange={(value) => handleInputChange("location_of_car", value)}
-            />
-          </div>
-          <div className="selector w-full md:w-1/4">
-            <label>{t("Shipping_from")} :</label>
-            <DainamicSelector
-              returnTitle={true}
-              placeholder="Select"
-              Api_URL={`${
-                userRole === "ADMIN" ? "admin" : "customer"
-              }/ports?type=2`}
-              value={formData.shipping_from}
-              onChange={(value) =>
-                handleInputChange("shipping_from", String(value))
-              }
-              error={errors.shipping_from}
-            />
-          </div>
-        </div>
-        <div className="flex w-full flex-wrap items-center justify-between  gap-3">
-          <div className="selector w-full md:w-1/4">
-            <label>{t("Price")} :</label>
-            <Text_input
-              placeholder="2000 RO"
-              value={formData.price}
-              onChange={(e) => handleInputChange("price", e.target.value)}
-              //   error={errors.price}
-            />
-          </div>
-          <div className="selector w-full md:w-1/4">
-            <label>{t("VIN_NO")}</label>
-            <Text_input
-              placeholder="UK02584...."
-              value={formData.vin}
-              onChange={(e) => handleInputChange("vin", e.target.value)}
-              //   error={errors.price}
-            />
-          </div>
-          <div className="py-[10px] w-full md:w-2/5">
-            <label className="mb-1 block font-semibold">{t("Carfax")}</label>
-            <Text_selector
-              options={CarfaxOptions}
-              placeholder={
-                t("Available") + " " + t("or") + " " + t("Not_available")
-              }
-              value={formData.car_fax}
-              onChange={(value) => handleInputChange("car_fax", Number(value))}
-            />
-          </div>
-        </div>
-      </div>
+      <Chooser
+        question={t("Please select end use type") + "*"}
+        option1={t("use_type_option1")}
+        value1={0}
+        option2={t("use_type_option2")}
+        value2={1}
+        value={formData.use_type}
+        onChange={(value) => handleInputChange("use_type", Number(value))}
+      />
 
-      <div className="flex  md:w-1/3 justify-start  items-center gap-4">
-        <FileUploder
-          onFileUpload={(fileName) =>
-            setFormData((prev) => ({ ...prev, bill_pdf: fileName }))
-          }
-          label={t("Upload_bill") + "*"}
-        />
-      </div>
-      <div className="flex  md:w-1/3 justify-start  items-center gap-4">
-        <FileUploder
-          label={t("Upload original")}
-          onFileUpload={(fileName) =>
-            setFormData((prev) => ({ ...prev, title_pdf: fileName }))
-          }
-        />
-      </div>
-      <div className="py-[10px] w-full md:w-2/5">
-        <label className="mb-1 block font-semibold">{t("consignee")} :</label>
-        <Text_selector
-          options={CarfaxOptions}
-          placeholder={
-            t("Available") + " " + t("or") + " " + t("Not_available")
-          }
-          value={formData.apply_consignee}
-          onChange={(value) =>
-            handleInputChange("apply_consignee", Number(value))
-          }
-        />
-      </div>
-      {formData.apply_consignee === 1 && (
-        <div className="flex  md:w-1/2 justify-start  items-center gap-4">
-          <FileUploder
-            onFileUpload={(fileName) =>
-              setFormData((prev) => ({ ...prev, consignee: fileName }))
-            }
-            label={t("Upload_consignee")}
-          />
-        </div>
-      )}
       <p className="text-text_title text-start font-bold text-xl"></p>
       <Chooser
         question={t("use_type_q") + "*"}

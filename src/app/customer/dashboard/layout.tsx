@@ -4,7 +4,7 @@ import Footer from "../../../components/DashboardComponernt/customer/footer";
 import Sidebar from "../../../components/DashboardComponernt/customer/siedbar";
 import Topbar from "../../../components/DashboardComponernt/customer/topbar";
 import AuthGuard from "@/app/admin/AuthGuard";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import Loader from "@/components/loading/loadingPage";
@@ -16,6 +16,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { isArabic } = useLanguage();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isExpand, setIsExpand] = useState(true);
   const isFullData = useSelector(
     (state: RootState) => state.auth.user?.is_full_data
@@ -95,8 +96,11 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
             console.log(val);
           }}
         />
-        <main className="w-full flex flex-col h-screen overflow-y-auto bg-secondary1 pb-[50px] md:pb-0 py-3 px-2">
-          <Topbar isExpand={isExpand} />
+        <main
+          ref={scrollContainerRef}
+          className="w-full flex flex-col h-screen overflow-y-auto bg-secondary1 pb-[50px] md:pb-0 px-2"
+        >
+          <Topbar isExpand={isExpand} scrollContainerRef={scrollContainerRef} />
           <div className="wellcome w-full flex flex-col flex-grow py-3">
             {children}
           </div>

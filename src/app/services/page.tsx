@@ -15,10 +15,15 @@ import { fetchServicesUserSuccess } from "@/store/slice/servicesCustomer";
 const ServicesPage: React.FC = () => {
   const { t, isArabic } = useLanguage();
   const [loadingPage, setLoadingPage] = useState(false);
+  const [showService, setShowService] = useState(0);
   const dispatch = useDispatch();
   const services = useSelector(
     (state: RootState) => state.servicesUser.servicesList
   );
+  const { socialMediaList } = useSelector(
+    (state: RootState) => state.socialMedia
+  );
+  const whatsappItem = socialMediaList.find((item) => item.icon === "whatsapp");
   const lastUpdated = useSelector(
     (state: RootState) => state.servicesUser.lastUpdated
   );
@@ -54,7 +59,14 @@ const ServicesPage: React.FC = () => {
       fetchServices();
     }
   }, [isArabic]);
-
+  useEffect(() => {
+    if (showService) {
+      const element = document.getElementById(String(showService));
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  }, [showService]);
   const [selectedService, setSelectedService] = useState<string | null>(null);
   return (
     <div>
@@ -100,7 +112,10 @@ const ServicesPage: React.FC = () => {
                       image={service.image}
                       title={service.title}
                       isActive={selectedService === service.title}
-                      showDetails={() => setSelectedService(service.title)}
+                      showDetails={() => {
+                        setSelectedService(service.title);
+                        setShowService(service.id);
+                      }}
                       hideDetails={() => setSelectedService(null)}
                     />
                   ))}
@@ -112,8 +127,8 @@ const ServicesPage: React.FC = () => {
 
       {/* Section for Service Details */}
       {selectedService && (
-        <>
-          <div className="flex flex-col items-start justify-start px-[50px] bg-secondary1">
+        <div id={String(showService)}>
+          <div className="flex flex-col items-start justify-start py-10 px-[50px] bg-secondary1">
             {
               services.find((service) => service.title === selectedService)
                 ?.body
@@ -125,7 +140,7 @@ const ServicesPage: React.FC = () => {
                 ?.description
             }
           </div>
-        </>
+        </div>
       )}
 
       {/* CTA Section */}
@@ -133,7 +148,9 @@ const ServicesPage: React.FC = () => {
         title={t("servises_CTA_Title")}
         des={t("servises_CTA_Body")}
         btnText={t("Contact_Us")}
-        onClick={() => window.location.replace("/contact")}
+        onClick={() => {
+          if (whatsappItem?.link) window.open(whatsappItem?.link, "_blank");
+        }}
       />
 
       {/* Footer */}

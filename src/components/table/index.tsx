@@ -537,7 +537,7 @@ const GeneralTable: React.FC<GeneralTableProps> = ({
                   colSpan={columns.length}
                   className="text-center py-4 text-[11px]"
                 >
-                  لا توجد بيانات متاحة
+                  no data
                 </td>
               </tr>
             )}

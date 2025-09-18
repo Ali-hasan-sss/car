@@ -58,7 +58,7 @@ button {
   bottom: 0;
   left: 50%;
   width: 0%;
-  background-color: white; /* نفس خلفية الصفحة */
+  background-color: #f7f7f8; /* نفس خلفية الصفحة */
   z-index: 1;
   animation: hideReveal 6s infinite alternate;
   transform: translateX(-50%);

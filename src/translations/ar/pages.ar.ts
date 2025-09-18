@@ -4,7 +4,7 @@ export const pages_ar = {
   hero_title: "بسّط رحلة استيراد سيارتك!",
   hero_des: "خدمات شاملة لاستيراد وشحن السيارات من كندا إلى سلطنة عُمان",
   What_shipping: "ماذا تريد ان تشحن؟",
-  Select_address: "اختر عنوانك",
+  Select_address: "اختر مدينتك",
   Enter_Email: "أدخل عنوان بريدك الإلكتروني",
   Get_Quote: "احصل على عرض سعر فوري",
   Address: "العنوان",
@@ -67,4 +67,5 @@ export const pages_ar = {
   contact_info: "معلومات الاتصال",
   Pages: "الصفحات",
   view_post: "عرض المقال",
+  Read_More: "قرائة المزيد",
 };

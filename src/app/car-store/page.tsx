@@ -28,10 +28,10 @@ const RegisterPage = () => {
   }, []);
   const { isArabic } = useLanguage();
   return (
-    <div>
+    <div className="bg-secondary1">
       <Navbar />
       <div className="flex items-center justify-center w-full">
-        <h1 className=" p-4 enimat_title">
+        <h1 className=" p-4 mt-2 enimat_title">
           {isArabic ? "معرض السيارات" : "Cars Store"}
         </h1>
       </div>

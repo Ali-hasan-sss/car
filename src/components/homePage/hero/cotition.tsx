@@ -16,10 +16,12 @@ export default function Cotation() {
   const { t, isArabic } = useLanguage();
   const userRole = useSelector((state: RootState) => state.auth.user?.userRole);
   const items = [
-    { src: "/images/sedan.png", alt: "sedan", label: "Car" },
+    { src: "/images/sedan.png", alt: "sedan", label: "Sedan" },
     { src: "/images/pickup-truck.png", alt: "pickup-truck", label: "Pickup" },
     { src: "/images/suv.png", alt: "SUV", label: "SUV" },
     { src: "/images/van.png", alt: "bus", label: "van" },
+    { src: "/images/crossover-car.png", alt: "Crossover", label: "Crossover" },
+    { src: "/images/motorcycle.png", alt: "motorcycle", label: "motorcycle" },
   ];
   const [isArabice, setIsArabic] = useState(true);
   const [car, setCar] = useState("");
@@ -36,6 +38,11 @@ export default function Cotation() {
   const pathName = window.location.pathname;
   const isDashboard = pathName.includes("dashboard");
   const heroInfo = useSelector((state: RootState) => state.blogs.selectedBlog);
+  const { socialMediaList } = useSelector(
+    (state: RootState) => state.socialMedia
+  );
+  const whatsappItem = socialMediaList.find((item) => item.icon === "whatsapp");
+
   const [userHero, setUserHero] = useState({
     title: "",
     description: "",
@@ -149,8 +156,32 @@ export default function Cotation() {
   //send cotetion
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateForm()) console.log("message:", message);
+
+    if (validateForm() && whatsappItem) {
+      const encodedMessage = encodeURIComponent(message);
+      let waUrl = "";
+
+      if (whatsappItem.link.includes("wa.me")) {
+        // الرابط بصيغة wa.me
+        const phone = whatsappItem.link.split("wa.me/")[1].split("?")[0];
+        waUrl = `https://wa.me/${phone}?text=${encodedMessage}`;
+      } else if (whatsappItem.link.includes("api.whatsapp.com")) {
+        // الرابط بصيغة api.whatsapp.com
+        const phoneParam = whatsappItem.link.includes("phone=")
+          ? whatsappItem.link.split("phone=")[1].split("&")[0]
+          : "";
+
+        waUrl = `https://api.whatsapp.com/send?phone=${phoneParam}&text=${encodedMessage}`;
+      } else {
+        toast.error("رابط واتساب غير مدعوم");
+        return;
+      }
+
+      console.log("Final WhatsApp link:", waUrl);
+      window.open(waUrl, "_blank");
+    }
   };
+
   //edit hero info
   const handleSave = async () => {
     try {
@@ -345,7 +376,14 @@ export default function Cotation() {
               <TextSelector
                 options={[
                   { value: "Muscat", label: "Muscat" },
-                  { value: "aldoqm", label: "Aldoqm" },
+                  { value: "Dhofar", label: "Dhofar" },
+                  { value: "Musandam", label: "Musandam" },
+                  { value: "Al Buraimi", label: "Al Buraimi" },
+                  { value: "Al Dakhiliyah", label: "Al Dakhiliyah" },
+                  { value: "North Al Batinah", label: "North Al Batinah" },
+                  { value: "South Al Batinah", label: "South Al Batinah" },
+                  { value: "Al Dhahirah", label: "Al Dhahirah" },
+                  { value: "Al Wusta", label: "Al Wusta" },
                 ]}
                 placeholder="Muscat"
                 value={address}
@@ -359,7 +397,7 @@ export default function Cotation() {
               <TextSelector
                 options={[{ value: "torinto", label: "Torinto" }]}
                 value={shippingPort}
-                placeholder="Shipping Port"
+                placeholder="Shipping country"
                 onChange={(val) => {
                   setShippingPort(String(val));
                 }}

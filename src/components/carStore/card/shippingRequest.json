@@ -1,0 +1,42 @@
+[
+  {
+    "commodity_type": "vehicle",
+    "is_pickup": 1,
+    "is_consolidate": 1,
+    "final_port": "",
+    "in_transit": 1,
+    "use_type": 0,
+    "package_shippings": [
+      {
+        "package_type": 0,
+        "pieces": 0,
+        "description": "",
+        "unit": 0,
+        "length": 0,
+        "width": 0,
+        "height": 0,
+        "Weight_unit": 0,
+        "item_weight": 0,
+        "item_value": 0
+      }
+    ],
+    "vehicles": [
+      {
+        "manufacturer": 0,
+        "category_id": 0,
+        "cmodel_id": 0,
+        "year": "",
+        "drive_system": 0,
+        "transmission_type": 0,
+        "cylinders": 0,
+        "fuel_type": 0,
+        "ex_color": "",
+        "in_color": "",
+        "vin": "",
+        "car_status": 0,
+        "bill_pdf": "",
+        "title_pdf": ""
+      }
+    ]
+  }
+]

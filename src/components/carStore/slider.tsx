@@ -82,7 +82,7 @@ export default function Slider_card() {
           0: { slidesPerView: 1.5, spaceBetween: 2 },
         }}
         navigation={{
-          prevEl: prevRef.current, // الربط باستخدام refs
+          prevEl: prevRef.current,
           nextEl: nextRef.current,
         }}
         onBeforeInit={(swiper) => {
@@ -104,9 +104,9 @@ export default function Slider_card() {
         {loadingPage ? (
           <Loader />
         ) : (
-          cars.map((car, index) => (
+          cars.slice(0, 20).map((car, index) => (
             <SwiperSlide key={index}>
-              <Card car={car} />
+              <Card car={car} isClickable />
             </SwiperSlide>
           ))
         )}
@@ -114,7 +114,7 @@ export default function Slider_card() {
 
       <div className="slider-controls flex justify-between items-center mt-1">
         <div className="flex item-center justify-center gap-1">
-          {cars.map((_, index) => (
+          {cars.slice(0, 8).map((_, index) => (
             <div
               key={index}
               className="dot flex item-center justify-center gap-1"

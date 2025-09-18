@@ -38,7 +38,7 @@ export default function Actions() {
   const [sortby, setSortby] = useState("date");
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [view, setView] = useState("table");
+  const [view, setView] = useState("menu");
   const handleTogleFilter = () => setOpenFilter(!openFilter);
   const [selectedRequest, setSelectedRequest] = useState<{
     id: number;
@@ -182,7 +182,7 @@ export default function Actions() {
         title={t("Auctions")}
         action={{
           filter: true,
-          export: true,
+          export: false,
           add: true,
           addNewActiom: () => {
             setOpenModal(true);

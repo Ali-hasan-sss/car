@@ -52,9 +52,8 @@ export default function Dropdown() {
     { id: 1, label: t("Home"), path: "/" },
     { id: 2, label: t("Services"), path: "/services" },
     { id: 3, label: t("About_us"), path: "/about" },
-    { id: 4, label: t("bloge"), path: "/blog" },
-    { id: 5, label: t("Car Store"), path: "/car-store" },
-    { id: 6, label: t("Contact_Us"), path: "/contact" },
+    { id: 4, label: t("Blogs"), path: "/blog" },
+    { id: 5, label: t("Cars_Store"), path: "/car-store" },
   ];
 
   const [currentPath, setCurrentPath] = useState("");

@@ -9,7 +9,6 @@ import {
   fuelTypeOptions,
   InteriorColor,
   NumberOfCylinders,
-  ShippingOption,
   TransmissionTypeOptions,
   budgetOptions,
 } from "../data";
@@ -58,10 +57,14 @@ export default function Auctions({
     in_color: "",
   });
   const currentYear = new Date().getFullYear();
-  const yearOfMade = Array.from({ length: 30 }, (_, i) => {
-    const yearString = (currentYear - i).toString();
-    return { value: yearString, label: yearString };
-  });
+  const startYear = 2018;
+  const yearOfMade = Array.from(
+    { length: currentYear - startYear + 1 },
+    (_, i) => {
+      const yearString = (currentYear - i).toString();
+      return { value: yearString, label: yearString };
+    }
+  );
 
   const dispatch = useDispatch<AppDispatch>();
   const { manufacturers, status } = useSelector(
@@ -83,10 +86,8 @@ export default function Auctions({
       if (!formData.fuel_type) newErrors.fuel_type = " ";
       if (!formData.cylinders) newErrors.cylinders = " ";
       if (!formData.from_budget || !formData.to_budget) newErrors.budget = " ";
-      if (!formData.shipping_option) newErrors.shipping_option = " ";
       if (!formData.ex_color) newErrors.ex_color = " ";
       if (!formData.in_color) newErrors.in_color = " ";
-      if (!formData.country_id) newErrors.country_id = " ";
     }
 
     setErrors(newErrors);
@@ -201,13 +202,24 @@ export default function Auctions({
       <div className="heading_form flex item-center justify-center">
         <h2 className="text-xl">{t("Select_Auction")}</h2>
       </div>
-      <Text_input
-        value={formData.auction_link}
-        id="link"
-        placeholder="https://www.copart.com/dashboard"
-        label={t("auction_link")}
-        onChange={(e) => handleInputChange("auction_link", e.target.value)}
-      />
+      <div className="w-full flex items-end gap-2">
+        <div className="flex-1">
+          <Text_input
+            value={formData.auction_link}
+            id="link"
+            placeholder="https://www.copart.com/dashboard"
+            label={t("auction_link")}
+            onChange={(e) => handleInputChange("auction_link", e.target.value)}
+          />
+        </div>
+        <button
+          className="py-1 px-2 flex items-center justify-center button_outline"
+          onClick={handleSubmit}
+          disabled={loading}
+        >
+          {loading ? <LoadingBTN /> : t("Send_Car_Order")}
+        </button>
+      </div>
       <div className="flex w-full items-center justify-between">
         <div className="w-1/2 flex items-center justify-start">
           <hr className="w-full text-gray-400" />
@@ -311,16 +323,6 @@ export default function Auctions({
             error={errors.budget}
           />
         </div>
-        <div className="selector w-[250px]">
-          <label>{t("Shipping_Option")} : </label>
-          <Text_selector
-            options={ShippingOption}
-            placeholder={t("container")}
-            value={formData.shipping_option}
-            onChange={(value) => handleInputChange("shipping_option", value)}
-            error={errors.shipping_option}
-          />
-        </div>
       </div>
       <div className="flex w-full flex-wrap items-center justify-between gap-[10px]">
         <div className="selector w-[250px]">
@@ -341,35 +343,6 @@ export default function Auctions({
             value={formData.in_color}
             onChange={(value) => handleInputChange("in_color", value)}
             error={errors.in_color}
-          />
-        </div>
-        <div className="selector w-[250px]">
-          <label>{t("Shipping_Country")} :</label>
-          <DainamicSelector
-            placeholder="Canada"
-            value={formData.country_id}
-            onChange={(value) =>
-              setFormData({ ...formData, country_id: value })
-            }
-            Api_URL={`${
-              userRole === "ADMIN" ? "admin" : "customer"
-            }/countries?is_shown_auction=1`}
-            error={errors.country_id}
-          />
-        </div>
-        <div className="selector w-[250px]">
-          <label>{t("Shipping_from")} :</label>
-          <DainamicSelector
-            returnTitle={true}
-            placeholder="Select"
-            Api_URL={`${
-              userRole === "ADMIN" ? "admin" : "customer"
-            }/ports?type=2`}
-            value={formData.shipping_from}
-            onChange={(value) =>
-              handleInputChange("shipping_from", String(value))
-            }
-            error={errors.shipping_from}
           />
         </div>
       </div>

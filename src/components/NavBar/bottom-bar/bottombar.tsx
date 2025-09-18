@@ -30,11 +30,6 @@ export default function Bottombar() {
       label: t("Cars_Store"),
       path: "/car-store",
     },
-    {
-      id: 6,
-      label: t("Contact_Us"),
-      path: "/contact",
-    },
   ];
   return (
     <div className="menu px-[10px] md:px-[50px] hidden md:block w-full h-[47px]  ">

@@ -131,7 +131,7 @@ export default function Actions() {
         title={t("Auctions")}
         action={{
           filter: true,
-          export: true,
+          export: false,
           add: true,
           addNewActiom: () => {
             setOpenModal(true);

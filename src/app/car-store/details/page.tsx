@@ -9,7 +9,7 @@ export default function Car() {
     <>
       <Navbar />
 
-      <CarDetails isStore />
+      <CarDetails />
 
       <Footer />
     </>

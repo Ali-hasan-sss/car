@@ -92,7 +92,7 @@ export default function Settings() {
         </div>
       )}
       {activeTap === "manufacturers" && (
-        <div className="flex w-full px-5 h-[50vh] overflow-y-auto bg-white">
+        <div className="flex w-full px-5 h-[50vh] bg-white">
           <CarTypes />
         </div>
       )}

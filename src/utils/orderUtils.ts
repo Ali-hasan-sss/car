@@ -67,7 +67,7 @@ export const getColorValue = (color: string) => {
     case "yellow":
       return "bg-yellow-400";
     case "orange":
-      return "bg-orange-500";
+      return "bg-red-400";
     case "brown":
       return "bg-amber-800"; // أقرب لون بني
     case "beige":

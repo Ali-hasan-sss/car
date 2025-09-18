@@ -9,7 +9,7 @@ import store, { RootState } from "@/store/store";
 const AdminDashboardLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const userRole = useSelector((state: RootState) => state.auth.user?.userRole);
   useEffect(() => {
     document.title = "SOUFAN GLOBAL | Admin dashboard";

@@ -165,7 +165,8 @@ export default function ShippingDetails() {
   const statusInfo = getStatusInfo(shipping.status);
 
   const handleEdit = (order: CarShipping) => {
-    const mapOrderToFormInputs = (order: CarShipping): ShippingFormInputs => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const mapOrderToFormInputs = (order: any): any => {
       return {
         id: order.id ?? null,
         manufacturer: order.category?.manufacturer?.id ?? null,

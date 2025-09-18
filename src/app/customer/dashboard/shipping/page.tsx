@@ -18,7 +18,7 @@ import {
   deleteCarShipping,
   fetchCarShippings,
 } from "@/store/slice/ShippingSlice";
-import { CarShipping, ShippingFormInputs } from "@/Types/AuctionTypes";
+import { ShippingFormInputs } from "@/Types/AuctionTypes";
 import DeleteMessage from "@/components/messags/deleteMessage";
 
 export default function Shipping() {
@@ -73,7 +73,7 @@ export default function Shipping() {
     },
   ];
   const apiUrl = "customer/car-shippings";
-  const [view, setView] = useState("table");
+  const [view, setView] = useState("menu");
   const dispatch = useAppDispatch();
 
   const [actions] = useState({
@@ -90,15 +90,16 @@ export default function Shipping() {
       filterValue ? `&status=${filterValue}` : ""
     }`;
     dispatch(fetchCarShippings({ API: apiUrl }));
-  }, [dispatch, showing, currentPage]);
+  }, [dispatch, showing, currentPage, filterValue]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (order: any) => {
-    const mapOrderToFormInputs = (order: CarShipping): ShippingFormInputs => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const mapOrderToFormInputs = (order: any): any => {
       return {
         id: order.id ?? null,
         manufacturer: order.category?.manufacturer?.id ?? null,
-        is_pickup: 0, // مبدئياً القيمة الافتراضية
+        is_pickup: 0,
         is_consolidate: 0,
         final_port: "",
         in_transit: 0,
@@ -144,7 +145,7 @@ export default function Shipping() {
         title={t("Shipping")}
         action={{
           filter: true,
-          export: true,
+          export: false,
           add: true,
           addNewActiom: () => setOpenModal(true),
           filterActiom: handleTogleFilter,

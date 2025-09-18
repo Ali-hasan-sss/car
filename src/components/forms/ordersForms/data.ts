@@ -141,9 +141,7 @@ export const budgetOptions = {
 export const CarStatusOptions = [
   { value: 1, label: "New" },
   { value: 2, label: "Used" },
-  { value: 3, label: "Modified" },
-  { value: 4, label: "Accidented" },
-  { value: 5, label: "Disabled" },
+  { value: 3, label: "Accidented" },
 ];
 export const shippingStatusOptions = [
   { value: 1, label: "In_Stock" },

@@ -94,7 +94,7 @@ export default function Sales() {
     },
   ];
   const apiUrl = `admin/car-sales`;
-  const [view, setView] = useState("table");
+  const [view, setView] = useState("menu");
   const dispatch = useAppDispatch();
   const { carSales, loading, actionLoadingIds, totalPages } = useSelector(
     (state: RootState) => state.carSales
@@ -185,7 +185,7 @@ export default function Sales() {
         title={t("Sales")}
         action={{
           filter: true,
-          export: true,
+          export: false,
           add: true,
           addNewActiom: () => {
             setOpenModal(true);

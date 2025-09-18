@@ -1,9 +1,5 @@
 import Text_selector from "@/components/inputs/selectors/text_selector";
-import {
-  DimensionunitOptions,
-  packageTypeOptions,
-  WeightUnitOptions,
-} from "../data";
+import { packageTypeOptions } from "../data";
 import { packages } from "@/Types/AuctionTypes";
 import { useEffect, useState } from "react";
 import Number_input from "@/components/inputs/number_input";
@@ -30,7 +26,7 @@ export default function PackageForm({
     length: 0,
     width: 0,
     height: 0,
-    Weight_unit: 0,
+    Weight_unit: 1,
     item_weight: 0,
     item_value: 0,
   });
@@ -128,17 +124,6 @@ export default function PackageForm({
           />
         </div>
 
-        {/* Dimension Unit */}
-        <div className="py-[10px] w-full md:w-1/5">
-          <label className="mb-1 block text-sm">{t("Dimension_unit")}</label>
-          <Text_selector
-            options={DimensionunitOptions}
-            placeholder="Select"
-            value={packageData.unit}
-            onChange={(value) => handleInputChange("unit", Number(value))}
-          />
-        </div>
-
         {/* Length */}
         <div className="py-[10px] w-full md:w-1/5">
           <label className="mb-1 block text-sm">{t("Length")}</label>
@@ -178,19 +163,6 @@ export default function PackageForm({
 
         {/* Weight Section */}
         <div className="w-full items-center gap-4 md:flex">
-          {/* Weight Unit */}
-          <div className="py-[10px] w-full md:w-1/4">
-            <label className="mb-1 block text-sm">{t("Weight_Unit")}</label>
-            <Text_selector
-              options={WeightUnitOptions}
-              placeholder="Select"
-              value={packageData.Weight_unit}
-              onChange={(value) =>
-                handleInputChange("Weight_unit", Number(value))
-              }
-            />
-          </div>
-
           {/* Item Weight */}
           <div className="py-[10px] w-full md:w-1/4">
             <label className="mb-1 block text-sm">{t("Item_weight")}</label>
@@ -228,14 +200,6 @@ export default function PackageForm({
               }
               error={errors.item_value}
             />
-            <div className="py-[10px] flex w-1/2 items-center justify-center">
-              <p className="text-sm mt-3">
-                {t("Total_value")}:
-                <span className="mx-1 py-1 px-2 rounded-full bg-green-400">
-                  $ {packageData.item_value * packageData.pieces}
-                </span>
-              </p>
-            </div>
           </div>
         </div>
         <div className="w-full flex items-center mt-4 gap-5">

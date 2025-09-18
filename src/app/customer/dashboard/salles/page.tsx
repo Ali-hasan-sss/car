@@ -86,7 +86,7 @@ export default function SallesPage() {
       includeInForm: false,
     },
   ];
-  const [view, setView] = useState("table");
+  const [view, setView] = useState("menu");
   const dispatch = useAppDispatch();
   const { carSales, loading, actionLoadingIds, totalPages } = useSelector(
     (state: RootState) => state.carSales
@@ -97,7 +97,7 @@ export default function SallesPage() {
       filterValue ? `&status=${filterValue}` : ""
     }`;
     dispatch(fetchCarSales({ API: apiUrl }));
-  }, [dispatch, showing, currentPage]);
+  }, [dispatch, showing, currentPage, filterValue]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (order: any) => {
     const mapOrderToFormInputs = (order: CarSale): SallesFormInputs => {
@@ -143,7 +143,7 @@ export default function SallesPage() {
         title={t("Sales")}
         action={{
           filter: true,
-          export: true,
+          export: false,
           add: true,
           addNewActiom: () => {
             setOpenModal(true);
@@ -159,11 +159,6 @@ export default function SallesPage() {
             label={t("Filter")}
             onFilterChange={(val) => setFilterValue(val)}
           />{" "}
-        </>
-      )}
-      {openFilter && (
-        <>
-          <GeneralFilter label="Filter & Sort Control" />
         </>
       )}
       <ToolBar

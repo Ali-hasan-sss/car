@@ -20,7 +20,7 @@ export default function Card({ post }: PostCardProps) {
 
   const info = isNew() ? "New" : "old";
   return (
-    <div className="box w-[350px] h-[400px] flex flex-col p-3">
+    <div className=" w-[350px] h-[400px] flex flex-col p-3">
       {/* الصورة */}
       <div className="plog_image w-full h-[200px] flex items-center justify-center">
         <img
@@ -56,7 +56,7 @@ export default function Card({ post }: PostCardProps) {
           onClick={() => viewBlog(post)}
           className="text-blue-500 text-sm underline mt-2 self-start"
         >
-          {t("Read More")}
+          {t("Read_More")}
         </button>
       </div>
     </div>

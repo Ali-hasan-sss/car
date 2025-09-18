@@ -5,7 +5,7 @@ export const pages_en = {
   hero_des:
     "Comprehensive services to import and ship cars from Canada to Oman",
   What_shipping: "What are you shipping?",
-  Select_address: "Select your address",
+  Select_address: "Select your country",
   Enter_Email: "Enter Your Email Address",
   Get_Quote: "Get an Instant Quote",
   store_title: "Car Showroom",
@@ -70,4 +70,5 @@ export const pages_en = {
   contact_info: "contact info",
   Pages: "Pages",
   view_post: "View post",
+  Read_More: "Read More",
 };

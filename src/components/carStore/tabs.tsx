@@ -3,8 +3,8 @@ import { useLanguage } from "@/context/LanguageContext";
 export default function Tabs() {
   const tabs = [
     { en: "All", ar: "الكل" },
-    { en: "Used cars", ar: "سيارات مستعملة" },
-    { en: "New cars", ar: "سيارات جديدة" },
+    // { en: "Used cars", ar: "سيارات مستعملة" },
+    // { en: "New cars", ar: "سيارات جديدة" },
   ];
   const { isArabic } = useLanguage();
   return (

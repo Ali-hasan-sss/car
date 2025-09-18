@@ -90,7 +90,7 @@ export const orders_en = {
   Not_available: "Not available",
   Sohar: "Sohar",
   car_source: "Car Source",
-  GULF: "GULF",
+  GULF: "GCC",
   IMPORTED: "IMPORTED",
   Duqm: "Duqm",
   Car_Images: "Car Images",

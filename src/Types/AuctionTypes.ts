@@ -238,33 +238,29 @@ export interface packages {
 }
 export interface ShippingFormInputs {
   id?: number | null;
-  manufacturer: number | null;
+  commodity_type: string;
   is_pickup: number;
   is_consolidate: number;
   final_port: string;
   in_transit: number;
-  vin: string;
-  cmodel_id: number | null;
+  use_type: number;
+  package_shippings: packages[];
+  vehicles: ShippingVehicle[];
+}
+
+export interface ShippingVehicle {
+  manufacturer: number | null;
   category_id: number | null;
+  cmodel_id: number | null;
   year: string;
-  mileage: string;
   drive_system: number | null;
   transmission_type: number | null;
   cylinders: number | null;
   fuel_type: number | null;
-  price: string;
-  images: string[];
   ex_color: string;
   in_color: string;
-  shipping_from: string;
+  vin: string;
   car_status: number | null;
-  location_of_car: number | null;
-  car_fax: number | null;
-  commodity_type: string;
   bill_pdf: string;
   title_pdf: string;
-  consignee: string;
-  apply_consignee: number | null;
-  use_type: number;
-  package_shippings: packages[];
 }
